@@ -6,6 +6,7 @@ header('Content-Type: text/plain; charset=utf-8');
 
 $spamMessage = $_POST['spam_message'] ?? '';
 $manualDtmf = $_POST['dtmf_sequence'] ?? '';
+$manualPhone = $_POST['phone_number'] ?? '';
 
 if (empty($spamMessage)) {
     die("오류: 광고 문자 내용이 비어있습니다.");
@@ -18,9 +19,25 @@ if (empty($matches)) {
 }
 $phoneNumber = str_replace('-', '', $matches[0]);
 
-// 식별번호 추출 (6자리 숫자)
+// 식별번호 추출 (6자리 숫자 또는 수동 입력 전화번호 사용)
 preg_match('/\b\d{6}\b/', $spamMessage, $idMatches);
 $identificationNumber = $idMatches[0] ?? '';
+
+// 식별번호가 없고 수동으로 전화번호를 입력했으면 사용
+$phoneToUse = '';
+if (empty($identificationNumber) && !empty($manualPhone)) {
+    // 전화번호에서 하이픈만 제거, 010은 그대로 유지
+    $phoneToUse = preg_replace('/[^0-9]/', '', $manualPhone);
+    // 한국 휴대폰 번호 형식 확인 (010으로 시작하는 11자리)
+    if (strlen($phoneToUse) == 11 && substr($phoneToUse, 0, 3) == '010') {
+        // 010은 그대로 유지
+        $identificationNumber = $phoneToUse;
+    } else {
+        // 잘못된 형식인 경우 그대로 사용
+        $identificationNumber = $phoneToUse;
+    }
+    // phoneToUse는 그대로 유지하여 {Phone} 변수에서 사용
+}
 
 // 패턴 데이터베이스 로드
 $patternsFile = __DIR__ . '/patterns.json';
@@ -43,13 +60,15 @@ $pattern = $patterns[$phoneNumber] ?? $patterns['default'] ?? [
 if (!empty($manualDtmf)) {
     $dtmfToSend = preg_replace('/[,\s]/', '', $manualDtmf);
 } else {
-    // 패턴에서 {ID} 치환
-    $dtmfToSend = str_replace('{ID}', $identificationNumber, $pattern['dtmf_pattern']);
+    // 패턴에서 변수 치환 ({ID}, {Phone} 지원)
+    $dtmfToSend = $pattern['dtmf_pattern'];
+    $dtmfToSend = str_replace('{ID}', $identificationNumber, $dtmfToSend);
+    $dtmfToSend = str_replace('{Phone}', $phoneToUse ?: $identificationNumber, $dtmfToSend);
     $dtmfToSend .= $pattern['confirmation_dtmf'];
 }
 
-echo "추출된 번호: " . $phoneNumber . "\n";
-echo "식별번호: " . $identificationNumber . "\n";
+echo "추출된 080번호: " . $phoneNumber . "\n";
+echo "식별번호: " . $identificationNumber . (!empty($phoneToUse) ? " (수동 입력된 전화번호)" : "") . "\n";
 echo "사용된 패턴: " . ($pattern['name'] ?? 'Unknown') . "\n";
 echo "DTMF 시퀀스: " . $dtmfToSend . "\n\n";
 

@@ -20,6 +20,10 @@
         <label for="spam_message">광고 문자 내용:</label><br>
         <textarea id="spam_message" name="spam_message" required></textarea><br>
 
+        <label for="phone_number">전화번호 (식별번호가 없는 경우):</label><br>
+        <input type="text" id="phone_number" name="phone_number" placeholder="예: 01012345678"><br>
+        <small style="color: #666;">💡 문자에 식별번호가 없으면 여기에 본인 전화번호를 입력하세요</small><br><br>
+
         <label for="dtmf_sequence">전화 연결 후 누를 버튼 (쉼표로 구분, 예: 1,2,1):</label><br>
         <input type="text" id="dtmf_sequence" name="dtmf_sequence" placeholder="예: 105623#1 (마지막 1은 자동으로 확인용으로 분리됩니다)"><br>
         <small style="color: #666;">💡 시스템이 자동으로 2단계 전송: ①식별번호# → ②확인번호1</small><br>
@@ -47,7 +51,7 @@
             const resultDiv = document.getElementById('result');
             resultDiv.textContent = '처리 중... 잠시만 기다려주세요.';
 
-            fetch('process.php', {
+            fetch('process_v2.php', {
                 method: 'POST',
                 body: formData
             })
