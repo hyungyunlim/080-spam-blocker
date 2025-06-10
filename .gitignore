@@ -1,14 +1,37 @@
-# 로그 파일
+# 로그 파일들
 *.log
 *.txt
+logs/
 
 # 녹음 파일
 *.wav
 *.mp3
 
-# 임시 파일
+# 분석 결과 파일들 (런타임에 생성됨)
+analysis_results/
+progress/
+*_analysis.json
+
+# Python 관련
+venv/
+*.pyc
+__pycache__/
+
+# 임시 파일들
 *.tmp
+*.bak
+*.backup
 *~
+
+# OS 파일들
+.DS_Store
+Thumbs.db
+
+# IDE/에디터 파일들
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # 설정 파일 (민감한 정보 포함 가능)
 # config.php

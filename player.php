@@ -20,6 +20,9 @@ if (file_exists($full_path) && pathinfo($full_path, PATHINFO_EXTENSION) == 'wav'
     header('Content-Length: ' . filesize($full_path));
     header('Accept-Ranges: bytes');
     
+    // 다운로드 시 올바른 파일명 설정
+    header('Content-Disposition: inline; filename="' . $filename . '"');
+    
     // 파일 내용 출력 (스트리밍)
     readfile($full_path);
     exit;

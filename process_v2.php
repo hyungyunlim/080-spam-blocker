@@ -4,12 +4,20 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header('Content-Type: text/plain; charset=utf-8');
 
-$spamMessage = $_POST['spam_message'] ?? '';
-$manualDtmf = $_POST['dtmf_sequence'] ?? '';
+// SMS 전송 클래스 포함
+require_once __DIR__ . '/sms_sender.php';
+
+$spamMessage = $_POST['spam_content'] ?? '';
 $manualPhone = $_POST['phone_number'] ?? '';
+$selectedId = $_POST['selected_id'] ?? '';
+$notificationPhone = $_POST['notification_phone'] ?? '';
 
 if (empty($spamMessage)) {
     die("오류: 광고 문자 내용이 비어있습니다.");
+}
+
+if (empty($notificationPhone)) {
+    die("오류: 알림 받을 연락처가 비어있습니다.");
 }
 
 // 080 번호 추출
@@ -19,9 +27,39 @@ if (empty($matches)) {
 }
 $phoneNumber = str_replace('-', '', $matches[0]);
 
-// 식별번호 추출 (6자리 숫자 또는 수동 입력 전화번호 사용)
-preg_match('/\b\d{6}\b/', $spamMessage, $idMatches);
-$identificationNumber = $idMatches[0] ?? '';
+// 식별번호 결정 우선순위:
+// 1. 사용자가 선택한 식별번호
+// 2. 자동 추출된 식별번호
+// 3. 수동 입력된 전화번호
+$identificationNumber = '';
+
+if (!empty($selectedId)) {
+    // 사용자가 선택한 식별번호 사용
+    $identificationNumber = $selectedId;
+    echo "사용자 선택 식별번호: " . $identificationNumber . "\n";
+} else {
+    // 자동 식별번호 추출
+    $idPatterns = [
+        '/수신거부\s*:?\s*(\d{5,8})/i',
+        '/해지\s*:?\s*(\d{5,8})/i',
+        '/탈퇴\s*:?\s*(\d{5,8})/i',
+        '/식별번호\s*:?\s*(\d{5,8})/i',
+        '/\(.*?(\d{5,8}).*?\)/',
+        '/\b(\d{5,8})\b/'
+    ];
+    
+    foreach ($idPatterns as $pattern) {
+        preg_match($pattern, $spamMessage, $idMatches);
+        if (!empty($idMatches[1])) {
+            // 080 번호와 겹치지 않는지 확인
+            if (strpos($phoneNumber, $idMatches[1]) === false) {
+                $identificationNumber = $idMatches[1];
+                echo "자동 추출 식별번호: " . $identificationNumber . "\n";
+                break;
+            }
+        }
+    }
+}
 
 // 식별번호가 없고 수동으로 전화번호를 입력했으면 사용
 $phoneToUse = '';
@@ -32,11 +70,12 @@ if (empty($identificationNumber) && !empty($manualPhone)) {
     if (strlen($phoneToUse) == 11 && substr($phoneToUse, 0, 3) == '010') {
         // 010은 그대로 유지
         $identificationNumber = $phoneToUse;
+        echo "수동 입력 전화번호 사용: " . $identificationNumber . "\n";
     } else {
         // 잘못된 형식인 경우 그대로 사용
         $identificationNumber = $phoneToUse;
+        echo "수동 입력 번호 사용: " . $identificationNumber . "\n";
     }
-    // phoneToUse는 그대로 유지하여 {Phone} 변수에서 사용
 }
 
 // 패턴 데이터베이스 로드
@@ -56,20 +95,15 @@ $pattern = $patterns[$phoneNumber] ?? $patterns['default'] ?? [
     'total_duration' => 30
 ];
 
-// 수동 입력이 있으면 그것을 사용, 없으면 패턴 사용
-if (!empty($manualDtmf)) {
-    $dtmfToSend = preg_replace('/[,\s]/', '', $manualDtmf);
-} else {
-    // 패턴에서 변수 치환 ({ID}, {Phone} 지원)
-    $dtmfToSend = $pattern['dtmf_pattern'];
-    $dtmfToSend = str_replace('{ID}', $identificationNumber, $dtmfToSend);
-    $dtmfToSend = str_replace('{Phone}', $phoneToUse ?: $identificationNumber, $dtmfToSend);
-    $dtmfToSend .= $pattern['confirmation_dtmf'];
-}
+// 패턴에서 변수 치환 ({ID}, {Phone} 지원)
+$dtmfToSend = $pattern['dtmf_pattern'];
+$dtmfToSend = str_replace('{ID}', $identificationNumber, $dtmfToSend);
+$dtmfToSend = str_replace('{Phone}', $phoneToUse ?: $identificationNumber, $dtmfToSend);
+$dtmfToSend .= $pattern['confirmation_dtmf'];
 
 echo "추출된 080번호: " . $phoneNumber . "\n";
-echo "식별번호: " . $identificationNumber . (!empty($phoneToUse) ? " (수동 입력된 전화번호)" : "") . "\n";
-echo "사용된 패턴: " . ($pattern['name'] ?? 'Unknown') . "\n";
+echo "최종 식별번호: " . $identificationNumber . "\n";
+echo "사용된 패턴: " . ($pattern['name'] ?? 'default') . "\n";
 echo "DTMF 시퀀스: " . $dtmfToSend . "\n\n";
 
 // AstDB에 변수 저장 (패턴 정보 포함)
@@ -77,6 +111,8 @@ $uniqueId = uniqid();
 exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} dtmf {$dtmfToSend}\"");
 exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} recnum {$phoneNumber}\"");
 exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} pattern " . json_encode($pattern) . "\"");
+exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} notification_phone {$notificationPhone}\"");
+exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} identification_number {$identificationNumber}\"");
 echo "AstDB에 변수 저장 완료: ID={$uniqueId}\n";
 
 // Call File 내용 생성
@@ -99,10 +135,22 @@ $spoolDir = '/var/spool/asterisk/outgoing/';
 $finalFile = $spoolDir . basename($tempFile);
 if (rename($tempFile, $finalFile)) {
     echo "성공: Call File이 생성되었습니다. Asterisk가 곧 전화를 걸 것입니다.";
+    echo "\n알림 연락처: {$notificationPhone}";
+    echo "\n처리 완료 후 SMS로 결과를 알려드립니다.";
     
     // 패턴 학습 모드 안내
     echo "\n\n💡 팁: 이 번호가 처음이거나 패턴이 맞지 않으면, 녹음을 들어보고 patterns.json을 업데이트하세요!";
 } else {
     echo "오류: Call File을 생성하지 못했습니다.";
+    
+    // 실패 시에도 SMS 알림 전송
+    $smsSender = new SMSSender();
+    $result = $smsSender->sendUnsubscribeNotification(
+        $notificationPhone, 
+        $phoneNumber, 
+        $identificationNumber, 
+        'failed'
+    );
+    $smsSender->logSMS($result, 'call_file_creation_failed');
 }
 ?> 
