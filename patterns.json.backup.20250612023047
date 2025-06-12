@@ -1,0 +1,29 @@
+{
+    "patterns": {
+        "0801234567": {
+            "name": "즉시 선택 패턴",
+            "description": "바로 메뉴 선택",
+            "initial_wait": 2,
+            "dtmf_timing": 3,
+            "dtmf_pattern": "2",
+            "confirmation_wait": 3,
+            "confirmation_dtmf": "{ID}#1",
+            "total_duration": 25,
+            "notes": "메뉴 선택 후 식별번호"
+        },
+        "default": {
+            "name": "기본값",
+            "description": "알려지지 않은 번호용 기본 설정",
+            "initial_wait": 3,
+            "dtmf_timing": 6,
+            "dtmf_pattern": "{ID}#",
+            "confirmation_wait": 5,
+            "confirmation_dtmf": "1",
+            "total_duration": 30,
+            "notes": "새로운 번호는 이 패턴으로 시작"
+        }
+    },
+    "variables": {
+        "{ID}": "광고 문자에서 추출한 식별번호"
+    }
+}
