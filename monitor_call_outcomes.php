@@ -54,6 +54,29 @@ foreach ($files as $file) {
         continue;
     }
 
+    //  추가 검사: 최근 녹음 분석 결과가 "success" 인 경우, 재학습/재통화 건너뜀
+    $recordingDir = '/var/spool/asterisk/monitor/';
+    $filesRec = glob($recordingDir . '*-TO_' . $dialed . '.wav');
+    usort($filesRec, function($a,$b){return filemtime($b) <=> filemtime($a);} );
+    if($filesRec){
+        $latestRec = $filesRec[0];
+        $base = pathinfo($latestRec, PATHINFO_FILENAME);
+        $analysisDir = __DIR__ . '/analysis_results/';
+        $candidates = [
+            $analysisDir . 'analysis_' . $base . '.json',
+            $analysisDir . $base . '_analysis.json'
+        ];
+        foreach($candidates as $cand){
+            if(file_exists($cand)){
+                $data = json_decode(file_get_contents($cand),true);
+                if(isset($data['analysis']['status']) && $data['analysis']['status']==='success'){
+                    // 이미 성공 처리됨
+                    continue 2; // skip foreach($files) loop continue outer
+                }
+            }
+        }
+    }
+
     if (!$hasSpecific) {
         // 1) 패턴 디스커버리 시작
         $discovery = new PatternDiscovery();
