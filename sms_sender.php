@@ -290,6 +290,17 @@ class SMSSender {
      * @param string $originalMessage 원본 메시지 내용 (선택사항)
      */
     public function logSMS($result, $type = 'notification', $originalMessage = null) {
+        // ---- guard: ensure $result is array ----
+        if (!is_array($result)) {
+            $result = [
+                'success' => false,
+                'message' => is_string($result) ? $result : json_encode($result, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
+                'phone'   => '',
+                'bytes'   => 0,
+                'debug'   => null
+            ];
+        }
+        
         $logFile = __DIR__ . '/logs/sms_notifications.log';
         $jsonLogFile = __DIR__ . '/logs/sms_detailed.json';
         $timestamp = date('Y-m-d H:i:s');

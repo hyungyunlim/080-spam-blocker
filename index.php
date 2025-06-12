@@ -4,7 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>080 수신거부 자동화 시스템</title>
+    <!-- Favicon to avoid 404 -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3e%3ctext y='0.9em' font-size='100'%3e🚫%3c/text%3e%3c/svg%3e">
     
+    <?php
+        ini_set('display_errors', 1);
+        error_reporting(E_ALL);
+
+        // 페이지 로드 시 처리
+        $actionResult = '';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['action'])) {
+                if ($_POST['action'] === 'make_call' && isset($_POST['id'])) {
+                    require_once 'process_v2.php';
+                    $processor = new CallProcessor();
+                    $actionResult = $processor->makeCall($_POST['id'], $_POST['phone_number']);
+                } elseif ($_POST['action'] === 'start_discovery') {
+                    require_once 'pattern_discovery.php';
+                    $discovery = new PatternDiscovery();
+                    $actionResult = $discovery->startDiscovery($_POST['discovery_phone_number'], $_POST['notification_phone_number']);
+                }
+            }
+        }
+    ?>
+
     <style>
         * {
             margin: 0;
@@ -16,7 +39,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f7fa;
             min-height: 100vh;
         }
 
@@ -28,41 +51,49 @@
 
         .header {
             text-align: center;
-            color: white;
+            color: #2c3e50;
             margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .header p {
             font-size: 1.1rem;
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
         .card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             margin-bottom: 30px;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
 
         .card-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
+            padding: 20px 30px;
             font-size: 1.3rem;
             font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .card-body {
@@ -77,61 +108,84 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #555;
+            color: #4a5568;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f7fafc;
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: #667eea;
+            background: white;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .form-group textarea {
-            resize: none;
-            overflow: hidden;
+            resize: vertical;
             min-height: 120px;
-            max-height: 400px;
+            font-family: inherit;
         }
 
         .help-text {
             font-size: 13px;
-            color: #666;
+            color: #718096;
             margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover::before {
+            transform: translateX(0);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
         .btn:disabled {
-            background: #ccc;
+            background: #cbd5e0;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -143,331 +197,253 @@
         }
 
         .btn-secondary {
-            background: #6c757d;
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
         }
 
         .btn-secondary:hover {
-            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+            box-shadow: 0 6px 20px rgba(74, 85, 104, 0.4);
         }
 
         .result-box {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
             padding: 20px;
             margin-top: 20px;
             white-space: pre-wrap;
             min-height: 60px;
-        }
-
-        /* Dynamic Input Container */
-        .dynamic-input-container {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
-            transform: translateY(-10px);
-            opacity: 0;
-        }
-
-        .dynamic-input-container.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .detected-info {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* ID Selection UI */
-        .id-selection-container {
-            background: #fff3cd;
-            color: #856404;
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            border: 1px solid #ffeaa7;
-        }
-
-        .id-selection-header {
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .id-options {
-            margin-bottom: 12px;
-        }
-
-        .id-option {
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .id-option:hover {
-            background: #f8f9fa;
-            border-color: #667eea;
-        }
-
-        .id-option input[type="radio"] {
-            margin-right: 8px;
-        }
-
-        .id-option-custom {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .id-custom-input {
-            flex: 1;
-            min-width: 200px;
-            padding: 8px 12px;
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
+            font-family: 'SF Mono', 'Consolas', monospace;
             font-size: 14px;
         }
 
-        .confirmation-container {
-            background: #e7f3ff;
-            border: 1px solid #b8d4ff;
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 16px;
-            display: none;
-        }
-
-        .confirmation-container.show {
-            display: block;
-        }
-
-        .confirmation-text {
-            margin-bottom: 12px;
-            font-weight: 600;
-            color: #0c5460;
-        }
-
-        .confirmation-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-confirm {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-confirm:hover {
-            background: #218838;
-        }
-
-        .btn-cancel {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-cancel:hover {
-            background: #5a6268;
-        }
-
-        /* Recording Grid */
-        .recordings-grid {
-            display: grid;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
+        /* Recording Items */
         .recording-item {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
             padding: 20px;
+            margin-bottom: 16px;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .recording-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
         }
 
         .recording-item:hover {
-            background: #f1f3f4;
-            border-color: #667eea;
+            border-color: #cbd5e0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .recording-item:hover::before {
+            transform: scaleY(1);
         }
 
         .recording-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 15px;
-        }
-
-        .recording-name {
-            font-weight: 600;
-            color: #333;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .recording-name:hover {
-            color: #667eea;
-        }
-
-        .recording-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
         }
 
         .recording-title {
             font-weight: 600;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 5px;
         }
 
         .recording-datetime {
-            font-size: 13px;
-            color: #666;
+            font-size: 14px;
+            color: #718096;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
-        .call-icon, .date-icon {
-            font-size: 14px;
+        /* Labels */
+        .label {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .label-unsubscribe {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .label-discovery {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .label-registered {
+            background: #dbeafe;
+            color: #1e40af;
         }
 
         /* Analysis Results */
         .analysis-result {
             margin-top: 15px;
-            padding: 15px;
-            border-radius: 6px;
+            padding: 16px;
+            border-radius: 10px;
             font-size: 14px;
-            display: none;
+            position: relative;
+            overflow: hidden;
         }
 
         .result-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
         }
 
         .result-failure {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
 
         .result-uncertain {
-            background: #fff3cd;
-            color: #856404;
-            border-left: 4px solid #ffc107;
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
         }
 
         .result-unknown {
-            background: #d1ecf1;
-            color: #0c5460;
-            border-left: 4px solid #17a2b8;
+            background: #e0e7ff;
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
         }
 
-        /* Progress Bar */
-        .progress-container {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 16px;
+       /* Audio Player Custom Styling */
+       .audio-container {
+            width: 100%;
             margin-top: 12px;
-            display: none;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            position: relative;
         }
 
-        .progress-bar {
-            background: #e9ecef;
-            border-radius: 4px;
-            height: 8px;
-            overflow: hidden;
-            margin-bottom: 12px;
+        audio {
+            width: 100%;
+            height: 48px;
+            display: block;
+            outline: none;
         }
 
-        .progress-fill {
-            background: #28a745;
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.3s ease;
+        /* 브라우저별 오디오 컨트롤 스타일 통일 */
+        audio::-webkit-media-controls-enclosure {
+            background-color: transparent;
         }
 
-        .progress-info {
-            font-size: 14px;
-            color: #495057;
+        audio::-webkit-media-controls-panel {
+            background-color: transparent;
         }
 
-        .progress-stage {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .progress-details {
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        /* Responsive Design */
+        /* 모바일에서 오디오 플레이어 스타일 */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
+            audio {
+                height: 54px;
             }
             
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .card-body {
-                padding: 20px;
-            }
-            
-            .recording-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .recording-title {
-                font-size: 14px;
-            }
-            
-            .recording-datetime {
-                font-size: 12px;
-            }
-
-            .id-option-custom {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .id-custom-input {
-                width: 100%;
-                min-width: auto;
+            .audio-container {
+                padding: 6px;
             }
         }
 
-        /* Fade-in Animation */
+        /* 모바일에서 오디오 플레이어 스타일 */
+        @media (max-width: 768px) {
+            audio {
+                height: 54px;
+        }
+
+            .audio-container {
+                min-height: 70px;
+            }
+        }
+
+        /* 전체 내용 보기 텍스트 초기 상태 */
+        .transcription-text {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .transcription-text pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+        }
+
+        /* 분석 다시하기 버튼 스타일 */
+        .reanalyze-btn {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .reanalyze-btn:hover {
+            background: #d97706;
+        }
+
+        /* Transcription */
+        .transcription-container {
+            margin-top: 12px;
+        }
+
+        .transcription-text {
+            margin-top: 10px;
+            padding: 12px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+            border: 1px solid #e2e8f0;
+        }
+
+        .transcription-text pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            font-family: inherit;
+        }
+
+        /* Spinner Animation */
+        .spinner {
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -479,8 +455,193 @@
             }
         }
 
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
+        /* Toast Notifications */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #2d3748;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-notification.error {
+            background: #e53e3e;
+        }
+
+        .toast-notification::before {
+            content: '✓';
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .toast-notification.error::before {
+            content: '✕';
+        }
+
+        /* Loading States */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+                margin-bottom: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+            
+            .recording-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .toast-notification {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+            }
+        }
+
+        /* Smooth Transitions */
+        * {
+            transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+            }
+
+        /* Focus Styles for Accessibility */
+        button:focus,
+        input:focus,
+        textarea:focus,
+        a:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+            }
+
+        /* Dynamic Input Container */
+        .dynamic-input-container {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            transform: translateY(-10px);
+                opacity: 0;
+            }
+
+        .dynamic-input-container.show {
+                transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ID Selection */
+        .id-selection-container {
+            background: #fef3c7;
+            border: 2px solid #fde68a;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .id-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .id-option:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .id-option input[type="radio"]:checked + label {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+        }
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        .progress {
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            line-height: 25px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-bar-striped {
+            background-image: linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+            background-size: 1rem 1rem;
+        }
+
+        .progress-bar-animated {
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+
+        @keyframes progress-bar-stripes {
+            from { background-position: 1rem 0; }
+            to { background-position: 0 0; }
+        }
+
+        .step-progress {
+            margin-bottom: 15px;
+        }
+
+        .step-name {
+            font-weight: bold;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -561,12 +722,18 @@
                     </div>
 
                     <button type="submit" class="btn">
-                        📞 수신거부 전화 걸기
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-outbound" viewBox="0 0 16 16">
+                            <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459l-4.682-4.682a1.75 1.75 0 0 1-.459-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.28 1.494l-.547 2.19a.5.5 0 0 0 .178.643l2.457 2.457a.5.5 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.28l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.363-1.03-.038-2.137.703-2.877zM11 .5a.5.5 0 0 1 .5.5V3h2.5a.5.5 0 0 1 0 1H11.5v2.5a.5.5 0 0 1-1 0V4H8a.5.5 0 0 1 0-1h2.5V1a.5.5 0 0 1 .5-.5"/>
+                        </svg>
+                        수신거부 전화 걸기
                     </button>
                 </form>
 
                 <!-- 결과 표시 영역 -->
                 <div id="resultArea" class="result-box" style="display: none;"></div>
+
+                <!-- 실시간 상태 표시 영역 -->
+                <div id="discovery-status-container" style="margin-top: 15px;"></div>
             </div>
         </div>
 
@@ -586,20 +753,49 @@
                 </div>
             </div>
         </div>
+
+        <!-- 시스템 관리 카드 -->
+        <div class="card">
+            <div class="card-header">
+                🛠️ 시스템 관리
+            </div>
+            <div class="card-body">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <a href="pattern_manager.php" class="btn" style="text-decoration: none; text-align: center;">
+                        🧠 패턴 매니저
+                    </a>
+                    <a href="sms_test.php" class="btn" style="text-decoration: none; text-align: center;">
+                        📱 SMS 보내기
+                    </a>
+                    <a href="patterns.json" target="_blank" class="btn btn-secondary" style="text-decoration: none; text-align: center;">
+                        📝 패턴 설정 보기
+                    </a>
+                </div>
+                <div style="margin-top: 15px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; font-size: 14px; color: #666;">
+                    💡 <strong>새로운 기능:</strong> 이제 시스템이 새로운 080번호를 자동으로 학습합니다! 
+                    처음 보는 번호의 경우 먼저 패턴 파악 전화를 걸어 음성 시스템을 분석하고, 
+                    자동으로 최적화된 DTMF 패턴을 생성합니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast-notification"></div>
+
+    <div id="progressContainer" style="display: none; margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+        <h3>패턴 분석 진행상황</h3>
+        <div class="progress" style="height: 25px; margin-bottom: 10px;">
+            <div id="analysisProgress" class="progress-bar progress-bar-striped progress-bar-animated" 
+                 role="progressbar" style="width: 0%;" 
+                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <span id="progressText">0%</span>
+            </div>
+        </div>
+        <div id="progressMessage" style="margin-bottom: 10px;"></div>
+        <div id="analysisSteps"></div>
     </div>
 
     <script>
-        // 식별번호 패턴 (숫자 5-8자리)
-        const ID_PATTERNS = [
-            /\b(\d{5,8})\b/g,
-            /수신거부\s*(\d{5,8})/g,
-            /해지\s*(\d{5,8})/g,
-            /탈퇴\s*(\d{5,8})/g
-        ];
-
-        // 080 번호 패턴
-        const PHONE_080_PATTERN = /080[0-9]{7,8}/g;
-
         document.addEventListener('DOMContentLoaded', function() {
             const spamContent = document.getElementById('spamContent');
             const dynamicContainer = document.getElementById('dynamicInputContainer');
@@ -612,95 +808,22 @@
             const selectedIdDisplay = document.getElementById('selectedIdDisplay');
             const confirmButton = document.getElementById('confirmSelection');
             const cancelButton = document.getElementById('cancelSelection');
+        const spamForm = document.getElementById('spamForm');
+        const resultArea = document.getElementById('resultArea');
+        const recordingsList = document.getElementById('recordingsList');
+        const refreshBtn = document.getElementById('refreshBtn');
             
-            let selectedIds = [];
             let confirmedId = null;
+            let lastRecordingsUpdate = null;
             
             // 텍스트영역 자동 크기 조절
             function autoResize(textarea) {
                 if (!textarea) return;
-                
-                // 최소 높이 설정
-                const minHeight = 120;
-                const maxHeight = 400;
-                
-                // 높이 초기화
-                textarea.style.height = minHeight + 'px';
-                
-                // 스크롤 높이 기반으로 조정
-                const scrollHeight = textarea.scrollHeight;
-                const newHeight = Math.max(minHeight, Math.min(scrollHeight, maxHeight));
-                
-                textarea.style.height = newHeight + 'px';
-                
-                // 스크롤 표시 여부 결정
-                if (scrollHeight > maxHeight) {
-                    textarea.style.overflowY = 'scroll';
-                } else {
-                    textarea.style.overflowY = 'hidden';
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
                 }
-            }
-            
-            // 초기 텍스트영역 설정
-            function initializeTextarea() {
-                try {
-                    console.log('initializeTextarea 시작');
-                    
-                    const spamContent = document.getElementById('spamContent');
-                    if (spamContent) {
-                        console.log('spamContent 요소 찾음');
-                        
-                        // 초기 크기 설정
-                        if (typeof autoResize === 'function') {
-                            autoResize(spamContent);
-                        }
-                        
-                        // 기존 내용이 있으면 분석
-                        const existingText = spamContent.value.trim();
-                        if (existingText.length > 10) {
-                            if (typeof analyzeText === 'function') {
-                                analyzeText(existingText);
-                            }
-                        }
-                        
-                        console.log('initializeTextarea 완료');
-                    } else {
-                        console.warn('spamContent 요소를 찾을 수 없습니다');
-                    }
-                } catch (error) {
-                    console.error('initializeTextarea 에러:', error);
-                }
-            }
-            
-            // 텍스트 입력 시 실시간 분석 및 자동 크기 조절
-            if (spamContent) {
-                // 모든 입력 이벤트에 리스너 추가
+
                 spamContent.addEventListener('input', function() {
-                    const text = this.value.trim();
-                    
-                    // 자동 크기 조절
-                    autoResize(this);
-                    
-                    if (text.length > 10) {
-                        analyzeText(text);
-                    } else {
-                        hideDynamicInput();
-                    }
-                });
-                
-                // 추가 이벤트들 (붙여넣기, 잘라내기 등)
-                spamContent.addEventListener('paste', function() {
-                    setTimeout(() => {
-                        autoResize(this);
-                        const text = this.value.trim();
-                        if (text.length > 10) {
-                            analyzeText(text);
-                        }
-                    }, 10);
-                });
-                
-                spamContent.addEventListener('cut', function() {
-                    setTimeout(() => {
                         autoResize(this);
                         const text = this.value.trim();
                         if (text.length > 10) {
@@ -708,630 +831,1171 @@
                         } else {
                             hideDynamicInput();
                         }
-                    }, 10);
                 });
-                
-                // 포커스/블러 이벤트
-                spamContent.addEventListener('focus', function() {
-                    autoResize(this);
-                });
-                
-                spamContent.addEventListener('blur', function() {
-                    autoResize(this);
-                });
-            }
 
             function analyzeText(text) {
-                // 080 번호 찾기
-                const phoneNumbers = text.match(PHONE_080_PATTERN) || [];
+            const phone_080_pattern = /080[0-9]{7,8}/g;
+            const phoneNumbers = text.match(phone_080_pattern) || [];
                 
                 if (phoneNumbers.length === 0) {
                     hideDynamicInput();
                     return;
                 }
 
-                // 식별번호 찾기 (더 정확한 패턴 적용)
-                let foundIds = [];
-                
-                // 1. 명시적인 수신거부 패턴 우선 검색
-                const explicitPatterns = [
-                    /수신거부\s*:?\s*(\d{5,8})/gi,
-                    /해지\s*:?\s*(\d{5,8})/gi,
-                    /탈퇴\s*:?\s*(\d{5,8})/gi,
-                    /식별번호\s*:?\s*(\d{5,8})/gi
+            const id_patterns = [
+                // 명시적인 키워드 기반 패턴 (인증번호/식별번호/고객번호/등록번호/확인번호 뒤에 숫자 4~8자리)
+                /(?:인증번호|식별번호|고객번호|등록번호|확인번호)\s*[:\-]?\s*(\d{4,8})/gi,
+                // "번호는 123456" 같은 형태 지원
+                /번호(?:는|:)?\s*(\d{4,8})/gi
                 ];
                 
-                explicitPatterns.forEach(pattern => {
-                    const matches = [...text.matchAll(pattern)];
-                    matches.forEach(match => {
-                        if (match[1] && !foundIds.includes(match[1])) {
+            let foundIds = [];
+            id_patterns.forEach(pattern => {
+                let match;
+                while ((match = pattern.exec(text)) !== null) {
+                    if (!phoneNumbers.some(p => p.includes(match[1]))) {
                             foundIds.push(match[1]);
                         }
-                    });
-                });
-                
-                // 2. 명시적인 패턴이 없으면 괄호 안의 숫자 찾기
-                if (foundIds.length === 0) {
-                    const bracketPattern = /\(.*?(\d{5,8}).*?\)/g;
-                    const matches = [...text.matchAll(bracketPattern)];
-                    matches.forEach(match => {
-                        if (match[1] && !foundIds.includes(match[1])) {
-                            foundIds.push(match[1]);
-                        }
-                    });
                 }
-                
-                // 3. 여전히 없으면 일반적인 숫자 패턴 (하지만 전화번호와 겹치지 않도록)
-                if (foundIds.length === 0) {
-                    const generalPattern = /\b(\d{5,8})\b/g;
-                    const matches = [...text.matchAll(generalPattern)];
-                    matches.forEach(match => {
-                        // 080 번호와 겹치지 않는지 확인
-                        if (match[1] && !foundIds.includes(match[1]) && 
-                            !phoneNumbers.some(phone => phone.includes(match[1]))) {
-                            foundIds.push(match[1]);
-                        }
-                    });
-                }
+            });
+            
+            foundIds = [...new Set(foundIds)]; // 중복 제거
 
-                selectedIds = foundIds;
-                showDynamicInput();
+            showDynamicInput(foundIds, phoneNumbers);
+        }
 
-                if (foundIds.length === 1) {
-                    // 식별번호가 하나만 발견된 경우
-                    detectedIdText.textContent = `식별번호 발견: ${foundIds[0]} (080번호: ${phoneNumbers.join(', ')})`;
-                    detectedIdSection.style.display = 'block';
-                    multipleIdSection.style.display = 'none';
-                    phoneInputSection.style.display = 'none';
-                    confirmedId = foundIds[0];
-                } else if (foundIds.length > 1) {
-                    // 식별번호가 여러개 발견된 경우
-                    showMultipleIdSelection(foundIds, phoneNumbers);
-                } else {
-                    // 식별번호가 없는 경우
-                    detectedIdSection.style.display = 'none';
-                    multipleIdSection.style.display = 'none';
-                    phoneInputSection.style.display = 'block';
-                    confirmedId = null;
-                }
-            }
-
-            function showMultipleIdSelection(foundIds, phoneNumbers) {
+        function showDynamicInput(foundIds, phoneNumbers) {
+            dynamicContainer.classList.add('show');
                 detectedIdSection.style.display = 'none';
+            multipleIdSection.style.display = 'none';
                 phoneInputSection.style.display = 'none';
-                multipleIdSection.style.display = 'block';
                 confirmationContainer.classList.remove('show');
                 confirmedId = null;
                 
-                // 옵션 생성
+            if (foundIds.length === 1) {
+                confirmedId = foundIds[0];
+                detectedIdText.innerHTML = `✅ 080번호: <strong>${phoneNumbers.join(', ')}</strong><br>✅ 식별번호: <strong>${confirmedId}</strong>`;
+                detectedIdSection.style.display = 'block';
+            } else if (foundIds.length > 1) {
+                multipleIdSection.style.display = 'block';
                 idOptions.innerHTML = '';
                 foundIds.forEach((id, index) => {
-                    const option = document.createElement('div');
-                    option.className = 'id-option';
-                    option.innerHTML = `
+                    idOptions.innerHTML += `
+                        <div class="id-option">
                         <input type="radio" id="id${index}" name="selectedId" value="${id}">
                         <label for="id${index}">${id}</label>
+                        </div>
                     `;
-                    idOptions.appendChild(option);
-                    
-                    // 첫 번째 옵션을 기본 선택
-                    if (index === 0) {
-                        option.querySelector('input').checked = true;
-                    }
                 });
-                
-                // 라디오 버튼 변경 이벤트 추가
-                const radioButtons = idOptions.querySelectorAll('input[type="radio"]');
-                radioButtons.forEach(radio => {
-                    radio.addEventListener('change', showConfirmation);
-                });
-                
-                // 커스텀 입력 이벤트 추가
-                document.getElementById('customId').addEventListener('change', showConfirmation);
-                document.getElementById('customIdInput').addEventListener('input', showConfirmation);
+                idOptions.innerHTML += `
+                    <div class="id-option-custom">
+                        <input type="radio" id="customId" name="selectedId" value="custom">
+                        <label for="customId">직접 입력:</label>
+                        <input type="text" id="customIdInput" class="id-custom-input">
+                    </div>
+                `;
+            } else {
+                phoneInputSection.style.display = 'block';
             }
+        }
+        
+        idOptions.addEventListener('change', (e) => {
+            if (e.target.name === 'selectedId') {
+                showConfirmation();
+            }
+        });
+        
+        document.getElementById('customIdInput')?.addEventListener('input', showConfirmation);
 
             function showConfirmation() {
                 const selectedRadio = document.querySelector('input[name="selectedId"]:checked');
                 if (!selectedRadio) return;
                 
-                let selectedValue = '';
-                if (selectedRadio.value === 'custom') {
-                    selectedValue = document.getElementById('customIdInput').value.trim();
-                    if (!selectedValue) return;
-                } else {
-                    selectedValue = selectedRadio.value;
-                }
-                
+            let selectedValue = (selectedRadio.value === 'custom') 
+                ? document.getElementById('customIdInput').value.trim() 
+                : selectedRadio.value;
+
+            if(selectedValue) {
                 selectedIdDisplay.textContent = selectedValue;
                 confirmationContainer.classList.add('show');
+            } else {
+                confirmationContainer.classList.remove('show');
+            }
             }
 
-            // 확인 버튼 이벤트
-            confirmButton.addEventListener('click', function() {
+        confirmButton.addEventListener('click', () => {
                 const selectedRadio = document.querySelector('input[name="selectedId"]:checked');
-                if (selectedRadio) {
-                    if (selectedRadio.value === 'custom') {
-                        confirmedId = document.getElementById('customIdInput').value.trim();
-                    } else {
-                        confirmedId = selectedRadio.value;
-                    }
-                    
-                    // 확인된 ID로 단일 표시로 변경
-                    detectedIdText.textContent = `선택된 식별번호: ${confirmedId}`;
+            if (!selectedRadio) return;
+            
+            confirmedId = (selectedRadio.value === 'custom')
+                ? document.getElementById('customIdInput').value.trim()
+                : selectedRadio.value;
+
+            if (confirmedId) {
+                detectedIdText.innerHTML = `✅ 선택된 식별번호: <strong>${confirmedId}</strong>`;
                     detectedIdSection.style.display = 'block';
                     multipleIdSection.style.display = 'none';
+                confirmationContainer.classList.remove('show');
                 }
             });
 
-            // 취소 버튼 이벤트
-            cancelButton.addEventListener('click', function() {
+        cancelButton.addEventListener('click', () => {
                 confirmationContainer.classList.remove('show');
+            const selectedRadio = document.querySelector('input[name="selectedId"]:checked');
+            if(selectedRadio) selectedRadio.checked = false;
                 confirmedId = null;
             });
 
-            function showDynamicInput() {
-                dynamicContainer.style.display = 'block';
-                setTimeout(() => {
-                    dynamicContainer.classList.add('show');
-                }, 10);
-            }
-
             function hideDynamicInput() {
                 dynamicContainer.classList.remove('show');
-                setTimeout(() => {
-                    dynamicContainer.style.display = 'none';
-                    detectedIdSection.style.display = 'none';
-                    multipleIdSection.style.display = 'none';
-                    phoneInputSection.style.display = 'none';
-                    confirmationContainer.classList.remove('show');
-                    confirmedId = null;
-                }, 300);
-            }
-            
-            // 페이지 로드 시 초기 크기 설정
-            autoResize(spamContent);
-        });
+        }
 
-        // 폼 제출 처리
-        document.getElementById('spamForm').addEventListener('submit', function(e) {
+        spamForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const formData = new FormData(this);
-            const resultArea = document.getElementById('resultArea');
-            
-            // 확인된 식별번호가 있다면 추가
-            const multipleIdSection = document.getElementById('multipleIdSection');
-            if (multipleIdSection.style.display !== 'none' && confirmedId) {
-                formData.append('selected_id', confirmedId);
-            }
-            
-            // 결과 영역 표시
             resultArea.style.display = 'block';
             resultArea.innerHTML = '처리 중...';
             
-            fetch('process_v2.php', {
+            const formData = new FormData(this);
+            if (confirmedId) {
+                formData.append('id', confirmedId);
+            }
+            // 폼 액션(process_v2.php)으로 전송
+            fetch(this.action, {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.text())
             .then(data => {
-                resultArea.innerHTML = data;
-                resultArea.classList.add('fade-in');
-                
-                // 성공 시 녹음 목록 새로고침
-                setTimeout(() => {
-                    loadRecordings();
-                }, 2000);
+                // 서버에서 HTML이 넘어와도 태그를 제거하고 텍스트만 표시
+                const safeText = typeof data === 'string' ? data.replace(/(<([^>]+)>)/gi, '') : data;
+                resultArea.textContent = safeText;
+                getRecordings();
             })
             .catch(error => {
-                resultArea.innerHTML = '오류가 발생했습니다: ' + error.message;
+                resultArea.textContent = '오류 발생: ' + error;
             });
         });
 
-        // 파일명에서 정보 추출
-        function parseFilename(filename) {
-            try {
-                console.log('Parsing filename:', filename);
-                
-                // 예: 20250609-235131-FROM_SYSTEM-TO_0800121900.wav
-                const match = filename.match(/(\d{8})-(\d{6})-FROM_(.+?)-TO_(.+?)\.wav$/);
-                
-                if (match) {
-                    const [, date, time, from, to] = match;
-                    console.log('Matched parts:', { date, time, from, to });
-                    
-                    // 날짜 파싱 (YYYYMMDD)
-                    const year = date.substr(0, 4);
-                    const month = date.substr(4, 2);
-                    const day = date.substr(6, 2);
-                    
-                    // 시간 파싱 (HHMMSS)
-                    const hour = time.substr(0, 2);
-                    const minute = time.substr(2, 2);
-                    const second = time.substr(4, 2);
-                    
-                    const result = {
-                        date: `${year}년 ${parseInt(month)}월 ${parseInt(day)}일`,
-                        time: `${hour}:${minute}:${second}`,
-                        from: from,
-                        to: to,
-                        formatted: true
-                    };
-                    
-                    console.log('Parsed result:', result);
-                    return result;
-                }
-                
-                console.log('No match found, returning original');
-                return {
-                    original: filename,
-                    formatted: false
-                };
-            } catch (error) {
-                console.error('Error parsing filename:', filename, error);
-                return {
-                    original: filename,
-                    formatted: false
-                };
-            }
+        let autoAnalysisSet = new Set();
+
+        // 진행 중인 analysis_id를 추적 (filename -> analysis_id)
+        const persistedAnalyses = JSON.parse(localStorage.getItem('activeAnalyses') || '[]');
+        const activeAnalysisMap = new Map(persistedAnalyses);
+
+        function persistActiveAnalyses() {
+            localStorage.setItem('activeAnalyses', JSON.stringify([...activeAnalysisMap]));
         }
 
-        // 녹음 파일 목록 로드
-        function loadRecordings() {
-            const recordingsList = document.getElementById('recordingsList');
-            
-            // 로딩 상태 표시
-            recordingsList.innerHTML = `
-                <div style="text-align: center; padding: 40px; color: #666;">
-                    🔄 녹음 파일을 불러오는 중...
-                </div>
-            `;
-            
-            console.log('녹음 파일 목록 로드 시작...');
-            
+        // 기존 getRecordings 함수 내부에서, 진행 중인 analysis_id가 있으면 해당 항목에 프로그레스바 추가
+        function getRecordings() {
             fetch('get_recordings.php')
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                .then(response => response.json())
+                .then(data => {
+                    if (lastRecordingsUpdate !== null && data.updated <= lastRecordingsUpdate) {
+                        return; // no changes, skip DOM rebuild
                     }
-                    return response.json();
-                })
-                .then(files => {
-                    console.log('받은 파일 목록:', files);
-                    
-                    if (!Array.isArray(files)) {
-                        throw new Error('응답이 배열 형태가 아닙니다: ' + typeof files);
-                    }
-                    
-                    if (files.length === 0) {
-                        recordingsList.innerHTML = `
-                            <div style="text-align: center; padding: 40px; color: #666;">
-                                🎵 아직 녹음 파일이 없습니다
-                            </div>
-                        `;
-                        return;
-                    }
+                    lastRecordingsUpdate = data.updated;
 
-                    let html = '';
-                    files.forEach((file, index) => {
-                        console.log(`Processing file ${index + 1}:`, file);
-                        
-                        const safeId = file.replace(/[^a-zA-Z0-9]/g, '_');
-                        
-                        // 파일명 파싱 개선
-                        const fileInfo = parseFilename(file);
-                        console.log('Parsed file info:', fileInfo);
-                        
-                        let displayHeader;
-                        if (fileInfo.formatted) {
-                            displayHeader = `
-                                <div class="recording-info">
-                                    <div class="recording-title">
-                                        <span class="call-icon">📞</span>
-                                        <strong>${fileInfo.to}</strong>
-                                    </div>
-                                    <div class="recording-datetime">
-                                        <span class="date-icon">📅</span> ${fileInfo.date} ${fileInfo.time}
-                                    </div>
-                                </div>
-                            `;
-                        } else {
-                            displayHeader = `
-                                <div class="recording-info">
-                                    <div class="recording-title">
-                                        <span class="call-icon">🎵</span> ${fileInfo.original}
-                                    </div>
-                                </div>
-                            `;
+                    if (data.success && data.recordings && data.recordings.length > 0) {
+                        // 기존 DOM의 항목을 Map으로 저장 (filename 기준)
+                        const existingItems = new Map();
+                        recordingsList.querySelectorAll('.recording-item').forEach(item => {
+                            const audio = item.querySelector('audio');
+                            if (audio) {
+                                const src = audio.getAttribute('src');
+                                const match = src.match(/file=([^&]+)/);
+                                if (match) {
+                                    existingItems.set(decodeURIComponent(match[1]), item);
+                                }
+                            }
+                        });
+
+                        // 새로 그릴 항목
+                        const newItems = [];
+
+                        data.recordings.forEach(rec => {
+                            let item = existingItems.get(rec.filename);
+                            if (item) {
+                                // 이미 있는 항목이면 그대로 사용
+                                existingItems.delete(rec.filename);
+                            } else {
+                                // 새 항목이면 생성
+                                item = createRecordingItem(rec);
+                            }
+                            newItems.push(item);
+                        });
+
+                        // 남은 기존 항목(삭제된 것)은 DOM에서 제거
+                        existingItems.forEach(item => item.remove());
+
+                        // 순서대로 DOM에 배치
+                        recordingsList.innerHTML = '';
+                        newItems.forEach(item => recordingsList.appendChild(item));
+
+                        // --- 자동 분석 트리거 (DOM 리프레시 생략 시에도) ---
+                        if (Array.isArray(data.recordings)) {
+                            data.recordings.forEach(rec => {
+                                if (rec.ready_for_analysis && !autoAnalysisSet.has(rec.filename)) {
+                                    const btn = document.querySelector(`button.analyze-btn[data-file="${rec.filename}"]`);
+                                    if (btn && !btn.disabled) {
+                                        autoAnalysisSet.add(rec.filename);
+                                        handleAnalysisClick(btn);
+                                    }
+                                }
+                            });
                         }
-                        
-                        html += `
-                            <div class="recording-item fade-in">
-                                <div class="recording-header">
-                                    <a href="player.php?file=${encodeURIComponent(file)}" target="_blank" class="recording-name">
-                                        ${displayHeader}
-                                    </a>
-                                    <button class="btn btn-small" onclick="analyzeRecording('${file}', this)" data-filename="${file}">
-                                        🎤 음성분석
-                                    </button>
-                                </div>
-                                <div id="progress-${safeId}" class="progress-container"></div>
-                                <div id="analysis-${safeId}" class="analysis-result"></div>
-                            </div>
-                        `;
-                    });
-                    
-                    console.log('HTML 생성 완료, 항목 수:', files.length);
-                    recordingsList.innerHTML = html;
-                    
-                    // 기존 분석 결과 로드
-                    setTimeout(() => {
-                        console.log('기존 분석 결과 로드 시작');
-                        loadExistingAnalysis();
-                    }, 500);
+
+                        // ---- 통화 진행바 트리거 (DOM 재빌드 없이도) ----
+                        data.recordings.forEach(rec => {
+                            if (rec.analysis_result === '미분석' && !rec.ready_for_analysis) {
+                                const btnEl = document.querySelector(`button.analyze-btn[data-file="${rec.filename}"]`);
+                                const recordingItem = btnEl ? btnEl.closest('.recording-item') : null;
+                                if (recordingItem && !recordingItem.querySelector('.call-progress')) {
+                                    trackCallProgress(recordingItem, rec.filename);
+                                }
+                            }
+                        });
+                    } else if (data.error) {
+                        recordingsList.innerHTML = `<div class=\"analysis-result result-failure\">${data.error}</div>`;
+                    } else {
+                        recordingsList.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">표시할 녹음 파일이 없습니다.</div>';
+                    }
                 })
                 .catch(error => {
-                    console.error('녹음 파일 로드 실패:', error);
-                    recordingsList.innerHTML = `
-                        <div style="text-align: center; padding: 40px; color: #dc3545;">
-                            ❌ 녹음 파일을 불러올 수 없습니다<br>
-                            <small style="color: #666;">오류: ${error.message}</small>
-                        </div>
-                    `;
+                    console.error('Error fetching recordings:', error);
+                    recordingsList.innerHTML = `<div class=\"analysis-result result-failure\">녹음 목록을 불러오는 데 실패했습니다: ${error.message}</div>`;
                 });
         }
 
-        // 음성 분석 함수
-        function analyzeRecording(filename, button) {
-            const safeId = filename.replace(/[^a-zA-Z0-9]/g, '_');
-            const progressContainer = document.getElementById(`progress-${safeId}`);
-            const originalText = button.textContent;
+        // 데이터 객체를 받아 녹음 항목 DOM 요소를 생성하는 함수
+        function createRecordingItem(rec) {
+            const item = document.createElement('div');
+            item.className = 'recording-item';
             
-            button.disabled = true;
-            button.textContent = '⏳ 분석 중...';
+            const statusColor = rec.analysis_result === '성공' ? 'result-success' : 
+                                rec.analysis_result === '실패' ? 'result-failure' :
+                                rec.analysis_result === '불확실' ? 'result-uncertain' : 
+                                rec.analysis_result === '미분석' ? 'result-unknown' : 'result-unknown';
             
-            progressContainer.style.display = 'block';
-            progressContainer.innerHTML = `
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                </div>
-                <div class="progress-info">
-                    <div class="progress-stage">🔄 분석 시작</div>
-                    <div class="progress-message">분석을 준비하고 있습니다...</div>
-                </div>
+            const callTypeLabel = rec.call_type === 'discovery' 
+                ? '<span class="label label-discovery">패턴탐색</span>' 
+                : '<span class="label label-unsubscribe">수신거부</span>';
+
+            const registrationBadge = rec.pattern_registered ? '<span class="label label-registered">패턴등록</span>' : '';
+
+            let analysisDetailsHtml = '';
+            let showAnalyzeButton = false;
+            let showReanalyzeButton = false;
+                    
+            if (rec.analysis_result && rec.analysis_result !== '미분석') {
+                const completedAt = rec.completed_at ? new Date(rec.completed_at).toLocaleString('ko-KR') : '';
+                const confidenceText = rec.confidence ? ` (신뢰도: ${rec.confidence}%)` : '';
+                
+                // 패턴 탐색 결과인 경우 특별 처리
+                if (rec.call_type === 'discovery' && rec.pattern_data) {
+                    analysisDetailsHtml = `
+                        <strong>패턴 분석 완료</strong>${confidenceText}${completedAt ? ` <span style="color:#666;">(${completedAt})</span>` : ''}
+                        <p><strong>패턴명:</strong> ${rec.pattern_data.name}</p>
+                        <p><strong>DTMF 타이밍:</strong> ${rec.pattern_data.dtmf_timing}초</p>
+                        <p><strong>DTMF 패턴:</strong> ${rec.pattern_data.dtmf_pattern}</p>
+                    `;
+                } else {
+                    // 일반 분석 결과
+                    analysisDetailsHtml = `
+                        <strong>분석 결과:</strong> ${rec.analysis_result}${confidenceText}${completedAt ? ` <span style="color:#666;">(${completedAt})</span>` : ''}
+                        <p>${rec.analysis_text || ''}</p>
+                    `;
+                }
+                
+                if (rec.transcription) {
+                    analysisDetailsHtml += `
+                        <div class="transcription-container">
+                            <button class="btn btn-small btn-secondary toggle-transcription">전체 내용 보기</button>
+                            <div class="transcription-text" style="display: none;">
+                                <p><strong>변환된 텍스트:</strong></p>
+                                <pre>${rec.transcription}</pre>
+                            </div>
+                            </div>
+                        `;
+                }
+                showReanalyzeButton = true; // 분석 완료된 파일에 다시 분석 버튼 표시
+            } else {
+                analysisDetailsHtml = '<strong>분석 결과:</strong> 미분석 <span style="color: #666;">(아직 분석되지 않았습니다)</span>';
+                showAnalyzeButton = true;
+            }
+
+            // 파일 경로 처리 - 이스케이프 문자 제거
+            const filePath = rec.path || rec.filename || '';
+            const cleanPath = filePath.replace(/\\/g, '');
+                        
+            // 파일 경로가 비어있으면 filename 사용
+            const fileForAnalysis = cleanPath || rec.filename || '';
+
+            item.innerHTML = `
+                <div class="recording-header">
+                                <div class="recording-info">
+                                    <div class="recording-title">
+                            📞 ${rec.title}
+                                    </div>
+                                    <div class="recording-datetime">
+                            <span class="date-icon">📅</span> ${rec.datetime}
+                                    </div>
+                                </div>
+                    <div class="recording-tags">${callTypeLabel} ${registrationBadge}</div>
+                                    </div>
+                <audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;"></audio>
+                <div class="analysis-result ${statusColor}" style="display: block;">
+                    ${analysisDetailsHtml}
+                                </div>
+                ${showAnalyzeButton ? `
+                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end;">
+                    <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small analyze-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16">
+                            <path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 4a.5.5 0 0 0 0 .707l.707.707a.5.5 0 0 0 .707 0L8.707 4a.5.5 0 0 0 0-.707Zm-3.5 1.65A.5.5 0 0 0 3.293 6L2 7.293a.5.5 0 1 0 .707.707L4 6.707a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707 0ZM10 8a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"/>
+                            <path d="M6.25 10.5c.065.14.12.29.18.445l.08.18a.5.5 0 0 0 .868.036l.338-.676a.5.5 0 0 0-.16-.672l-.354-.354a.5.5 0 0 0-.85-.043l-.248.495Zm3.5 0c.065.14.12.29.18.445l.08.18a.5.5 0 0 0 .868.036l.338-.676a.5.5 0 0 0-.16-.672l-.354-.354a.5.5 0 0 0-.85-.043l-.248.495ZM1.625 13.5A.5.5 0 0 0 1 14h14a.5.5 0 0 0-.625-.5h-12.75Z"/>
+                        </svg>
+                        분석하기
+                                    </button>
+                    <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">
+                        🗑 삭제
+                                    </button>
+                                </div>
+                ` : ''}
+                ${showReanalyzeButton ? `
+                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end;">
+                    <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small reanalyze-btn analyze-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                        </svg>
+                        ${rec.call_type === 'discovery' ? '패턴 다시 분석하기' : '다시 분석하기'}
+                    </button>
+                    <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">
+                        🗑 삭제
+                    </button>
+                            </div>
+                ` : ''}
             `;
             
-            // 비동기 분석 시작
-            fetch('analyze_recording_async.php', {
+            // 이벤트 리스너 추가 (이벤트 위임 대신 직접 추가)
+            const transcriptionToggle = item.querySelector('.toggle-transcription');
+            if (transcriptionToggle) {
+                transcriptionToggle.addEventListener('click', function() {
+                    const textDiv = item.querySelector('.transcription-text');
+                    const isVisible = textDiv.style.display === 'block';
+                    textDiv.style.display = isVisible ? 'none' : 'block';
+                    this.textContent = isVisible ? '전체 내용 보기' : '숨기기';
+                    // 파일명 기준으로 펼침 상태 저장/제거
+                    if (!isVisible) {
+                        openTranscriptions.add(rec.filename);
+                    } else {
+                        openTranscriptions.delete(rec.filename);
+                    }
+                    localStorage.setItem('openTranscriptions', JSON.stringify([...openTranscriptions]));
+                });
+            }
+            // 목록 갱신 시 펼침 상태 복원
+            if (openTranscriptions.has(rec.filename)) {
+                const textDiv = item.querySelector('.transcription-text');
+                if (textDiv) {
+                    textDiv.style.display = 'block';
+                    if (transcriptionToggle) transcriptionToggle.textContent = '숨기기';
+                }
+            }
+            
+            return item;
+        }
+
+        // 수동 분석 버튼 클릭 처리 함수
+        function handleAnalysisClick(button) {
+            const recordingFile = button.dataset.file;
+            const callType = button.dataset.type || 'unsubscribe';
+            console.log('Analyze button clicked, file:', recordingFile, 'type:', callType);
+            console.log('Button dataset:', button.dataset);
+            console.log('Button HTML:', button.outerHTML);
+            
+            if (!recordingFile) {
+                showToast('분석할 파일 경로를 찾을 수 없습니다.', true);
+                return;
+            }
+
+            // 버튼이 있는 recording-item 찾기
+            const recordingItem = button.closest('.recording-item');
+            
+            // 버튼 상태 변경
+            button.disabled = true;
+            const originalContent = button.innerHTML;
+            button.innerHTML = '<span class="spinner" style="width: 14px; height: 14px; margin-right: 5px;"></span> 분석 시작중...';
+
+            // 전체 경로가 아닌 파일명만 전송
+            const filename = recordingFile.includes('/') ? recordingFile.split('/').pop() : recordingFile;
+            const fullPath = recordingFile.includes('/') ? recordingFile : '/var/spool/asterisk/monitor/' + recordingFile;
+
+            console.log('Sending request with file:', fullPath);
+            
+            // call_type에 따라 다른 API 호출
+            const apiUrl = callType === 'discovery' ? 'analyze_pattern_recording.php' : 'analyze_recording.php';
+
+            fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: 'filename=' + encodeURIComponent(filename)
+                body: 'file=' + encodeURIComponent(fullPath)
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Response body:', text);
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.success) {
-                    // 진행 상황 모니터링 시작
-                    monitorProgress(data.job_id, safeId, button, originalText);
+                console.log('Analysis response:', data);
+                if (data.success && data.analysis_id) {
+                    // 진행 상황 표시 UI 생성
+                    const progressContainer = createProgressUI(recordingItem);
+                    // 진행 중인 analysis_id를 추적
+                    activeAnalysisMap.set(filename, data.analysis_id);
+                    persistActiveAnalyses();
+                    // call_type에 따라 다른 진행 상황 추적
+                    if (callType === 'discovery') {
+                        trackPatternAnalysisProgress(data.analysis_id, progressContainer, button, originalContent, data.phone_number, filename);
+                    } else {
+                        trackAnalysisProgress(data.analysis_id, progressContainer, button, originalContent);
+                    }
                 } else {
-                    showAnalysisError(safeId, button, originalText, data.error || '분석 시작 실패');
+                    showToast('분석 시작 실패: ' + (data.message || '알 수 없는 오류'), true);
+                    button.disabled = false;
+                    button.innerHTML = originalContent;
+                    autoAnalysisSet.delete(filename);
+                    activeAnalysisMap.delete(filename);
                 }
             })
             .catch(error => {
-                showAnalysisError(safeId, button, originalText, error.message);
+                showToast('분석 스크립트 실행 중 오류가 발생했습니다.', true);
+                console.error('Fetch Error:', error);
+                button.disabled = false;
+                button.innerHTML = originalContent;
+                autoAnalysisSet.delete(filename);
+                activeAnalysisMap.delete(filename);
             });
         }
 
-        // 진행 상황 모니터링
-        function monitorProgress(jobId, safeId, button, originalText) {
+        // 진행 상황 UI 생성
+        function createProgressUI(recordingItem) {
+            // 기존 진행 상황 UI가 있으면 제거
+            const existingProgress = recordingItem.querySelector('.analysis-progress');
+            if (existingProgress) {
+                existingProgress.remove();
+            }
+
+            const progressHTML = `
+                <div class="analysis-progress" style="margin-top: 15px; padding: 15px; background: #f0f4f8; border-radius: 8px; border: 1px solid #d1d9e6;">
+                    <div class="progress-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span class="progress-stage" style="font-weight: 600; color: #4a5568;">분석 준비중...</span>
+                        <span class="progress-percentage" style="font-weight: 600; color: #667eea;">0%</span>
+                    </div>
+                    <div class="progress-bar" style="background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div class="progress-fill" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+                    </div>
+                    <div class="progress-message" style="margin-top: 8px; font-size: 13px; color: #718096;">대기중...</div>
+                </div>
+            `;
+
+            recordingItem.insertAdjacentHTML('beforeend', progressHTML);
+            return recordingItem.querySelector('.analysis-progress');
+        }
+
+        // 진행 상황 추적 (수신거부 분석용)
+        function trackAnalysisProgress(analysisId, progressContainer, button, originalButtonContent) {
+            const stageElement = progressContainer.querySelector('.progress-stage');
+            const percentageElement = progressContainer.querySelector('.progress-percentage');
+            const fillElement = progressContainer.querySelector('.progress-fill');
+            const messageElement = progressContainer.querySelector('.progress-message');
+            const recordingItem = progressContainer.closest('.recording-item');
+
+            const stageNames = {
+                'queued': '대기중',
+                'starting': '시작중',
+                'loading_model': '모델 로딩',
+                'transcribing': '음성 변환',
+                'analyzing': '텍스트 분석',
+                'saving': '결과 저장',
+                'completed': '완료',
+                'error': '오류',
+                'timeout': '시간 초과'
+            };
+
+            // 진행 상황 확인 함수
             const checkProgress = () => {
-                fetch(`analyze_recording_async.php?job_id=${jobId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            updateProgress(safeId, data);
-                            
-                            if (data.stage === 'completed') {
-                                showAnalysisComplete(safeId, button, originalText);
-                            } else if (data.stage === 'error') {
-                                showAnalysisError(safeId, button, originalText, data.message);
-                            } else {
-                                // 계속 모니터링
-                                setTimeout(checkProgress, 2000);
+                fetch(`get_analysis_progress.php?analysis_id=${analysisId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                            const stage = data.stage || 'unknown';
+                            const percentage = data.percentage || 0;
+                            const message = data.message || '';
+
+                            // UI 업데이트
+                            stageElement.textContent = stageNames[stage] || stage;
+                            percentageElement.textContent = percentage + '%';
+                            fillElement.style.width = percentage + '%';
+                            messageElement.textContent = message;
+
+                            if (data.completed || stage === 'completed') {
+                                // 분석 완료
+                                progressContainer.style.background = '#d1fae5';
+                                progressContainer.style.borderColor = '#a7f3d0';
+                                stageElement.style.color = '#065f46';
+                                
+                                setTimeout(() => {
+                                    progressContainer.remove();
+                                    button.disabled = false;
+                                    button.innerHTML = originalButtonContent;
+                                    showToast('분석이 완료되었습니다!');
+                                    
+                                    // 해당 녹음 항목만 업데이트
+                                    updateSingleRecordingItem(recordingItem);
+                                }, 2000);
+                            } else if (stage === 'error' || stage === 'timeout') {
+                                // 오류 발생
+                                progressContainer.style.background = '#fee2e2';
+                                progressContainer.style.borderColor = '#fecaca';
+                                stageElement.style.color = '#991b1b';
+                                
+                                setTimeout(() => {
+                                    progressContainer.remove();
+                                    button.disabled = false;
+                                    button.innerHTML = originalButtonContent;
+                                }, 3000);
+                } else {
+                                // 계속 진행중 - 1초 후 다시 확인
+                                setTimeout(checkProgress, 1000);
                             }
                         } else {
-                            showAnalysisError(safeId, button, originalText, '진행 상황 확인 실패');
-                        }
-                    })
-                    .catch(error => {
-                        showAnalysisError(safeId, button, originalText, error.message);
+                            // API 오류
+                            console.error('Progress check failed:', data);
+                            progressContainer.remove();
+                            button.disabled = false;
+                            button.innerHTML = originalButtonContent;
+                }
+            })
+            .catch(error => {
+                        console.error('Progress check error:', error);
+                        progressContainer.remove();
+                        button.disabled = false;
+                        button.innerHTML = originalButtonContent;
                     });
             };
             
-            // 첫 번째 체크를 1초 후에 시작
-            setTimeout(checkProgress, 1000);
+            // 첫 번째 확인은 500ms 후에 시작
+            setTimeout(checkProgress, 500);
         }
 
-        // 진행 상황 업데이트
-        function updateProgress(safeId, progressData) {
-            const progressContainer = document.getElementById(`progress-${safeId}`);
+        // 단일 녹음 항목 업데이트 함수
+        function updateSingleRecordingItem(recordingItem) {
+            // 오디오 요소에서 파일명 추출
+            const audioElement = recordingItem.querySelector('audio');
+            if (!audioElement) return;
             
-            const stageTexts = {
-                'starting': '🔄 시작 중',
-                'file_check': '📁 파일 확인',
-                'loading_model': '🤖 모델 로딩',
-                'model_loaded': '✅ 모델 준비',
-                'transcribing': '🎙️ 음성 변환',
-                'transcription_done': '📝 변환 완료',
-                'analyzing': '🔍 패턴 분석',
-                'saving': '💾 결과 저장',
-                'completed': '✅ 완료',
-                'error': '❌ 오류'
+            const src = audioElement.getAttribute('src');
+            const match = src.match(/file=([^&]+)/);
+            if (!match) return;
+            
+            const filename = decodeURIComponent(match[1]);
+            
+            // 서버에서 최신 데이터 가져오기
+            fetch('get_recordings.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.recordings) {
+                        // 해당 파일의 최신 정보 찾기
+                        const updatedRec = data.recordings.find(rec => rec.filename === filename);
+                        if (updatedRec) {
+                            // 새로운 항목으로 교체
+                            const newItem = createRecordingItem(updatedRec);
+                            recordingItem.replaceWith(newItem);
+                            
+                            // 애니메이션 효과
+                            newItem.style.animation = 'fadeIn 0.5s ease-in';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating recording item:', error);
+            });
+        }
+
+        // 패턴 분석 진행 상황 추적
+        function trackPatternAnalysisProgress(analysisId, progressContainer, button, originalButtonContent, phoneNumber, filename) {
+            const stageElement = progressContainer.querySelector('.progress-stage');
+            const percentageElement = progressContainer.querySelector('.progress-percentage');
+            const fillElement = progressContainer.querySelector('.progress-fill');
+            const messageElement = progressContainer.querySelector('.progress-message');
+            const recordingItem = progressContainer.closest('.recording-item');
+
+            const stageNames = {
+                'queued': '대기중',
+                'starting': '시작중',
+                'loading_model': '모델 로딩',
+                'model_loaded': '모델 로드 완료',
+                'transcribing': '음성 변환',
+                'transcribed': '음성 변환 완료',
+                'analyzing_keywords': '키워드 분석',
+                'analyzing_pattern': 'DTMF 패턴 분석',
+                'saving': '결과 저장',
+                'completed': '완료',
+                'error': '오류',
+                'timeout': '시간 초과'
+            };
+
+            // 진행 상황 확인 함수
+            const checkProgress = () => {
+                fetch(`get_pattern_analysis_progress.php?analysis_id=${analysisId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && !data.prevent_refresh) {
+                            const stage = data.stage || 'unknown';
+                            const percentage = data.percentage || 0;
+                            const message = data.message || '';
+
+                            // UI 업데이트
+                            stageElement.textContent = stageNames[stage] || stage;
+                            percentageElement.textContent = percentage + '%';
+                            fillElement.style.width = percentage + '%';
+                            messageElement.textContent = message;
+                            
+                            if (data.completed || stage === 'completed') {
+                                // 분석 완료
+                                progressContainer.style.background = '#d1fae5';
+                                progressContainer.style.borderColor = '#a7f3d0';
+                                stageElement.style.color = '#065f46';
+                                
+                                let successMessage = '패턴 분석이 완료되었습니다!';
+                                successMessage += ` ${phoneNumber} 번호의 패턴이 저장되었습니다.`;
+                                if (data.pattern_saved) {
+                                    successMessage += ` ${phoneNumber} 번호의 패턴이 저장되었습니다.`;
+                                }
+                                if (filename && activeAnalysisMap.has(filename)) {
+                                    activeAnalysisMap.delete(filename);
+                                    persistActiveAnalyses();
+                                }
+                                
+                                setTimeout(() => {
+                                    progressContainer.remove();
+                                    if (button) {
+                                        button.disabled = false;
+                                        button.innerHTML = originalButtonContent;
+                                    }
+                                    showToast(successMessage);
+                                    
+                                    // 패턴 분석 결과 표시
+                                    if (data.result) {
+                                        displayPatternAnalysisResult(recordingItem, data.result);
+                                    }
+                                    // 패턴 저장에 따른 태그 갱신
+                                    updateSingleRecordingItem(recordingItem);
+                                }, 2000);
+                            } else if (stage === 'error' || stage === 'timeout') {
+                                // 오류 발생
+                                progressContainer.style.background = '#fee2e2';
+                                progressContainer.style.borderColor = '#fecaca';
+                                stageElement.style.color = '#991b1b';
+                            
+                            setTimeout(() => {
+                                    progressContainer.remove();
+                                    if (button) {
+                                        button.disabled = false;
+                                        button.innerHTML = originalButtonContent;
+                                    }
+                            }, 3000);
+                            } else {
+                                // API 오류 또는 네트워크 문제 – 1.5초 후 재시도
+                                console.error('Progress poll failed, retrying...', data);
+                                setTimeout(checkProgress, 1500);
+                            }
+                        } else {
+                            // 아직 progress 파일이 생성되지 않았거나 서버가 준비 중
+                            stageElement.textContent = '대기중';
+                            messageElement.textContent = '서버 준비중...';
+                            setTimeout(checkProgress, 1500); // 재시도
+                         }
+                    })
+                    .catch(error => {
+                        console.error('Progress check error:', error);
+                        progressContainer.remove();
+                        if (button) {
+                            button.disabled = false;
+                            button.innerHTML = originalButtonContent;
+                        }
+                    });
             };
             
-            progressContainer.innerHTML = `
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${progressData.progress}%"></div>
-                </div>
-                <div class="progress-info">
-                    <div class="progress-stage">${stageTexts[progressData.stage] || progressData.stage}</div>
-                    <div class="progress-message">${progressData.message}</div>
-                    <div class="progress-details">
-                        <div>작업 ID: ${progressData.job_id}</div>
-                        <div>진행률: ${progressData.progress}%</div>
-                    </div>
-                </div>
-            `;
+            // 첫 번째 확인은 500ms 후에 시작
+            setTimeout(checkProgress, 500);
         }
 
-        // 분석 완료 처리
-        function showAnalysisComplete(safeId, button, originalText) {
-            const progressContainer = document.getElementById(`progress-${safeId}`);
+        // 패턴 분석 결과 표시
+        function displayPatternAnalysisResult(recordingItem, result) {
+            const analysisResultDiv = recordingItem.querySelector('.analysis-result');
+            if (!analysisResultDiv) return;
             
-            progressContainer.style.display = 'none';
-            button.disabled = false;
-            button.textContent = originalText;
+            const pattern = result.pattern;
+            const confidence = result.confidence || 0;
             
-            // 최종 결과 로드
-            const originalFilename = button.getAttribute('data-filename');
+            analysisResultDiv.className = 'analysis-result result-success';
+            analysisResultDiv.innerHTML = `
+                <strong>패턴 분석 완료</strong> (신뢰도: ${confidence}%)
+                <p><strong>패턴명:</strong> ${pattern.name}</p>
+                <p><strong>DTMF 타이밍:</strong> ${pattern.dtmf_timing}초</p>
+                <p><strong>DTMF 패턴:</strong> ${pattern.dtmf_pattern}</p>
+                ${result.transcription ? `
+                <div class="transcription-container">
+                    <button class="btn btn-small btn-secondary toggle-transcription">전체 내용 보기</button>
+                    <div class="transcription-text" style="display: none;">
+                        <p><strong>변환된 텍스트:</strong></p>
+                        <pre>${result.transcription}</pre>
+                </div>
+                    </div>
+                ` : ''}
+            `;
+
+            // 토글 버튼에 이벤트 리스너 추가
+            const transcriptionToggle = analysisResultDiv.querySelector('.toggle-transcription');
+            if (transcriptionToggle) {
+                transcriptionToggle.addEventListener('click', function() {
+                    const textDiv = analysisResultDiv.querySelector('.transcription-text');
+                    const isVisible = textDiv.style.display === 'block';
+                    textDiv.style.display = isVisible ? 'none' : 'block';
+                    this.textContent = isVisible ? '전체 내용 보기' : '숨기기';
+                });
+            }
+
+            // 버튼 영역 업데이트 - 다시 분석하기 버튼만 표시
+            const analyzeBtn = recordingItem.querySelector('.analyze-btn');
+            const fileForAnalysis = analyzeBtn ? analyzeBtn.dataset.file : '';
+            const buttonContainer = analyzeBtn ? analyzeBtn.parentElement : null;
+            
+            if (buttonContainer) {
+                buttonContainer.innerHTML = `
+                    <button data-file="${fileForAnalysis}" data-type="discovery" class="btn btn-small reanalyze-btn analyze-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                        </svg>
+                        패턴 다시 분석하기
+                    </button>
+                `;
+            }
+            
+            // 분석 완료 후 전체 목록 새로고침하여 결과가 유지되도록 함
             setTimeout(() => {
-                loadAnalysisResult(safeId, originalFilename);
+                getRecordings();
             }, 1000);
         }
 
-        // 분석 오류 처리
-        function showAnalysisError(safeId, button, originalText, errorMessage) {
-            const progressContainer = document.getElementById(`progress-${safeId}`);
-            const resultDiv = document.getElementById(`analysis-${safeId}`);
-            
-            progressContainer.style.display = 'none';
-            button.disabled = false;
-            button.textContent = originalText;
-            
-            resultDiv.className = 'analysis-result result-failure';
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `❌ 분석 실패: ${errorMessage}`;
+        // 수동 분석 버튼 클릭 처리 - 이벤트 위임 수정
+        recordingsList.addEventListener('click', function(event) {
+            // 삭제 버튼 처리
+            const delBtn = event.target.closest('.delete-btn');
+            if (delBtn && !delBtn.disabled) {
+                event.preventDefault();
+                handleDeleteClick(delBtn);
+                return;
         }
 
-        // 분석 결과 로드
-        function loadAnalysisResult(safeId, filename) {
-            const resultDiv = document.getElementById(`analysis-${safeId}`);
-            
-            fetch(`analyze_recording.php?filename=${encodeURIComponent(filename)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.analysis) {
-                        const analysis = data.analysis.analysis;
-                        const transcription = data.analysis.transcription || '텍스트 변환 실패';
-                        
-                        let statusClass = 'result-unknown';
-                        let statusIcon = '❓';
-                        
-                        switch(analysis.status) {
-                            case 'success':
-                                statusClass = 'result-success';
-                                statusIcon = '✅';
-                                break;
-                            case 'failed':
-                                statusClass = 'result-failure';
-                                statusIcon = '❌';
-                                break;
-                            case 'attempted':
-                                statusClass = 'result-uncertain';
-                                statusIcon = '⚠️';
-                                break;
-                            default:
-                                statusClass = 'result-unknown';
-                                statusIcon = '❓';
-                        }
-                        
-                        resultDiv.className = `analysis-result ${statusClass}`;
-                        resultDiv.style.display = 'block';
-                        resultDiv.innerHTML = `
-                            <div style="margin-bottom: 10px;">
-                                <strong>${statusIcon} ${analysis.status.toUpperCase()}</strong> 
-                                <span style="opacity: 0.8;">(신뢰도: ${analysis.confidence}%)</span>
-                            </div>
-                            <div style="margin-bottom: 8px;">
-                                <strong>📝 인식된 텍스트:</strong><br>
-                                <span style="font-size: 13px; opacity: 0.9;">${transcription}</span>
-                            </div>
-                            <div>
-                                <strong>💭 판단 근거:</strong><br>
-                                <span style="font-size: 13px; opacity: 0.9;">${analysis.reason}</span>
-                            </div>
-                        `;
-                    } else {
-                        // 재시도 로직
-                        const retryCount = resultDiv.getAttribute('data-retry-count') || 0;
-                        if (retryCount < 5) {
-                            resultDiv.setAttribute('data-retry-count', parseInt(retryCount) + 1);
-                            
-                            resultDiv.className = 'analysis-result';
-                            resultDiv.style.display = 'block';
-                            resultDiv.innerHTML = `🔄 분석 결과 로딩 중... (${parseInt(retryCount) + 1}/5)`;
+            // 분석(재분석) 버튼 처리
+            const analyzeBtn = event.target.closest('.analyze-btn');
+            if (analyzeBtn && !analyzeBtn.disabled) {
+                event.preventDefault();
+                handleAnalysisClick(analyzeBtn);
+            }
+        });
+
+        // 오디오 플레이어 로드 시 시간 초기화 (버그 수정)
+        recordingsList.addEventListener('loadedmetadata', function(e) {
+            if (e.target.tagName === 'AUDIO') {
+                e.target.currentTime = 0;
+                // 시간 표시 포맷 수정
+                updateAudioTimeDisplay(e.target);
+            }
+        }, true);
+
+        // 오디오 시간 업데이트 이벤트
+        recordingsList.addEventListener('timeupdate', function(e) {
+            if (e.target.tagName === 'AUDIO') {
+                updateAudioTimeDisplay(e.target);
+            }
+        }, true);
+
+        // 오디오 시간 표시 업데이트 함수
+        function updateAudioTimeDisplay(audio) {
+            // 브라우저의 기본 컨트롤을 사용하므로 별도 처리 불필요
+            // 하지만 NaN 문제를 방지하기 위한 체크 추가
+            if (isNaN(audio.duration)) {
+                audio.load(); // 오디오 다시 로드
+            }
+        }
+
+        // 시간 포맷팅 함수
+        function formatTime(seconds) {
+            if (isNaN(seconds) || seconds === Infinity) return '0:00';
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // 토스트 알림 함수
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast-notification ' + (isError ? 'error' : 'success');
+            toast.style.display = 'block';
                             
                             setTimeout(() => {
-                                loadAnalysisResult(safeId, filename);
+                toast.style.display = 'none';
                             }, 3000);
-                        } else {
-                            resultDiv.className = 'analysis-result result-failure';
-                            resultDiv.style.display = 'block';
-                            resultDiv.innerHTML = `❌ 분석 결과를 불러올 수 없습니다. 페이지를 새로고침해보세요.`;
-                        }
-                    }
-                })
-                .catch(error => {
-                    resultDiv.className = 'analysis-result result-failure';
-                    resultDiv.style.display = 'block';
-                    resultDiv.innerHTML = `❌ 결과 로드 실패: ${error.message}`;
-                });
         }
 
-        // 기존 분석 결과 로드
-        function loadExistingAnalysis() {
-            fetch('analyze_recording.php?list=true')
+        // 새로고침 버튼 이벤트 리스너
+        refreshBtn.addEventListener('click', function() {
+            getRecordings();
+        });
+
+        // 페이지 로드 시 녹음 목록 가져오기
+        getRecordings();
+
+        // 5초 주기로 녹음 목록 자동 갱신 (탭이 활성화된 경우에만)
+        setInterval(() => {
+            if (!document.hidden && !document.querySelector('.call-progress') && !document.querySelector('.analysis-progress')) {
+                getRecordings();
+            }
+        }, 5000);
+
+        // 삭제 버튼 클릭 처리 함수
+        function handleDeleteClick(button) {
+            const recordingFile = button.dataset.file;
+            const callType = button.dataset.type || 'unsubscribe';
+            if (!recordingFile) return;
+
+            if (!confirm('정말 이 녹음과 분석 결과를 삭제하시겠습니까?')) {
+                return;
+            }
+
+            const originalContent = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '삭제중...';
+
+            fetch('delete_recording.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'file=' + encodeURIComponent(recordingFile) + '&type=' + encodeURIComponent(callType)
+            })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success && data.results) {
-                        data.results.forEach(result => {
-                            const safeId = result.filename.replace(/[^a-zA-Z0-9]/g, '_');
-                            const resultDiv = document.getElementById(`analysis-${safeId}`);
-                            
-                            if (resultDiv) {
-                                loadAnalysisResult(safeId, result.filename);
-                            }
-                        });
+                if (data.success) {
+                    showToast('삭제되었습니다.');
+                    const item = button.closest('.recording-item');
+                    if (item) item.remove();
+                } else {
+                    showToast('삭제 실패: ' + (data.errors ? data.errors.join(', ') : '알 수 없는 오류'), true);
+                    button.disabled = false;
+                    button.innerHTML = originalContent;
                     }
                 })
                 .catch(error => {
-                    console.log('기존 분석 결과 로드 실패:', error);
+                console.error('Delete error:', error);
+                showToast('삭제 중 오류가 발생했습니다.', true);
+                button.disabled = false;
+                button.innerHTML = originalContent;
                 });
         }
 
-        // 새로고침 버튼
-        document.getElementById('refreshBtn').addEventListener('click', function() {
-            loadRecordings();
-        });
+        function createCallProgressUI(recordingItem) {
+            const html = `
+            <div class="call-progress" style="margin-top:10px;padding:12px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span class="call-status" style="color:#0369a1;font-weight:600;">통화 연결중...</span>
+                    <span class="call-duration" style="color:#0369a1;font-weight:600;">0s</span>
+                </div>
+                <div class="progress-bar" style="background:#e0f2fe;height:6px;border-radius:4px;margin-top:8px;overflow:hidden;">
+                    <div class="progress-fill" style="background:#0ea5e9;width:0;height:100%;transition:width 0.3s;"></div>
+                </div>
+            </div>`;
+            recordingItem.insertAdjacentHTML('beforeend', html);
+            return recordingItem.querySelector('.call-progress');
+        }
 
-        // 페이지 로드 시 초기화
-        window.addEventListener('load', function() {
-            // DOM이 완전히 로드된 후 함수들 실행
-            if (typeof initializeTextarea === 'function') {
-                initializeTextarea();
-            } else {
-                console.error('initializeTextarea function is not defined');
+        function trackCallProgress(recordingItem, filename) {
+            let progressEl = recordingItem.querySelector('.call-progress');
+            if (!progressEl) {
+                progressEl = createCallProgressUI(recordingItem);
+            }
+            const statusEl = progressEl.querySelector('.call-status');
+            const durEl = progressEl.querySelector('.call-duration');
+            const fillEl = progressEl.querySelector('.progress-fill');
+
+            const poll = () => {
+                fetch(`get_call_progress.php?file=${encodeURIComponent(filename)}`)
+                    .then(r=>r.json())
+                    .then(data=>{
+                        if(!data.exists){
+                            statusEl.textContent='녹음 대기중...';
+                            setTimeout(poll,2000);
+                            return;
+                        }
+                        durEl.textContent=`${data.duration_est}s`;
+                        const percent=Math.min((data.duration_est/40)*100,99);
+                        fillEl.style.width=percent+'%';
+                        if(data.finished){
+                            statusEl.textContent='통화 종료';
+                            fillEl.style.width='100%';
+                            setTimeout(()=>{
+                                progressEl.remove();
+                                autoAnalysisSet.delete(filename); // 자동 분석 트리거를 위해 추가
+                                getRecordings();
+                            },3000);
+                        }else{
+                            setTimeout(poll,2000);
+                        }
+                    })
+                    .catch(()=>setTimeout(poll,3000));
+            };
+            poll();
+        }
+
+        function updateProgressDisplay(progressData) {
+            const progressBar = document.getElementById('analysisProgress');
+            const progressText = document.getElementById('progressText');
+            const progressMessage = document.getElementById('progressMessage');
+            
+            if (!progressBar || !progressText || !progressMessage) return;
+            
+            // 진행률 업데이트
+            progressBar.style.width = progressData.percentage + '%';
+            progressText.textContent = progressData.percentage + '%';
+            
+            // 진행 상태 메시지 업데이트
+            progressMessage.textContent = progressData.message;
+            
+            // 단계별 진행상황 표시
+            if (progressData.steps) {
+                const stepsContainer = document.getElementById('analysisSteps');
+                if (stepsContainer) {
+                    let stepsHtml = '';
+                    for (const [step, progress] of Object.entries(progressData.steps)) {
+                        const stepName = {
+                            'audio_processing': '오디오 처리',
+                            'pattern_detection': '패턴 감지',
+                            'pattern_analysis': '패턴 분석',
+                            'saving': '결과 저장'
+                        }[step] || step;
+                        
+                        stepsHtml += `
+                            <div class="step-progress">
+                                <div class="step-name">${stepName}</div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: ${progress}%" 
+                                         aria-valuenow="${progress}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        ${progress}%
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    stepsContainer.innerHTML = stepsHtml;
+                }
             }
             
-            if (typeof loadRecordings === 'function') {
-                loadRecordings();
-            } else {
-                console.error('loadRecordings function is not defined');
+            // 분석이 완료되면 프로그레스 바 숨기기
+            if (progressData.completed) {
+                setTimeout(() => {
+                    const progressContainer = document.getElementById('progressContainer');
+                    if (progressContainer) {
+                        progressContainer.style.display = 'none';
+                    }
+                }, 2000);
+            }
+        }
+
+        // 진행상황 체크 함수
+        function checkPatternAnalysisProgress(analysisId) {
+            if (!analysisId) {
+                console.error('No analysis ID provided');
+                return;
+            }
+            
+            console.log('Checking progress for analysis:', analysisId);
+            
+            // 진행상황 컨테이너 표시
+            const progressContainer = document.getElementById('progressContainer');
+            if (progressContainer) {
+                progressContainer.style.display = 'block';
+            }
+            
+            // 진행상황 체크
+            fetch(`get_pattern_analysis_progress.php?analysis_id=${analysisId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Progress data:', data);
+                    
+                    if (data.success) {
+                        updateProgressDisplay(data);
+                        
+                        // 분석이 완료되지 않았으면 계속 체크
+                        if (!data.completed) {
+                            setTimeout(() => checkPatternAnalysisProgress(analysisId), 1000);
+                        } else {
+                            // 분석이 완료되면 3초 후에 페이지 새로고침
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 3000);
+                        }
+                    } else {
+                        console.error('Progress check failed:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Progress check error:', error);
+                });
+        }
+
+        // 진행상황 표시 업데이트
+        function updateProgressDisplay(progressData) {
+            console.log('Updating progress display:', progressData);
+            
+            const progressBar = document.getElementById('analysisProgress');
+            const progressText = document.getElementById('progressText');
+            const progressMessage = document.getElementById('progressMessage');
+            
+            if (!progressBar || !progressText || !progressMessage) {
+                console.error('Progress display elements not found');
+                return;
+            }
+            
+            // 진행률 업데이트
+            progressBar.style.width = progressData.percentage + '%';
+            progressBar.setAttribute('aria-valuenow', progressData.percentage);
+            progressText.textContent = progressData.percentage + '%';
+            
+            // 진행 상태 메시지 업데이트
+            progressMessage.textContent = progressData.message;
+            
+            // 단계별 진행상황 표시
+            if (progressData.steps) {
+                const stepsContainer = document.getElementById('analysisSteps');
+                if (stepsContainer) {
+                    let stepsHtml = '';
+                    for (const [step, progress] of Object.entries(progressData.steps)) {
+                        const stepName = {
+                            'audio_processing': '오디오 처리',
+                            'pattern_detection': '패턴 감지',
+                            'pattern_analysis': '패턴 분석',
+                            'saving': '결과 저장'
+                        }[step] || step;
+                        
+                        stepsHtml += `
+                            <div class="step-progress" style="margin-bottom: 10px;">
+                                <div class="step-name" style="margin-bottom: 5px;">${stepName}</div>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: ${progress}%" 
+                                         aria-valuenow="${progress}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        ${progress}%
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    stepsContainer.innerHTML = stepsHtml;
+                }
+            }
+        }
+
+        // 페이지 로드 시 진행상황 체크 시작
+        document.addEventListener('DOMContentLoaded', function() {
+            // URL에서 analysis_id 파라미터 확인
+            const urlParams = new URLSearchParams(window.location.search);
+            const analysisId = urlParams.get('analysis_id');
+            
+            console.log('Page loaded, analysis_id:', analysisId);
+            
+            if (analysisId) {
+                checkPatternAnalysisProgress(analysisId);
             }
         });
+
+        // 패턴 분석 시작 함수
+        function startPatternAnalysis(recordingFile) {
+            console.log('Starting pattern analysis for file:', recordingFile);
+            
+            const formData = new FormData();
+            formData.append('file', recordingFile);
+            
+            fetch('analyze_pattern_recording.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Analysis start response:', data);
+                
+                if (data.success) {
+                    // 분석 ID를 URL에 추가하고 진행상황 체크 시작
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('analysis_id', data.analysis_id);
+                    window.history.pushState({}, '', url);
+                    
+                    checkPatternAnalysisProgress(data.analysis_id);
+                } else {
+                    console.error('Analysis start failed:', data.message);
+                    alert('패턴 분석 시작 실패: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Analysis start error:', error);
+                alert('패턴 분석 시작 중 오류가 발생했습니다.');
+            });
+        }
+
+        // 전역 progressContainer는 숨김 처리
+        const globalProgress = document.getElementById('progressContainer');
+        if (globalProgress) globalProgress.style.display = 'none';
+
+        // 펼침 상태 관리용 Set (localStorage 활용)
+        const openTranscriptions = new Set(JSON.parse(localStorage.getItem('openTranscriptions') || '[]'));
+
+        // // --- 자동 분석 트리거 --- (existing)
+        // autoAnalysisSet.forEach(filename => {
+        //     const btn = document.querySelector(`button.analyze-btn[data-file="${filename}"]`);
+        //     if (btn && !btn.disabled) {
+        //         handleAnalysisClick(btn);
+        //     }
+        // });
+
+        // // --- 통화 진행바 트리거 (패턴탐색/수신거부 공통) ---
+        // data.recordings.forEach(rec => {
+        //     if (rec.analysis_result === '미분석' && !rec.ready_for_analysis) {
+        //         const item = document.querySelector(`.recording-item [data-file="${rec.filename}"]`);
+        //         if (item) {
+        //             const recordingItem = item.closest('.recording-item');
+        //             if (recordingItem && !recordingItem.querySelector('.analysis-progress')) {
+        //                 const progressContainer = createProgressUI(recordingItem);
+        //                 trackCallProgress(recordingItem, rec.filename);
+        //             }
+        //         }
+        //     }
+        // });
+    }); // <-- 첫 번째 document.addEventListener('DOMContentLoaded', ...) 종료
     </script>
 </body>
 </html>
