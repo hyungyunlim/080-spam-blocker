@@ -67,7 +67,7 @@ function parse_recording_filename($filename) {
  * @return array 분석 결과 (status, text)
  */
 function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $recordTimestamp = null) {
-    require_once __DIR__ . '/PatternManager.php';
+    require_once __DIR__ . '/pattern_manager.php';
 
     $base_filename = pathinfo($recording_filename, PATHINFO_FILENAME);
 

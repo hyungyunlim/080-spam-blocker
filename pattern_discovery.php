@@ -2,8 +2,8 @@
 // sudo nano pattern_discovery.php
 
 if (!class_exists('PatternManager')) {
-    if (file_exists(__DIR__ . '/PatternManager.php')) {
-        require_once __DIR__ . '/PatternManager.php';
+    if (file_exists(__DIR__ . '/pattern_manager.php')) {
+        require_once __DIR__ . '/pattern_manager.php';
     } else if (file_exists(__DIR__ . '/pattern_manager_class.php')) { // legacy name
         require_once __DIR__ . '/pattern_manager_class.php';
     } else {

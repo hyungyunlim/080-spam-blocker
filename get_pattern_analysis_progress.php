@@ -29,7 +29,7 @@ if (file_exists($resultFile)) {
     
     if ($resultData && $resultData['success']) {
         // pattern_manager.php에 패턴 저장
-        require_once __DIR__ . '/PatternManager.php';
+        require_once __DIR__ . '/pattern_manager.php';
         
         $patternManager = new PatternManager();
         
