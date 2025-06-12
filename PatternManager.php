@@ -411,9 +411,11 @@
                             'initial_wait' => 3,
                             'dtmf_timing' => 6,
                             'dtmf_pattern' => '{ID}#',
-                            'confirmation_wait' => 5,
+                            'confirmation_wait' => 2,
                             'confirmation_dtmf' => '1',
                             'total_duration' => 30,
+                            'confirm_delay' => 2,
+                            'confirm_repeat' => 3,
                             'notes' => '새로운 번호는 이 패턴으로 시작'
                         ]
                     ],
@@ -668,17 +670,22 @@
                 try {
                     if ($action === 'add' || $action === 'edit') {
                         $number = $_POST['number'] ?? '';
-                        $patternData = [
+                        // 기존 패턴 값 보존을 위해 먼저 기존 데이터를 불러옵니다
+                        $existingPattern = $manager->getPattern($number);
+
+                        $patternData = array_merge($existingPattern ?? [], [
                             'name' => $_POST['name'] ?? '',
                             'description' => $_POST['description'] ?? '',
                             'initial_wait' => intval($_POST['initial_wait'] ?? 3),
                             'dtmf_timing' => intval($_POST['dtmf_timing'] ?? 6),
                             'dtmf_pattern' => $_POST['dtmf_pattern'] ?? '{ID}#',
-                            'confirmation_wait' => intval($_POST['confirmation_wait'] ?? 5),
+                            'confirmation_wait' => intval($_POST['confirmation_wait'] ?? 2),
                             'confirmation_dtmf' => $_POST['confirmation_dtmf'] ?? '1',
                             'total_duration' => intval($_POST['total_duration'] ?? 30),
-                            'notes' => $_POST['notes'] ?? ''
-                        ];
+                            'confirm_delay' => intval($_POST['confirm_delay'] ?? ($existingPattern['confirm_delay'] ?? 2)),
+                            'confirm_repeat' => intval($_POST['confirm_repeat'] ?? ($existingPattern['confirm_repeat'] ?? 3)),
+                            'notes' => $_POST['notes'] ?? ($existingPattern['notes'] ?? '')
+                        ]);
                         
                         $manager->updatePattern($number, $patternData);
                         $message = $action === 'add' ? 
@@ -744,6 +751,8 @@
                                 <th>확인대기</th>
                                 <th>확인DTMF</th>
                                 <th>총시간</th>
+                                <th>지연</th>
+                                <th>반복</th>
                                 <th>상태</th>
                                 <th>액션</th>
                             </tr>
@@ -766,6 +775,8 @@
                                 <td><?php echo $pattern['confirmation_wait']; ?>초</td>
                                 <td><?php echo htmlspecialchars($pattern['confirmation_dtmf']); ?></td>
                                 <td><?php echo $pattern['total_duration']; ?>초</td>
+                                <td><?php echo $pattern['confirm_delay'] ?? 2; ?>초</td>
+                                <td><?php echo $pattern['confirm_repeat'] ?? 3; ?>회</td>
                                 <td>
                                     <?php if (isset($pattern['needs_verification']) && $pattern['needs_verification']): ?>
                                         <span class="label needs-verification">검증 필요</span>
@@ -836,7 +847,7 @@
                             
                             <div class="form-group">
                                 <label for="form-confirmation-wait">확인 대기</label>
-                                <input type="number" name="confirmation_wait" id="form-confirmation-wait" value="5" min="0" max="15">
+                                <input type="number" name="confirmation_wait" id="form-confirmation-wait" value="2" min="0" max="15">
                                 <div class="help-text">확인 버튼 입력 전 대기</div>
                             </div>
                             
@@ -844,6 +855,16 @@
                                 <label for="form-total-duration">총 녹음시간</label>
                                 <input type="number" name="total_duration" id="form-total-duration" value="30" min="10" max="60">
                                 <div class="help-text">전체 통화 녹음 시간</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="form-confirm-delay">확인 지연</label>
+                                <input type="number" name="confirm_delay" id="form-confirm-delay" value="2" min="0" max="10">
+                                <div class="help-text">반복 확인 DTMF 간격(초)</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="form-confirm-repeat">반복 횟수</label>
+                                <input type="number" name="confirm_repeat" id="form-confirm-repeat" value="3" min="1" max="5">
+                                <div class="help-text">확인 DTMF 전송 횟수</div>
                             </div>
                         </div>
                         
@@ -922,8 +943,10 @@
                 document.getElementById('form-description').value = pattern.description || '';
                 document.getElementById('form-initial-wait').value = pattern.initial_wait || 3;
                 document.getElementById('form-dtmf-timing').value = pattern.dtmf_timing || 6;
-                document.getElementById('form-confirmation-wait').value = pattern.confirmation_wait || 5;
+                document.getElementById('form-confirmation-wait').value = pattern.confirmation_wait || 2;
                 document.getElementById('form-total-duration').value = pattern.total_duration || 30;
+                document.getElementById('form-confirm-delay').value = pattern.confirm_delay || 2;
+                document.getElementById('form-confirm-repeat').value = pattern.confirm_repeat || 3;
                 document.getElementById('form-dtmf-pattern').value = pattern.dtmf_pattern || '{ID}#';
                 document.getElementById('form-confirmation-dtmf').value = pattern.confirmation_dtmf || '1';
                 document.getElementById('form-notes').value = pattern.notes || '';
@@ -949,8 +972,10 @@
                 // 기본값 복원
                 document.getElementById('form-initial-wait').value = 3;
                 document.getElementById('form-dtmf-timing').value = 6;
-                document.getElementById('form-confirmation-wait').value = 5;
+                document.getElementById('form-confirmation-wait').value = 2;
                 document.getElementById('form-total-duration').value = 30;
+                document.getElementById('form-confirm-delay').value = 2;
+                document.getElementById('form-confirm-repeat').value = 3;
                 document.getElementById('form-dtmf-pattern').value = '{ID}#';
                 document.getElementById('form-confirmation-dtmf').value = '1';
             }

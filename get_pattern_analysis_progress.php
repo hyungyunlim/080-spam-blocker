@@ -44,7 +44,7 @@ if (file_exists($resultFile)) {
             'initial_wait' => $resultData['pattern']['initial_wait'] ?? 3,
             'dtmf_timing' => $resultData['pattern']['dtmf_timing'] ?? 6,
             'dtmf_pattern' => $resultData['pattern']['dtmf_pattern'] ?? '{ID}#',
-            'confirmation_wait' => $resultData['pattern']['confirmation_wait'] ?? 5,
+            'confirmation_wait' => $resultData['pattern']['confirmation_wait'] ?? 2,
             'confirmation_dtmf' => $resultData['pattern']['confirmation_dtmf'] ?? '1',
             'total_duration' => $resultData['pattern']['total_duration'] ?? 30,
             'confirm_delay' => $resultData['pattern']['confirm_delay'] ?? 2,
@@ -126,7 +126,6 @@ if (file_exists($progressFile)) {
             }
             
             $progressData['percentage'] = min(99, round($totalProgress));
-            $progressData['prevent_refresh'] = true;
             
             // 진행 상태 메시지 업데이트
             if ($progressData['percentage'] < 30) {

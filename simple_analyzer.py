@@ -16,20 +16,8 @@ from datetime import datetime
 import re
 import contextlib
 
-def update_progress(progress_file, stage, percentage, message):
-    """진행 상황을 JSON 파일로 저장"""
-    try:
-        progress_data = {
-            'stage': stage,
-            'percentage': percentage,
-            'message': message,
-            'timestamp': datetime.now().isoformat(),
-            'updated_at': int(time.time())
-        }
-        with open(progress_file, 'w', encoding='utf-8') as f:
-            json.dump(progress_data, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        print(f"Progress update error: {e}", file=sys.stderr)
+# Disable internal progress writing; wrapper manages progress updates
+update_progress = lambda *args, **kwargs: None
 
 def detect_unsubscribe_patterns(text):
     """수신거부 패턴 검출 (개선된 로직)"""
@@ -84,25 +72,46 @@ def analyze_audio(audio_file, output_file, progress_file=None, model_size='small
         if not os.path.exists(audio_file):
             raise FileNotFoundError(f'오디오 파일을 찾을 수 없습니다: {audio_file}')
         
+        print('파일 확인 완료')
+        
         if progress_file:
+            update_progress(progress_file, 'file_check', 10, '오디오 파일 확인 완료')
             update_progress(progress_file, 'loading_model', 20, f'Whisper {model_size} 모델을 로딩중입니다...')
             
+        print(f'Whisper {model_size.capitalize()} 모델 로딩')
+        
         model = whisper.load_model(model_size)
+        print('모델 로드 완료')
+        
+        if progress_file:
+            update_progress(progress_file, 'model_loaded', 30, '모델 로딩 완료')
         
         if progress_file:
             update_progress(progress_file, 'transcribing', 40, '음성을 텍스트로 변환중입니다...')
         
-        with open(os.devnull, 'w') as f, contextlib.redirect_stderr(f):
-            result = model.transcribe(audio_file, language='ko', fp16=False, verbose=None) 
+        print('음성 인식 시작')
+        # Whisper 변환 - verbose=True 로 설정하여 세그먼트가 실시간 출력되도록
+        result = model.transcribe(audio_file, language='ko', fp16=False, verbose=True)
+        
+        # 세그먼트 출력은 Whisper 내부에서 처리됨 (verbose=True)
         
         if progress_file:
-            update_progress(progress_file, 'analyzing', 70, '변환된 텍스트를 분석중입니다...')
+            update_progress(progress_file, 'transcription_done', 70, 'STT 변환 완료, 분석 중...')
         
         transcription = result["text"].strip()
+        print('STT 변환 완료')
+        print('🔑 키워드 / 패턴 분석 중...')
         analysis = detect_unsubscribe_patterns(transcription)
+        
+        print(f"🔍 분석 결과: status={analysis['status']} confidence={analysis['confidence']} reason={analysis['reason']}")
+        
+        if progress_file:
+            update_progress(progress_file, 'analyzing_keywords', 80, '수신거부 패턴 분석 중...')
         
         if progress_file:
             update_progress(progress_file, 'saving', 90, '결과를 저장중입니다...')
+        
+        print('결과 저장')
         
         output_data = {
             'file_path': audio_file,

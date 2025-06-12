@@ -1,0 +1,62 @@
+{
+    "patterns": {
+        "0808895050": {
+            "name": "기본 패턴 (105623#)",
+            "description": "식별번호 입력 후 확인",
+            "initial_wait": 3,
+            "dtmf_timing": 6,
+            "dtmf_pattern": "{ID}#",
+            "confirmation_wait": 5,
+            "confirmation_dtmf": "1",
+            "total_duration": 30,
+            "notes": "첫 번째 성공 케이스"
+        },
+        "0801234567": {
+            "name": "즉시 선택 패턴",
+            "description": "바로 메뉴 선택",
+            "initial_wait": 2,
+            "dtmf_timing": 3,
+            "dtmf_pattern": "2",
+            "confirmation_wait": 3,
+            "confirmation_dtmf": "{ID}#1",
+            "total_duration": 25,
+            "notes": "메뉴 선택 후 식별번호"
+        },
+        "0809876543": {
+            "name": "복잡한 메뉴 패턴",
+            "description": "다단계 메뉴 네비게이션",
+            "initial_wait": 3,
+            "dtmf_timing": 5,
+            "dtmf_pattern": "1,3,2",
+            "confirmation_wait": 4,
+            "confirmation_dtmf": "{ID}#",
+            "total_duration": 35,
+            "notes": "여러 메뉴를 거쳐야 함"
+        },
+        "default": {
+            "name": "기본값",
+            "description": "알려지지 않은 번호용 기본 설정",
+            "initial_wait": 3,
+            "dtmf_timing": 6,
+            "dtmf_pattern": "{ID}#",
+            "confirmation_wait": 5,
+            "confirmation_dtmf": "1",
+            "total_duration": 30,
+            "notes": "새로운 번호는 이 패턴으로 시작"
+        },
+        "0800121900": {
+            "name": "교보문고",
+            "description": "폰번호 확인",
+            "initial_wait": 9,
+            "dtmf_timing": 16,
+            "dtmf_pattern": "{Phone}#",
+            "confirmation_wait": 5,
+            "confirmation_dtmf": "1",
+            "total_duration": 30,
+            "notes": ""
+        }
+    },
+    "variables": {
+        "{ID}": "광고 문자에서 추출한 식별번호"
+    }
+}

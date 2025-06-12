@@ -178,7 +178,7 @@ class PatternDiscovery
                 'dtmf_pattern'      => $patternDetails['dtmf_pattern'] ?? '{ID}#',
                 'initial_wait'      => $patternDetails['initial_wait'] ?? ($patterns['patterns']['default']['initial_wait'] ?? 3),
                 'dtmf_timing'       => $patternDetails['dtmf_timing'] ?? ($patterns['patterns']['default']['dtmf_timing'] ?? 6),
-                'confirmation_wait' => $patternDetails['confirmation_wait'] ?? ($patterns['patterns']['default']['confirmation_wait'] ?? 5),
+                'confirmation_wait' => $patternDetails['confirmation_wait'] ?? ($patterns['patterns']['default']['confirmation_wait'] ?? 2),
                 'confirmation_dtmf' => $patternDetails['confirmation_dtmf'] ?? ($patterns['patterns']['default']['confirmation_dtmf'] ?? '1'),
                 'total_duration'    => $patternDetails['total_duration'] ?? ($patterns['patterns']['default']['total_duration'] ?? 30),
                 'confirm_delay'     => $patternDetails['confirm_delay'] ?? ($patterns['patterns']['default']['confirm_delay'] ?? 2),

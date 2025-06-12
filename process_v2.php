@@ -130,6 +130,11 @@ file_put_contents($logFile, "Pattern found. Preparing to create Call File.\n", F
 $dtmfToSend = $pattern['dtmf_pattern'];
 $dtmfToSend = str_replace('{ID}', $identificationNumber, $dtmfToSend);
 $dtmfToSend = str_replace('{Phone}', $phoneNumber, $dtmfToSend);
+$cleanNotifyDigits = preg_replace('/[^0-9]/', '', $notificationPhone);
+$dtmfToSend = str_replace('{Notify}', $cleanNotifyDigits, $dtmfToSend);
+$dtmfToSend = str_ireplace('{notify}', $cleanNotifyDigits, $dtmfToSend);
+$dtmfToSend = str_ireplace('{phone}', $phoneNumber, $dtmfToSend);
+$dtmfToSend = str_ireplace('{id}', $identificationNumber, $dtmfToSend);
 $dtmfToSend = ltrim($dtmfToSend, ','); // 맨 앞 콤마 제거
 
 file_put_contents($logFile, "Final DTMF sequence: " . $dtmfToSend . "\n", FILE_APPEND);
@@ -139,6 +144,7 @@ echo "적용될 DTMF 패턴: " . $dtmfToSend . "\n";
 
 // 8. Asterisk DB에 변수 저장
 $uniqueId = uniqid();
+exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} dtmf {$dtmfToSend}\"");
 exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} dtmf_sequence {$dtmfToSend}\"");
 exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} notification_phone {$notificationPhone}\"");
 exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} identification_number {$identificationNumber}\"");
@@ -151,10 +157,11 @@ $callFileContent .= "CallerID: \"Spam Blocker\" <0212345678>\n";
 $callFileContent .= "MaxRetries: 1\n";
 $callFileContent .= "RetryTime: 60\n";
 $callFileContent .= "WaitTime: 45\n";
-$callFileContent .= "Context: spam-blocker\n";
+$callFileContent .= "Context: callfile-handler\n";
 $callFileContent .= "Extension: s\n";
 $callFileContent .= "Priority: 1\n";
 $callFileContent .= "Set: CALL_ID={$uniqueId}\n";
+$callFileContent .= "Set: CALLFILE_ID={$uniqueId}\n";
 $callFileContent .= "Set: __CONFIRM_WAIT={$pattern['confirmation_wait']}\n";
 $callFileContent .= "Set: __TOTAL_DURATION={$pattern['total_duration']}\n";
 $callFileContent .= "Set: __INITIAL_WAIT={$pattern['initial_wait']}\n";
@@ -162,10 +169,15 @@ $callFileContent .= "Set: __DTMF_TIMING={$pattern['dtmf_timing']}\n";
 $confirmDelay = isset($pattern['confirm_delay']) ? $pattern['confirm_delay'] : (isset($pattern['confirmation_wait']) ? $pattern['confirmation_wait'] : 2);
 $callFileContent .= "Set: __CONFIRM_DELAY={$confirmDelay}\n";
 $callFileContent .= "Set: TOTAL_DURATION={$pattern['total_duration']}\n";
-$confirmDtmf = isset($pattern['confirmation_dtmf']) ? $pattern['confirmation_dtmf'] : '1';
-$callFileContent .= "Set: __CONFIRM_DTMF={$confirmDtmf}\n";
-$confirmRepeat = isset($pattern['confirm_repeat']) ? $pattern['confirm_repeat'] : 1;
-$callFileContent .= "Set: __CONFIRM_REPEAT={$confirmRepeat}\n";
+$confirmDtmfRaw = isset($pattern['confirmation_dtmf']) ? trim($pattern['confirmation_dtmf']) : '';
+if ($confirmDtmfRaw !== '') {
+    $callFileContent .= "Set: __CONFIRM_DTMF={$confirmDtmfRaw}\n";
+    $confirmRepeat = isset($pattern['confirm_repeat']) ? $pattern['confirm_repeat'] : 1;
+    $callFileContent .= "Set: __CONFIRM_REPEAT={$confirmRepeat}\n";
+} else {
+    // 확인 DTMF가 비어 있으면 반복 횟수를 0으로 설정하여 dialplan이 바로 넘어가도록 한다
+    $callFileContent .= "Set: __CONFIRM_REPEAT=0\n";
+}
 
 // 10. Call File 생성 및 스풀 디렉토리로 이동
 // PrivateTmp=true 설정 때문에 시스템의 /tmp 대신 프로젝트 내부에 임시 파일 생성
@@ -190,6 +202,15 @@ if (rename($tempFile, $finalFile)) {
     $message = "[성공] 080 스팸 수신거부 요청 완료\n번호: {$phoneNumber}";
     $smsSender->sendSms($notificationPhone, $message);
     $smsSender->logSMS($message, 'call_file_created');
+
+    // 패턴 사용 통계 업데이트
+    require_once __DIR__ . '/PatternManager.php';
+    try {
+        $pm = new PatternManager();
+        $pm->recordPatternUsage($phoneNumber, true);
+    } catch (Exception $e) {
+        error_log('Pattern usage update failed: ' . $e->getMessage());
+    }
     echo "\n💡 팁: 이 번호가 처음이거나 패턴이 맞지 않으면, 녹음을 들어보고 patterns.json을 업데이트하세요!";
 
 } else {

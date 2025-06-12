@@ -52,10 +52,6 @@ function parse_recording_filename($filename) {
     $info['file_size']  = file_exists($filepath) ? filesize($filepath) : 0;
 
     $info['title'] = $phone_number ?: '알 수 없는 번호';
-    if ($info['id'] !== 'N/A') {
-        $info['title'] .= ' (ID: ' . $info['id'] . ')';
-    }
-
 
     return $info;
 }
@@ -100,8 +96,10 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
 
         // 1) 파일 기반 매칭 (same base filename + _pattern.json)
         $base = pathinfo($recording_filename, PATHINFO_FILENAME);
-        $file_specific = $pattern_dir . $base . '_pattern.json';
-        if (file_exists($file_specific)) {
+        $file_specific_raw = $pattern_dir . $base . '_pattern.json';
+        $file_specific_done = $file_specific_raw . '.done';
+        $file_specific = file_exists($file_specific_raw) ? $file_specific_raw : (file_exists($file_specific_done) ? $file_specific_done : null);
+        if ($file_specific) {
             $data = json_decode(file_get_contents($file_specific), true);
             if ($data && isset($data['success']) && $data['success']) {
                 // 분석 시점이 녹음 생성보다 충분히 이후인지 확인 (5초 기준)
@@ -124,7 +122,7 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
 
         // 2) 기존 전화번호 기반 fallback (이전 로직)
         if (is_dir($pattern_dir)) {
-            $files = glob($pattern_dir . '*.json');
+            $files = array_merge(glob($pattern_dir . '*.json'), glob($pattern_dir . '*.json.done'));
             $latestData = null;
             $latestTime = 0;
             foreach ($files as $file) {
@@ -268,9 +266,25 @@ if (is_dir($recording_dir)) {
                     $longEnough
                 );
 
-                // 상태 변화가 발생할 경우(분석 준비 완료 또는 분석 결과 생성) -> 업데이트 타임스탬프를 현재로 갱신하여 프론트가 DOM을 새로 그리도록 함
-                if ($recording_info['ready_for_analysis'] || ($recording_info['analysis_result'] !== '미분석' && $analysis_data['analysis_result'] !== '미분석')) {
+                // ready_for_analysis 로 true 가 되는 시점만 갱신 (분석 결과는 파일 mtime/analysisTs 로 이미 반영됨)
+                if ($recording_info['ready_for_analysis']) {
                     $lastUpdated = time();
+                }
+
+                // 이미 패턴이 등록되었지만 pattern_data 가 비어있는 경우, patterns.json 에서 불러오기
+                if ($recording_info['call_type'] === 'discovery' && $recording_info['pattern_registered'] && empty($recording_info['pattern_data'])) {
+                    // 전화번호 추출
+                    if (preg_match('/discovery-(\d+)/', $recording_info['filename'], $m)) {
+                        $pn = $m[1];
+                        require_once __DIR__ . '/pattern_manager.php';
+                        $pm = new PatternManager();
+                        $patterns = $pm->getPatterns();
+                        if (isset($patterns['patterns'][$pn])) {
+                            $recording_info['pattern_data'] = $patterns['patterns'][$pn];
+                            $recording_info['analysis_result'] = '성공';
+                            $recording_info['analysis_text'] = '패턴 등록 완료';
+                        }
+                    }
                 }
 
                 // 최종 배열에 추가 (ready flag 포함)

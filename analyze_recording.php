@@ -56,7 +56,7 @@ if (!is_dir($progressDir)) {
 }
 
 // Python 스크립트 경로 확인
-$analyzerScript = __DIR__ . '/simple_analyzer.py';
+$analyzerScript = __DIR__ . '/simple_analyzer_runner.py';
 if (!file_exists($analyzerScript)) {
     http_response_code(500);
     die(json_encode(['success' => false, 'message' => 'Analysis script not found.']));
@@ -84,13 +84,17 @@ file_put_contents($progressFile, json_encode([
 
 $modelSize = 'small'; // small 모델 사용
 
-// Python 스크립트 실행 명령어 구성
+// 결과 JSON 파일 경로 (wrapper expects positional arg)
+$baseName = pathinfo($recordingFile, PATHINFO_FILENAME);
+$outputFile = $analysisDir . '/' . $baseName . '_analysis.json';
+
+// Python 스크립트 실행 명령어 구성 (wrapper positional args)
 $command = sprintf(
-    '%s %s --file %s --output_dir %s --model %s --progress_file %s > %s 2>&1 &',
+    '%s %s %s %s %s --progress_file %s > %s 2>&1 &',
     escapeshellcmd($pythonPath),
     escapeshellarg($analyzerScript),
     escapeshellarg($recordingFile),
-    escapeshellarg($analysisDir),
+    escapeshellarg($outputFile),
     escapeshellarg($modelSize),
     escapeshellarg($progressFile),
     escapeshellarg(__DIR__ . '/logs/analyzer_' . date('Y-m-d') . '.log')

@@ -797,6 +797,37 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+                        // URL에서 analysis_id 파라미터 확인
+            const urlParams = new URLSearchParams(window.location.search);
+            const analysisId = urlParams.get('analysis_id');
+            
+            console.log('Page loaded, analysis_id:', analysisId);
+            
+            if (analysisId) {
+                checkPatternAnalysisProgress(analysisId);
+            }
+            
+            // 초기 녹음 목록 로드
+            getRecordings();
+            
+            // localStorage에서 진행 중인 분석 복원
+            const persistedAnalyses = JSON.parse(localStorage.getItem('activeAnalyses') || '[]');
+            persistedAnalyses.forEach(([filename, analysisId]) => {
+                activeAnalysisMap.set(filename, analysisId);
+            });
+            
+            // 5초 주기로 녹음 목록 자동 갱신 (탭이 활성화된 경우에만)
+            setInterval(() => {
+                if (!document.hidden && !document.querySelector('.call-progress') && !document.querySelector('.analysis-progress')) {
+                    getRecordings();
+                }
+            }, 5000);
+
+            // 전역 progressContainer는 숨김 처리
+            const globalProgress = document.getElementById('progressContainer');
+            if (globalProgress) globalProgress.style.display = 'none';
+            });
+
             const spamContent = document.getElementById('spamContent');
             const dynamicContainer = document.getElementById('dynamicInputContainer');
             const detectedIdSection = document.getElementById('detectedIdSection');
@@ -808,10 +839,10 @@
             const selectedIdDisplay = document.getElementById('selectedIdDisplay');
             const confirmButton = document.getElementById('confirmSelection');
             const cancelButton = document.getElementById('cancelSelection');
-        const spamForm = document.getElementById('spamForm');
-        const resultArea = document.getElementById('resultArea');
-        const recordingsList = document.getElementById('recordingsList');
-        const refreshBtn = document.getElementById('refreshBtn');
+            const spamForm = document.getElementById('spamForm');
+            const resultArea = document.getElementById('resultArea');
+            const recordingsList = document.getElementById('recordingsList');
+            const refreshBtn = document.getElementById('refreshBtn');
             
             let confirmedId = null;
             let lastRecordingsUpdate = null;
@@ -969,6 +1000,15 @@
                 // 서버에서 HTML이 넘어와도 태그를 제거하고 텍스트만 표시
                 const safeText = typeof data === 'string' ? data.replace(/(<([^>]+)>)/gi, '') : data;
                 resultArea.textContent = safeText;
+                
+                // 패턴탐색이 시작된 경우 감지
+                if (safeText.includes('패턴 디스커버리를 시작합니다') || safeText.includes('패턴 학습 중입니다')) {
+                    // 패턴탐색 시작 후 즉시 녹음 상태 추적 시작
+                    setTimeout(() => {
+                        startMonitoringPatternDiscovery();
+                    }, 3000); // 3초 후 모니터링 시작
+                }
+                
                 getRecordings();
             })
             .catch(error => {
@@ -986,66 +1026,32 @@
             localStorage.setItem('activeAnalyses', JSON.stringify([...activeAnalysisMap]));
         }
 
+
         // 기존 getRecordings 함수 내부에서, 진행 중인 analysis_id가 있으면 해당 항목에 프로그레스바 추가
         function getRecordings() {
             fetch('get_recordings.php')
                 .then(response => response.json())
                 .then(data => {
-                    if (lastRecordingsUpdate !== null && data.updated <= lastRecordingsUpdate) {
-                        return; // no changes, skip DOM rebuild
+                    if (!data.success) {
+                        recordingsList.innerHTML = `<div class="analysis-result result-failure">${data.error || '오류 발생'}</div>`;
+                        return;
                     }
-                    lastRecordingsUpdate = data.updated;
 
-                    if (data.success && data.recordings && data.recordings.length > 0) {
-                        // 기존 DOM의 항목을 Map으로 저장 (filename 기준)
-                        const existingItems = new Map();
-                        recordingsList.querySelectorAll('.recording-item').forEach(item => {
-                            const audio = item.querySelector('audio');
-                            if (audio) {
-                                const src = audio.getAttribute('src');
-                                const match = src.match(/file=([^&]+)/);
-                                if (match) {
-                                    existingItems.set(decodeURIComponent(match[1]), item);
-                                }
-                            }
-                        });
-
-                        // 새로 그릴 항목
-                        const newItems = [];
-
+                    // DOM 업데이트 필요 여부와 관계없이 자동 분석 및 진행 상태 체크는 항상 수행
+                    if (data.recordings && data.recordings.length > 0) {
+                        // 1. 자동 분석 트리거 (DOM 업데이트 전에 먼저 체크)
                         data.recordings.forEach(rec => {
-                            let item = existingItems.get(rec.filename);
-                            if (item) {
-                                // 이미 있는 항목이면 그대로 사용
-                                existingItems.delete(rec.filename);
-                            } else {
-                                // 새 항목이면 생성
-                                item = createRecordingItem(rec);
+                            if (rec.ready_for_analysis && !autoAnalysisSet.has(rec.filename)) {
+                                // DOM에서 버튼 찾기
+                                const btn = document.querySelector(`button.analyze-btn[data-file="${rec.filename}"]`);
+                                if (btn && !btn.disabled) {
+                                    autoAnalysisSet.add(rec.filename);
+                                    handleAnalysisClick(btn);
+                                }
                             }
-                            newItems.push(item);
                         });
 
-                        // 남은 기존 항목(삭제된 것)은 DOM에서 제거
-                        existingItems.forEach(item => item.remove());
-
-                        // 순서대로 DOM에 배치
-                        recordingsList.innerHTML = '';
-                        newItems.forEach(item => recordingsList.appendChild(item));
-
-                        // --- 자동 분석 트리거 (DOM 리프레시 생략 시에도) ---
-                        if (Array.isArray(data.recordings)) {
-                            data.recordings.forEach(rec => {
-                                if (rec.ready_for_analysis && !autoAnalysisSet.has(rec.filename)) {
-                                    const btn = document.querySelector(`button.analyze-btn[data-file="${rec.filename}"]`);
-                                    if (btn && !btn.disabled) {
-                                        autoAnalysisSet.add(rec.filename);
-                                        handleAnalysisClick(btn);
-                                    }
-                                }
-                            });
-                        }
-
-                        // ---- 통화 진행바 트리거 (DOM 재빌드 없이도) ----
+                        // 2. 통화 진행바 트리거 (DOM 업데이트 전에 체크)
                         data.recordings.forEach(rec => {
                             if (rec.analysis_result === '미분석' && !rec.ready_for_analysis) {
                                 const btnEl = document.querySelector(`button.analyze-btn[data-file="${rec.filename}"]`);
@@ -1055,16 +1061,114 @@
                                 }
                             }
                         });
-                    } else if (data.error) {
-                        recordingsList.innerHTML = `<div class=\"analysis-result result-failure\">${data.error}</div>`;
+
+                        // 3. 진행 중인 분석 재개 (localStorage에서 복원)
+                        activeAnalysisMap.forEach((analysisId, filename) => {
+                            const rec = data.recordings.find(r => r.filename === filename);
+                            if (rec && rec.analysis_result === '미분석') {
+                                const btnEl = document.querySelector(`button.analyze-btn[data-file="${filename}"]`);
+                                const recordingItem = btnEl ? btnEl.closest('.recording-item') : null;
+                                if (recordingItem && !recordingItem.querySelector('.analysis-progress')) {
+                                    const progressContainer = createProgressUI(recordingItem);
+                                    const button = recordingItem.querySelector('.analyze-btn');
+                                    if (rec.call_type === 'discovery') {
+                                        // 전화번호 추출
+                                        let phoneNumber = '';
+                                        if (rec.filename.match(/discovery-(\d+)/)) {
+                                            phoneNumber = rec.filename.match(/discovery-(\d+)/)[1];
+                                        }
+                                        trackPatternAnalysisProgress(analysisId, progressContainer, button, button.innerHTML, phoneNumber, filename);
+                                    } else {
+                                        trackAnalysisProgress(analysisId, progressContainer, button, button.innerHTML);
+                                    }
+                                }
+                            }
+                        });
+
+                        // 4. DOM 업데이트는 실제로 변경이 있을 때만
+                        if (lastRecordingsUpdate === null || data.updated > lastRecordingsUpdate) {
+                            lastRecordingsUpdate = data.updated;
+
+                            // 기존 DOM 업데이트 로직
+                            const existingItems = new Map();
+                            recordingsList.querySelectorAll('.recording-item').forEach(item => {
+                                const audio = item.querySelector('audio');
+                                if (audio) {
+                                    const src = audio.getAttribute('src');
+                                    const match = src.match(/file=([^&]+)/);
+                                    if (match) {
+                                        existingItems.set(decodeURIComponent(match[1]), item);
+                                    }
+                                }
+                            });
+
+                            const newItems = [];
+                            data.recordings.forEach(rec => {
+                                let item = existingItems.get(rec.filename);
+                                if (item) {
+                                    existingItems.delete(rec.filename);
+                                } else {
+                                    item = createRecordingItem(rec);
+                                }
+                                newItems.push(item);
+                            });
+
+                            existingItems.forEach(item => item.remove());
+                            recordingsList.innerHTML = '';
+                            newItems.forEach(item => recordingsList.appendChild(item));
+                        }
                     } else {
                         recordingsList.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">표시할 녹음 파일이 없습니다.</div>';
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching recordings:', error);
-                    recordingsList.innerHTML = `<div class=\"analysis-result result-failure\">녹음 목록을 불러오는 데 실패했습니다: ${error.message}</div>`;
+                    recordingsList.innerHTML = `<div class="analysis-result result-failure">녹음 목록을 불러오는 데 실패했습니다: ${error.message}</div>`;
                 });
+        }
+
+        function startMonitoringPatternDiscovery() {
+            const checkInterval = setInterval(() => {
+                fetch('get_recordings.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.recordings) {
+                            // 최신 discovery 녹음 찾기
+                            const discoveryRecording = data.recordings.find(rec => 
+                                rec.call_type === 'discovery' && 
+                                rec.analysis_result === '미분석' &&
+                                (Date.now() - rec.file_mtime * 1000) < 60000 // 1분 이내 생성
+                            );
+                            
+                            if (discoveryRecording) {
+                                // 통화 진행 상태 추적
+                                const recordingItem = document.querySelector(`[data-file="${discoveryRecording.filename}"]`)?.closest('.recording-item');
+                                if (recordingItem && !recordingItem.querySelector('.call-progress')) {
+                                    trackCallProgress(recordingItem, discoveryRecording.filename);
+                                }
+                                
+                                // ready_for_analysis가 true가 되면 자동 분석 시작
+                                if (discoveryRecording.ready_for_analysis && !autoAnalysisSet.has(discoveryRecording.filename)) {
+                                    const btn = document.querySelector(`button.analyze-btn[data-file="${discoveryRecording.filename}"]`);
+                                    if (btn && !btn.disabled) {
+                                        autoAnalysisSet.add(discoveryRecording.filename);
+                                        handleAnalysisClick(btn);
+                                    }
+                                }
+                                
+                                clearInterval(checkInterval); // 녹음 찾으면 모니터링 중지
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error monitoring pattern discovery:', error);
+                    });
+            }, 2000); // 2초마다 체크
+            
+            // 5분 후 자동으로 모니터링 중지
+            setTimeout(() => {
+                clearInterval(checkInterval);
+            }, 300000);
         }
 
         // 데이터 객체를 받아 녹음 항목 DOM 요소를 생성하는 함수
@@ -1119,17 +1223,35 @@
                         `;
                 }
                 showReanalyzeButton = true; // 분석 완료된 파일에 다시 분석 버튼 표시
+            } else if (rec.call_type === 'discovery' && rec.pattern_registered) {
+                // 패턴이 이미 등록된 탐색 녹음
+                if (rec.pattern_data) {
+                    const pat = rec.pattern_data;
+                    analysisDetailsHtml = `
+                        <strong>패턴 등록 완료</strong><br/>
+                        <p><strong>패턴명:</strong> ${pat.name || '자동 생성 패턴'}</p>
+                        <p><strong>DTMF 패턴:</strong> ${pat.dtmf_pattern}</p>
+                        <p><strong>DTMF 타이밍:</strong> ${pat.dtmf_timing}초</p>
+                        <p><strong>초기 대기:</strong> ${pat.initial_wait}초</p>
+                        <p><strong>확인 DTMF:</strong> ${pat.confirmation_dtmf} (지연 ${pat.confirm_delay}s x ${pat.confirm_repeat}회)</p>
+                    `;
+                } else {
+                    analysisDetailsHtml = '<strong>패턴 등록 완료</strong><br/>이미 자동 생성된 패턴이 등록되어 있습니다.';
+                }
             } else {
-                analysisDetailsHtml = '<strong>분석 결과:</strong> 미분석 <span style="color: #666;">(아직 분석되지 않았습니다)</span>';
+                // 미분석 + 패턴 미등록 -> 결과 영역 숨김
+                analysisDetailsHtml = '';
                 showAnalyzeButton = true;
             }
 
-            // 파일 경로 처리 - 이스케이프 문자 제거
-            const filePath = rec.path || rec.filename || '';
-            const cleanPath = filePath.replace(/\\/g, '');
-                        
-            // 파일 경로가 비어있으면 filename 사용
-            const fileForAnalysis = cleanPath || rec.filename || '';
+            // 분석 결과 섹션 (없을 경우 display:none)
+            const analysisResultSection = `
+                <div class="analysis-result ${statusColor}" style="display: ${analysisDetailsHtml ? 'block' : 'none'};">
+                    ${analysisDetailsHtml}
+                </div>`;
+
+            // auto-analysis 로직은 filename 으로 버튼을 찾으므로 data-file 은 순수 파일명만 사용
+            const fileForAnalysis = rec.filename;
 
             item.innerHTML = `
                 <div class="recording-header">
@@ -1144,9 +1266,7 @@
                     <div class="recording-tags">${callTypeLabel} ${registrationBadge}</div>
                                     </div>
                 <audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;"></audio>
-                <div class="analysis-result ${statusColor}" style="display: block;">
-                    ${analysisDetailsHtml}
-                                </div>
+                ${analysisResultSection}
                 ${showAnalyzeButton ? `
                 <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end;">
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small analyze-btn">
@@ -1201,6 +1321,11 @@
                     textDiv.style.display = 'block';
                     if (transcriptionToggle) transcriptionToggle.textContent = '숨기기';
                 }
+            }
+            
+            // 통화 진행 상태 즉시 트리거 (녹음중일 때)
+            if (rec.analysis_result === '미분석' && !rec.ready_for_analysis && !item.querySelector('.call-progress')) {
+                trackCallProgress(item, rec.filename);
             }
             
             return item;
@@ -1321,8 +1446,12 @@
             const stageNames = {
                 'queued': '대기중',
                 'starting': '시작중',
+                'file_check': '파일 확인',
                 'loading_model': '모델 로딩',
+                'model_loaded': '모델 로드 완료',
                 'transcribing': '음성 변환',
+                'transcription_done': 'STT 완료',
+                'analyzing_keywords': '키워드 분석',
                 'analyzing': '텍스트 분석',
                 'saving': '결과 저장',
                 'completed': '완료',
@@ -1331,6 +1460,8 @@
             };
 
             // 진행 상황 확인 함수
+            const POLL_INTERVAL = 400; // ms – 더 짧은 주기로 폴링하여 빠른 단계 변화를 포착
+
             const checkProgress = () => {
                 fetch(`get_analysis_progress.php?analysis_id=${analysisId}`)
             .then(response => response.json())
@@ -1373,8 +1504,8 @@
                                     button.innerHTML = originalButtonContent;
                                 }, 3000);
                 } else {
-                                // 계속 진행중 - 1초 후 다시 확인
-                                setTimeout(checkProgress, 1000);
+                                // 계속 진행중 – 지정 주기 후 다시 확인
+                                setTimeout(checkProgress, POLL_INTERVAL);
                             }
                         } else {
                             // API 오류
@@ -1392,8 +1523,8 @@
                     });
             };
             
-            // 첫 번째 확인은 500ms 후에 시작
-            setTimeout(checkProgress, 500);
+            // 첫 번째 확인은 250ms 후에 시작 – 빠른 초기 단계 포착
+            setTimeout(checkProgress, 250);
         }
 
         // 단일 녹음 항목 업데이트 함수
@@ -1446,7 +1577,7 @@
                 'transcribing': '음성 변환',
                 'transcribed': '음성 변환 완료',
                 'analyzing_keywords': '키워드 분석',
-                'analyzing_pattern': 'DTMF 패턴 분석',
+                'analyzing': '텍스트 분석',
                 'saving': '결과 저장',
                 'completed': '완료',
                 'error': '오류',
@@ -1548,6 +1679,7 @@
             const confidence = result.confidence || 0;
             
             analysisResultDiv.className = 'analysis-result result-success';
+            analysisResultDiv.style.display = 'block';
             analysisResultDiv.innerHTML = `
                 <strong>패턴 분석 완료</strong> (신뢰도: ${confidence}%)
                 <p><strong>패턴명:</strong> ${pattern.name}</p>
@@ -1665,16 +1797,6 @@
         refreshBtn.addEventListener('click', function() {
             getRecordings();
         });
-
-        // 페이지 로드 시 녹음 목록 가져오기
-        getRecordings();
-
-        // 5초 주기로 녹음 목록 자동 갱신 (탭이 활성화된 경우에만)
-        setInterval(() => {
-            if (!document.hidden && !document.querySelector('.call-progress') && !document.querySelector('.analysis-progress')) {
-                getRecordings();
-            }
-        }, 5000);
 
         // 삭제 버튼 클릭 처리 함수
         function handleDeleteClick(button) {
@@ -1923,15 +2045,7 @@
 
         // 페이지 로드 시 진행상황 체크 시작
         document.addEventListener('DOMContentLoaded', function() {
-            // URL에서 analysis_id 파라미터 확인
-            const urlParams = new URLSearchParams(window.location.search);
-            const analysisId = urlParams.get('analysis_id');
-            
-            console.log('Page loaded, analysis_id:', analysisId);
-            
-            if (analysisId) {
-                checkPatternAnalysisProgress(analysisId);
-            }
+
         });
 
         // 패턴 분석 시작 함수
@@ -1967,35 +2081,35 @@
             });
         }
 
-        // 전역 progressContainer는 숨김 처리
-        const globalProgress = document.getElementById('progressContainer');
-        if (globalProgress) globalProgress.style.display = 'none';
-
         // 펼침 상태 관리용 Set (localStorage 활용)
         const openTranscriptions = new Set(JSON.parse(localStorage.getItem('openTranscriptions') || '[]'));
 
-        // // --- 자동 분석 트리거 --- (existing)
-        // autoAnalysisSet.forEach(filename => {
-        //     const btn = document.querySelector(`button.analyze-btn[data-file="${filename}"]`);
-        //     if (btn && !btn.disabled) {
-        //         handleAnalysisClick(btn);
-        //     }
-        // });
+    // 페이지 언로드 시 진행 중인 분석 저장
+    window.addEventListener('beforeunload', function() {
+        if (typeof persistActiveAnalyses === 'function') {
+            persistActiveAnalyses();
+        }
+    });
 
-        // // --- 통화 진행바 트리거 (패턴탐색/수신거부 공통) ---
-        // data.recordings.forEach(rec => {
-        //     if (rec.analysis_result === '미분석' && !rec.ready_for_analysis) {
-        //         const item = document.querySelector(`.recording-item [data-file="${rec.filename}"]`);
-        //         if (item) {
-        //             const recordingItem = item.closest('.recording-item');
-        //             if (recordingItem && !recordingItem.querySelector('.analysis-progress')) {
-        //                 const progressContainer = createProgressUI(recordingItem);
-        //                 trackCallProgress(recordingItem, rec.filename);
-        //             }
-        //         }
-        //     }
-        // });
-    }); // <-- 첫 번째 document.addEventListener('DOMContentLoaded', ...) 종료
+    // 디버그용 전역 함수 (개발 환경에서만 사용)
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        window.debugRecordings = function() {
+            fetch('get_recordings.php')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Current recordings:', data);
+                    if (data.recordings) {
+                        console.log('Ready for analysis:', data.recordings.filter(r => r.ready_for_analysis));
+                        console.log('In progress:', data.recordings.filter(r => r.analysis_result === '미분석'));
+                    }
+                });
+        };
+        
+        window.debugActiveAnalyses = function() {
+            console.log('Active analyses:', [...activeAnalysisMap]);
+            console.log('Auto analysis set:', [...autoAnalysisSet]);
+        };
+    }
     </script>
 </body>
 </html>
