@@ -53,11 +53,22 @@ def detect_unsubscribe_patterns(text):
         if re.search(pattern, text_normalized):
             return {'status': 'failed', 'confidence': confidence, 'reason': f'명확한 실패 키워드 감지: {reason}'}
 
+    confirm_only_patterns = {
+        # 확인만 요구하는 안내 – 실제로 자동 해지가 되지 않으므로 실패로 간주
+        '확인절차1': (r'(원하시면|하시려면|원하면).{0,15}[12]번.{0,10}(누르|눌러)', 65),
+        '확인절차2': (r'[12]번.{0,10}(누르|눌러).{0,15}(원하시면|하시려면|원하면)', 65),
+        '확인절차3': (r'거부.{0,20}[12]번.{0,10}(누르|눌러)', 60)
+    }
+    for reason, (pattern, confidence) in confirm_only_patterns.items():
+        if re.search(pattern, text_normalized):
+            return {'status': 'failed', 'confidence': confidence, 'reason': f'확인 절차만 요구하여 자동 처리 실패 감지: {reason}'}
+
+    # 일반적인 시도/안내 패턴 – 결과가 불분명할 때 attempted 유지
     attempt_patterns = {
-        '시도': (r'수신거부|수신차단|해지|거부.*?(번호|안내|방법)', 60)
+        '시도': (r'수신거부|수신차단|해지|거부', 60)
     }
     for reason, (pattern, confidence) in attempt_patterns.items():
-         if re.search(pattern, text_normalized):
+        if re.search(pattern, text_normalized):
             return {'status': 'attempted', 'confidence': confidence, 'reason': '결과가 불분명한 수신거부 시도 키워드 감지'}
 
     return {'status': 'unknown', 'confidence': 20, 'reason': '관련 키워드를 찾을 수 없음'}
@@ -113,11 +124,25 @@ def analyze_audio(audio_file, output_file, progress_file=None, model_size='small
         
         print('결과 저장')
         
+        # 패턴 힌트 생성 (confirm-only 실패 감지)
+        pattern_hint = None
+        if analysis['status'] == 'failed' and '확인 절차' in analysis['reason']:
+            phone_match = re.search(r'TO_(\d+)', os.path.basename(audio_file))
+            if phone_match:
+                phone_number = phone_match.group(1)
+                pattern_hint = {
+                    'phone_number': phone_number,
+                    'pattern_type': 'confirm_only',
+                    'auto_supported': False
+                }
+        
         output_data = {
             'file_path': audio_file,
             'timestamp': datetime.now().isoformat(),
             'transcription': transcription,
-            'analysis': analysis
+            'analysis': analysis,
+            'pattern_hint': pattern_hint,
+            'file_size': os.path.getsize(audio_file) if os.path.exists(audio_file) else 0
         }
         
         with open(output_file, 'w', encoding='utf-8') as f:

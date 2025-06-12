@@ -42,6 +42,18 @@ foreach ($files as $file) {
 
     $hasSpecific = isset($patterns[$dialed]) && $patterns[$dialed]['name'] !== '기본값';
 
+    // confirm-only 패턴(auto_supported:false)는 자동 재시도 대상에서 제외
+    if ($hasSpecific && isset($patterns[$dialed]['auto_supported']) && $patterns[$dialed]['auto_supported'] === false) {
+        continue; // skip further processing
+    }
+
+    // lock check (prevent duplicate while analysis pending)
+    $lockFile = __DIR__ . '/pattern_discovery_active/' . $dialed . '.lock';
+    if (file_exists($lockFile) && (time() - filemtime($lockFile) < 1800)) {
+        // discovery or analysis in progress; wait
+        continue;
+    }
+
     if (!$hasSpecific) {
         // 1) 패턴 디스커버리 시작
         $discovery = new PatternDiscovery();

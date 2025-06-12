@@ -1,6 +1,9 @@
 <?php
 // sudo nano pattern_discovery.php
 
+require_once __DIR__ . '/pattern_manager.php';
+require_once __DIR__ . '/call_processor.php';
+
 if (!class_exists('PatternManager')) {
     if (file_exists(__DIR__ . '/pattern_manager.php')) {
         require_once __DIR__ . '/pattern_manager.php';
@@ -34,6 +37,7 @@ class PatternDiscovery
     private $patternManager;
     private $logFile;
     private $discoveryDir = '/var/www/html/spam/pattern_discovery/';
+    private $lockDir = '/var/www/html/spam/pattern_discovery_active/';
     private $pythonScript = __DIR__ . '/advanced_pattern_analyzer.py';
     
     public function __construct()
@@ -53,6 +57,9 @@ class PatternDiscovery
                 @chgrp($this->discoveryDir, 'asterisk');
             }
         }
+        if (!is_dir($this->lockDir)) {
+            @mkdir($this->lockDir, 0775, true);
+        }
         $this->log("--- PatternDiscovery Initialized ---");
         }
         
@@ -65,6 +72,15 @@ class PatternDiscovery
     {
         $this->log("Attempting to start discovery for phone: {$phoneNumber}");
         $uniqueId = uniqid('discovery_');
+
+        // 중복 실행 방지 락파일 체크 (30분 유효)
+        $lockFile = $this->lockDir . $phoneNumber . '.lock';
+        if (file_exists($lockFile) && (time() - filemtime($lockFile) < 1800)) {
+            $this->log("Discovery already in progress for {$phoneNumber}. Skipping.");
+            return "이미 진행 중입니다. 잠시 후 다시 시도해주세요.";
+        }
+        // create/refresh lock
+        touch($lockFile);
 
         // 상태: 시작됨
         exec("/usr/sbin/asterisk -rx \"database put Discovery/{$uniqueId}/status starting\"");
@@ -186,6 +202,8 @@ class PatternDiscovery
                 'notes'             => "자동 분석됨 - " . date('Y-m-d H:i:s'),
                 'auto_generated'    => true,
                 'needs_verification' => true,
+                'auto_supported'    => isset($patternDetails['auto_supported']) ? $patternDetails['auto_supported'] : true,
+                'pattern_type'      => $patternDetails['pattern_type'] ?? 'two_step',
                 'created_at'        => date('Y-m-d H:i:s'),
                 'updated_at'        => date('Y-m-d H:i:s')
             ]
@@ -195,8 +213,17 @@ class PatternDiscovery
         
         if ($this->patternManager->savePatterns($patterns)) {
             $this->log("Successfully saved new pattern for {$phoneNumber}.");
-            // 학습 성공 후 자동 재시도 및 알림
-            $this->initiateUnsubscribeAndNotify($phoneNumber, $discoveryId);
+            // auto_supported 가 true 인 경우에만 자동 재호출
+            if (!isset($newPattern['auto_supported']) || $newPattern['auto_supported']) {
+                $this->initiateUnsubscribeAndNotify($phoneNumber, $discoveryId);
+            } else {
+                $this->log("Pattern is confirm-only; skipping automatic retry call.");
+                exec("/usr/sbin/asterisk -rx \"database put Discovery/{$discoveryId}/status confirm_only\"");
+                // Clean up basic keys
+                exec("/usr/sbin/asterisk -rx \"database del Discovery {$discoveryId}/phone\"");
+                exec("/usr/sbin/asterisk -rx \"database del Discovery {$discoveryId}/notify\"");
+            }
+            @unlink($this->lockDir . $phoneNumber . '.lock');
         } else {
             $this->log("Error: Failed to save new pattern for {$phoneNumber}.");
         }
@@ -242,6 +269,7 @@ class PatternDiscovery
         exec("/usr/sbin/asterisk -rx \"database del Discovery {$discoveryId}/notify\"");
         exec("/usr/sbin/asterisk -rx \"database del Discovery {$discoveryId}/status\"");
         $this->log("Cleaned up AstDB for ID: {$discoveryId}");
+        @unlink($this->lockDir . $targetPhoneNumber . '.lock');
     }
 }
 

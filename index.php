@@ -16,7 +16,7 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['action'])) {
                 if ($_POST['action'] === 'make_call' && isset($_POST['id'])) {
-                    require_once 'process_v2.php';
+                    require_once 'call_processor.php';
                     $processor = new CallProcessor();
                     $actionResult = $processor->makeCall($_POST['id'], $_POST['phone_number']);
                 } elseif ($_POST['action'] === 'start_discovery') {
@@ -654,6 +654,18 @@
             font-weight: bold;
             margin-bottom: 5px;
         }
+        /* Real-time call log inside call-progress */
+        .call-log {
+            max-height: 160px;
+            overflow-y: auto;
+            font-size: 12px;
+            background: #ffffff;
+            padding: 8px;
+            margin-top: 8px;
+            border-radius: 4px;
+            border: 1px solid #e0f2fe;
+            white-space: pre-line;
+        }
     </style>
 </head>
 <body>
@@ -880,9 +892,27 @@
                     }
                 });
 
+            spamContent.addEventListener('keydown', function(e){
+                // Enter 키 단독 입력으로 폼이 제출되는 것을 방지 (Shift+Enter 는 줄바꿈 허용)
+                if(e.key === 'Enter' && !e.shiftKey){
+                    e.stopPropagation();
+                    e.preventDefault();
+                    // 문단 구분을 위해 줄바꿈만 삽입
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    const value = this.value;
+                    this.value = value.substring(0, start) + '\n' + value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 1;
+                    autoResize(this);
+                }
+            });
+
             function analyzeText(text) {
-            const phone_080_pattern = /080[0-9]{7,8}/g;
-            const phoneNumbers = text.match(phone_080_pattern) || [];
+            // 080 번호: 하이픈이 섞여 있어도 인식 (예: 080-8888-5050)
+            const phone_080_pattern = /080[-0-9]{7,12}/g;
+            const rawPhones = text.match(phone_080_pattern) || [];
+            // 하이픈 제거 후 중복 제거
+            const phoneNumbers = [...new Set(rawPhones.map(p => p.replace(/[^0-9]/g, '')))];
                 
                 if (phoneNumbers.length === 0) {
                     hideDynamicInput();
@@ -1017,7 +1047,7 @@
             .then(response => response.text())
             .then(data => {
                 // 서버에서 HTML이 넘어와도 태그를 제거하고 텍스트만 표시
-                const safeText = typeof data === 'string' ? data.replace(/(<([^>]+)>)/gi, '') : data;
+                const safeText = typeof data === 'string' ? data.replace(/(<([^>]+)>)/gi, '').trimStart() : data;
                 resultArea.textContent = safeText;
                 
                 // 패턴탐색이 시작된 경우 감지
@@ -1204,12 +1234,26 @@
                 ? '<span class="label label-discovery">패턴탐색</span>' 
                 : '<span class="label label-unsubscribe">수신거부</span>';
 
-            const patternTypeBadge = (rec.pattern_data && rec.pattern_data.pattern_type === 'confirm_only') ? '<span class="label label-unverified">Confirm-Only</span>' : (rec.pattern_data && rec.pattern_data.pattern_type === 'id_only') ? '<span class="label label-verified">ID-Only</span>' : '';
+            let patternTypeBadge = '';
+            if (rec.pattern_data) {
+                if (rec.pattern_data.auto_supported === false) {
+                    patternTypeBadge = '<span class="label label-unverified">확인 번호만 필요</span>';
+                } else if (rec.pattern_data.pattern_type === 'id_only') {
+                    patternTypeBadge = '<span class="label label-verified">ID-Only</span>';
+                } else if (rec.pattern_data.pattern_type === 'confirm_only') {
+                    patternTypeBadge = '<span class="label label-unverified">확인 번호만 필요</span>';
+                }
+            }
             const registrationBadge = rec.pattern_registered ? '<span class="label label-registered">패턴등록</span>' : '';
 
             let analysisDetailsHtml = '';
             let showAnalyzeButton = false;
             let showReanalyzeButton = false;
+            const isConfirmOnly = rec.pattern_data && rec.pattern_data.auto_supported === false;
+            let showRetryCallButton = false;
+            if (rec.call_type === 'unsubscribe' && (rec.analysis_result === '실패' || rec.analysis_result === '불확실')) {
+                showRetryCallButton = true;
+            }
                     
             if (rec.analysis_result && rec.analysis_result !== '미분석') {
                 const completedAt = rec.completed_at ? new Date(rec.completed_at).toLocaleString('ko-KR') : '';
@@ -1232,12 +1276,13 @@
                 }
                 
                 if (rec.transcription) {
+                    const transText = rec.transcription.trim() ? rec.transcription : '변환된 텍스트를 가져올 수 없습니다.';
                     analysisDetailsHtml += `
                         <div class="transcription-container">
                             <button class="btn btn-small btn-secondary toggle-transcription">전체 내용 보기</button>
                             <div class="transcription-text" style="display: none;">
                                 <p><strong>변환된 텍스트:</strong></p>
-                                <pre>${rec.transcription}</pre>
+                                <pre>${transText}</pre>
                             </div>
                             </div>
                         `;
@@ -1310,12 +1355,12 @@
                         </svg>
                         ${rec.call_type === 'discovery' ? '패턴 다시 분석하기' : '다시 분석하기'}
                     </button>
-                    <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">
-                        🗑 삭제
-                    </button>
+                    ${showRetryCallButton ? `<button data-file="${fileForAnalysis}" data-phone="${rec.title}" data-id="${rec.identification_number || ''}" data-notify="${rec.notification_phone || ''}" class="btn btn-small retry-call-btn" ${isConfirmOnly?'disabled title="자동 수신거부가 불가능한 번호입니다."':''}>${isConfirmOnly?'☎️ 직접 전화 필요':'📞 다시 시도하기'}</button>` : ''}
+                    <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">🗑 삭제</button>
                             </div>
                 ` : ''}
             `;
+            
             
             // 이벤트 리스너 추가 (이벤트 위임 대신 직접 추가)
             const transcriptionToggle = item.querySelector('.toggle-transcription');
@@ -1346,6 +1391,30 @@
             // 통화 진행 상태 즉시 트리거 (녹음중일 때)
             if (rec.analysis_result === '미분석' && !rec.ready_for_analysis && !item.querySelector('.call-progress')) {
                 trackCallProgress(item, rec.filename);
+            }
+            
+            const retryBtn = item.querySelector('.retry-call-btn');
+            if (retryBtn && !retryBtn.disabled) {
+                retryBtn.addEventListener('click', function(){
+                    const phone = this.dataset.phone;
+                    const idVal = this.dataset.id || '';
+                    const notifyVal = this.dataset.notify || '';
+                    if(!phone){ showToast('전화번호를 확인할 수 없습니다.',true); return; }
+                    if (rec.pattern_data && rec.pattern_data.auto_supported === false) {
+                        showToast('이 번호는 자동 수신거부가 불가능합니다. 안내에 따라 수동으로 진행해주세요.', true);
+                        return;
+                    }
+                    // confirm 제거 – 바로 재시도 실행
+                    const params = `phone=${encodeURIComponent(phone)}${idVal?`&id=${encodeURIComponent(idVal)}`:''}${notifyVal?`&notify=${encodeURIComponent(notifyVal)}`:''}`;
+                    fetch('retry_call.php',{
+                        method:'POST',
+                        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+                        body:params
+                    })
+                    .then(r=>r.text())
+                    .then(txt=>{ const msg = txt.trim()?txt:'자동 수신거부가 불가능한 번호입니다.'; showToast(msg); getRecordings(); })
+                    .catch(()=>showToast('다시 시도 요청 중 오류가 발생했습니다.',true));
+                });
             }
             
             return item;
@@ -1869,6 +1938,7 @@
                 <div class="progress-bar" style="background:#e0f2fe;height:6px;border-radius:4px;margin-top:8px;overflow:hidden;">
                     <div class="progress-fill" style="background:#0ea5e9;width:0;height:100%;transition:width 0.3s;"></div>
                 </div>
+                <div class="call-log"></div>
             </div>`;
             recordingItem.insertAdjacentHTML('beforeend', html);
             return recordingItem.querySelector('.call-progress');
@@ -1879,9 +1949,29 @@
             if (!progressEl) {
                 progressEl = createCallProgressUI(recordingItem);
             }
+
+            // 로그 메시지를 친절한 한국어로 변환하는 헬퍼
+            function translateCallLog(msg){
+                if(!msg) return '';
+                msg = msg.trim();
+                if(msg.startsWith('RECORDING_START')) return '녹음 시작';
+                if(msg.startsWith('RECORDING_END'))   return '녹음 종료';
+                if(msg.startsWith('SENDING FIRST DTMF'))  return '식별번호 전송 중';
+                if(msg.startsWith('SENDING SECOND DTMF')) return '확인 DTMF 전송 중';
+                if(msg.startsWith('DTMF_CONFIRMED'))      return 'DTMF 확인됨';
+                if(msg.includes('STT'))                   return '음성 인식 중';
+                if(msg.includes('TRANSCRIBE')||msg.includes('TRANSCRIPTION')) return '음성 텍스트 변환 중';
+                if(msg.includes('ANALYSIS'))              return '분석 중';
+                if(msg.includes('TRIGGER'))               return '분석 트리거';
+                if(msg.includes('WAITING') || msg.includes('IVR')) return '음성 안내 대기 중';
+                if(msg.startsWith('CALL_FINISHED')||msg.startsWith('HANGUP')) return '통화 종료';
+                return msg; // 기본: 원본 유지
+            }
+
             const statusEl = progressEl.querySelector('.call-status');
             const durEl = progressEl.querySelector('.call-duration');
             const fillEl = progressEl.querySelector('.progress-fill');
+            const logEl  = progressEl.querySelector('.call-log');
 
             const poll = () => {
                 fetch(`get_call_progress.php?file=${encodeURIComponent(filename)}`)
@@ -1895,17 +1985,24 @@
                         durEl.textContent=`${data.duration_est}s`;
                         const percent=Math.min((data.duration_est/40)*100,99);
                         fillEl.style.width=percent+'%';
-                        // 최신 call_progress 로그 1줄로 상태 갱신
+                        // 최신 call_progress 로그(여러 줄)로 상태 및 로그 영역 업데이트
                         (function(){
                             const m = filename.match(/-ID_([A-Za-z0-9]+)/);
                             if(!m) return;
-                            fetch(`get_call_detail.php?id=${m[1]}&lines=1`)
+                            fetch(`get_call_detail.php?id=${m[1]}&lines=20`)
                             .then(r=>r.json())
                             .then(d=>{
                                 if(d.success && d.lines && d.lines.length){
-                                    const raw=d.lines[0];
-                                    const msg=raw.substring(raw.indexOf(']')+2);
-                                    statusEl.textContent = msg;
+                                    // 상태(마지막 줄) 업데이트
+                                    const lastRaw = d.lines[d.lines.length-1];
+                                    const lastMsg = lastRaw.substring(lastRaw.indexOf(']')+2);
+                                    statusEl.textContent = translateCallLog(lastMsg);
+                                    // 전체 로그 표시
+                                    if(logEl){
+                                        const text = d.lines.map(l=>l.substring(l.indexOf(']')+2)).join('\n');
+                                        logEl.textContent = text;
+                                        logEl.scrollTop = logEl.scrollHeight;
+                                    }
                                 }
                             }).catch(()=>{});
                         })();

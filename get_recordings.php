@@ -107,6 +107,30 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
                 if ($recordTimestamp && $analysisTs && $analysisTs <= ($recordTimestamp + 5)) {
                     // 아직 해당 녹음에 대한 분석이 아니므로 무시
                 } else {
+                    // 확인 절차 실패 기반 confirm_only 패턴 자동 등록
+                    if(isset($data['pattern_hint']['phone_number'])){
+                        $pnum = $data['pattern_hint']['phone_number'];
+                        $patternsAll = $patternManager->getPatterns();
+                        if(!isset($patternsAll['patterns'][$pnum])){
+                            $patternsAll['patterns'][$pnum] = [
+                                'name' => 'Confirm-Only 자동 등록',
+                                'dtmf_pattern' => '',
+                                'initial_wait' => 2,
+                                'dtmf_timing' => 0,
+                                'confirmation_wait'=>2,
+                                'confirmation_dtmf'=>'1',
+                                'total_duration'=>30,
+                                'pattern_type'=>'confirm_only',
+                                'auto_supported'=>false,
+                                'auto_generated'=>true,
+                                'created_at'=>date('Y-m-d H:i:s'),
+                                'updated_at'=>date('Y-m-d H:i:s')
+                            ];
+                            $patternManager->savePatterns($patternsAll);
+                            $recording_info['pattern_data'] = $patternsAll['patterns'][$pnum];
+                        }
+                    }
+
                     return [
                         'analysis_result' => '성공',
                         'analysis_text' => '패턴 분석 완료 - ' . ($data['pattern']['name'] ?? '패턴 생성됨'),
@@ -146,6 +170,30 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
                 if ($recordTimestamp && $analysisTs && $analysisTs <= ($recordTimestamp + 5)) {
                     // 분석 시점이 이전이므로 무시
                 } else {
+                    // 확인 절차 실패 기반 confirm_only 패턴 자동 등록
+                    if(isset($latestData['pattern_hint']['phone_number'])){
+                        $pnum = $latestData['pattern_hint']['phone_number'];
+                        $patternsAll = $patternManager->getPatterns();
+                        if(!isset($patternsAll['patterns'][$pnum])){
+                            $patternsAll['patterns'][$pnum] = [
+                                'name' => 'Confirm-Only 자동 등록',
+                                'dtmf_pattern' => '',
+                                'initial_wait' => 2,
+                                'dtmf_timing' => 0,
+                                'confirmation_wait'=>2,
+                                'confirmation_dtmf'=>'1',
+                                'total_duration'=>30,
+                                'pattern_type'=>'confirm_only',
+                                'auto_supported'=>false,
+                                'auto_generated'=>true,
+                                'created_at'=>date('Y-m-d H:i:s'),
+                                'updated_at'=>date('Y-m-d H:i:s')
+                            ];
+                            $patternManager->savePatterns($patternsAll);
+                            $recording_info['pattern_data'] = $patternsAll['patterns'][$pnum];
+                        }
+                    }
+
                     return [
                         'analysis_result' => '성공',
                         'analysis_text' => '패턴 분석 완료 - ' . ($latestData['pattern']['name'] ?? '패턴 생성됨'),
@@ -206,6 +254,30 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
                         $status_ko = $status; // 그 외 다른 상태값은 그대로 사용
                 }
 
+                // 확인 절차 실패 기반 confirm_only 패턴 자동 등록
+                if(isset($data['pattern_hint']['phone_number'])){
+                    $pnum = $data['pattern_hint']['phone_number'];
+                    $patternsAll = $patternManager->getPatterns();
+                    if(!isset($patternsAll['patterns'][$pnum])){
+                        $patternsAll['patterns'][$pnum] = [
+                            'name' => 'Confirm-Only 자동 등록',
+                            'dtmf_pattern' => '',
+                            'initial_wait' => 2,
+                            'dtmf_timing' => 0,
+                            'confirmation_wait'=>2,
+                            'confirmation_dtmf'=>'1',
+                            'total_duration'=>30,
+                            'pattern_type'=>'confirm_only',
+                            'auto_supported'=>false,
+                            'auto_generated'=>true,
+                            'created_at'=>date('Y-m-d H:i:s'),
+                            'updated_at'=>date('Y-m-d H:i:s')
+                        ];
+                        $patternManager->savePatterns($patternsAll);
+                        $recording_info['pattern_data'] = $patternsAll['patterns'][$pnum];
+                    }
+                }
+
                 return [
                     'analysis_result' => $status_ko,
                     'analysis_text' => $data['analysis']['reason'] ?? '분석 내용이 없습니다.',
@@ -231,6 +303,14 @@ $recording_dir = '/var/spool/asterisk/monitor/';
 $recordings = [];
 $lastUpdated = 0; // 최근 수정 시각 추적
 
+require_once __DIR__ . '/recording_info_extractor.php';
+$recExtractor = new RecordingInfoExtractor();
+
+// Load all patterns once for later lookups
+require_once __DIR__ . '/pattern_manager.php';
+$patternManagerGlobal = new PatternManager();
+$allPatternsGlobal = $patternManagerGlobal->getPatterns();
+
 // 디렉토리가 존재하는지 확인
 if (is_dir($recording_dir)) {
     if ($dh = opendir($recording_dir)) {
@@ -240,6 +320,15 @@ if (is_dir($recording_dir)) {
                 // 기존 분석 결과 확인 및 추가 (파일 생성 시점 고려)
                 $analysis_data = get_analysis_result($file, $recording_info['call_type'], $recording_info['timestamp']);
                 $recording_info = array_merge($recording_info, $analysis_data);
+                
+                // 추가 정보: 식별번호
+                $extra = $recExtractor->extractAllInfo($file);
+                if($extra && isset($extra['identification_number'])){
+                    $recording_info['identification_number'] = $extra['identification_number'];
+                }
+                if($extra && isset($extra['notification_phone'])){
+                    $recording_info['notification_phone'] = $extra['notification_phone'];
+                }
                 
                 // 최신 수정 시각 계산
                 if ($recording_info['timestamp'] > $lastUpdated) {
@@ -285,6 +374,19 @@ if (is_dir($recording_dir)) {
                             $recording_info['analysis_text'] = '패턴 등록 완료';
                         }
                     }
+                }
+
+                // 전화번호 키 추출: 파일명 TO_08.. 우선, 없으면 title
+                if(preg_match('/TO_(\d{7,11})/i', $recording_info['filename'], $pm)){
+                    $phoneKey = $pm[1];
+                } else {
+                    $phoneKey = preg_replace('/[^0-9]/','',$recording_info['title']);
+                }
+
+                // 패턴 정보 주입 (전역 패턴 목록 기반)
+                if(isset($allPatternsGlobal['patterns'][$phoneKey])){
+                    $recording_info['pattern_data'] = $allPatternsGlobal['patterns'][$phoneKey];
+                    $recording_info['pattern_registered'] = true;
                 }
 
                 // 최종 배열에 추가 (ready flag 포함)
