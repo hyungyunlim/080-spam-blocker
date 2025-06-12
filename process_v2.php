@@ -26,6 +26,29 @@ require_once __DIR__ . '/pattern_discovery.php';
 // POST 데이터 로깅
 file_put_contents($logFile, "POST Data: " . json_encode($_POST) . "\n", FILE_APPEND);
 
+// ============ CLI MODE SUPPORT ============
+if (php_sapi_name() === 'cli') {
+    $cliArgs = getopt('', [
+        'phone:',      // --phone=080xxxxxx (필수)
+        'notification::', // --notification=010...
+        'id::',           // --id=1234 (식별번호)
+        'auto',          // --auto 플래그 (dummy)
+    ]);
+
+    if (!isset($cliArgs['phone'])) {
+        fwrite(STDERR, "--phone parameter required in CLI mode\n");
+        exit(1);
+    }
+
+    // CLI 모드를 POST 에뮬레이션하여 동일 로직 재사용
+    $_POST['spam_content']      = 'AUTO_CALL ' . $cliArgs['phone'];
+    $_POST['notification_phone'] = $cliArgs['notification'] ?? '01000000000';
+    if (isset($cliArgs['id'])) {
+        $_POST['phone_number'] = $cliArgs['id'];
+    }
+}
+// =========================================
+
 // POST 데이터 변수 할당
 $spamMessage = $_POST['spam_content'] ?? '';
 $manualPhone = $_POST['phone_number'] ?? '';
@@ -121,19 +144,28 @@ if ($pattern && isset($pattern['auto_supported']) && !$pattern['auto_supported']
     exit;
 }
 
-// 6. 패턴이 없을 경우, 패턴 디스커버리 실행
+// 6. 패턴이 없을 경우 → ① 기본 패턴으로 먼저 시도, ② 실패 시 디스커버리 전환
 if (!$pattern) {
-    file_put_contents($logFile, "Pattern not found. Starting pattern discovery for {$phoneNumber}.\n", FILE_APPEND);
-    echo "🔍 패턴이 없습니다! 패턴 디스커버리를 시작합니다: {$phoneNumber}\n";
-    
-    $discovery = new PatternDiscovery();
-    $result = $discovery->startDiscovery($phoneNumber, $notificationPhone);
+    $usingDefault = false;
+    if (isset($patterns['default'])) {
+        $pattern          = $patterns['default'];
+        $usingDefault     = true;
+        $pattern['name']  = $pattern['name'] ?? '기본 패턴';
+        echo "ℹ️  등록된 패턴이 없어 기본 패턴으로 먼저 시도합니다.\n";
+        file_put_contents($logFile, "Pattern not found – using default pattern first.\n", FILE_APPEND);
+    } else {
+        file_put_contents($logFile, "Pattern not found and no default. Starting discovery.\n", FILE_APPEND);
+        echo "🔍 패턴이 없습니다! 패턴 디스커버리를 시작합니다: {$phoneNumber}\n";
 
-    $smsSender = new SmsSender();
-    $smsSender->logSMS($result, 'pattern_discovery_started');
-    
-    file_put_contents($logFile, "Exiting after starting discovery.\n--- Script End ---\n\n", FILE_APPEND);
-    exit("패턴 학습 중입니다. 완료 후 다시 시도해주세요.");
+        $discovery = new PatternDiscovery();
+        $result = $discovery->startDiscovery($phoneNumber, $notificationPhone);
+
+        $smsSender = new SmsSender();
+        $smsSender->logSMS($result, 'pattern_discovery_started');
+        
+        file_put_contents($logFile, "Exiting after starting discovery.\n--- Script End ---\n\n", FILE_APPEND);
+        exit("패턴 학습 중입니다. 완료 후 다시 시도해주세요.");
+    }
 }
 
 // 7. 패턴이 존재할 경우, Call File 생성 준비

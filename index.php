@@ -866,13 +866,18 @@
                 }
 
                 spamContent.addEventListener('input', function() {
-                        autoResize(this);
-                        const text = this.value.trim();
-                        if (text.length > 10) {
-                            analyzeText(text);
-                        } else {
-                            hideDynamicInput();
-                        }
+                    autoResize(this);
+                    // 새 입력이 시작되면 이전 결과 박스를 숨긴다
+                    if (resultArea) {
+                        resultArea.style.display = 'none';
+                        resultArea.innerHTML = '';
+                    }
+                    const text = this.value.trim();
+                    if (text.length > 10) {
+                        analyzeText(text);
+                    } else {
+                        hideDynamicInput();
+                    }
                 });
 
             function analyzeText(text) {
@@ -1890,6 +1895,20 @@
                         durEl.textContent=`${data.duration_est}s`;
                         const percent=Math.min((data.duration_est/40)*100,99);
                         fillEl.style.width=percent+'%';
+                        // 최신 call_progress 로그 1줄로 상태 갱신
+                        (function(){
+                            const m = filename.match(/-ID_([A-Za-z0-9]+)/);
+                            if(!m) return;
+                            fetch(`get_call_detail.php?id=${m[1]}&lines=1`)
+                            .then(r=>r.json())
+                            .then(d=>{
+                                if(d.success && d.lines && d.lines.length){
+                                    const raw=d.lines[0];
+                                    const msg=raw.substring(raw.indexOf(']')+2);
+                                    statusEl.textContent = msg;
+                                }
+                            }).catch(()=>{});
+                        })();
                         if(data.finished){
                             statusEl.textContent='통화 종료';
                             fillEl.style.width='100%';
