@@ -109,6 +109,18 @@ if (file_exists($patternsFile)) {
 $pattern = $patterns[$phoneNumber] ?? null;
 file_put_contents($logFile, "Pattern for {$phoneNumber}: " . ($pattern ? 'Found' : 'Not Found') . "\n", FILE_APPEND);
 
+// 자동호출 지원 여부 확인
+if ($pattern && isset($pattern['auto_supported']) && !$pattern['auto_supported']) {
+    echo "⚠️  자동 수신거부가 불가능합니다.\n";
+    echo "   이 음성 시스템은 본인확인을 위해 고객님의 전화번호 입력을 요구하거나,\n";
+    echo "   통화가 시작되자마자 '1번을 누르세요' 라는 확인만 받습니다.\n";
+    echo "   시스템이 대신 '1번'을 눌러줄 방법은 있지만, 사용자의 전화번호를 대신 입력할 수 없어서\n";
+    echo "   자동 처리(수신거부 완료)까지 진행할 수 없습니다.\n";
+    echo "   녹음 파일을 참고하여 직접 전화를 걸어 수신거부를 진행해주세요.\n";
+    file_put_contents($logFile, "Pattern for {$phoneNumber} is confirm_only – aborting automatic call.\n", FILE_APPEND);
+    exit;
+}
+
 // 6. 패턴이 없을 경우, 패턴 디스커버리 실행
 if (!$pattern) {
     file_put_contents($logFile, "Pattern not found. Starting pattern discovery for {$phoneNumber}.\n", FILE_APPEND);

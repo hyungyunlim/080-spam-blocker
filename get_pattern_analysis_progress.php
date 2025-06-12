@@ -49,6 +49,8 @@ if (file_exists($resultFile)) {
             'total_duration' => $resultData['pattern']['total_duration'] ?? 30,
             'confirm_delay' => $resultData['pattern']['confirm_delay'] ?? 2,
             'confirm_repeat' => $resultData['pattern']['confirm_repeat'] ?? 3,
+            'pattern_type' => $resultData['pattern']['pattern_type'] ?? 'two_step',
+            'auto_supported' => $resultData['pattern']['auto_supported'] ?? true,
             'confidence' => $resultData['confidence'] ?? 0,
             'transcription' => $resultData['transcription'] ?? '',
             'analysis_time' => $resultData['analysis_time'] ?? date('Y-m-d H:i:s'),

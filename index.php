@@ -296,6 +296,16 @@
             color: #1e40af;
         }
 
+        .label-unverified {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        .label-verified {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
         /* Analysis Results */
         .analysis-result {
             margin-top: 15px;
@@ -557,6 +567,7 @@
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
+            margin-bottom: 20px;
             border: 2px solid #e2e8f0;
             transition: all 0.3s ease;
             transform: translateY(-10px);
@@ -905,7 +916,7 @@
                 
             if (foundIds.length === 1) {
                 confirmedId = foundIds[0];
-                detectedIdText.innerHTML = `✅ 080번호: <strong>${phoneNumbers.join(', ')}</strong><br>✅ 식별번호: <strong>${confirmedId}</strong>`;
+                detectedIdText.innerHTML = `080번호: <strong>${phoneNumbers.join(', ')}</strong><br>식별번호: <strong>${confirmedId}</strong>`;
                 detectedIdSection.style.display = 'block';
             } else if (foundIds.length > 1) {
                 multipleIdSection.style.display = 'block';
@@ -926,7 +937,10 @@
                     </div>
                 `;
             } else {
-                phoneInputSection.style.display = 'block';
+                // 식별번호는 없지만 080 수신거부 번호는 파싱됨 – 사용자에게 번호만 안내
+                phoneInputSection.style.display = 'none';
+                detectedIdText.innerHTML = `080번호: <strong>${phoneNumbers.join(', ')}</strong>`;
+                detectedIdSection.style.display = 'block';
             }
         }
         
@@ -1185,6 +1199,7 @@
                 ? '<span class="label label-discovery">패턴탐색</span>' 
                 : '<span class="label label-unsubscribe">수신거부</span>';
 
+            const patternTypeBadge = (rec.pattern_data && rec.pattern_data.pattern_type === 'confirm_only') ? '<span class="label label-unverified">Confirm-Only</span>' : (rec.pattern_data && rec.pattern_data.pattern_type === 'id_only') ? '<span class="label label-verified">ID-Only</span>' : '';
             const registrationBadge = rec.pattern_registered ? '<span class="label label-registered">패턴등록</span>' : '';
 
             let analysisDetailsHtml = '';
@@ -1263,7 +1278,7 @@
                             <span class="date-icon">📅</span> ${rec.datetime}
                                     </div>
                                 </div>
-                    <div class="recording-tags">${callTypeLabel} ${registrationBadge}</div>
+                    <div class="recording-tags">${callTypeLabel} ${registrationBadge} ${patternTypeBadge}</div>
                                     </div>
                 <audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;"></audio>
                 ${analysisResultSection}
@@ -1584,6 +1599,9 @@
                 'timeout': '시간 초과'
             };
 
+            // 폴링 주기 (ms)
+            const POLL_INTERVAL = 800;
+
             // 진행 상황 확인 함수
             const checkProgress = () => {
                 fetch(`get_pattern_analysis_progress.php?analysis_id=${analysisId}`)
@@ -1645,9 +1663,8 @@
                                     }
                             }, 3000);
                             } else {
-                                // API 오류 또는 네트워크 문제 – 1.5초 후 재시도
-                                console.error('Progress poll failed, retrying...', data);
-                                setTimeout(checkProgress, 1500);
+                                // 계속 진행중 – 지정 주기 후 다시 확인
+                                setTimeout(checkProgress, POLL_INTERVAL);
                             }
                         } else {
                             // 아직 progress 파일이 생성되지 않았거나 서버가 준비 중

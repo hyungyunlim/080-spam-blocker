@@ -34,7 +34,7 @@ class PatternDiscovery
     private $patternManager;
     private $logFile;
     private $discoveryDir = '/var/www/html/spam/pattern_discovery/';
-    private $pythonScript = '/home/linux/080-spam-blocker/advanced_pattern_analyzer.py';
+    private $pythonScript = __DIR__ . '/advanced_pattern_analyzer.py';
     
     public function __construct()
     {

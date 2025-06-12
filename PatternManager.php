@@ -764,9 +764,6 @@
                                 <td><strong><?php echo htmlspecialchars($number); ?></strong></td>
                                 <td>
                                     <?php echo htmlspecialchars($pattern['name']); ?>
-                                    <?php if (isset($pattern['auto_generated']) && $pattern['auto_generated']): ?>
-                                        <span class="label auto-generated">자동 생성</span>
-                                    <?php endif; ?>
                                 </td>
                                 <td><?php echo htmlspecialchars($pattern['description'] ?? ''); ?></td>
                                 <td><?php echo $pattern['initial_wait']; ?>초</td>
@@ -1019,11 +1016,14 @@
                 const verifiedBadge = pattern.needs_verification ? 
                     '<span class="badge badge-unverified">미검증</span>' : 
                     '<span class="badge badge-verified">검증됨</span>';
+                const typeBadge = (pattern.pattern_type === 'confirm_only') ? '<span class="badge badge-unverified">Confirm-Only</span>' :
+                                  (pattern.pattern_type === 'id_only') ? '<span class="badge badge-verified">ID-Only</span>' : '';
+                const supportedBadge = (pattern.auto_supported === false) ? '<span class="badge badge-unverified">수동</span>' : '';
                 
                 tr.innerHTML = `
                     <td><strong>${number}</strong></td>
                     <td>
-                        ${pattern.name} ${autoGenBadge}
+                        ${pattern.name} ${autoGenBadge} ${typeBadge} ${supportedBadge}
                     </td>
                 `;
                 

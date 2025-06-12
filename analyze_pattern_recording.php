@@ -95,7 +95,7 @@ $scriptPath  = __DIR__ . '/pattern_analyzer_runner.py';
 
 // 래퍼가 없으면 기존 스크립트 사용 (progress 미지원)
 if (!file_exists($scriptPath)) {
-    $scriptPath = '/home/linux/080-spam-blocker/advanced_pattern_analyzer.py';
+    $scriptPath = __DIR__ . '/advanced_pattern_analyzer.py';
 }
 
 $cmd = sprintf(
