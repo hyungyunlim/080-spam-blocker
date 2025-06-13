@@ -19,9 +19,22 @@ foreach ($files as $file) {
     $callId  = basename($file, '.log');
 
     $success = false;
-    if (strpos($content, 'Recording completed') !== false && strpos($content, 'Completed') !== false) {
-        // naive heuristic for success
-        $success = true;
+    $unreachable = false;
+
+    // 1) 명시적인 STT 결과가 있으면 우선 판단
+    if (preg_match('/UNSUB_(success|failed|failed_unreachable)/', $content, $mRes)) {
+        if ($mRes[1] === 'success') {
+            $success = true;
+        } elseif ($mRes[1] === 'failed_unreachable') {
+            $unreachable = true; // 실패이면서 통화 미연결
+        }
+    } else {
+        // 2) Whisper 결과 전까지는 UNSUB_ 로그가 없을 수 있음 → 보조 휴리스틱
+        if (strpos($content, 'Recording completed') !== false && strpos($content, 'FIRST_DTMF_SENT') !== false) {
+            // 통화 흐름은 정상이나 결과는 아직 확인 불가 → 잠정 실패로 두고 discovery 로 이어지도록 false 유지
+        } elseif (strpos($content, 'FIRST_DTMF_SENT') === false) {
+            $unreachable = true;
+        }
     }
 
     // extract dialed 080
@@ -34,6 +47,13 @@ foreach ($files as $file) {
     touch($file . '.done');
 
     if ($success || !$dialed) continue;
+
+    // 별도 처리: ARS 연결 실패 (호 자체가 안 걸리거나 즉시 끊김)
+    if ($unreachable) {
+        // 간단히 실패 로그 기록 후 알림용으로 마킹
+        file_put_contents($file, date('Y-m-d H:i:s') . " [{$callId}] UNSUB_failed_unreachable\n", FILE_APPEND);
+        // TODO: SMS 알림 또는 추가 로직 연동 가능
+    }
 
     // 실패: 패턴 존재 여부 확인
     $patternsFile = __DIR__ . '/patterns.json';

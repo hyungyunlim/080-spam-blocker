@@ -306,6 +306,11 @@
             color: #065f46;
         }
 
+        .label-auto {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
         /* Analysis Results */
         .analysis-result {
             margin-top: 15px;
@@ -1234,6 +1239,8 @@
                 ? '<span class="label label-discovery">패턴탐색</span>' 
                 : '<span class="label label-unsubscribe">수신거부</span>';
 
+            const autoLabel = rec.trigger === 'auto' ? '<span class="label label-auto">자동</span>' : '';
+
             let patternTypeBadge = '';
             if (rec.pattern_data) {
                 if (rec.pattern_data.auto_supported === false) {
@@ -1249,9 +1256,9 @@
             let analysisDetailsHtml = '';
             let showAnalyzeButton = false;
             let showReanalyzeButton = false;
-            const isConfirmOnly = rec.pattern_data && rec.pattern_data.auto_supported === false;
+            const isConfirmOnly = rec.pattern_data && (rec.pattern_data.auto_supported === false || rec.pattern_data.pattern_type === 'confirm_only');
             let showRetryCallButton = false;
-            if (rec.call_type === 'unsubscribe' && (rec.analysis_result === '실패' || rec.analysis_result === '불확실')) {
+            if (rec.call_type === 'unsubscribe' && (rec.analysis_result === '실패' || rec.analysis_result === '불확실' || rec.analysis_result === '시도됨')) {
                 showRetryCallButton = true;
             }
                     
@@ -1328,7 +1335,7 @@
                             <span class="date-icon">📅</span> ${rec.datetime}
                                     </div>
                                 </div>
-                    <div class="recording-tags">${callTypeLabel} ${registrationBadge} ${patternTypeBadge}</div>
+                    <div class="recording-tags">${callTypeLabel} ${autoLabel} ${registrationBadge} ${patternTypeBadge}</div>
                                     </div>
                 <audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;"></audio>
                 ${analysisResultSection}
@@ -1965,6 +1972,12 @@
                 if(msg.includes('TRIGGER'))               return '분석 트리거';
                 if(msg.includes('WAITING') || msg.includes('IVR')) return '음성 안내 대기 중';
                 if(msg.startsWith('CALL_FINISHED')||msg.startsWith('HANGUP')) return '통화 종료';
+                if(msg.startsWith('FIRST_DTMF_SENT'))  return '식별번호 전송 완료';
+                if(msg.startsWith('SECOND_DTMF_SENT')) return '확인 DTMF 전송 완료';
+                if(msg.startsWith('UNSUB_success'))     return '수신거부 성공';
+                if(msg.startsWith('UNSUB_failed'))      return '수신거부 실패';
+                if(msg.startsWith('STT_START'))         return '음성 인식 시작';
+                if(msg.startsWith('STT_DONE'))          return '음성 인식 완료';
                 return msg; // 기본: 원본 유지
             }
 

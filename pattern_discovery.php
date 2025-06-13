@@ -39,6 +39,8 @@ class PatternDiscovery
     private $discoveryDir = '/var/www/html/spam/pattern_discovery/';
     private $lockDir = '/var/www/html/spam/pattern_discovery_active/';
     private $pythonScript = __DIR__ . '/advanced_pattern_analyzer.py';
+    // 자동 재호출(learn → 바로 unsubscribe) 기능 토글. 2025-06-13 요구사항: 끔
+    private const ENABLE_AUTO_RETRY_AFTER_LEARN = false;
     
     public function __construct()
     {
@@ -209,16 +211,28 @@ class PatternDiscovery
             ]
         );
         
+        // === 패턴 타입 자동 교정 ===
+        if (strpos($newPattern['dtmf_pattern'], '{ID}') !== false) {
+            if (!empty(trim($newPattern['confirmation_dtmf']))) {
+                $newPattern['pattern_type'] = 'two_step'; // 식별번호 + 확인 단계
+            } else {
+                $newPattern['pattern_type'] = 'id_only';
+            }
+        } else if (empty(trim($newPattern['dtmf_pattern'])) && !empty(trim($newPattern['confirmation_dtmf']))) {
+            $newPattern['pattern_type'] = 'confirm_only';
+            $newPattern['auto_supported'] = false;
+        }
+        
         $patterns['patterns'][$phoneNumber] = $newPattern;
         
         if ($this->patternManager->savePatterns($patterns)) {
             $this->log("Successfully saved new pattern for {$phoneNumber}.");
-            // auto_supported 가 true 인 경우에만 자동 재호출
-            if (!isset($newPattern['auto_supported']) || $newPattern['auto_supported']) {
+            if (self::ENABLE_AUTO_RETRY_AFTER_LEARN && (!isset($newPattern['auto_supported']) || $newPattern['auto_supported'])) {
+                // 설정이 켜져 있을 때만 재호출
                 $this->initiateUnsubscribeAndNotify($phoneNumber, $discoveryId);
             } else {
-                $this->log("Pattern is confirm-only; skipping automatic retry call.");
-                exec("/usr/sbin/asterisk -rx \"database put Discovery/{$discoveryId}/status confirm_only\"");
+                $this->log("Auto-retry after learning is disabled; skipping automatic unsubscribe call.");
+                exec("/usr/sbin/asterisk -rx \"database put Discovery/{$discoveryId}/status completed\"");
                 // Clean up basic keys
                 exec("/usr/sbin/asterisk -rx \"database del Discovery {$discoveryId}/phone\"");
                 exec("/usr/sbin/asterisk -rx \"database del Discovery {$discoveryId}/notify\"");

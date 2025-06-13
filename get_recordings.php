@@ -11,6 +11,7 @@ function parse_recording_filename($filename) {
         'timestamp'     => 0,
         'id'            => 'N/A',
         'datetime'      => 'N/A',
+        'trigger'       => 'manual',
         'path'          => '/var/spool/asterisk/monitor/' . $filename
     ];
 
@@ -52,6 +53,11 @@ function parse_recording_filename($filename) {
     $info['file_size']  = file_exists($filepath) ? filesize($filepath) : 0;
 
     $info['title'] = $phone_number ?: '알 수 없는 번호';
+
+    // 자동 트리거 여부(FROM_AUTO 포함 여부)
+    if(strpos($filename, 'FROM_AUTO') !== false){
+        $info['trigger'] = 'auto';
+    }
 
     return $info;
 }

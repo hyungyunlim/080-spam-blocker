@@ -251,7 +251,7 @@ class AdvancedPatternAnalyzer:
         # 2. 확인 키워드 분석
         confirmations = keyword_timings.get('confirmation', [])
         if confirmations:
-            # 확인 키워드가 있으면 1번 누르는 패턴으로 추정
+            # 확인 단계가 존재하므로 기본적으로 '1' 입력으로 가정
             pattern_analysis['confirmation_dtmf'] = '1'
             confidence_score += 20
             print(f"✅ 확인 키워드 감지: {len(confirmations)}개")

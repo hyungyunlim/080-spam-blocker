@@ -1,10 +1,13 @@
 <?php
 // PHP 오류 로깅 설정
 // Early exit for empty or non-POST requests (브라우저가 빈 요청 보낼 때 500 방지)
-if($_SERVER['REQUEST_METHOD']!=='POST' || empty($_POST)){
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode(['success'=>false,'message'=>'no data']);
-    exit;
+// 웹 요청이 아닌 CLI 호출인 경우, $_SERVER['REQUEST_METHOD'] 가 존재하지 않으므로 이 검사를 우회한다.
+if (php_sapi_name() !== 'cli') {
+    if($_SERVER['REQUEST_METHOD']!=='POST' || empty($_POST)){
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['success'=>false,'message'=>'no data']);
+        exit;
+    }
 }
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // 사용자에게는 오류를 보여주지 않음
@@ -45,6 +48,11 @@ if (php_sapi_name() === 'cli') {
     $_POST['notification_phone'] = $cliArgs['notification'] ?? '01000000000';
     if (isset($cliArgs['id'])) {
         $_POST['phone_number'] = $cliArgs['id'];
+    }
+
+    $isAuto = isset($cliArgs['auto']);
+    if($isAuto){
+        $GLOBALS['AUTO_CALL_MODE'] = true;
     }
 }
 // =========================================
@@ -88,8 +96,8 @@ if (preg_match('/식별번호\s*[:]?\s*([0-9]{4,8})/u', $spamMessage, $m)) {
 }
 
 // ② 11자리 010 번호 (ID 대신 전화번호를 요구하는 일부 업체용)
-if (empty($identificationNumber) && preg_match('/010\d{8}/', $spamMessage, $m2)) {
-    $identificationNumber = $m2[0];
+if (empty($identificationNumber) && preg_match('/010[-\s]?\d{3,4}[-\s]?\d{4}(?:#)?/', $spamMessage, $m2)) {
+    $identificationNumber = preg_replace('/[^0-9]/', '', $m2[0]);
     file_put_contents($logFile, "ID from SMS 010-number: {$identificationNumber}\n", FILE_APPEND);
 }
 
@@ -223,23 +231,60 @@ if ($confirmDtmfRaw !== '') {
     $callFileContent .= "Set: __CONFIRM_REPEAT=0\n";
 }
 
-// 10. Call File 생성 및 스풀 디렉토리로 이동
+// 자동 호출 플래그 전달 (녹음 파일 이름 태깅에 사용)
+if(!empty($GLOBALS['AUTO_CALL_MODE'])){
+    $callFileContent .= "Set: __AUTO_CALL=1\n";
+}
+
+// 10. Call File 생성 – 반드시 .call 확장자를 사용 (queue_runner 는 *.call 검색)
 // PrivateTmp=true 설정 때문에 시스템의 /tmp 대신 프로젝트 내부에 임시 파일 생성
 $tempDir = __DIR__ . '/tmp_calls/';
-$tempFile = tempnam($tempDir, 'call_');
+$rawTemp = tempnam($tempDir, 'call_'); // 확장자 없음
+$tempFile = $rawTemp . '.call';
+rename($rawTemp, $tempFile);
 
 file_put_contents($tempFile, $callFileContent);
 file_put_contents($logFile, "Temporary Call File created at: {$tempFile}\n", FILE_APPEND);
 
+// ---- New: create initial call_progress log ----
+$progressDir = '/var/log/asterisk/call_progress';
+if (!is_dir($progressDir)) {
+    mkdir($progressDir, 0775, true);
+}
+$progressLog = $progressDir . '/' . $uniqueId . '.log';
+$initLine = date('Y-m-d H:i:s') . " [{$uniqueId}] CALL_CREATED TO_{$phoneNumber} ID_{$identificationNumber}\n";
+file_put_contents($progressLog, $initLine, FILE_APPEND);
+// ----------------------------------------------
+
 chown($tempFile, 'asterisk');
 chgrp($tempFile, 'asterisk');
 
-$spoolDir = '/var/spool/asterisk/outgoing/';
-$finalFile = $spoolDir . basename($tempFile);
+// =================================================================================
+//  모뎀 상태 확인 – quectel 채널이 활동 중이면 Busy 로 판단
+//  Busy 시 call_queue 로, Idle(Free) 시 즉시 outgoing 으로 이동
+// =================================================================================
+
+$queueDir = __DIR__ . '/call_queue/';
+if(!is_dir($queueDir)) mkdir($queueDir, 0775, true);
+
+function modem_is_busy(): bool {
+    $out = [];
+    exec('/usr/sbin/asterisk -rx "core show channels concise" | grep quectel', $out);
+    return count($out) > 0; // active quectel channel → busy
+}
+
+$destinationDir = modem_is_busy() ? $queueDir : '/var/spool/asterisk/outgoing/';
+
+$finalFile = $destinationDir . basename($tempFile);
 
 if (rename($tempFile, $finalFile)) {
-    file_put_contents($logFile, "Call File moved to: {$finalFile}. Success.\n", FILE_APPEND);
-    echo "성공: Call File이 생성되었습니다. Asterisk가 곧 전화를 걸 것입니다.\n";
+    $destLabel = ($destinationDir === $queueDir) ? 'Queued' : 'Spool';
+    file_put_contents($logFile, "Call File moved to: {$finalFile} ({$destLabel}).\n", FILE_APPEND);
+    if($destinationDir === $queueDir){
+        echo "성공: Call File이 큐에 등록되었습니다. 모뎀이 통화 중이므로 여유가 생기면 순차 발신됩니다.\n";
+    } else {
+        echo "성공: Call File이 생성되어 즉시 발신 대기 중입니다.\n";
+    }
     echo "알림 연락처: {$notificationPhone}\n";
 
     $smsSender = new SmsSender();

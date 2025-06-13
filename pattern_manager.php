@@ -13,7 +13,8 @@ if ($isDirect) {
     exit;
 } else {
     // 다른 파일이 include 할 때: 클래스만 로드하고 HTML은 버림
+    // Class-only load to avoid HTML output duplication
     ob_start();
-    require __DIR__ . '/PatternManager.php';
+    require_once __DIR__ . '/PatternManager.php';
     ob_end_clean();
 } 

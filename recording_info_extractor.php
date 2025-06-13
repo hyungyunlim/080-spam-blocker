@@ -43,7 +43,7 @@ class RecordingInfoExtractor {
             $timestamp = $matches[1];
             
             // AstDB에서 해당 시간대의 정보 조회
-            $astDbCommand = "/usr/sbin/asterisk -rx \"database show CallFile\"";
+            $astDbCommand = "/usr/sbin/asterisk -rx \"database show CallFile\" 2>/dev/null";
             $output = shell_exec($astDbCommand);
             
             if ($output) {
@@ -78,7 +78,7 @@ class RecordingInfoExtractor {
      * AstDB에서 특정 키 값 조회
      */
     private function getFromAstDB($key) {
-        $command = "/usr/sbin/asterisk -rx \"database get {$key}\"";
+        $command = "/usr/sbin/asterisk -rx \"database get {$key}\" 2>/dev/null";
         $output = shell_exec($command);
         
         if ($output && preg_match('/Value:\s*(.+)/', $output, $matches)) {

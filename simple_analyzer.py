@@ -68,7 +68,7 @@ def detect_unsubscribe_patterns(text):
         '시도': (r'수신거부|수신차단|해지|거부', 60)
     }
     for reason, (pattern, confidence) in attempt_patterns.items():
-        if re.search(pattern, text_normalized):
+         if re.search(pattern, text_normalized):
             return {'status': 'attempted', 'confidence': confidence, 'reason': '결과가 불분명한 수신거부 시도 키워드 감지'}
 
     return {'status': 'unknown', 'confidence': 20, 'reason': '관련 키워드를 찾을 수 없음'}

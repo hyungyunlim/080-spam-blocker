@@ -47,4 +47,19 @@ $status = $success ? 'success' : 'failed';
 file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] UNSUB_{$status}\n", FILE_APPEND);
 file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] STT_DONE\n", FILE_APPEND);
 
+// === 패턴 사용 통계 업데이트 ===
+require_once __DIR__ . '/pattern_manager.php';
+try {
+    $pm = new PatternManager(__DIR__ . '/patterns.json');
+    // Dialed 080 번호 AstDB 에서 가져오기
+    $recVal = trim(exec("/usr/sbin/asterisk -rx \"database get CallFile {$callId} recnum\""));
+    $phoneNumber = preg_replace('/[^0-9]/', '', str_replace('Value:','', $recVal));
+    if ($phoneNumber !== '') {
+        $pm->recordPatternUsage($phoneNumber, $success);
+    }
+} catch (Throwable $e) {
+    // 로깅만, 실패해도 메인 로직에는 영향 없도록
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] PM_ERROR " . $e->getMessage() . "\n", FILE_APPEND);
+}
+
 exit(0); 
