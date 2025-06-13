@@ -746,32 +746,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             }
         }
 
-        /* 다크모드 지원 */
-        @media (prefers-color-scheme: dark) {
-            .card,
-            .stat-card {
-                background: rgba(30, 41, 59, 0.95);
-                color: #e2e8f0;
-            }
-            
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                background: #1e293b;
-                color: #e2e8f0;
-                border-color: #334155;
-            }
-            
-            .pattern-table tbody tr {
-                background: #1e293b;
-            }
-            
-            .dtmf-builder {
-                background: #1e293b;
-                border-color: #334155;
-            }
-        }
-
         /* 드래그 시 자리 표시(placeholder) */
         .dtmf-placeholder {
             height: 68px; /* dtmf-step padding 포함 평균 높이 */
@@ -780,6 +754,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             background: rgba(106, 90, 205, 0.08);
             margin: 4px 0;
             transition: all 0.15s ease;
+        }
+        .pattern-table tbody tr { background: rgba(255,255,255,0.95); }
+        .dtmf-builder { background: #ffffff; }
+ 
+        /* 항상 라이트 테마로 강제 */
+        .pattern-table tbody tr,
+        .pattern-table tbody td {
+            background: #ffffff !important;
+            color: #334155;
         }
     </style>
 </head>
@@ -1228,7 +1211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                         <?php if ($pattern['pattern_type'] === 'confirm_only'): ?>
                                             <span class="label label-confirm-only">확인전용</span>
                                         <?php elseif ($pattern['pattern_type'] === 'id_only'): ?>
-                                            <span class="label label-id-only">ID전용</span>
+                                            <span class="label label-id-only">식별번호만 필요</span>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <?php if (isset($pattern['auto_supported']) && $pattern['auto_supported'] === false): ?>

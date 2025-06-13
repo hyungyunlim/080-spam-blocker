@@ -93,7 +93,7 @@ class PatternDiscovery
         $callFileContent = "Channel: quectel/quectel0/{$phoneNumber}\n";
         $callFileContent .= "Context: pattern-discovery\n";
         $callFileContent .= "Extension: s\n";
-        $callFileContent .= "MaxRetries: 1\n";
+        $callFileContent .= "MaxRetries: 0\n";
         $callFileContent .= "RetryTime: 60\n";
         $callFileContent .= "WaitTime: 25\n";
         $callFileContent .= "Priority: 1\n";
@@ -229,7 +229,7 @@ class PatternDiscovery
             $this->log("Successfully saved new pattern for {$phoneNumber}.");
             if (self::ENABLE_AUTO_RETRY_AFTER_LEARN && (!isset($newPattern['auto_supported']) || $newPattern['auto_supported'])) {
                 // 설정이 켜져 있을 때만 재호출
-                $this->initiateUnsubscribeAndNotify($phoneNumber, $discoveryId);
+            $this->initiateUnsubscribeAndNotify($phoneNumber, $discoveryId);
             } else {
                 $this->log("Auto-retry after learning is disabled; skipping automatic unsubscribe call.");
                 exec("/usr/sbin/asterisk -rx \"database put Discovery/{$discoveryId}/status completed\"");

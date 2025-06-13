@@ -3,10 +3,10 @@
 // Early exit for empty or non-POST requests (브라우저가 빈 요청 보낼 때 500 방지)
 // 웹 요청이 아닌 CLI 호출인 경우, $_SERVER['REQUEST_METHOD'] 가 존재하지 않으므로 이 검사를 우회한다.
 if (php_sapi_name() !== 'cli') {
-    if($_SERVER['REQUEST_METHOD']!=='POST' || empty($_POST)){
-        header('Content-Type: application/json; charset=utf-8');
-        echo json_encode(['success'=>false,'message'=>'no data']);
-        exit;
+if($_SERVER['REQUEST_METHOD']!=='POST' || empty($_POST)){
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode(['success'=>false,'message'=>'no data']);
+    exit;
     }
 }
 error_reporting(E_ALL);
@@ -163,16 +163,16 @@ if (!$pattern) {
         file_put_contents($logFile, "Pattern not found – using default pattern first.\n", FILE_APPEND);
     } else {
         file_put_contents($logFile, "Pattern not found and no default. Starting discovery.\n", FILE_APPEND);
-        echo "🔍 패턴이 없습니다! 패턴 디스커버리를 시작합니다: {$phoneNumber}\n";
+    echo "🔍 패턴이 없습니다! 패턴 디스커버리를 시작합니다: {$phoneNumber}\n";
+    
+    $discovery = new PatternDiscovery();
+    $result = $discovery->startDiscovery($phoneNumber, $notificationPhone);
 
-        $discovery = new PatternDiscovery();
-        $result = $discovery->startDiscovery($phoneNumber, $notificationPhone);
-
-        $smsSender = new SmsSender();
-        $smsSender->logSMS($result, 'pattern_discovery_started');
-        
-        file_put_contents($logFile, "Exiting after starting discovery.\n--- Script End ---\n\n", FILE_APPEND);
-        exit("패턴 학습 중입니다. 완료 후 다시 시도해주세요.");
+    $smsSender = new SmsSender();
+    $smsSender->logSMS($result, 'pattern_discovery_started');
+    
+    file_put_contents($logFile, "Exiting after starting discovery.\n--- Script End ---\n\n", FILE_APPEND);
+    exit("패턴 학습 중입니다. 완료 후 다시 시도해주세요.");
     }
 }
 
@@ -180,13 +180,25 @@ if (!$pattern) {
 file_put_contents($logFile, "Pattern found. Preparing to create Call File.\n", FILE_APPEND);
 
 $dtmfToSend = $pattern['dtmf_pattern'];
-$dtmfToSend = str_replace('{ID}', $identificationNumber, $dtmfToSend);
-$dtmfToSend = str_replace('{Phone}', $phoneNumber, $dtmfToSend);
+
+// 알림 연락처(숫자만)
 $cleanNotifyDigits = preg_replace('/[^0-9]/', '', $notificationPhone);
-$dtmfToSend = str_replace('{Notify}', $cleanNotifyDigits, $dtmfToSend);
-$dtmfToSend = str_ireplace('{notify}', $cleanNotifyDigits, $dtmfToSend);
-$dtmfToSend = str_ireplace('{phone}', $phoneNumber, $dtmfToSend);
-$dtmfToSend = str_ireplace('{id}', $identificationNumber, $dtmfToSend);
+
+// AUTO_CALL_MODE(=SMS 경로) 일 때는 {Phone} 을 발신자 번호(알림 연락처)로 사용하고,
+// 수동(UI) 경로에서는 080 수신거부 대상 번호를 사용한다.
+$isAuto = !empty($GLOBALS['AUTO_CALL_MODE']);
+$valueForPhone = $isAuto ? $cleanNotifyDigits : $phoneNumber;
+
+$tokens = [
+    '{ID}'     => $identificationNumber,
+    '{Notify}' => $cleanNotifyDigits,
+    '{Phone}'  => $valueForPhone,
+];
+
+foreach ($tokens as $search => $replacement) {
+    $dtmfToSend = str_ireplace($search, $replacement, $dtmfToSend);
+}
+
 $dtmfToSend = ltrim($dtmfToSend, ','); // 맨 앞 콤마 제거
 
 file_put_contents($logFile, "Final DTMF sequence: " . $dtmfToSend . "\n", FILE_APPEND);
@@ -206,7 +218,7 @@ file_put_contents($logFile, "Variables stored in AstDB for ID: {$uniqueId}\n", F
 // 9. Call File 내용 생성
 $callFileContent = "Channel: quectel/quectel0/{$phoneNumber}\n";
 $callFileContent .= "CallerID: \"Spam Blocker\" <0212345678>\n";
-$callFileContent .= "MaxRetries: 1\n";
+$callFileContent .= "MaxRetries: 0\n";
 $callFileContent .= "RetryTime: 60\n";
 $callFileContent .= "WaitTime: 45\n";
 $callFileContent .= "Context: callfile-handler\n";
@@ -224,8 +236,8 @@ $callFileContent .= "Set: TOTAL_DURATION={$pattern['total_duration']}\n";
 $confirmDtmfRaw = isset($pattern['confirmation_dtmf']) ? trim($pattern['confirmation_dtmf']) : '';
 if ($confirmDtmfRaw !== '') {
     $callFileContent .= "Set: __CONFIRM_DTMF={$confirmDtmfRaw}\n";
-    $confirmRepeat = isset($pattern['confirm_repeat']) ? $pattern['confirm_repeat'] : 1;
-    $callFileContent .= "Set: __CONFIRM_REPEAT={$confirmRepeat}\n";
+$confirmRepeat = isset($pattern['confirm_repeat']) ? $pattern['confirm_repeat'] : 1;
+$callFileContent .= "Set: __CONFIRM_REPEAT={$confirmRepeat}\n";
 } else {
     // 확인 DTMF가 비어 있으면 반복 횟수를 0으로 설정하여 dialplan이 바로 넘어가도록 한다
     $callFileContent .= "Set: __CONFIRM_REPEAT=0\n";

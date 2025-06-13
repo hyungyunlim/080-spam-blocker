@@ -883,17 +883,17 @@
                 }
 
                 spamContent.addEventListener('input', function() {
-                    autoResize(this);
+                        autoResize(this);
                     // 새 입력이 시작되면 이전 결과 박스를 숨긴다
                     if (resultArea) {
                         resultArea.style.display = 'none';
                         resultArea.innerHTML = '';
                     }
-                    const text = this.value.trim();
-                    if (text.length > 10) {
-                        analyzeText(text);
-                    } else {
-                        hideDynamicInput();
+                        const text = this.value.trim();
+                        if (text.length > 10) {
+                            analyzeText(text);
+                        } else {
+                            hideDynamicInput();
                     }
                 });
 
@@ -909,8 +909,8 @@
                     this.value = value.substring(0, start) + '\n' + value.substring(end);
                     this.selectionStart = this.selectionEnd = start + 1;
                     autoResize(this);
-                }
-            });
+                        }
+                });
 
             function analyzeText(text) {
             // 080 번호: 하이픈이 섞여 있어도 인식 (예: 080-8888-5050)
@@ -1246,7 +1246,7 @@
                 if (rec.pattern_data.auto_supported === false) {
                     patternTypeBadge = '<span class="label label-unverified">확인 번호만 필요</span>';
                 } else if (rec.pattern_data.pattern_type === 'id_only') {
-                    patternTypeBadge = '<span class="label label-verified">ID-Only</span>';
+                    patternTypeBadge = '<span class="label label-id-only">식별번호만 필요</span>';
                 } else if (rec.pattern_data.pattern_type === 'confirm_only') {
                     patternTypeBadge = '<span class="label label-unverified">확인 번호만 필요</span>';
                 }
@@ -1362,7 +1362,7 @@
                         </svg>
                         ${rec.call_type === 'discovery' ? '패턴 다시 분석하기' : '다시 분석하기'}
                     </button>
-                    ${showRetryCallButton ? `<button data-file="${fileForAnalysis}" data-phone="${rec.title}" data-id="${rec.identification_number || ''}" data-notify="${rec.notification_phone || ''}" class="btn btn-small retry-call-btn" ${isConfirmOnly?'disabled title="자동 수신거부가 불가능한 번호입니다."':''}>${isConfirmOnly?'☎️ 직접 전화 필요':'📞 다시 시도하기'}</button>` : ''}
+                    ${showRetryCallButton ? `<button data-file="${fileForAnalysis}" data-phone="${rec.title}" data-id="${rec.identification_number || rec.id || ''}" data-notify="${rec.notification_phone || ''}" class="btn btn-small retry-call-btn" ${isConfirmOnly?'disabled title="자동 수신거부가 불가능합니다."':''}>${isConfirmOnly?'☎️ 직접 전화 필요':'📞 다시 시도하기'}</button>` : ''}
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">🗑 삭제</button>
                             </div>
                 ` : ''}
@@ -1412,7 +1412,7 @@
                         return;
                     }
                     // confirm 제거 – 바로 재시도 실행
-                    const params = `phone=${encodeURIComponent(phone)}${idVal?`&id=${encodeURIComponent(idVal)}`:''}${notifyVal?`&notify=${encodeURIComponent(notifyVal)}`:''}`;
+                    const params = `phone=${encodeURIComponent(phone)}&id=${encodeURIComponent(idVal)}${notifyVal?`&notify=${encodeURIComponent(notifyVal)}`:''}`;
                     fetch('retry_call.php',{
                         method:'POST',
                         headers:{'Content-Type':'application/x-www-form-urlencoded'},
