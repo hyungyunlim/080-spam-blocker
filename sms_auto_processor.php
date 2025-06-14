@@ -31,18 +31,28 @@ if ($smsRaw === false) {
 
 // === DB 저장 (SQLite) =====================================================
 try {
-    $dbPath = __DIR__ . '/notifications.db';
+    // central DB
+    $dbPath = __DIR__ . '/spam.db';
     $db = new SQLite3($dbPath);
-    $db->exec('CREATE TABLE IF NOT EXISTS sms_incoming (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        received_at TEXT,
-        phone080 TEXT,
-        identification TEXT,
-        caller TEXT
-    );');
-    $stmt = $db->prepare('INSERT INTO sms_incoming (received_at, phone080, identification, caller) VALUES (:ts,:ph,:id,:cl)');
+    // ensure schema present (users etc.)
+    $schemaFile = __DIR__ . '/schema.sql';
+    if(file_exists($schemaFile)){
+        $db->exec(file_get_contents($schemaFile));
+    }
+    // ---------------- User handling ----------------
+    $callerClean = preg_replace('/[^0-9]/','',$caller);
+    $user = $db->querySingle("SELECT id, verified FROM users WHERE phone='{$callerClean}'", true);
+    if(!$user){
+        $db->exec("INSERT INTO users(phone) VALUES('{$callerClean}')");
+        $user = ['id'=>$db->lastInsertRowID(),'verified'=>0];
+    }
+    $userId = (int)$user['id'];
+
+    // insert incoming SMS
+    $stmt = $db->prepare('INSERT INTO sms_incoming (user_id, received_at, phone080, identification, caller, processed) VALUES (:uid,:ts,:ph,:id,:cl,0)');
+    $stmt->bindValue(':uid', $userId, SQLITE3_INTEGER);
     $stmt->bindValue(':ts', date('Y-m-d H:i:s'), SQLITE3_TEXT);
-    $stmt->bindValue(':ph', '', SQLITE3_TEXT); // placeholder, will update after extraction
+    $stmt->bindValue(':ph', '', SQLITE3_TEXT); // placeholder
     $stmt->bindValue(':id', '', SQLITE3_TEXT);
     $stmt->bindValue(':cl', $caller, SQLITE3_TEXT);
     $stmt->execute();
@@ -132,6 +142,19 @@ if(isset($db) && isset($rowId)){
     $upd2->bindValue(':id', $id, SQLITE3_TEXT);
     $upd2->bindValue(':rid', $rowId, SQLITE3_INTEGER);
     $upd2->execute();
+}
+
+// 정규화된 발신자 번호 (숫자만)
+$callerClean = preg_replace('/[^0-9]/','',$caller);
+
+// --- if user not verified: send code then exit ---
+if(isset($user) && !$user['verified']){
+    $code = str_pad(random_int(0,999999),6,'0',STR_PAD_LEFT);
+    $exp  = time()+600;
+    $db->exec("INSERT INTO verification_codes(user_id,code,expires_at) VALUES({$userId},'{$code}',{$exp})");
+    require_once __DIR__ . '/sms_sender.php';
+    (new SMSSender())->sendVerificationCode($callerClean, $code);
+    exit(0);
 }
 
 exit(0);

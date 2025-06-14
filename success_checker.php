@@ -74,23 +74,53 @@ try {
     file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] PM_ERROR " . $e->getMessage() . "\n", FILE_APPEND);
 }
 
-// === SMS 알림 전송 ===
+/* ---------- unsubscribe_calls DB 업데이트 ---------- */
 try {
-    // 알림 연락처, 080번호, 식별번호 추출
-    $notifyVal = trim(exec("/usr/sbin/asterisk -rx \"database get CallFile {$callId} notification_phone\""));
-    $notifyPhone = preg_replace('/[^0-9]/','', str_replace('Value:','',$notifyVal));
-    $idVal = trim(exec("/usr/sbin/asterisk -rx \"database get CallFile {$callId} identification_number\""));
-    $identNumber = preg_replace('/[^0-9]/','', str_replace('Value:','',$idVal));
+    $db = new SQLite3(__DIR__ . '/spam.db');
+    $conf = isset($data['analysis']['confidence']) ? (int)$data['analysis']['confidence'] : null;
 
-    if($notifyPhone !== '' && $phoneNumber !== ''){
+    $stmt = $db->prepare(
+        'UPDATE unsubscribe_calls
+         SET status = :st,
+             confidence = :cf,
+             recording_file = :rf
+         WHERE call_id = :cid'
+    );
+    $stmt->bindValue(':st', $status, SQLITE3_TEXT);
+    $stmt->bindValue(':cf', $conf !== null ? $conf : null,
+                     $conf !== null ? SQLITE3_INTEGER : SQLITE3_NULL);
+    $stmt->bindValue(':rf', basename($wav), SQLITE3_TEXT);
+    $stmt->bindValue(':cid', $callId, SQLITE3_TEXT);
+    $stmt->execute();
+} catch (Throwable $e) {
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] UC_DB_ERR "
+                      . $e->getMessage() . "\n", FILE_APPEND);
+}
+
+/* ---------- 결과 SMS 알림 ---------- */
+try {
+    $notifyVal = trim(exec("/usr/sbin/asterisk -rx \"database get CallFile {$callId} notification_phone\""));
+    $notifyPhone = preg_replace('/[^0-9]/', '', str_replace('Value:', '', $notifyVal));
+
+    $identVal = trim(exec("/usr/sbin/asterisk -rx \"database get CallFile {$callId} identification_number\""));
+    $identNumber = preg_replace('/[^0-9]/', '', str_replace('Value:', '', $identVal));
+
+    if ($notifyPhone !== '' && $phoneNumber !== '') {
         require_once __DIR__ . '/sms_sender.php';
         $smsSender = new SMSSender();
-        $confidence = isset($data['analysis']['confidence']) ? (int)$data['analysis']['confidence'] : 0;
-        $recFileName = basename($wav);
-        $smsSender->sendAnalysisCompleteNotification($notifyPhone, $phoneNumber, $identNumber, $status, $confidence, $recFileName);
+        $confidence = $conf ?? 0;
+        $smsSender->sendAnalysisCompleteNotification(
+            $notifyPhone,
+            $phoneNumber,
+            $identNumber,
+            $status,
+            $confidence,
+            basename($wav)
+        );
     }
-} catch(Throwable $e){
-    file_put_contents($logFile, date('Y-m-d H:i:s')." [{$callId}] SMS_ERROR " . $e->getMessage() . "\n", FILE_APPEND);
+} catch (Throwable $e) {
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] SMS_ERR "
+                      . $e->getMessage() . "\n", FILE_APPEND);
 }
 
 exit(0); 

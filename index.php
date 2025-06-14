@@ -1,9 +1,12 @@
+<?php require_once __DIR__.'/auth.php'; $IS_LOGGED=is_logged_in(); $CUR_PHONE=current_user_phone(); ?>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>080 수신거부 자동화 시스템</title>
+    <script>window.IS_LOGGED=<?php echo $IS_LOGGED?'true':'false';?>;window.CUR_PHONE=<?php echo json_encode($CUR_PHONE);?>;</script>
+    <script src="login_flow.js"></script>
     <!-- Favicon to avoid 404 -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3e%3ctext y='0.9em' font-size='100'%3e🚫%3c/text%3e%3c/svg%3e">
     
@@ -58,6 +61,7 @@
             color: white;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         .header h1 {
@@ -671,6 +675,265 @@
             border: 1px solid #e0f2fe;
             white-space: pre-line;
         }
+
+        /* Verification Section Styles */
+        .verification-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid #cbd5e0;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .verification-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .verification-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .verification-icon {
+            font-size: 32px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .verification-title h3 {
+            margin: 0 0 4px 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .verification-title p {
+            margin: 0;
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .verification-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .verification-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .verification-input-group label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 16px;
+        }
+
+        .verification-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .verification-input-wrapper input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 4px;
+            background: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .verification-input-wrapper input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        .countdown-timer {
+            font-weight: 600;
+            color: #f56565;
+            background: #fed7d7;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 60px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .verification-help {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #718096;
+            background: #f7fafc;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .verification-actions {
+            display: flex;
+            justify-content: center;
+        }
+
+        .verification-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(72, 187, 120, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .verification-btn:hover {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .verification-btn:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .verification-btn .btn-icon {
+            font-size: 18px;
+        }
+
+        .verification-message {
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            transform: translateY(-10px);
+            opacity: 0;
+            min-height: 20px;
+        }
+
+        .verification-message:not(:empty) {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Verification Message States */
+        .verify-msg.sending {
+            background: #ebf8ff;
+            color: #2b6cb0;
+            border: 2px solid #bee3f8;
+        }
+
+        .verify-msg.sending::before {
+            content: '📤 ';
+            font-size: 16px;
+        }
+
+        .verify-msg.success {
+            background: #f0fff4;
+            color: #276749;
+            border: 2px solid #9ae6b4;
+        }
+
+        .verify-msg.success::before {
+            content: '✅ ';
+            font-size: 16px;
+        }
+
+        .verify-msg.error {
+            background: #fed7d7;
+            color: #c53030;
+            border: 2px solid #feb2b2;
+        }
+
+        .verify-msg.error::before {
+            content: '❌ ';
+            font-size: 16px;
+        }
+
+        .verify-msg.checking {
+            background: #faf5ff;
+            color: #6b46c1;
+            border: 2px solid #d6bcfa;
+        }
+
+        .verify-msg.checking::before {
+            content: '🔍 ';
+            font-size: 16px;
+        }
+
+        /* Responsive Design for Verification */
+        @media (max-width: 768px) {
+            .verification-container {
+                padding: 20px;
+                margin-top: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .verification-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+            
+            .verification-input-wrapper {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .verification-input-wrapper input {
+                padding: 14px 16px;
+                font-size: 16px;
+                letter-spacing: 2px;
+            }
+            
+            .countdown-timer {
+                align-self: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -678,7 +941,15 @@
         <div class="header">
             <h1>🚫 080 수신거부 자동화 시스템</h1>
             <p>스팸 문자의 080 번호를 자동으로 추출하여 수신거부 전화를 대신 걸어드립니다</p>
+            <?php if ($IS_LOGGED): ?>
+            <div style="position: absolute; top: 20px; right: 20px;">
+                <span style="color: white; opacity: 0.9; margin-right: 10px;">📱 <?php echo htmlspecialchars($CUR_PHONE); ?></span>
+                <a href="logout.php" style="color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; font-size: 14px;">로그아웃</a>
+            </div>
+            <?php endif; ?>
         </div>
+
+        <?php include __DIR__.'/dashboard_embed.php'; ?>
 
         <!-- 메인 입력 카드 -->
         <div class="card">
@@ -749,6 +1020,43 @@
                         <div class="help-text">📱 처리 완료 후 결과를 알림 문자로 받을 연락처를 입력해주세요</div>
                     </div>
 
+                    <!-- 인증 단계 (비로그인시 노출) -->
+                    <div id="verificationSection" class="verification-container" style="<?php echo !$IS_LOGGED ? 'display:none;' : 'display:none;' ?>">
+                        <div class="verification-header">
+                            <div class="verification-icon">📱</div>
+                            <div class="verification-title">
+                                <h3>휴대폰 인증</h3>
+                                <p>서비스 이용을 위해 휴대폰 인증이 필요합니다</p>
+                            </div>
+                        </div>
+                        
+                        <div class="verification-content">
+                            <div class="verification-input-group">
+                                <label for="verificationCode">인증번호 입력</label>
+                                <div class="verification-input-wrapper">
+                                    <input id="verificationCode" 
+                                           type="text" 
+                                           maxlength="6" 
+                                           placeholder="6자리 인증번호를 입력하세요"
+                                           autocomplete="one-time-code">
+                                    <span id="verifyCountdown" class="countdown-timer"></span>
+                                </div>
+                                <div class="verification-help">
+                                    <span>📞 입력하신 연락처로 인증번호가 전송됩니다</span>
+                                </div>
+                            </div>
+                            
+                            <div class="verification-actions">
+                                <button type="button" id="verifyBtn" class="btn verification-btn">
+                                    <span class="btn-icon">✓</span>
+                                    <span class="btn-text">인증하기</span>
+                                </button>
+                            </div>
+                            
+                            <div id="verifyMsg" class="verification-message"></div>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-outbound" viewBox="0 0 16 16">
                             <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459l-4.682-4.682a1.75 1.75 0 0 1-.459-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.28 1.494l-.547 2.19a.5.5 0 0 0 .178.643l2.457 2.457a.5.5 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.28l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.363-1.03-.038-2.137.703-2.877zM11 .5a.5.5 0 0 1 .5.5V3h2.5a.5.5 0 0 1 0 1H11.5v2.5a.5.5 0 0 1-1 0V4H8a.5.5 0 0 1 0-1h2.5V1a.5.5 0 0 1 .5-.5"/>
@@ -775,9 +1083,15 @@
             </div>
             <div class="card-body">
                 <div id="recordingsList" class="recordings-grid">
+                    <?php if (!$IS_LOGGED): ?>
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        🔐 로그인 후 녹음 파일을 확인할 수 있습니다
+                    </div>
+                    <?php else: ?>
                     <div style="text-align: center; padding: 40px; color: #666;">
                         🎵 녹음 파일을 불러오는 중...
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -2191,7 +2505,13 @@
 
         // 페이지 로드 시 진행상황 체크 시작
         document.addEventListener('DOMContentLoaded', function() {
-
+            // 로그인 여부에 따라 녹음 목록 로드
+            if (window.IS_LOGGED) {
+                getRecordings();
+            }
+            
+            // 인증 관련 이벤트 리스너 설정
+            setupVerificationFlow();
         });
 
         // 패턴 분석 시작 함수
@@ -2229,6 +2549,161 @@
 
         // 펼침 상태 관리용 Set (localStorage 활용)
         const openTranscriptions = new Set(JSON.parse(localStorage.getItem('openTranscriptions') || '[]'));
+
+        // 인증 플로우 설정
+        function setupVerificationFlow() {
+            const spamContent = document.getElementById('spamContent');
+            const notificationPhone = document.getElementById('notificationPhone');
+            const verificationSection = document.getElementById('verificationSection');
+            const verificationCode = document.getElementById('verificationCode');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const verifyMsg = document.getElementById('verifyMsg');
+            const spamForm = document.getElementById('spamForm');
+            
+            let verificationCodeSent = false;
+            let countdownTimer = null;
+            
+            // 입력 필드 변경 시 인증 섹션 표시 여부 결정
+            function checkAndShowVerification() {
+                if (!window.IS_LOGGED && spamContent.value.trim() && notificationPhone.value.trim()) {
+                    if (!verificationCodeSent) {
+                        // 인증번호 자동 발송
+                        sendVerificationCode();
+                    }
+                    verificationSection.style.display = 'block';
+                }
+            }
+            
+            // 인증번호 발송
+            function sendVerificationCode() {
+                if (verificationCodeSent) return;
+                
+                const phone = notificationPhone.value.trim();
+                if (!phone) return;
+                
+                verifyMsg.className = 'verification-message verify-msg sending';
+                verifyMsg.textContent = '인증번호를 발송하고 있습니다...';
+                
+                fetch('/api/send_code.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: phone })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        verificationCodeSent = true;
+                        verifyMsg.className = 'verification-message verify-msg success';
+                        verifyMsg.textContent = '인증번호가 발송되었습니다. (유효시간: 10분)';
+                        startCountdown(600); // 10분
+                        verificationCode.focus();
+                    } else {
+                        verifyMsg.className = 'verification-message verify-msg error';
+                        verifyMsg.textContent = data.message || '인증번호 발송에 실패했습니다.';
+                    }
+                })
+                .catch(error => {
+                    verifyMsg.className = 'verification-message verify-msg error';
+                    verifyMsg.textContent = '오류가 발생했습니다: ' + error.message;
+                });
+            }
+            
+            // 카운트다운 타이머
+            function startCountdown(seconds) {
+                const countdownElement = document.getElementById('verifyCountdown');
+                let remaining = seconds;
+                
+                countdownTimer = setInterval(() => {
+                    const minutes = Math.floor(remaining / 60);
+                    const secs = remaining % 60;
+                    countdownElement.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                    
+                    if (remaining <= 0) {
+                        clearInterval(countdownTimer);
+                        countdownElement.textContent = '시간 만료';
+                        verificationCodeSent = false;
+                        verifyMsg.className = 'verification-message verify-msg error';
+                        verifyMsg.textContent = '인증번호가 만료되었습니다. 다시 시도해주세요.';
+                    }
+                    remaining--;
+                }, 1000);
+            }
+            
+            // 인증번호 확인
+            function verifyCode() {
+                const code = verificationCode.value.trim();
+                const phone = notificationPhone.value.trim();
+                
+                if (!code || !phone) {
+                    verifyMsg.className = 'verification-message verify-msg error';
+                    verifyMsg.textContent = '인증번호를 입력해주세요.';
+                    return;
+                }
+                
+                verifyMsg.className = 'verification-message verify-msg checking';
+                verifyMsg.textContent = '인증번호를 확인하고 있습니다...';
+                verifyBtn.disabled = true;
+                
+                fetch('/api/verify_code.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: phone, code: code })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 인증 성공 - 로그인 상태로 변경
+                        window.IS_LOGGED = true;
+                        window.CUR_PHONE = phone;
+                        
+                        verifyMsg.className = 'verification-message verify-msg success';
+                        verifyMsg.textContent = '인증이 완료되었습니다!';
+                        
+                        // 인증 섹션 숨기기
+                        setTimeout(() => {
+                            verificationSection.style.display = 'none';
+                        }, 2000);
+                        
+                        // 녹음 목록 새로고침
+                        getRecordings();
+                        
+                        // 카운트다운 타이머 정리
+                        if (countdownTimer) {
+                            clearInterval(countdownTimer);
+                        }
+                    } else {
+                        verifyMsg.className = 'verification-message verify-msg error';
+                        verifyMsg.textContent = data.message || '인증번호가 올바르지 않습니다.';
+                        verifyBtn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    verifyMsg.className = 'verification-message verify-msg error';
+                    verifyMsg.textContent = '오류가 발생했습니다: ' + error.message;
+                    verifyBtn.disabled = false;
+                });
+            }
+            
+            // 이벤트 리스너 등록
+            spamContent.addEventListener('input', checkAndShowVerification);
+            notificationPhone.addEventListener('input', checkAndShowVerification);
+            verifyBtn.addEventListener('click', verifyCode);
+            verificationCode.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyCode();
+                }
+            });
+            
+            // 폼 제출 시 인증 상태 확인
+            spamForm.addEventListener('submit', function(e) {
+                if (!window.IS_LOGGED && (!verificationCodeSent || !verificationCode.value.trim())) {
+                    e.preventDefault();
+                    verifyMsg.className = 'verification-message verify-msg error';
+                    verifyMsg.textContent = '먼저 휴대폰 인증을 완료해주세요.';
+                    return false;
+                }
+            });
+        }
 
     // 페이지 언로드 시 진행 중인 분석 저장
     window.addEventListener('beforeunload', function() {

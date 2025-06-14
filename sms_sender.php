@@ -450,5 +450,10 @@ class SMSSender {
         
         return $logs;
     }
+
+    public function sendVerificationCode($phoneNumber, $code){
+        $msg = "[080 차단 서비스]\n인증번호: {$code}\n10분 내 입력하세요.";
+        return $this->sendSMS($phoneNumber, $msg);
+    }
 }
 ?> 

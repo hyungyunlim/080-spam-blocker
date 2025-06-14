@@ -202,6 +202,20 @@ echo "적용될 DTMF 패턴: " . $dtmfToSend . "\n";
 
 // 8. Asterisk DB에 변수 저장
 $uniqueId = uniqid();
+// --- DB log (unsubscribe_calls) ----------------------------------
+try{
+    $dbPath= __DIR__.'/spam.db';
+    $dbUC = new SQLite3($dbPath);
+    $uidRow = $dbUC->querySingle("SELECT id FROM users WHERE phone='{$cleanNotifyDigits}'",true);
+    $uidVal = $uidRow ? (int)$uidRow['id'] : null;
+    $stmtUC = $dbUC->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status) VALUES (:cid,:uid,:p080,:ident,datetime("now"),"pending")');
+    $stmtUC->bindValue(':cid',$uniqueId,SQLITE3_TEXT);
+    if($uidVal!==null){$stmtUC->bindValue(':uid',$uidVal,SQLITE3_INTEGER);} else {$stmtUC->bindValue(':uid',null,SQLITE3_NULL);}
+    $stmtUC->bindValue(':p080',$phoneNumber,SQLITE3_TEXT);
+    $stmtUC->bindValue(':ident',$identificationNumber,SQLITE3_TEXT);
+    $stmtUC->execute();
+}catch(Throwable $e){ /* ignore db errors */ }
+
 exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} dtmf {$dtmfToSend}\"");
 exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} dtmf_sequence {$dtmfToSend}\"");
 exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} notification_phone {$notificationPhone}\"");
