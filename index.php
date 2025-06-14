@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>080 수신거부 자동화 시스템</title>
-    <script>window.IS_LOGGED=<?php echo $IS_LOGGED?'true':'false';?>;window.CUR_PHONE=<?php echo json_encode($CUR_PHONE);?>;</script>
+    <script>
+        window.IS_LOGGED=<?php echo $IS_LOGGED?'true':'false';?>;
+        window.CUR_PHONE=<?php echo json_encode($CUR_PHONE);?>;
+        window.AUTH_FLOW=<?php echo $authFlow ?: 'null';?>;
+    </script>
     <script src="login_flow.js"></script>
     <!-- Favicon to avoid 404 -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3e%3ctext y='0.9em' font-size='100'%3e🚫%3c/text%3e%3c/svg%3e">
@@ -16,9 +20,60 @@
 
         // 페이지 로드 시 처리
         $actionResult = '';
+        $authFlow = '';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['action'])) {
-                if ($_POST['action'] === 'make_call' && isset($_POST['id'])) {
+                // 인증 관련 액션
+                if ($_POST['action'] === 'send_verification') {
+                    $phone = preg_replace('/[^0-9]/', '', $_POST['phone'] ?? '');
+                    if ($phone === '') {
+                        $authFlow = json_encode(['status' => 'error', 'message' => '전화번호를 입력하세요.']);
+                    } else {
+                        require_once 'sms_sender.php';
+                        $db = new SQLite3(__DIR__ . '/spam.db');
+                        $db->exec("INSERT OR IGNORE INTO users(phone) VALUES('{$phone}')");
+                        $row = $db->querySingle("SELECT id FROM users WHERE phone='{$phone}'", true);
+                        $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+                        $exp = time() + 600;
+                        $db->exec("INSERT INTO verification_codes(user_id,code,expires_at) VALUES({$row['id']},'{$code}',{$exp})");
+                        $result = (new SMSSender())->sendVerificationCode($phone, $code);
+                        
+                        if ($result['success']) {
+                            $_SESSION['verification_phone'] = $phone;
+                            $authFlow = json_encode(['status' => 'code_sent', 'phone' => $phone, 'expires_at' => $exp]);
+                        } else {
+                            $authFlow = json_encode(['status' => 'error', 'message' => 'SMS 전송 실패: ' . $result['message']]);
+                        }
+                    }
+                } elseif ($_POST['action'] === 'verify_code') {
+                    $code = preg_replace('/[^0-9]/', '', $_POST['code'] ?? '');
+                    $phone = $_SESSION['verification_phone'] ?? '';
+                    
+                    if ($code === '' || $phone === '') {
+                        $authFlow = json_encode(['status' => 'error', 'message' => '인증번호를 입력하세요.']);
+                    } else {
+                        $db = new SQLite3(__DIR__ . '/spam.db');
+                        $row = $db->querySingle("
+                            SELECT vc.*, u.id as user_id, u.phone 
+                            FROM verification_codes vc 
+                            JOIN users u ON vc.user_id = u.id 
+                            WHERE u.phone = '{$phone}' AND vc.code = '{$code}' AND vc.expires_at > " . time() . "
+                            ORDER BY vc.id DESC LIMIT 1
+                        ", true);
+                        
+                        if ($row) {
+                            // 로그인 성공
+                            $_SESSION['user_id'] = $row['user_id'];
+                            $_SESSION['phone'] = $row['phone'];
+                            unset($_SESSION['verification_phone']);
+                            $authFlow = json_encode(['status' => 'logged_in', 'phone' => $row['phone']]);
+                        } else {
+                            $authFlow = json_encode(['status' => 'error', 'message' => '인증번호가 잘못되었거나 만료되었습니다.']);
+                        }
+                    }
+                }
+                // 기존 액션들
+                elseif ($_POST['action'] === 'make_call' && isset($_POST['id'])) {
                     require_once 'call_processor.php';
                     $processor = new CallProcessor();
                     $actionResult = $processor->makeCall($_POST['id'], $_POST['phone_number']);
@@ -2583,10 +2638,10 @@
             }
             
             // 인증번호 발송
-            function sendVerificationCode() {
+            function sendVerificationCode(phoneNumber = null) {
                 if (verificationCodeSent) return;
                 
-                const phone = notificationPhone.value.trim();
+                const phone = phoneNumber || notificationPhone.value.trim();
                 if (!phone) return;
                 
                 verifyMsg.className = 'verification-message verify-msg sending';
@@ -2679,6 +2734,14 @@
                         if (countdownTimer) {
                             clearInterval(countdownTimer);
                         }
+                        
+                        // 자동으로 메인 폼 제출 (인증 완료 후)
+                        setTimeout(() => {
+                            verifyMsg.textContent = '인증 완료! 수신거부 처리를 시작합니다...';
+                            // 메인 폼 제출
+                            const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                            spamForm.dispatchEvent(submitEvent);
+                        }, 1000);
                     } else {
                         verifyMsg.className = 'verification-message verify-msg error';
                         verifyMsg.textContent = data.message || '인증번호가 올바르지 않습니다.';
@@ -2702,12 +2765,40 @@
                 }
             });
             
-            // 폼 제출 시 인증 상태 확인
+            // 폼 제출 시 자동 인증 플로우
             spamForm.addEventListener('submit', function(e) {
-                if (!window.IS_LOGGED && (!verificationCodeSent || !verificationCode.value.trim())) {
+                if (!window.IS_LOGGED) {
                     e.preventDefault();
+                    
+                    // 알림받을 연락처가 입력되어 있는지 확인
+                    const notificationPhone = document.getElementById('notificationPhone').value.trim();
+                    if (!notificationPhone) {
+                        verifyMsg.className = 'verification-message verify-msg error';
+                        verifyMsg.textContent = '알림받을 연락처를 먼저 입력해주세요.';
+                        return false;
+                    }
+                    
+                    // 이미 인증번호가 전송되었고 입력된 경우 바로 인증 시도
+                    if (verificationCodeSent && verificationCode.value.trim()) {
+                        verifyCode();
+                        return false;
+                    }
+                    
+                    // 인증번호가 아직 전송되지 않았으면 자동으로 전송
+                    if (!verificationCodeSent) {
+                        verifyMsg.className = 'verification-message verify-msg info';
+                        verifyMsg.textContent = '인증번호를 전송하고 있습니다...';
+                        
+                        // 자동으로 인증번호 전송
+                        sendVerificationCode(notificationPhone);
+                        return false;
+                    }
+                    
+                    // 인증번호가 전송되었지만 입력되지 않은 경우
                     verifyMsg.className = 'verification-message verify-msg error';
-                    verifyMsg.textContent = '먼저 휴대폰 인증을 완료해주세요.';
+                    verifyMsg.textContent = '전송된 인증번호를 입력해주세요.';
+                    verificationSection.style.display = 'block';
+                    verificationCode.focus();
                     return false;
                 }
             });
