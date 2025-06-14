@@ -1004,7 +1004,6 @@
             <?php endif; ?>
         </div>
 
-        <?php include __DIR__.'/dashboard_embed.php'; ?>
 
         <!-- 메인 입력 카드 -->
         <div class="card">
@@ -1101,12 +1100,6 @@
                                 </div>
                             </div>
                             
-                            <div class="verification-actions">
-                                <button type="button" id="verifyBtn" class="btn verification-btn">
-                                    <span class="btn-icon">✓</span>
-                                    <span class="btn-text">인증하기</span>
-                                </button>
-                            </div>
                             
                             <div id="verifyMsg" class="verification-message"></div>
                         </div>
@@ -2619,23 +2612,12 @@
             const notificationPhone = document.getElementById('notificationPhone');
             const verificationSection = document.getElementById('verificationSection');
             const verificationCode = document.getElementById('verificationCode');
-            const verifyBtn = document.getElementById('verifyBtn');
             const verifyMsg = document.getElementById('verifyMsg');
             const spamForm = document.getElementById('spamForm');
             
             let verificationCodeSent = false;
             let countdownTimer = null;
             
-            // 입력 필드 변경 시 인증 섹션 표시 여부 결정
-            function checkAndShowVerification() {
-                if (!window.IS_LOGGED && spamContent.value.trim() && notificationPhone.value.trim()) {
-                    if (!verificationCodeSent) {
-                        // 인증번호 자동 발송
-                        sendVerificationCode();
-                    }
-                    verificationSection.style.display = 'block';
-                }
-            }
             
             // 인증번호 발송
             function sendVerificationCode(phoneNumber = null) {
@@ -2705,7 +2687,6 @@
                 
                 verifyMsg.className = 'verification-message verify-msg checking';
                 verifyMsg.textContent = '인증번호를 확인하고 있습니다...';
-                verifyBtn.disabled = true;
                 
                 fetch('/api/verify_code.php', {
                     method: 'POST',
@@ -2745,20 +2726,15 @@
                     } else {
                         verifyMsg.className = 'verification-message verify-msg error';
                         verifyMsg.textContent = data.message || '인증번호가 올바르지 않습니다.';
-                        verifyBtn.disabled = false;
                     }
                 })
                 .catch(error => {
                     verifyMsg.className = 'verification-message verify-msg error';
                     verifyMsg.textContent = '오류가 발생했습니다: ' + error.message;
-                    verifyBtn.disabled = false;
                 });
             }
             
             // 이벤트 리스너 등록
-            spamContent.addEventListener('input', checkAndShowVerification);
-            notificationPhone.addEventListener('input', checkAndShowVerification);
-            verifyBtn.addEventListener('click', verifyCode);
             verificationCode.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     verifyCode();
