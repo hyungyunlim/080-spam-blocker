@@ -1,4 +1,12 @@
 <?php
+// 인증 체크
+require_once __DIR__ . '/auth.php';
+if (!is_logged_in()) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Unauthorized']);
+    exit;
+}
+
 // 보안 헤더 및 콘텐츠 타입 설정
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
