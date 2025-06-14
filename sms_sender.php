@@ -157,6 +157,20 @@ class SMSSender {
                 return $result;
             }
             
+            // 모뎀 사용 상태 체크 (통화 중인지 확인)
+            $statusCommand = "/usr/sbin/asterisk -rx " . escapeshellarg("quectel show device state quectel0");
+            $statusOutput = [];
+            exec($statusCommand, $statusOutput, $statusCode);
+            $statusText = implode(' ', $statusOutput);
+            
+            // 모뎀이 통화 중이면 대기
+            if (strpos($statusText, 'call') !== false || strpos($statusText, 'busy') !== false) {
+                $result['message'] = 'Modem is busy - SMS queued for later';
+                $result['debug'] = 'Modem status: ' . $statusText;
+                // 짧은 대기 후 재시도
+                sleep(2);
+            }
+            
             // 메시지를 안전하게 처리 (특수문자 및 한글 대응)
             $safeMessage = $this->prepareSafeMessage($message);
             
@@ -453,7 +467,32 @@ class SMSSender {
 
     public function sendVerificationCode($phoneNumber, $code){
         $msg = "[080 차단 서비스]\n인증번호: {$code}\n10분 내 입력하세요.";
-        return $this->sendSMS($phoneNumber, $msg);
+        
+        // 인증 SMS는 중요하므로 최대 3회 재시도
+        $maxRetries = 3;
+        $lastResult = null;
+        
+        for ($i = 0; $i < $maxRetries; $i++) {
+            $result = $this->sendSMS($phoneNumber, $msg);
+            
+            if ($result['success']) {
+                if ($i > 0) {
+                    $result['message'] .= " (재시도 {$i}회 후 성공)";
+                }
+                return $result;
+            }
+            
+            $lastResult = $result;
+            
+            // 마지막 시도가 아니면 잠시 대기
+            if ($i < $maxRetries - 1) {
+                sleep(5); // 5초 대기 후 재시도
+            }
+        }
+        
+        // 모든 재시도 실패
+        $lastResult['message'] = "SMS 전송 실패 ({$maxRetries}회 재시도): " . $lastResult['message'];
+        return $lastResult;
     }
 }
 ?> 
