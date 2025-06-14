@@ -86,14 +86,28 @@ if ($id === '') {
     }
 }
 
-// === Duplicate suppression via simple TTL lock (5 min) ==================
+// === Duplicate suppression =============================================
+// 1) Persistent check in SQLite – 동일 080+ID 조합이 최근 24시간 내 존재하면 건너뜀
+$dupWindow = 86400; // 24 h
+try {
+    if(isset($db)){
+        $q = $db->prepare('SELECT COUNT(*) AS cnt FROM sms_incoming WHERE phone080=:ph AND identification=:id AND received_at >= datetime("now", "-1 day")');
+        $q->bindValue(':ph', $phone080, SQLITE3_TEXT);
+        $q->bindValue(':id', $id, SQLITE3_TEXT);
+        $res = $q->execute()->fetchArray(SQLITE3_ASSOC);
+        if($res && $res['cnt'] > 0){
+            // 이미 처리된 조합
+            exit(0);
+        }
+    }
+} catch(Throwable $e){ /* ignore */ }
+
+// 2) Legacy lock-file 방식(5분) – 여전히 유지하여 중복 호출 폭발 방지
 $lockKey = "/tmp/smslock_{$phone080}_{$id}";
 $ttlSec  = 300; // 5 minutes
 if (file_exists($lockKey) && time() - filemtime($lockKey) < $ttlSec) {
-    // Same 080+ID combination processed recently – skip
     exit(0);
 }
-// create or refresh lock file (mtime used for TTL)
 @touch($lockKey);
 
 // 3. 중복 방지 체크 (최근 5분 내 동일 조합)

@@ -58,17 +58,16 @@ function startAnalysis($filename, $jobId) {
     
     updateProgress($jobId, 'file_check', 10, '파일 확인 완료');
     
-    // Python 스크립트 경로
-    $scriptPath = '/home/linux/080-spam-blocker/simple_analyzer_with_progress.py';
+    // Python 스크립트 경로 – 통합된 runner 사용
+    $scriptPath = '/var/www/html/spam/simple_analyzer_runner.py';
     
     // 백그라운드에서 Python 스크립트 실행
     $command = sprintf(
-        'python3 %s %s %s %s %s small > /dev/null 2>&1 &',
-        escapeshellarg($scriptPath),
+        'python3 %s %s %s small --progress_file %s > /dev/null 2>&1 &',
+        escapeshellcmd($scriptPath),
         escapeshellarg($recordingPath),
         escapeshellarg($resultFile),
-        escapeshellarg($progressFile),
-        escapeshellarg($jobId)
+        escapeshellarg($progressFile)
     );
     
     updateProgress($jobId, 'processing', 15, 'STT 분석 시작...');

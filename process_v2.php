@@ -45,7 +45,7 @@ if (php_sapi_name() === 'cli') {
 
     // CLI 모드를 POST 에뮬레이션하여 동일 로직 재사용
     $_POST['spam_content']      = 'AUTO_CALL ' . $cliArgs['phone'];
-    $_POST['notification_phone'] = $cliArgs['notification'] ?? '01000000000';
+    $_POST['notification_phone'] = $cliArgs['notification'] ?? '';
     if (isset($cliArgs['id'])) {
         $_POST['phone_number'] = $cliArgs['id'];
     }
@@ -95,13 +95,7 @@ if (preg_match('/식별번호\s*[:]?\s*([0-9]{4,8})/u', $spamMessage, $m)) {
     file_put_contents($logFile, "ID from SMS keyword: {$identificationNumber}\n", FILE_APPEND);
 }
 
-// ② 11자리 010 번호 (ID 대신 전화번호를 요구하는 일부 업체용)
-if (empty($identificationNumber) && preg_match('/010[-\s]?\d{3,4}[-\s]?\d{4}(?:#)?/', $spamMessage, $m2)) {
-    $identificationNumber = preg_replace('/[^0-9]/', '', $m2[0]);
-    file_put_contents($logFile, "ID from SMS 010-number: {$identificationNumber}\n", FILE_APPEND);
-}
-
-// ③ 수동 입력 번호
+// ② 수동 입력 번호
 if (empty($identificationNumber)) {
     $cleanManual = preg_replace('/[^0-9]/', '', $manualPhone);
     if (strlen($cleanManual) >= 4) {
@@ -110,10 +104,10 @@ if (empty($identificationNumber)) {
     }
 }
 
-// ④ 알림 연락처 fallback
+// ③ 알림 연락처(SMS 발신자) fallback
 if (empty($identificationNumber)) {
     $cleanNotify = preg_replace('/[^0-9]/', '', $notificationPhone);
-    if (strlen($cleanNotify) >= 4) {
+    if (strlen($cleanNotify) >= 4 && $cleanNotify !== '01000000000') {
         $identificationNumber = $cleanNotify;
         file_put_contents($logFile, "ID from notification phone: {$identificationNumber}\n", FILE_APPEND);
     } else {
@@ -300,9 +294,9 @@ if (rename($tempFile, $finalFile)) {
     echo "알림 연락처: {$notificationPhone}\n";
 
     $smsSender = new SmsSender();
-    $message = "[성공] 080 스팸 수신거부 요청 완료\n번호: {$phoneNumber}";
+    $message = "[시도] 080 수신거부 요청 진행중\n번호: {$phoneNumber}";
     $smsSender->sendSms($notificationPhone, $message);
-    $smsSender->logSMS($message, 'call_file_created');
+    $smsSender->logSMS($message, 'call_attempt_started');
 
     // 패턴 사용 통계 업데이트
     require_once __DIR__ . '/PatternManager.php';

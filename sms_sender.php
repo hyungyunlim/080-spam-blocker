@@ -13,7 +13,7 @@ class SMSSender {
         if (file_exists($configFile)) {
             $this->config = include $configFile;
         } else {
-            $this->config = ['message_mode' => 'short', 'single_sms_max_length' => 140];
+            $this->config = ['message_mode' => 'short', 'single_sms_max_length' => 300];
         }
     }
     
@@ -67,7 +67,8 @@ class SMSSender {
         $safeMessage = str_replace(['`', '"', "'", '\\'], '', $safeMessage);
         
         // 6. 길이 재확인 및 자르기 (300바이트 제한 준수)
-        $maxLength = 280; // 300바이트 안전 마진 고려
+        $maxAllowed = $this->config['single_sms_max_length'] ?? 300;
+        $maxLength = $maxAllowed - 10; // 10바이트 여유 마진
         if ($this->calculateByteLength($safeMessage) > $maxLength) {
             $safeMessage = mb_substr($safeMessage, 0, 120) . '...';
         }
@@ -122,8 +123,32 @@ class SMSSender {
             $byteLength = $this->calculateByteLength($message);
             $result['bytes'] = $byteLength;
             
-            if ($byteLength > 1000) {
-                $result['message'] = 'Message too long (max 1000 bytes)';
+            $maxAllowed = $this->config['single_sms_max_length'] ?? 300;
+            // auto multipart support
+            if ($byteLength > $maxAllowed) {
+                $parts = [];
+                $chunkMax = $maxAllowed - 10; // allow prefix like (1/3)
+                $offset = 0;
+                $msgLen = mb_strlen($message, 'UTF-8');
+                while ($offset < $msgLen) {
+                    $chunk = mb_substr($message, $offset, $chunkMax, 'UTF-8');
+                    // ensure byte length <= chunkMax
+                    while ($this->calculateByteLength($chunk) > $chunkMax) {
+                        $chunk = mb_substr($chunk, 0, -1, 'UTF-8');
+                    }
+                    $parts[] = $chunk;
+                    $offset += mb_strlen($chunk, 'UTF-8');
+                }
+                $total = count($parts);
+                $successAll = true;
+                foreach ($parts as $idx=>$ptxt) {
+                    $prefix = "(".($idx+1)."/{$total}) ";
+                    $sendText = $prefix.$ptxt;
+                    $subRes = $this->sendSMS($phoneNumber, $sendText); // recursion safe because shorter now
+                    $successAll = $successAll && $subRes['success'];
+                }
+                $result['success'] = $successAll;
+                $result['message'] = $successAll ? 'Multipart SMS sent' : 'One or more parts failed';
                 return $result;
             }
             
