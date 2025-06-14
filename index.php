@@ -1398,7 +1398,15 @@
         // 기존 getRecordings 함수 내부에서, 진행 중인 analysis_id가 있으면 해당 항목에 프로그레스바 추가
         function getRecordings() {
             fetch('get_recordings.php')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            throw new Error('로그인이 필요합니다');
+                        }
+                        throw new Error(`서버 오류: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (!data.success) {
                         recordingsList.innerHTML = `<div class="analysis-result result-failure">${data.error || '오류 발생'}</div>`;
