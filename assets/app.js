@@ -216,18 +216,27 @@
                 const verificationSection = document.getElementById('verificationSection');
                 const submitSection = document.getElementById('submitSection');
                 
+                console.log('Progressive disclosure called:', {
+                    width: window.innerWidth,
+                    isMobile: window.innerWidth <= 768,
+                    textLength: text.length,
+                    verificationExists: !!verificationSection
+                });
+                
                 // Only apply progressive disclosure on mobile (screen width <= 768px)
                 if (window.innerWidth <= 768) {
                     if (text.length > 0) {
                         // Show sections with staggered animations when content is entered
                         if (notificationSection && !notificationSection.classList.contains('show')) {
                             setTimeout(() => {
+                                notificationSection.style.display = 'block';
                                 notificationSection.classList.add('show');
                             }, 200);
                         }
                         // Only show verification section if it exists (non-logged users)
                         if (verificationSection && !verificationSection.classList.contains('show')) {
                             setTimeout(() => {
+                                verificationSection.style.display = 'block';
                                 verificationSection.classList.add('show');
                             }, 400);
                         }
@@ -235,6 +244,7 @@
                         const submitDelay = verificationSection ? 600 : 400;
                         if (submitSection && !submitSection.classList.contains('show')) {
                             setTimeout(() => {
+                                submitSection.style.display = 'block';
                                 submitSection.classList.add('show');
                             }, submitDelay);
                         }
@@ -242,32 +252,65 @@
                         // Hide sections when content is cleared
                         if (notificationSection) {
                             notificationSection.classList.remove('show');
+                            notificationSection.style.display = 'none';
                         }
                         if (verificationSection) {
                             verificationSection.classList.remove('show');
+                            verificationSection.style.display = 'none';
                         }
                         if (submitSection) {
                             submitSection.classList.remove('show');
+                            submitSection.style.display = 'none';
                         }
                     }
                 } else {
                     // On desktop, ensure sections are always visible
                     if (notificationSection) {
+                        notificationSection.style.display = 'block';
                         notificationSection.classList.add('show');
                     }
                     if (verificationSection) {
+                        verificationSection.style.display = 'block';
                         verificationSection.classList.add('show');
                     }
                     if (submitSection) {
+                        submitSection.style.display = 'block';
                         submitSection.classList.add('show');
                     }
                 }
             }
             
+            // Force initial mobile state
+            function initializeMobileState() {
+                if (window.innerWidth <= 768) {
+                    const notificationSection = document.getElementById('notificationSection');
+                    const verificationSection = document.getElementById('verificationSection');
+                    const submitSection = document.getElementById('submitSection');
+                    
+                    // Force remove show class on mobile
+                    if (notificationSection) {
+                        notificationSection.classList.remove('show');
+                        notificationSection.style.display = 'none';
+                    }
+                    if (verificationSection) {
+                        verificationSection.classList.remove('show');
+                        verificationSection.style.display = 'none';
+                    }
+                    if (submitSection) {
+                        submitSection.classList.remove('show');
+                        submitSection.style.display = 'none';
+                    }
+                }
+            }
+            
+            // Initialize mobile state immediately
+            initializeMobileState();
+            
             // Initialize progressive disclosure on page load and handle window resize
             handleProgressiveDisclosure(spamContent ? spamContent.value.trim() : '');
             
             window.addEventListener('resize', function() {
+                initializeMobileState();
                 handleProgressiveDisclosure(spamContent ? spamContent.value.trim() : '');
             });
 
