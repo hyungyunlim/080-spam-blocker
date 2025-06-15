@@ -15,15 +15,25 @@ if ($IS_LOGGED) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>080 수신거부 자동화 시스템</title>
+    <!-- Preload JavaScript files -->
+    <link rel="preload" href="login_flow.js?v=3" as="script">
+    <link rel="preload" href="assets/modal.js?v=2" as="script">
+    <link rel="preload" href="assets/app.js?v=3" as="script">
+    
+    <!-- Critical inline configuration (minimal) -->
     <script>
         window.IS_LOGGED=<?php echo $IS_LOGGED?'true':'false';?>;
         window.CUR_PHONE=<?php echo json_encode($CUR_PHONE);?>;
         window.IS_ADMIN=<?php echo $IS_ADMIN?'true':'false';?>;
         window.AUTH_FLOW=<?php echo $authFlow ?: 'null';?>;
     </script>
-    <script src="login_flow.js"></script>
-    <!-- Favicon to avoid 404 -->
+    <!-- Favicon and PWA Manifest -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3e%3ctext y='0.9em' font-size='100'%3e🚫%3c/text%3e%3c/svg%3e">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="080 차단">
     
     <?php
         ini_set('display_errors', 1);
@@ -114,8 +124,31 @@ if ($IS_LOGGED) {
         }
     ?>
 
-    <link rel="stylesheet" href="assets/style.css?v=1">
-    <link rel="stylesheet" href="assets/modal.css?v=1">
+    <!-- Critical CSS for above-the-fold content -->
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;background:#f5f7fa;min-height:100vh}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        .header{text-align:center;color:#2c3e50;margin-bottom:40px;padding:40px 20px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+        .header h1{font-size:clamp(1.8rem,4vw,2.5rem);margin-bottom:10px;font-weight:700}
+        .header p{font-size:clamp(1rem,2.5vw,1.1rem);opacity:0.9}
+        .card{background:white;padding:30px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.1);margin-bottom:30px}
+        .btn{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;transition:all 0.3s ease;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-weight:600}
+        .btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 8px 25px rgba(102,126,234,0.4)}
+        .btn:focus{outline:none}
+        .btn:not(:active):not(:hover){transform:translateY(0) scale(1)}
+    </style>
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="data:font/woff2;base64," as="font" type="font/woff2" crossorigin>
+    
+    <!-- Load CSS asynchronously -->
+    <link rel="preload" href="assets/style.css?v=3" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="assets/modal.css?v=2" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="assets/style.css?v=3">
+        <link rel="stylesheet" href="assets/modal.css?v=2">
+    </noscript>
 </head>
 <body>
     <div class="container">
@@ -186,7 +219,32 @@ if ($IS_LOGGED) {
         <div id="analysisSteps"></div>
     </div>
 
-    <script src="assets/modal.js?v=1"></script>
-    <script src="assets/app.js?v=1" defer></script>
+    <!-- Load scripts with improved performance -->
+    <script src="login_flow.js?v=3" defer></script>
+    <script src="assets/modal.js?v=2" defer></script>
+    <script src="assets/app.js?v=3" defer></script>
+    
+    <?php
+    // Add performance monitoring in development
+    if (isset($_GET['debug']) || $_SERVER['HTTP_HOST'] === 'localhost') {
+        require_once __DIR__ . '/performance.php';
+        echo PerformanceOptimizer::addPerformanceMonitoring();
+    }
+    ?>
+    
+    <!-- Service Worker Registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/sw.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful');
+                })
+                .catch(function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        });
+    }
+    </script>
 </body>
 </html>
