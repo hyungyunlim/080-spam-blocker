@@ -3,7 +3,7 @@ require_once __DIR__ . '/auth.php';
 
 // 로그인되지 않은 상태로 admin.php에 직접 접근한 경우 admin_login.php로 리다이렉션
 if (!is_logged_in()) {
-    header('Location: admin_login.php');
+    header('Location: ' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/admin-login');
     exit;
 }
 

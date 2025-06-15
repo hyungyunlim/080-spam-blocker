@@ -374,4 +374,3 @@ function get_flash(): ?string {
     }
     return null;
 }
-?> 

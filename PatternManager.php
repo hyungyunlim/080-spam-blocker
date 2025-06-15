@@ -3,7 +3,13 @@ require_once __DIR__ . '/auth.php';
 
 // 로그인 확인
 if (!is_logged_in()) {
-    header('Location: login.php');
+    header('Location: admin_login.php');
+    exit;
+}
+
+// 관리자 권한 확인
+if (!is_admin()) {
+    header('Location: index.php');
     exit;
 }
 

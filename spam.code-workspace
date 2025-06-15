@@ -8,6 +8,6 @@
 		}
 	],
 	"settings": {
-		"php.validate.executablePath": ""
+		"php.validate.executablePath": "/usr/bin/php"
 	}
 }

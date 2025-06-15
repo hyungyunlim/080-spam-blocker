@@ -1,1 +1,19 @@
 Options -Indexes
+
+# Enable mod_rewrite
+RewriteEngine On
+
+# Redirect /spam-admin to admin.php
+RewriteRule ^spam-admin/?$ admin.php [L,QSA]
+
+# Redirect /pattern-manager to PatternManager.php
+RewriteRule ^pattern-manager/?$ PatternManager.php [L,QSA]
+
+# Redirect /admin-login to admin_login.php
+RewriteRule ^admin-login/?$ admin_login.php [L,QSA]
+
+# Redirect /admin-portal to admin-portal.php (alternative admin access)
+RewriteRule ^admin-portal/?$ admin-portal.php [L,QSA]
+
+# Keep original /admin for PBX system (no rewrite needed)
+# /admin will continue to serve the existing PBX admin interface
