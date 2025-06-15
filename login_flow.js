@@ -10,10 +10,15 @@ document.addEventListener('DOMContentLoaded',()=>{
     const vMsg=document.getElementById('verifyMsg');
     const vCountdown=document.getElementById('verifyCountdown');
 
-    // 스팸문자 입력시 자동으로 인증 섹션 노출
+    // 스팸문자 입력시 자동으로 인증 섹션 노출 (mobile progressive disclosure 고려)
     function showVerificationIfNeeded(){
       const spamContent=document.getElementById('spamContent')?.value?.trim();
       const notifPhone=notifInput?.value?.replace(/[^0-9]/g,'');
+      
+      // Mobile에서는 progressive disclosure가 인증 섹션을 보여줄 때까지 대기
+      if(window.innerWidth <= 768 && verSec && !verSec.classList.contains('show')){
+        return; // Progressive disclosure가 아직 인증 섹션을 노출하지 않았으면 대기
+      }
       
       if(spamContent && notifPhone && notifPhone.length>=10){
         if(!codeSent || currentAuthPhone!==notifPhone){
@@ -50,8 +55,11 @@ document.addEventListener('DOMContentLoaded',()=>{
           if(d.success){
             codeSent=true;
             currentAuthPhone=phone;
-            verSec.classList.add('show');
-            verSec.scrollIntoView({behavior:'smooth'});
+            // Progressive disclosure compatibility - only show if not in mobile progressive mode
+            if(window.innerWidth > 768 || verSec.classList.contains('show')){
+              verSec.classList.add('show');
+              verSec.scrollIntoView({behavior:'smooth'});
+            }
             vMsg.textContent=`${phone}로 인증번호를 전송했습니다.`;
             vMsg.className='verify-msg success show';
             vInput.focus();
