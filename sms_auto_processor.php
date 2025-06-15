@@ -49,12 +49,12 @@ try {
     $userId = (int)$user['id'];
 
     // insert incoming SMS
-    $stmt = $db->prepare('INSERT INTO sms_incoming (user_id, received_at, phone080, identification, caller, processed) VALUES (:uid,:ts,:ph,:id,:cl,0)');
+    $stmt = $db->prepare('INSERT INTO sms_incoming (user_id, raw_text, received_at, phone080, identification, processed) VALUES (:uid,:raw,:ts,:ph,:id,0)');
     $stmt->bindValue(':uid', $userId, SQLITE3_INTEGER);
+    $stmt->bindValue(':raw', $smsRaw, SQLITE3_TEXT);
     $stmt->bindValue(':ts', date('Y-m-d H:i:s'), SQLITE3_TEXT);
     $stmt->bindValue(':ph', '', SQLITE3_TEXT); // placeholder
     $stmt->bindValue(':id', '', SQLITE3_TEXT);
-    $stmt->bindValue(':cl', $caller, SQLITE3_TEXT);
     $stmt->execute();
     $rowId = $db->lastInsertRowID();
 } catch (Throwable $e) {
@@ -96,7 +96,10 @@ if ($id === '') {
     }
 }
 
-// === Duplicate suppression =============================================
+// === Startup Manager & Enhanced Duplicate Suppression ===============
+require_once __DIR__ . '/startup_manager.php';
+$startupManager = new StartupManager();
+
 // 1) Persistent check in SQLite – 동일 080+ID 조합이 최근 24시간 내 존재하면 건너뜀
 $dupWindow = 86400; // 24 h
 try {
@@ -111,6 +114,25 @@ try {
         }
     }
 } catch(Throwable $e){ /* ignore */ }
+
+// 1.5) 재시작 직후 보안 모드 - 더 엄격한 중복 방지
+if ($startupManager->isRecentStartup()) {
+    // 재시작 후 10분 이내에는 더 짧은 간격(1시간)으로도 중복 방지
+    try {
+        if(isset($db)){
+            $q = $db->prepare('SELECT COUNT(*) AS cnt FROM sms_incoming WHERE phone080=:ph AND identification=:id AND received_at >= datetime("now", "-1 hour")');
+            $q->bindValue(':ph', $phone080, SQLITE3_TEXT);
+            $q->bindValue(':id', $id, SQLITE3_TEXT);
+            $res = $q->execute()->fetchArray(SQLITE3_ASSOC);
+            if($res && $res['cnt'] > 0){
+                // 재시작 후 보안 모드에서 중복 감지
+                file_put_contents(__DIR__ . '/logs/sms_auto_processor.log', 
+                    date('Y-m-d H:i:s') . " [SECURITY] Blocked duplicate during startup mode: {$phone080}_{$id}\n", FILE_APPEND);
+                exit(0);
+            }
+        }
+    } catch(Throwable $e){ /* ignore */ }
+}
 
 // 2) Legacy lock-file 방식(5분) – 여전히 유지하여 중복 호출 폭발 방지
 $lockKey = "/tmp/smslock_{$phone080}_{$id}";

@@ -1,0 +1,64 @@
+<module>
+    <rawname>paging</rawname>
+    <repo>standard</repo>
+    <name>Paging and Intercom</name>
+    <version>17.0.3</version>
+    <publisher>Sangoma Technologies Corporation</publisher>
+    <license>GPLv3+</license>
+    <licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+    <category>Applications</category>
+    <changelog>
+		*17.0.3* Packaging of ver 17.0.3
+		*17.0.2* Packaging of ver 17.0.2
+		*17.0.1* 17.0.1 alpha release
+	</changelog>
+    <depends>
+       <version>16.0.10.23</version>
+        <module>core ge 16.0.56.5</module>
+	<module>framework ge 16.0.10.23</module>
+        <module>conferences</module>
+    </depends>
+    <description>Allows creation of paging groups to make announcements using the speaker built into most SIP phones. Also creates an
+        Intercom feature code that can be used as a prefix to talk directly to one person, as well as optional feature codes
+        to block/allow intercom calls to all users as well as blocking specific users or only allowing specific users.</description>
+    <more-info>https://wiki.freepbx.org/display/F2/Paging+and+Intercom+Module</more-info>
+    <menuitems>
+        <paging needsenginedb="yes">Paging and Intercom</paging>
+    </menuitems>
+    <database>
+        <table name="paging_groups">
+            <field name="page_number" type="string" length="50" default="" primarykey="true"/>
+            <field name="ext" type="string" length="25" default="" primarykey="true"/>
+        </table>
+        <table name="paging_autoanswer">
+            <field name="useragent" type="string" length="190" primarykey="true"/>
+            <field name="var" type="string" length="20" primarykey="true"/>
+            <field name="setting" type="string" length="255"/>
+        </table>
+        <table name="paging_config">
+            <field name="page_group" type="string" length="190" default="" primarykey="true"/>
+            <field name="force_page" type="integer"/>
+            <field name="duplex" type="integer" default="0"/>
+            <field name="description" type="string" length="255" default=""/>
+            <field name="announcement" type="string" length="255" notnull="false"/>
+            <field name="volume" type="integer" default="0"/>
+        </table>
+        <table name="paging_core_routing">
+            <field name="route" type="string" length="25" default="" primaryKey="true"/>
+            <field name="page_id" type="string" length="50" notnull="false"/>
+        </table>
+    </database>
+    <methods>
+        <get_config pri="600">paging600_get_config</get_config>
+    </methods>
+    <popovers>
+        <paging>
+            <display>paging</display>
+            <view>form</view>
+            <action>add</action>
+        </paging>
+    </popovers>
+    <supported>
+        <version>17.0</version>
+    </supported>
+</module>

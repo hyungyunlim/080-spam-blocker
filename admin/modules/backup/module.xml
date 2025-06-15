@@ -1,0 +1,37 @@
+<module>
+	<rawname>backup</rawname>
+	<repo>standard</repo>
+	<name>Backup &amp; Restore</name>
+	<version>17.0.5.65</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<category>Admin</category>
+	<description>Backup &amp; Restore for your FreePBX environment</description>
+	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/35815581/Backup+Restore</more-info>
+	<menuitems>
+		<backup needsenginedb="yes">Backup &amp; Restore</backup>
+		<backup_restore hidden="true" needsenginedb="yes">Backup &amp; Restore - Restore</backup_restore>
+	</menuitems>
+	<depends>
+		<module>filestore ge 17.0.1</module>
+		<version>17.0.1</version>
+	</depends>
+	<changelog>
+		*17.0.5.65* Fixing Github #701 
+		*17.0.5.64* Fixing FREEI-1852 - Send email even if logs are not enabled/present. 
+		*17.0.5.63* Fixing Github #122
+		*17.0.5.62* Fixing Github #546 Old Backups are not deleting issue 
+		*17.0.1alpha* 17.0.1 alpha release
+	</changelog>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<console>
+		<command>
+			<name>backup</name>
+			<alias>bu</alias>
+			<class>Backup</class>
+		</command>
+    </console>
+</module>

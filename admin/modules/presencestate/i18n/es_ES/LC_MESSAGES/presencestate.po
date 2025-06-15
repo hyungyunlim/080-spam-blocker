@@ -1,0 +1,201 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for presencestate
+# Copyright (C) 2008-2015 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-28 09:47-0400\n"
+"PO-Revision-Date: 2016-12-11 05:38+0200\n"
+"Last-Translator: Ernesto <ecasas@sangoma.com>\n"
+"Language-Team: Spanish <http://weblate.freepbx.org/projects/freepbx/"
+"presencestate/es_ES/>\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.4\n"
+
+#: views/grid.php:17
+msgid "Actions"
+msgstr "Acciones"
+
+#: views/bootnav.php:2 views/grid.php:2
+msgid "Add State"
+msgstr "Agregar Estado"
+
+#: presencestate.i18n.php:6
+msgid "Admin"
+msgstr "Administ"
+
+#: functions.inc.php:6
+msgid "Available"
+msgstr "Disponible"
+
+#: functions.inc.php:6
+msgid "Away"
+msgstr "Alejado"
+
+#: functions.inc.php:6
+msgid "Chat"
+msgstr "Chatear"
+
+#: functions.inc.php:6
+msgid "DND"
+msgstr "DND"
+
+#: ucp/views/settings.php:23
+msgid "Define Actions on A Status Change"
+msgstr "Definir acciones en un cambio de estado"
+
+#: Presencestate.class.php:205
+msgid "Delete"
+msgstr "Borrar"
+
+#: ucp/views/settings.php:7 ucp/views/settings.php:16
+msgid "Do Not Change"
+msgstr "No Cambiar"
+
+#: ucp/Presencestate.class.php:256
+msgid "Do Not Disturb"
+msgstr "No Molestar"
+
+#: ucp/Presencestate.class.php:255
+msgid "Do Nothing"
+msgstr "No haga nada"
+
+#: views/ucp_config.php:7
+msgid "Enable Presence"
+msgstr "Habilitar Presencia"
+
+#: functions.inc.php:6
+msgid "Extended Away"
+msgstr "Lejos extendido"
+
+#: ucp/Presencestate.class.php:257
+msgid "Findme/Follow Me"
+msgstr "Encuentra-Me/Sigue-Me"
+
+#: views/ucp_config.php:18
+msgid "Inherit"
+msgstr "Heredar"
+
+#: Presencestate.class.php:195
+msgid "Invalid Request"
+msgstr "Requerimiento Invalido"
+
+#: views/bootnav.php:3
+msgid "List States"
+msgstr "Listar Estados"
+
+#: presencestate.i18n.php:8
+msgid "Manage list of presence states."
+msgstr "manejar listas de estados de presencia."
+
+#: views/bootnav.php:16 views/grid.php:16
+msgid "Message"
+msgstr "Mensaje"
+
+#: views/ucp_config.php:15
+msgid "No"
+msgstr "No"
+
+#: ucp/views/settings.php:14
+msgid "On Browser Close or UCP Logout Set Status to"
+msgstr "Al cerrar Navegador o salir de UCP ponga en estado en"
+
+#: ucp/views/settings.php:5
+msgid "On UCP Login Set Status to"
+msgstr "Al entrar a UCP ponga estado en"
+
+#: views/form.php:50
+msgid "Optional Message"
+msgstr "Mensaje Opcional"
+
+#: views/form.php:62
+msgid "Optional message, example: Lunch"
+msgstr "Mensaje Opcional, por ejemplo: Almuerzo"
+
+#: ucp/Presencestate.class.php:180 ucp/Presencestate.class.php:190
+#: ucp/Presencestate.class.php:229
+msgid "Presence"
+msgstr "Presencia"
+
+#: ucp/Presencestate.class.php:263
+msgid "Presence Settings"
+msgstr ""
+
+#: Presencestate.class.php:121 presencestate.i18n.php:4
+#: presencestate.i18n.php:10
+msgid "Presence State"
+msgstr "Estado de Presencia"
+
+#: ucp/Presencestate.class.php:211
+msgid "Presence State is not enabled for this user."
+msgstr ""
+
+#: page.presencestate.php:6
+msgid "Presence States"
+msgstr "Estados de Presencia"
+
+#: Presencestate.class.php:205
+msgid "Reset"
+msgstr "Reinicio"
+
+#: views/form.php:38
+msgid "State type"
+msgstr "tipo de estado"
+
+#: Presencestate.class.php:205
+msgid "Submit"
+msgstr "Enviar"
+
+#: ucp/Presencestate.class.php:215
+msgid "This user doesn't have a default extension."
+msgstr ""
+
+#: views/bootnav.php:15 views/form.php:24 views/grid.php:15
+msgid "Type"
+msgstr "Tipo"
+
+#: functions.inc.php:6
+msgid "Unavailable"
+msgstr "Indisponible"
+
+#: views/ucp_config.php:28
+msgid ""
+"Whether to allow this user to be able to change their presence state/status "
+"in UCP"
+msgstr ""
+"Ya sea para permitir que este usuario sea capaz de cambiar su estado de "
+"presencia / estado UCP"
+
+#: views/ucp_config.php:13
+msgid "Yes"
+msgstr "Si"
+
+#~ msgid "Actions List"
+#~ msgstr "Lista de Acciones"
+
+#~ msgid "Offline"
+#~ msgstr "Fuera de Linea"
+
+#~ msgid "Presence State Settings"
+#~ msgstr "Configuración Estado de Presencia"
+
+#~ msgid "Status Not Set"
+#~ msgstr "Estado no establecido"
+
+#~ msgid "Your settings have been saved"
+#~ msgstr "Su Configuración ha sido Salvada"
+
+#~ msgid "New Presence State"
+#~ msgstr "Nuevo Estado de Presencia"
+
+#~ msgid "Presence Status"
+#~ msgstr "Estado de Presencia"

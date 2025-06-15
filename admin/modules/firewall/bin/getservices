@@ -1,0 +1,125 @@
+#!/usr/bin/env php
+<?php
+// vim: :set filetype=php tabstop=4 shiftwidth=4 autoindent smartindent:
+
+// Development:  Make sure we're not running as root.  This would be
+// a vulnerability if it is, as we're not doing integrity checks on
+// files here (we don't need to!)
+
+if (posix_geteuid() === 0) {
+	// throw new \Exception("I was run as root");
+}
+
+// Fast BMO instantiation
+$bootstrap_settings['freepbx_auth'] = false;
+$bootstrap_settings['skip_astman'] = false;
+// $bootstrap_settings['whoops_handler'] = 'JsonResponseHandler';
+$restrict_mods = true;
+include '/etc/freepbx.conf';
+
+// Start with our known information from FreePBX
+$services = array (
+	"smartports" => \FreePBX::Firewall()->getSmartPorts(),
+	"settings" => \FreePBX::Firewall()->getSmartSettings(),
+	"blacklist" => \FreePBX::Firewall()->getBlacklist(),
+	"fw" => array(),
+	"services" => array(),
+	"custom" => array(),
+);
+
+// Figure out where all the services we're caring about are.
+$knownsvcs = \FreePBX::Firewall()->getServices();
+
+// We care about custom services differently
+$custom = $knownsvcs['custom'];
+
+unset($knownsvcs['custom']);
+
+foreach ($knownsvcs as $section) {
+	foreach ($section as $k) {
+		$s = \FreePBX::Firewall()->getService($k);
+		if (isset($s['fw'])) {
+			$services['fw'][$k] = $s['fw'];
+		}
+		$services['services'][$k] = $s;
+	}
+}
+
+// Now set the zones for custom services..
+foreach ($custom as $sid => $tmparr) {
+	// Trim the ID to be less than 16 chars, for iptables
+	$trimmed = substr(str_replace("-", "", $sid), 0, 16);
+	// Now add it to our custom zone
+	$tmparr['zones'] = \FreePBX::Firewall()->getCustomServiceZones($sid);
+	$services['custom'][$trimmed] = $tmparr;
+}
+
+// Grab any hostnames that should be allowed through
+$hostmaps = \FreePBX::Firewall()->getConfig("hostmaps");
+if (!$hostmaps) {
+	$hostmaps = array();
+}
+$smart = \FreePBX::Firewall()->getSmartObj();
+$harr = array();
+foreach ($hostmaps as $host => $zone) {
+	if (!$host) {
+		// How did we get a blank one in there?
+		unset($hostmaps[$host]);
+		\FreePBX::Firewall()->setConfig("hostmaps", $hostmaps);
+		continue;
+	}
+
+	$lookup = $smart->lookup($host, false); // Don't allow caching of lookups
+	foreach ($lookup as $ipaddr) {
+		$harr[$ipaddr] = $zone;
+	}
+}
+
+$advanced = \FreePBX::Firewall()->getAdvancedSettings();
+
+// Grab /etc/hosts and make sure that every host in there is added
+// to the trusted zone
+$hosts = file("/etc/hosts");
+foreach ($hosts as $h) {
+	$line = preg_split("/\s+/", trim($h));
+	if (empty($line[0])) {
+		continue;
+	}
+	if (filter_var($line[0], \FILTER_VALIDATE_IP)) {
+		if(!empty($advanced["import_hosts"]) && ($advanced["import_hosts"] != "disabled" || $line[0] == "127.0.0.1")){
+			$harr[$line[0]] = "trusted";
+		}		
+	}
+}
+
+//Get RFW threshhold settings
+$services['rfwtshld']['fpbxratelimit']['TIER1'] = \FreePBX::Firewall()->getConfig('TIER1','fpbxratelimit');
+$services['rfwtshld']['fpbxratelimit']['TIER2'] = \FreePBX::Firewall()->getConfig('TIER2','fpbxratelimit');
+$services['rfwtshld']['fpbxratelimit']['TIER3'] = \FreePBX::Firewall()->getConfig('TIER3','fpbxratelimit');
+$services['rfwtshld']['fpbxrfw']['TIERA'] = \FreePBX::Firewall()->getConfig('TIERA','fpbxrfw');
+$services['rfwtshld']['fpbxrfw']['TIERB'] = \FreePBX::Firewall()->getConfig('TIERB','fpbxrfw');
+$services['rfwtshld']['fpbxrfw']['TIERC'] = \FreePBX::Firewall()->getConfig('TIERC','fpbxrfw');
+
+
+$services['hostmaps'] = $harr;
+
+// Safemode handling
+$safemode = array(
+	"status" => $advanced['safemode'],
+	"lastuptime" => (int) \FreePBX::Firewall()->getConfig('lastuptime'),
+);
+// Update it with the current uptime.
+$uptime = file("/proc/uptime");
+list($secs, $idle) = explode(" ", $uptime[0]);
+\FreePBX::Firewall()->setConfig('lastuptime', (int) $secs);
+$services['safemode'] = $safemode;
+
+$services['advancedsettings'] = $advanced;
+
+// Return our current module version
+$module = (array) simplexml_load_string(file_get_contents(__DIR__."/../module.xml"));
+$services['fwversion'] = $module['version'];
+// print_r($services); exit;
+print json_encode($services)."\n";
+
+

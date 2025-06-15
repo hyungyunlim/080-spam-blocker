@@ -1,0 +1,374 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 2.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-28 02:48-0500\n"
+"PO-Revision-Date: 2018-07-03 13:27+0000\n"
+"Last-Translator: Maurizio Longhitano <mlonghitano@teampower.it>\n"
+"Language-Team: Italian <http://*/projects/freepbx/blacklist/it/>\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.19.1\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+
+#: views/blgrid.php:33
+msgid "Actions"
+msgstr "Azioni"
+
+#: Api/Gql/Blacklist.php:18 Api/Gql/Blacklist.php:43
+msgid "Add a new number to the blacklist"
+msgstr ""
+
+#: views/modal_addnumber.php:7
+msgid "Add or replace entry"
+msgstr "Aggiungi o sostituisci voce"
+
+#: assets/js/blacklist.js:85
+#, perl-format
+msgid "Added %s to the blacklist"
+msgstr ""
+
+#: assets/js/blacklist.js:66
+msgid "Adding..."
+msgstr "Aggiungendo ..."
+
+#: Blacklist.class.php:31
+msgid ""
+"Adds a number to the Blacklist Module.  All calls from that number to the "
+"system will receive a disconnect recording.  Manage these in the Blacklist "
+"module."
+msgstr ""
+"Aggiunge un numero al modulo della lista nera. Tutte le chiamate da quel "
+"numero al sistema riceveranno una registrazione di disconnessione. "
+"Gestiscili nel modulo Blacklist."
+
+#: Blacklist.class.php:140
+msgid ""
+"Adds a number to the Blacklist Module. All calls from that number to the "
+"system will receive a disconnect recording. Manage these in the Blacklist "
+"module."
+msgstr ""
+
+#: Blacklist.class.php:33
+msgid ""
+"Adds the last caller to the Blacklist Module.  All calls from that number to "
+"the system will receive a disconnect recording."
+msgstr ""
+"Aggiunge l'ultimo chiamante al modulo della lista nera. Tutte le chiamate da "
+"quel numero al sistema riceveranno una registrazione di disconnessione."
+
+#: Blacklist.class.php:155
+msgid ""
+"Adds the last caller to the Blacklist Module. All calls from that number to "
+"the system will receive a disconnect recording."
+msgstr ""
+
+#: blacklist.i18n.php:6
+msgid "Admin"
+msgstr "Amministratore"
+
+#: assets/js/blacklist.js:161
+msgid "Are you sure to delete the selected records?"
+msgstr ""
+
+#: assets/js/blacklist.js:99
+#, perl-format
+msgid "Are you sure you want to delete the number %s?"
+msgstr ""
+
+#: Blacklist.class.php:30 Blacklist.class.php:633 blacklist.i18n.php:4
+#: blacklist.i18n.php:10 views/general.php:16
+msgid "Blacklist"
+msgstr "Lista Nera"
+
+#: views/general.php:3
+msgid "Blacklist Module"
+msgstr "Modulo lista nera"
+
+#: views/blgrid.php:3
+msgid "Blacklist Number"
+msgstr "Numero di lista nera"
+
+#: Api/Gql/Blacklist.php:121 Api/Gql/Blacklist.php:133
+msgid "Blacklist Settings"
+msgstr ""
+
+#: Blacklist.class.php:27 Blacklist.class.php:139
+msgid "Blacklist a number"
+msgstr "Mette in  Blacklist un numero"
+
+#: Blacklist.class.php:29 Blacklist.class.php:154
+msgid "Blacklist the last caller"
+msgstr "Mette in Blacklist l'ultimo chiamante"
+
+#: Blacklist.class.php:597
+msgid "Blacklist: Destination for BlackListed Calls"
+msgstr ""
+
+#: views/general.php:51
+msgid "Block Unknown/Blocked Caller ID"
+msgstr "Blocco sconosciuto / chiamte bloccate ID"
+
+#: views/general.php:39
+msgid "Bulk Handler"
+msgstr "Gestore di massa"
+
+#: views/modal_calllog.php:24
+msgid "Call Date/Time"
+msgstr "Chiama data / ora"
+
+#: views/modal_calllog.php:7
+msgid "Call Log"
+msgstr "Registro chiamate"
+
+#: Blacklist.class.php:515 Blacklist.class.php:539 Blacklist.class.php:554
+#: Blacklist.class.php:574 Blacklist.class.php:587 Blacklist.class.php:615
+#: Blacklist.class.php:628
+msgid "Cannot connect to Asterisk Manager, is Asterisk running?"
+msgstr ""
+
+#: Api/Gql/Blacklist.php:137
+msgid "Catch Unknown/Blocked Caller ID"
+msgstr ""
+
+#: views/general.php:75
+msgid "Check here to catch Unknown/Blocked Caller ID"
+msgstr "Controlla qui per catturare l'ID chiamante sconosciuto / bloccato"
+
+#: views/general.php:104
+msgid "Choose where blacklisted calls go"
+msgstr "Scegli dove andare le chiamate nella lista nera"
+
+#: views/modal_addnumber.php:63
+msgid "Close"
+msgstr "Chiudi"
+
+#: Blacklist.class.php:229
+msgid "Could not find file after upload"
+msgstr "Impossibile trovare il file dopo il caricamento"
+
+#: views/blgrid.php:2
+msgid "Delete Selected"
+msgstr "Elimina selezionato"
+
+#: Blacklist.class.php:640 views/blgrid.php:24 views/modal_addnumber.php:40
+msgid "Description"
+msgstr "Descrizione"
+
+#: assets/js/blacklist.js:61
+msgid "Description not allowed, reserved character!"
+msgstr ""
+
+#: Blacklist.class.php:640
+msgid "Description of number blacklisted"
+msgstr "Descrizione del numero nella blacklist"
+
+#: Api/Gql/Blacklist.php:176
+msgid "Description of the blocked number"
+msgstr ""
+
+#: views/general.php:89
+msgid "Destination for BlackListed Calls"
+msgstr "Destinazione per le chiamate con BlackListed"
+
+#: Api/Gql/Blacklist.php:142
+msgid "Destination for blacklisted calls"
+msgstr ""
+
+#: blacklist.i18n.php:12
+msgid "Disable call count in to main grid"
+msgstr ""
+
+#: Blacklist.class.php:703
+msgid "Disabled"
+msgstr ""
+
+#: assets/js/blacklist.js:83
+msgid "Entry Updated"
+msgstr "Voce aggiornata"
+
+#: views/general.php:21
+msgid "Import/Export"
+msgstr "Importare / Esportare"
+
+#: Blacklist.class.php:633
+msgid "Import/Export Caller Blacklist"
+msgstr "Importa / Esporta lista nera chiamante"
+
+#: views/blgrid.php:32
+msgid "Incoming Calls"
+msgstr ""
+
+#: Api/Gql/Blacklist.php:214
+msgid ""
+"Input variable destination does not exists in this system, Please provide "
+"the valid `destination`"
+msgstr ""
+
+#: views/blgrid.php:31
+msgid "Last Call"
+msgstr ""
+
+#: blacklist.i18n.php:16
+msgid ""
+"Loading call counts on machines with large call logs can be slow. This "
+"setting will disable the call count in the main grid."
+msgstr ""
+
+#: blacklist.i18n.php:14
+msgid "Log Display"
+msgstr ""
+
+#: Blacklist.class.php:118
+msgid "N/A"
+msgstr ""
+
+#: Blacklist.class.php:121
+msgid "Never"
+msgstr ""
+
+#: views/general.php:65 assets/js/blacklist.js:100 assets/js/blacklist.js:162
+msgid "No"
+msgstr "No"
+
+#: Blacklist.class.php:253
+msgid "No Entries to export"
+msgstr "Nessuna voce da esportare"
+
+#: views/blgrid.php:23
+msgid "Number"
+msgstr "Numero"
+
+#: assets/js/blacklist.js:112
+#, perl-format
+msgid "Number %s removed from the blacklist"
+msgstr ""
+
+#: views/modal_addnumber.php:18
+msgid "Number/CallerID"
+msgstr "Numero / ID chiamante"
+
+#: assets/js/blacklist.js:57
+msgid "Number/CallerID cannot be blank"
+msgstr "Numero / ID chiamante non può essere vuoto"
+
+#: Blacklist.class.php:66
+msgid "Numbers Deleted"
+msgstr "Numeri cancellati"
+
+#: Blacklist.class.php:639
+msgid "Phone Number"
+msgstr "Numero di telefono"
+
+#: Blacklist.class.php:657
+msgid "Phone Number Required"
+msgstr "Numero di telefono richiesto"
+
+#: Api/Gql/Blacklist.php:201
+msgid ""
+"Please provide the valid `destination` value, for example extension (100) :"
+"`from-did-direct,100,1`"
+msgstr ""
+
+#: Api/Gql/Blacklist.php:73 Blacklist.class.php:28 Blacklist.class.php:147
+msgid "Remove a number from the blacklist"
+msgstr "Rimuove un numero dalla blacklist"
+
+#: Blacklist.class.php:32 Blacklist.class.php:148
+msgid "Removes a number from the Blacklist Module"
+msgstr "Rimuove un numero dal modulo della lista nera"
+
+#: Blacklist.class.php:481
+msgid "Reset"
+msgstr "Azzerare"
+
+#: assets/js/blacklist.js:80
+msgid "Save Changes"
+msgstr "Salvataggio Cambiamenti"
+
+#: views/modal_addnumber.php:64
+msgid "Save changes"
+msgstr "Salva i Cambiamenti"
+
+#: views/general.php:26
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: Blacklist.class.php:481
+msgid "Submit"
+msgstr "Sottoscrivi"
+
+#: Blacklist.class.php:226
+msgid "Sucessfully imported all entries"
+msgstr "Importato con successo tutte le voci"
+
+#: Api/Gql/Blacklist.php:109
+msgid "The ID"
+msgstr ""
+
+#: Blacklist.class.php:233
+msgid "The file must be in CSV format!"
+msgstr "Il file deve essere in formato CSV!"
+
+#: Blacklist.class.php:639
+msgid "The number as it appears in the callerid display"
+msgstr "Il numero così come appare nel display del chiamante"
+
+#: Api/Gql/Blacklist.php:172
+msgid "The number to block"
+msgstr ""
+
+#: Blacklist.class.php:209
+msgid "There was an error uploading the file"
+msgstr "Si è verificato un errore durante l'upload del file"
+
+#: views/general.php:36
+msgid "This functionality is now part of the Bulk Handler Module"
+msgstr "Questa funzionalità è ora parte del Bulk Handler Module"
+
+#: blacklist.i18n.php:8
+msgid "This module is used to manage a system wide list of blocked callers"
+msgstr ""
+"Questo modulo viene utilizzato per gestire un elenco di tutti i chiamanti "
+"bloccati di sistema"
+
+#: Api/Gql/Blacklist.php:100 Api/Gql/Blacklist.php:157
+msgid "Used to manage a system wide list of blocked callers"
+msgstr ""
+
+#: views/general.php:60 assets/js/blacklist.js:100 assets/js/blacklist.js:162
+msgid "Yes"
+msgstr "Si"
+
+#~ msgid "Added %s to the blacklist."
+#~ msgstr "Aggiunto %s1 alla lista nera."
+
+#~ msgid "Are you sure you want to delete this item?"
+#~ msgstr "Sei sicuro di voler eliminare questo articolo?"
+
+#~ msgid "Blacklist entries"
+#~ msgstr "Voci in Blacklist"
+
+#~ msgid "Blacklist entry"
+#~ msgstr "Voce Blacklist"
+
+#~ msgid "Delete"
+#~ msgstr "Elimina"
+
+#~ msgid "Edit"
+#~ msgstr "Modifica"
+
+#~ msgid "Submit Changes"
+#~ msgstr "Conferma Cambiamenti"
+
+#~ msgid "deleted"
+#~ msgstr "eliminata"

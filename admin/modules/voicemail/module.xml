@@ -1,0 +1,68 @@
+<module>
+	<rawname>voicemail</rawname>
+	<repo>standard</repo>
+	<name>Voicemail</name>
+	<version>17.0.5.31</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<license>GPLv3+</license>
+	<candisable>no</candisable>
+	<canuninstall>no</canuninstall>
+	<changelog>
+		*17.0.5.31* Fixing restore time warnings 
+		*17.0.5.30* #issues 673 force rebuild fails 
+		*17.0.5.29* #629 Recent Scribe Icon fix causes uncaught TypeError 
+		*17.0.5.28* bump 
+		*17.0.5.27* Github #606 Fixing incorrect Voicemail maxsilence description in Voicemail Admin. 
+		*17.0.1alpha* 17.0.1 alpha release
+	</changelog>
+	<description>This module allows you to configure Voicemail for a user or extension</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/21135522/Voicemail</more-info>
+	<category>Settings</category>
+	<menuitems>
+		<voicemail needsenginedb="yes">Voicemail Admin</voicemail>
+	</menuitems>
+	<depends>
+		<module>core ge 17.0.1</module>
+		<version>17.0.1</version>
+	</depends>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<hooks>
+		<core class="Core" namespace="FreePBX\modules">
+			<method callingMethod="getQuickCreateDisplay" class="Voicemail" namespace="FreePBX\modules">getQuickCreateDisplay</method>
+			<method callingMethod="processQuickCreate" class="Voicemail" namespace="FreePBX\modules">processQuickCreate</method>
+			<method callingMethod="delUser" class="Voicemail" namespace="FreePBX\modules">delUser</method>
+		</core>
+		<bulkhandler class="Bulkhandler" namespace="FreePBX\modules">
+			<method callingMethod="getHeaders" class="Voicemail" namespace="FreePBX\modules">bulkhandlerGetHeaders</method>
+			<method callingMethod="import" class="Voicemail" namespace="FreePBX\modules">bulkhandlerImport</method>
+			<method callingMethod="export" class="Voicemail" namespace="FreePBX\modules">bulkhandlerExport</method>
+		</bulkhandler>
+		<backup class="Backup" namespace="FreePBX\modules">
+			<method callingMethod="getBackupSettingsDisplay" class="Voicemail" namespace="FreePBX\modules">getBackupSettingsDisplay</method>
+			<method callingMethod="processBackupSettings" class="Voicemail" namespace="FreePBX\modules">processBackupSettings</method>
+		</backup>
+		<ucp class="Ucp">
+			<method callingMethod="constructModuleConfigPages" class="Voicemail" namespace="FreePBX\modules">ucpConfigPage</method>
+			<method callingMethod="addUser" class="Voicemail" namespace="FreePBX\modules">ucpAddUser</method>
+			<method callingMethod="updateUser" class="Voicemail" namespace="FreePBX\modules">ucpUpdateUser</method>
+			<method callingMethod="delUser" class="Voicemail" namespace="FreePBX\modules">ucpDelUser</method>
+			<method callingMethod="addGroup" class="Voicemail" namespace="FreePBX\modules">ucpAddGroup</method>
+			<method callingMethod="updateGroup" class="Voicemail" namespace="FreePBX\modules">ucpUpdateGroup</method>
+			<method callingMethod="delGroup" class="Voicemail" namespace="FreePBX\modules">ucpDelGroup</method>
+		</ucp>
+	</hooks>
+	<database>
+		<table name="voicemail_admin">
+			<field name="variable" type="string" length="30" default="" primarykey="true"/>
+			<field name="value" type="string" length="80" default=""/>
+		</table>
+	</database>
+	<console>
+                <command>
+                        <name>voicemail</name>
+                </command>
+	</console>
+</module>

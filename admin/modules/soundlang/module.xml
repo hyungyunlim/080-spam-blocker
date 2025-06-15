@@ -1,0 +1,74 @@
+<module>
+	<rawname>soundlang</rawname>
+	<repo>standard</repo>
+	<name>Sound Languages</name>
+	<version>17.0.4.1</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<changelog>
+		*17.0.4.1* Packaging of ver 17.0.4.1
+		*17.0.2* Packaging of ver 17.0.2
+		*17.0.1alpha* 17.0.1 alpha release
+	</changelog>
+	<category>Admin</category>
+	<description>
+		Management of sound prompt languages.
+	</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/20611603/Sound+Languages</more-info>
+	<depends>
+		<version>17.0.1</version>
+	</depends>
+	<menuitems>
+		<soundlang>Sound Languages</soundlang>
+	</menuitems>
+	<oobe method="oobeHook" priority="150"/>
+	<database>
+		<table name="soundlang_packages">
+			<field name="id" type="bigint" primarykey="true" autoincrement="true"/>
+			<field name="type" type="string" length="20"/>
+			<field name="module" type="string" length="80"/>
+			<field name="language" type="string" length="20"/>
+			<field name="license" type="blob" notnull="false"/>
+			<field name="author" type="string" length="80" notnull="false"/>
+			<field name="authorlink" type="string" length="256" notnull="false"/>
+			<field name="format" type="string" length="20"/>
+			<field name="version" type="string" length="20" notnull="false"/>
+			<field name="installed" type="string" length="20" notnull="false"/>
+			<key name="id" type="unique">
+				<column name="id"/>
+			</key>
+			<key name="unique" type="unique">
+				<column name="type"/>
+				<column name="module"/>
+				<column name="language"/>
+				<column name="format"/>
+			</key>
+		</table>
+		<table name="soundlang_settings">
+			<field name="keyword" type="string" length="20" primarykey="true"/>
+			<field name="value" type="string" length="80"/>
+		</table>
+		<table name="soundlang_customlangs">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="language" type="string" length="20"/>
+			<field name="description" type="string" length="80"/>
+		</table>
+		<table name="soundlang_prompts">
+			<field name="type" type="string" length="20"/>
+			<field name="module" type="string" length="80"/>
+			<field name="language" type="string" length="20"/>
+			<field name="format" type="string" length="20"/>
+			<field name="filename" type="string" length="255" notnull="false"/>
+		</table>
+	</database>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<console>
+		<command>
+			<name>sounds</name>
+			<class>Soundlang</class>
+		</command>
+	</console>
+</module>

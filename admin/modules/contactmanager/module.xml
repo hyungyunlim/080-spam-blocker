@@ -1,0 +1,144 @@
+<module>
+	<rawname>contactmanager</rawname>
+	<repo>standard</repo>
+	<name>Contact Manager</name>
+	<version>17.0.5.15</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<changelog>
+		*17.0.5.15 #656 Increasing email field length 
+		*17.0.5.14 bump 
+		*17.0.5.13* FREEI-1619 Sangoma Desktop Softphone Contacts not being Displayed 
+		*17.0.5.11 bump 
+		*17.0.1* 17.0.1 alpha release
+	</changelog>
+	<category>Admin</category>
+	<description>
+		The Contact Manager module lets you add contacts to groups.
+	</description>
+	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/20023898/Contact+Manager+Module</more-info>
+	<menuitems>
+		<contactmanager needsenginedb="yes">Contact Manager</contactmanager>
+	</menuitems>
+	<depends>
+		<version>17.0.1</version>
+		<module>userman ge 17.0.1</module>
+	</depends>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<hooks>
+		<bulkhandler class="Bulkhandler" namespace="FreePBX\modules">
+			<method callingMethod="getHeaders" class="Contactmanager" namespace="FreePBX\modules">bulkhandlerGetHeaders</method>
+			<method callingMethod="getTypes" class="Contactmanager" namespace="FreePBX\modules">bulkhandlerGetTypes</method>
+			<method callingMethod="import" class="Contactmanager" namespace="FreePBX\modules">bulkhandlerImport</method>
+			<method callingMethod="export" class="Contactmanager" namespace="FreePBX\modules">bulkhandlerExport</method>
+		</bulkhandler>
+	<userman class="Userman" namespace="FreePBX\modules">
+			<method callingMethod="delGroup" class="Contactmanager" namespace="FreePBX\modules">usermanDelGroup</method>
+			<method callingMethod="addGroup" class="Contactmanager" namespace="FreePBX\modules">usermanAddGroup</method>
+			<method callingMethod="updateGroup" class="Contactmanager" namespace="FreePBX\modules">usermanUpdateGroup</method>
+			<method callingMethod="delUser" class="Contactmanager" namespace="FreePBX\modules">usermanDelUser</method>
+			<method callingMethod="addUser" class="Contactmanager" namespace="FreePBX\modules">usermanAddUser</method>
+			<method callingMethod="updateUser" class="Contactmanager" namespace="FreePBX\modules">usermanUpdateUser</method>
+			<method callingMethod="myShowPage" class="Contactmanager" namespace="FreePBX\modules">usermanShowPage</method>
+			<method callingMethod="getExtraUserDetailsDisplay" class="Contactmanager" namespace="FreePBX\modules">usermanUserDetails</method>
+			<method callingMethod="getExtraContactInfo" class="Contactmanager" namespace="FreePBX\modules">usermanAddContactInfo</method>
+		</userman>
+		<ucp class="Ucp">
+			<method callingMethod="constructModuleConfigPages" class="Contactmanager" namespace="FreePBX\modules">ucpConfigPage</method>
+			<method callingMethod="addUser" class="Contactmanager" namespace="FreePBX\modules">ucpAddUser</method>
+			<method callingMethod="updateUser" class="Contactmanager" namespace="FreePBX\modules">ucpUpdateUser</method>
+			<method callingMethod="delUser" class="Contactmanager" namespace="FreePBX\modules">ucpDelUser</method>
+			<method callingMethod="addGroup" class="Contactmanager" namespace="FreePBX\modules">ucpAddGroup</method>
+			<method callingMethod="updateGroup" class="Contactmanager" namespace="FreePBX\modules">ucpUpdateGroup</method>
+			<method callingMethod="delGroup" class="Contactmanager" namespace="FreePBX\modules">ucpDelGroup</method>
+		</ucp>
+	</hooks>
+	<database>
+		<table name="contactmanager_groups">
+			<field name="id" type="integer" primaryKey="true" autoincrement="true"/>
+			<field name="owner" type="integer"/>
+			<field name="name" type="string" length="80"/>
+			<field name="type" type="string" length="25"/>
+		</table>
+		<table name="contactmanager_group_entries">
+            <field name="id" type="integer" primarykey="true" autoincrement="true"/>
+            <field name="groupid" type="integer"/>
+            <field name="user" type="integer"/>
+            <field name="displayname" type="string" length="100" default=""/>
+            <field name="fname" type="string" length="100" default=""/>
+            <field name="lname" type="string" length="100" default=""/>
+            <field name="title" type="string" length="100" default=""/>
+            <field name="company" type="string" length="100" default=""/>
+            <field name="address" type="string" length="200" default=""/>
+            <field name="uuid" type="string" length="36" notnull="false"/>
+            <key name="uuid_index" type="unique">
+            <column name="uuid"/>
+            </key>
+	    </table>
+		<table name="contactmanager_entry_speeddials">
+			<field name="id" type="string" length="5" primaryKey="true"/>
+			<field name="entryid" type="integer"/>
+			<field name="numberid" type="integer"/>
+		</table>
+		<table name="contactmanager_entry_numbers">
+			<field name="id" type="integer" primaryKey="true" autoincrement="true"/>
+            <field name="entryid" type="integer"/>
+            <field name="number" type="string" length="100" notnull="false"/>
+            <field name="extension" type="string" length="100" notnull="false"/>
+            <field name="countrycode" type="string" length="4" notnull="false"/>
+            <field name="nationalnumber" type="string" length="100" notnull="false"/>
+            <field name="regioncode" type="string" length="2" notnull="false"/>
+			<field name="locale" type="string" length="2" notnull="false"/>
+			<field name="stripped" type="string" length="100" notnull="false"/>
+    	    <field name="type" type="string" length="100" notnull="false"/>
+	        <field name="flags" type="string" length="100" notnull="false"/>
+	        <field name="E164" type="string" length="100" notnull="false"/>
+			<field name="possibleshort" type="boolean" notnull="false"/>
+		</table>
+		<table name="contactmanager_entry_images">
+			<field name="entryid" type="integer" primaryKey="true"/>
+			<field name="image" type="blob" notnull="false"/>
+			<field name="format" type="string" length="45"/>
+			<field name="gravatar" type="boolean" default="0"/>
+		</table>
+		<table name="contactmanager_entry_userman_images">
+			<field name="uid" type="integer" primaryKey="true"/>
+			<field name="image" type="blob" notnull="false"/>
+			<field name="format" type="string" length="45"/>
+			<field name="gravatar" type="boolean" default="0"/>
+		</table>
+		<table name="contactmanager_entry_xmpps">
+			<field name="id" type="integer" primaryKey="true" autoincrement="true"/>
+			<field name="entryid" type="integer"/>
+			<field name="xmpp" type="string" length="100" notnull="false"/>
+		</table>
+		<table name="contactmanager_entry_emails">
+			<field name="id" type="integer" primaryKey="true" autoincrement="true"/>
+			<field name="entryid" type="integer"/>
+			<field name="email" type="string" length="500" notnull="false"/>
+		</table>
+		<table name="contactmanager_entry_websites">
+			<field name="id" type="integer" primaryKey="true" autoincrement="true"/>
+			<field name="entryid" type="integer"/>
+			<field name="website" type="string" length="100" notnull="false"/>
+		</table>
+		<table name="contactmanager_general_favorites">
+			<field name="id" type="integer" primaryKey="true" autoincrement="true"/>
+			<field name="list_name" type="string" length="100" notnull="true"/>
+			<field name="contact_ids" type="blob"/>
+		</table>
+		<table name="contactmanager_user_favorites">
+			<field name="uid" type="integer"/>
+			<field name="contact_ids" type="blob"/>
+		</table>
+
+	</database>
+	<console>
+		<command>
+			<name>contactmanager</name>
+		</command>
+	</console>
+</module>

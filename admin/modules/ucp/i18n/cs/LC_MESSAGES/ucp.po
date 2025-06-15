@@ -1,0 +1,1694 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for ucp
+# Copyright (C) 2008-2017 Sangoma Technologies, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-08 08:53-0400\n"
+"PO-Revision-Date: 2018-08-08 11:42+0000\n"
+"Last-Translator: Petr Varvarovsky <petrv@atlantis.cz>\n"
+"Language-Team: Czech <http://*/projects/freepbx/ucp/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 3.0.1\n"
+
+#: htdocs/assets/js/lodash-4.17.2.js:8787
+msgid "  abc  "
+msgstr "  abc  "
+
+#: htdocs/views/dashfootercontent.php:37
+#, php-format
+msgid "%s %s is licensed under the %s"
+msgstr ""
+
+#: htdocs/views/dashfootercontent.php:36
+#, php-format
+msgid "%s is a registered trademark of"
+msgstr ""
+
+#: htdocs/assets/js/emojionearea-3.4.2.min.js:9
+msgid ").replace(/"
+msgstr ""
+
+#: htdocs/assets/js/lodash-4.17.2.js:15199
+msgid ""
+");\n"
+"     *\n"
+"     * if (_.isError(elements)) {\n"
+"     *   elements = [];\n"
+"     * }\n"
+"     */\n"
+"    var attempt = baseRest(function(func, args) {\n"
+"      try {\n"
+"        return apply(func, undefined, args);\n"
+"      } catch (e) {\n"
+"        return isError(e) ? e : new Error(e);\n"
+"      }\n"
+"    });\n"
+"\n"
+"    /**\n"
+"     * Binds methods of an object to the object itself, overwriting the "
+"existing\n"
+"     * method.\n"
+"     *\n"
+"     * **Note:** This method doesn"
+msgstr ""
+");\n"
+"     *\n"
+"     * if (_.isError(elements)) {\n"
+"     *   elements = [];\n"
+"     * }\n"
+"     */\n"
+"    var attempt = baseRest(function(func, args) {\n"
+"      try {\n"
+"        return apply(func, undefined, args);\n"
+"      } catch (e) {\n"
+"        return isError(e) ? e : new Error(e);\n"
+"      }\n"
+"    });\n"
+"\n"
+"    /**\n"
+"     * Binds methods of an object to the object itself, overwriting the "
+"existing\n"
+"     * method.\n"
+"     *\n"
+"     * **Note:** This method doesn"
+
+#: htdocs/assets/js/lodash-4.17.2.js:14398
+msgid ""
+");\n"
+"     * // => "
+msgstr ""
+");\n"
+"     * // => "
+
+#: htdocs/assets/js/jquery-ui-1.13.2.min.js:6
+msgid "+t,e.props.alpha={idx:3,type:"
+msgstr ""
+
+#: htdocs/index.php:93
+msgid ".htaccess files are disabled on this webserver. Please enable them"
+msgstr ""
+"Soubory .htaccess jsou na tomto webovém serveru zakázány. Povolte je prosím"
+
+#: htdocs/index.php:106
+msgid ".htaccess files are not supported on this webserver."
+msgstr "Soubory .htaccess nejsou na tomto webovém serveru podporovány."
+
+#: htdocs/assets/js/socket.io-4.7.4.min.js:6
+msgid ".split("
+msgstr ""
+
+#: htdocs/assets/js/moment-with-locales-2.20.1.min.js:1
+msgid ": "
+msgstr ": "
+
+#: htdocs/modules/Ucptour/assets/js/global.js:123
+#, perl-format
+msgid "A dashboard can be deleted by clicking the '%s'"
+msgstr "Ovládací panel lze smazat kliknutím na tlačítko '%s'"
+
+#: htdocs/views/templates/phone.php:41
+msgid "ABC"
+msgstr "ABC"
+
+#: htdocs/views/dashboard-footer.php:219
+msgid "Accept"
+msgstr "Potvrdit"
+
+#: htdocs/modules/Settings/views/settings.php:5
+msgid "Account Settings"
+msgstr "Nastavení účtu"
+
+#: views/users_hook.php:164
+msgid "Active Sessions"
+msgstr "Aktivní relace"
+
+#: htdocs/views/dashboard-footer.php:12
+msgid "Add Dashboard"
+msgstr "Přidat ovládací panel"
+
+#: htdocs/views/dashboard-footer.php:54
+msgid "Add Widget"
+msgstr "Přidat widget"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:250
+msgid "Adding Side Bar Widgets"
+msgstr "Přidat widgety do postranního panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:299
+msgid "Adding Small Widgets"
+msgstr "Přidání malých widgetů"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:139
+#: htdocs/modules/Ucptour/assets/js/global.js:188
+msgid "Adding Widgets"
+msgstr "Přidání widgetů"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:32
+msgid "Adding a dashboard"
+msgstr "Přidání ovládacího panelu"
+
+#: ucp.i18n.php:6
+msgid "Admin"
+msgstr "Administrator"
+
+#: htdocs/views/dashboard-footer.php:230
+msgid "Alert"
+msgstr "Upozornění"
+
+#: htdocs/modules/Settings/views/settings.php:3
+msgid ""
+"All fields update when unfocused (selecting another field) except password"
+msgstr ""
+"Všechna pole se aktualizují, když jsou nezařazená (výběr jiného pole) kromě "
+"hesla"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:239
+#, perl-format
+msgid ""
+"All widgets in a dashboard can also be locked globally by clicking the '%s' "
+"symbol on the dashboard tab"
+msgstr ""
+"Všechny widgety na ovládacím panelu lze také globálně zamknout kliknutím na "
+"symbol \"%s\" na kartě ovládacího panelu"
+
+#: htdocs/modules/Settings/views/settings.php:144
+msgid "Allow Desktop Notifications"
+msgstr "Povolit notifikace na ploše"
+
+#: views/users_hook.php:46
+msgid "Allow Login"
+msgstr "Povolit přihlášení"
+
+#: htdocs/modules/Settings/views/settings.php:146
+msgid "Allow browser desktop notifications from UCP modules."
+msgstr "Povolení upozornění na ploše prohlížeče z modulů UCP."
+
+#: views/users_hook.php:249
+msgid ""
+"Allow this user to originate calls from within UCP. This is not the same as "
+"WebRTC"
+msgstr ""
+"Povolit tomuto uživateli, aby vytáčel hovory ze služby UCP. To není stejné "
+"jako WebRTC"
+
+#: views/users_hook.php:204
+msgid "Allowed Extension Settings"
+msgstr "Povolit nastavení pobočky"
+
+#: htdocs/modules/Widgets/assets/js/global.js:897
+msgid "Are you sure you want to delete this dashboard?"
+msgstr "Opravdu chcete tento ovládací panel smazat?"
+
+#: views/users_hook.php:106
+msgid "Assign UCP Template"
+msgstr ""
+
+#: Ucp.class.php:1212
+#, php-format
+msgid ""
+"Asterisk home dir (%s) doesn't exist, and, ASTSPOOLDIR doesn't exist. "
+"Aborting"
+msgstr "Domácí adresář Asterisku (%s) a ASTSPOOLDIR neexistuje. Ukončeno"
+
+#: htdocs/modules/Settings/views/settings.php:102
+msgid "Browse"
+msgstr "Procházet"
+
+#: htdocs/views/templates/phone.php:7 htdocs/views/templates/phone.php:95
+msgid "Call"
+msgstr "Volat"
+
+#: htdocs/views/dashboard-footer.php:22 htdocs/views/dashboard-footer.php:43
+#: htdocs/views/dashboard-footer.php:168 htdocs/views/dashboard-footer.php:218
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: htdocs/modules/Settings/views/settings.php:72
+msgid "Cell Phone"
+msgstr "Mobilní telefon"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:313
+msgid "Click the widget's icon to continue"
+msgstr "Chcete-li pokračovat, klikněte na ikonu widgetu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:33
+#: htdocs/modules/Ucptour/assets/js/global.js:140
+#: htdocs/modules/Ucptour/assets/js/global.js:189
+#: htdocs/modules/Ucptour/assets/js/global.js:251
+#: htdocs/modules/Ucptour/assets/js/global.js:300
+#: htdocs/modules/Ucptour/assets/js/global.js:335
+msgid "Click this symbol to continue"
+msgstr "Chcete-li pokračovat, klikněte na tento symbol"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:300
+#, perl-format
+msgid ""
+"Clicking the '%s' symbol will add this small widget to the display. It will "
+"be visible on all dashboards"
+msgstr ""
+"Kliknutím na symbol '%s' přidáte tento malý widget na displej. Bude vidět na "
+"všech panelech"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:189
+#, perl-format
+msgid ""
+"Clicking the '%s' symbol will add this widget to the currently active "
+"dashboard."
+msgstr ""
+"Kliknutím na symbol '%s' přidáte tento widget na aktuálně aktivní panel."
+
+#: htdocs/views/dashboard-footer.php:243 htdocs/views/forgot.php:15
+msgid "Close"
+msgstr "Zavřít"
+
+#: htdocs/modules/Settings/views/settings.php:67
+msgid "Company"
+msgstr "Firma"
+
+#: htdocs/views/dashboard-footer.php:209
+msgid "Confirm Action"
+msgstr "Potvrdit akci"
+
+#: htdocs/modules/Settings/views/settings.php:32
+msgid "Confirm Password"
+msgstr "Potvrdit heslo"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:25
+msgid "Congratulations!"
+msgstr "Gratulace!"
+
+#: htdocs/views/dashboard-footer.php:23
+msgid "Create Dashboard"
+msgstr "Vytvořit ovládací panel"
+
+#: htdocs/views/dashfootercontent.php:44
+#, php-format
+msgid "Current module licensed under %s"
+msgstr ""
+
+#: htdocs/views/templates/phone.php:45
+msgid "DEF"
+msgstr "DEF"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:238
+msgid "Dashboard Locking"
+msgstr "Uzamčení ovládacího panelu"
+
+#: htdocs/views/dashboard-footer.php:17 htdocs/views/dashboard-footer.php:38
+msgid "Dashboard Name"
+msgstr "Jméno ovládacího panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:202
+msgid "Dashboard Widget"
+msgstr "Widget ovládacího panelu"
+
+#: htdocs/views/dashboard-footer.php:59
+#: htdocs/modules/Ucptour/assets/js/global.js:101
+msgid "Dashboard Widgets"
+msgstr "Widgety ovládacího panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:167
+msgid ""
+"Dashboard Widgets are sorted into categories on the left. These widgets will "
+"appear directly on your dashboard. You can click on any category to get a "
+"listing of the widgets available"
+msgstr ""
+"Widgety ovládacího panelu jsou rozděleny do kategorií nalevo. Tyto widgety "
+"se budou zobrazovat přímo na ovládacím panelu. Klepnutím na libovolnou "
+"kategorii získáte seznam dostupných widgetů"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:102
+msgid "Dashboard widgets will be displayed here"
+msgstr "Zde se zobrazí widgety ovládacího panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:93
+msgid "Dashboards"
+msgstr "Ovládací panely"
+
+#: htdocs/modules/Settings/views/settings.php:162
+msgid "Date Format"
+msgstr "Formát data"
+
+#: htdocs/modules/Settings/views/settings.php:154
+msgid "Date and Time Format"
+msgstr "Formát data a času"
+
+#: htdocs/modules/Settings/views/settings.php:120
+#: htdocs/modules/Settings/views/settings.php:133
+msgid "Default"
+msgstr "Výchozí nastavení"
+
+#: htdocs/modules/Settings/views/settings.php:97
+msgid "Delete Image"
+msgstr "Smazat obrázek"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:122
+msgid "Delete a Dashboard"
+msgstr "Smazat ovládací panel"
+
+#: Ucp.class.php:1072
+msgid "Deleted Session"
+msgstr "Odstraněná relace"
+
+#: Ucp.class.php:384 Ucp.class.php:914
+msgid "Deleted User Session"
+msgstr "Odstraněná relace uživatele"
+
+#: htdocs/assets/js/ucp.js:80
+msgid "Disable"
+msgstr "Zakázat"
+
+#: htdocs/modules/Settings/views/settings.php:42
+msgid "Display Name"
+msgstr "Zobrazovaný název"
+
+#: Ucp.class.php:1373
+#, php-format
+msgid "Don't know what %s is"
+msgstr "Nevím, co je %s"
+
+#: Ucp.class.php:295 Ucp.class.php:321 Ucp.class.php:1167 Ucp.class.php:1171
+#: Ucp.class.php:1175 Ucp.class.php:1179
+msgid "Done"
+msgstr "Hotovo"
+
+#: htdocs/modules/Settings/views/settings.php:94
+msgid "Drop a new image here"
+msgstr "Umístit zde nový obrázek"
+
+#: htdocs/views/dashboard-footer.php:33 htdocs/views/dashboard-footer.php:44
+msgid "Edit Dashboard"
+msgstr "Upravit ovládací panel"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:115
+msgid "Editing a Dashboard"
+msgstr "Upravování ovládacího panelu"
+
+#: htdocs/modules/Settings/views/settings.php:47 htdocs/views/login.php:38
+msgid "Email"
+msgstr "Email"
+
+#: htdocs/assets/js/ucp.js:77
+msgid "Enable"
+msgstr "Povolit"
+
+#: views/users_hook.php:230
+msgid "Enable Originating Calls"
+msgstr "Povolit odchozí hovory"
+
+#: views/users_hook.php:76
+msgid "Enable Tour Mode"
+msgstr "Povolit režim prohlížení"
+
+#: views/users_hook.php:95
+msgid ""
+"Enable tour mode in UCP upon first login. If disabled the tour will not "
+"automatically start upon first login"
+msgstr ""
+"Aktivovat režim prohlížení v UCP při prvním přihlášení. Pokud je toto "
+"vypnuto, režim prohlížení se při prvním přihlášení automaticky nezapne"
+
+#: htdocs/modules/Settings/assets/js/global.js:140
+msgid "Enabling notifications was denied"
+msgstr "Zakázáno povolit upozornění"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:355
+msgid "End of tour"
+msgstr "Konec prohlížení"
+
+#: htdocs/modules/Settings/Settings.class.php:132
+msgid "English"
+msgstr "Angličtina"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:51
+msgid "Enter a name for your dashboard in this input box"
+msgstr "Do tohoto pole zadejte název ovládacího panelu"
+
+#: install.inc.php:20
+#, php-format
+msgid "Failed to install %s due to the following conflicting module(s): %s"
+msgstr ""
+"Instalace %s se nezdařila z důvodu následujících konfliktních modulů: %s"
+
+#: Ucp.class.php:1289
+#, php-format
+msgid "Failed to run: '%s'"
+msgstr "Nepodařilo se spustit: '%s'"
+
+#: Ucp.class.php:173
+msgid "Failed updating libraries!"
+msgstr "Nepodařilo se aktualizovat knihovny!"
+
+#: Ucp.class.php:303
+msgid "Failed!"
+msgstr "Neúspěšně!"
+
+#: htdocs/modules/Settings/views/settings.php:87
+msgid "Fax"
+msgstr "Fax"
+
+#: Ucp.class.php:176
+msgid "Finished updating libraries!"
+msgstr "Aktualizace knihoven dokončeny!"
+
+#: htdocs/views/templates/pagnation.php:4
+msgid "First"
+msgstr "První"
+
+#: htdocs/modules/Settings/views/settings.php:52
+msgid "First Name"
+msgstr "Jméno"
+
+#: htdocs/views/login.php:46
+msgid "Forgot Password"
+msgstr "Zapomenuté heslo"
+
+#: htdocs/views/templates/phone.php:51
+msgid "GHI"
+msgstr "GHI"
+
+#: views/users_hook.php:19
+msgid "General"
+msgstr "Obecné"
+
+#: Ucp.class.php:1177
+msgid "Generating Main CSS..."
+msgstr "Generování hlavního CSS..."
+
+#: Ucp.class.php:1173
+msgid "Generating Main Scripts..."
+msgstr "Generování hlavních skriptů..."
+
+#: Ucp.class.php:1169
+msgid "Generating Module CSS..."
+msgstr "Generování CSS modulu..."
+
+#: Ucp.class.php:1165
+msgid "Generating Module Scripts..."
+msgstr "Generování skriptů modulů..."
+
+#: htdocs/views/templates/phone.php:98
+msgid "Hold"
+msgstr "Přidržet"
+
+#: htdocs/modules/Home/Home.class.php:211
+msgid "Home"
+msgstr "Domů"
+
+#: htdocs/modules/Settings/views/settings.php:82
+msgid "Home Phone"
+msgstr "Telefon domů"
+
+#: Ucp.class.php:151 Ucp.class.php:158
+#, php-format
+msgid "Home directory [%s] is not writable"
+msgstr "Do domovského adresáře [%s] nelze zapisovat"
+
+#: htdocs/modules/Settings/views/settings.php:44
+msgid ""
+"How you would like your name displayed throughout UCP and Contact Manager"
+msgstr ""
+"Jak byste chtěli, aby se vaše jméno zobrazovalo v UCP a manažeru kontaktů"
+
+#: Ucp.class.php:143
+#, php-format
+msgid "ICU version is: %s requirement is %s"
+msgstr "Verze ICU je: %s Požadavek je %s"
+
+#: views/users_hook.php:56 views/users_hook.php:86 views/users_hook.php:116
+#: views/users_hook.php:240
+msgid "Inherit"
+msgstr "Zdědit"
+
+#: Ucp.class.php:163
+msgid "Installing/Updating Required Libraries. This may take a while..."
+msgstr "Instalace / aktualizace požadovaných knihoven. Může to chvíli trvat..."
+
+#: htdocs/modules/Settings/views/settings.php:7
+msgid "Interface Settings"
+msgstr "Nastavení rozhraní"
+
+#: htdocs/index.php:247
+#, php-format
+msgid ""
+"Internet Explorer %s is not supported. Functionality will be deteriorated "
+"until you upgrade to %s or higher"
+msgstr ""
+"Internet Explorer %s není podporován. Funkcionalita bude zhoršena, dokud "
+"neprovedete aktualizaci na %s nebo vyšší"
+
+#: htdocs/includes/User.class.php:111
+msgid "Invalid"
+msgstr "Neplatné"
+
+#: htdocs/modules/Home/Home.class.php:151
+#: htdocs/modules/Home/Home.class.php:167
+#: htdocs/modules/Home/Home.class.php:172
+msgid "Invalid Device"
+msgstr "Neplatné zařízení"
+
+#: htdocs/includes/User.class.php:119
+msgid "Invalid Login Credentials"
+msgstr "Neplatné přihlašovací údaje"
+
+#: htdocs/index.php:236
+msgid "Invalid Token"
+msgstr "Neplatný token"
+
+#: htdocs/modules/Widgets/Widgets.class.php:47
+msgid "Invalid dashboard id"
+msgstr "Neplatné ID ovládacího panelu"
+
+#: htdocs/views/templates/phone.php:55
+msgid "JKL"
+msgstr "JKL"
+
+#: htdocs/modules/Settings/views/settings.php:118
+msgid "Language"
+msgstr "Jazyk"
+
+#: htdocs/views/templates/pagnation.php:20
+msgid "Last"
+msgstr "Poslední"
+
+#: htdocs/modules/Settings/views/settings.php:57
+msgid "Last Name"
+msgstr "Příjmení"
+
+#: htdocs/views/forgot.php:85 htdocs/views/login.php:68
+msgid "Loading..."
+msgstr "Načítání..."
+
+#: htdocs/views/forgot.php:67 htdocs/views/login.php:48
+#: htdocs/assets/js/ucp.js:329 htdocs/assets/js/ucp.js:351
+#: htdocs/assets/js/ucp.js:361
+msgid "Login"
+msgstr "Přihlásit se"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:351
+msgid "Logout"
+msgstr "Odhlásit se"
+
+#: htdocs/views/templates/phone.php:59
+msgid "MNO"
+msgstr "MNO"
+
+#: views/users_hook.php:65
+msgid "May this user log in to UCP"
+msgstr "Nechť se tento uživatel přihlásí do UCP"
+
+#: views/users_hook.php:24
+msgid "Miscellaneous"
+msgstr "Různé"
+
+#: htdocs/includes/Ajax.class.php:37
+msgid "Module or Command requested invalid"
+msgstr ""
+
+#: htdocs/includes/Ajax.class.php:81
+msgid "Module or Command were null. Check your code."
+msgstr "Modul nebo příkaz byly nulové. Zkontrolujte kód."
+
+#: htdocs/modules/Ucptour/assets/js/global.js:130
+msgid ""
+"Multiple dashboard can be re-ordered by hovering with your mouse until the "
+"move cursor is shown. Then clicking and dragging the dashboard in the order "
+"you want"
+msgstr ""
+"Více navigačních panelů lze uspořádat pomocí kurzoru myši. Klikněte a "
+"přetáhněte ovládací desku v pořadí, které chcete"
+
+#: Ucp.class.php:116
+#, php-format
+msgid ""
+"NPM version is: %s requirement is %s. Run 'yum upgrade nodejs' from the CLI "
+"as root"
+msgstr ""
+"Verze NPM je: %s Požadavek je %s. Jako root Spusťte 'yum upgrade nodejs' z "
+"CLI"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:50
+msgid "Name your dashboard"
+msgstr "Pojmenujte svůj ovládací panel"
+
+#: views/users_hook.php:53 views/users_hook.php:83 views/users_hook.php:113
+#: views/users_hook.php:237
+msgid "No"
+msgstr "Ne"
+
+#: Ucp.class.php:112
+msgid "Node Package Manager is not installed"
+msgstr "Node Package Manager není nainstalován"
+
+#: Ucp.class.php:100
+msgid "Node is not installed"
+msgstr "Nod není nainstalován"
+
+#: Ucp.class.php:104
+#, php-format
+msgid ""
+"Node version is: %s requirement is %s. Run 'yum upgrade nodejs' from the CLI "
+"as root"
+msgstr ""
+"Verze nodu je: %s Požadavek je %s. Jako root spusťte 'yum upgrade nodejs' z "
+"CLI"
+
+#: views/users_hook.php:141
+msgid "None"
+msgstr ""
+
+#: htdocs/modules/Ucptour/assets/js/global.js:216
+msgid "Note: some widgets have size restrictions!"
+msgstr "Poznámka: některé widgety mají omezenou velikost!"
+
+#: htdocs/modules/Home/assets/js/global.js:73
+msgid "Nothing Entered"
+msgstr "Není nic zadané"
+
+#: htdocs/includes/User.class.php:81
+msgid "Nothing was Provided!"
+msgstr "Nic nebylo poskytnuto!"
+
+#: htdocs/views/header.php:59
+msgid "OFF"
+msgstr "OFF"
+
+#: htdocs/views/header.php:55
+msgid "ON"
+msgstr "ON"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:313
+msgid "Once a small widget has been added it will show up in the left sidebar"
+msgstr "Po přidání malého widgetu se zobrazí v levém bočním panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:129
+msgid "Ordering dashboards"
+msgstr "Objednání ovládacích panelů"
+
+#: htdocs/modules/Home/assets/js/global.js:47
+#: htdocs/modules/Home/assets/js/global.js:126
+msgid "Originate"
+msgstr "Vytočit"
+
+#: htdocs/modules/Home/assets/js/global.js:22
+#: htdocs/modules/Home/assets/js/global.js:45
+#: htdocs/modules/Home/assets/js/global.js:125
+msgid "Originate Call"
+msgstr "Vytočit hovor"
+
+#: htdocs/views/templates/phone.php:65
+msgid "PQRS"
+msgstr "PQRS"
+
+#: htdocs/modules/Settings/views/settings.php:25
+#: htdocs/modules/Settings/views/settings.php:27 htdocs/views/login.php:28
+msgid "Password"
+msgstr "Heslo"
+
+#: Ucp.class.php:435
+#, php-format
+msgid "Password Reset Link (Valid Until: %s): %s"
+msgstr "Odkaz na obnovení hesla (platný do: %s): %s"
+
+#: htdocs/views/forgot.php:49
+#, php-format
+msgid "Password Reset for: %s"
+msgstr "Reset hesla pro: %s"
+
+#: htdocs/modules/Settings/views/pwd_alert.php:1 htdocs/views/forgot.php:6
+msgid "Password does not match security policy."
+msgstr ""
+
+#: htdocs/assets/js/ucp.js:280
+msgid "Password has been changed!"
+msgstr "Heslo bylo změněno!"
+
+#: htdocs/assets/js/ucp.js:290 htdocs/assets/js/ucp.js:344
+msgid "Processing..."
+msgstr "Zpracovává se..."
+
+#: htdocs/modules/Home/Home.class.php:44
+msgid "RSS Feeds"
+msgstr "Kanály RSS"
+
+#: htdocs/modules/Home/Home.class.php:75
+msgid "RSS Feeds are not set."
+msgstr ""
+
+#: Api/Rest/Dashboard.php:12
+msgid "Read UCP Dashboard Information"
+msgstr ""
+
+#: Ucp.class.php:309
+msgid "Refreshing all UCP Assets, this could take a while..."
+msgstr "Obnovení všech zdrojů UCP. toto může chvíli trvat..."
+
+#: htdocs/views/forgot.php:71 htdocs/views/login.php:52
+msgid "Remember Me"
+msgstr "Zapamatovat si mě"
+
+#: htdocs/views/dashboard-header.php:108
+#: htdocs/modules/Widgets/assets/js/global.js:446
+msgid "Remove Widget"
+msgstr "Odebrat widget"
+
+#: htdocs/views/forgot.php:86
+msgid "Reset Password"
+msgstr "Resetování hesla"
+
+#: htdocs/modules/Settings/views/settings.php:149
+msgid "Restart Tour"
+msgstr "Restartovat prohlížení"
+
+#: Ucp.class.php:1228
+#, php-format
+msgid "Running (Uptime: %s)"
+msgstr "Aktivní (V provozu: %s)"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:69
+msgid "Save your dashboard"
+msgstr "Uložte svůj ovládací panel"
+
+#: htdocs/modules/Settings/assets/js/global.js:256
+msgid "Saved!"
+msgstr "Uloženo!"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:166
+msgid "Selecting Dashboard Widgets"
+msgstr "Nastavení widgetů ovládacího panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:266
+msgid "Selecting Side Bar Widgets"
+msgstr "Výběr widgetů bočního panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:277
+msgid "Selecting Small Widgets"
+msgstr "Výběr malých widgetů"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:155
+#: htdocs/modules/Ucptour/assets/js/global.js:174
+#: htdocs/modules/Ucptour/assets/js/global.js:284
+msgid "Selecting Widgets"
+msgstr "Výběr widgetů"
+
+#: htdocs/views/login.php:70
+msgid "Send Me A Password Reset Link"
+msgstr "Pošli mi odkaz na resetování hesla"
+
+#: htdocs/views/templates/chat.php:23
+#, php-format
+msgid "Sent at %s"
+msgstr "Poslat jako %s"
+
+#: htdocs/modules/Widgets/assets/js/global.js:100
+#: htdocs/modules/Widgets/assets/js/global.js:385
+msgid "Settings"
+msgstr "Nastavení"
+
+#: htdocs/views/dashboard-footer.php:60
+#: htdocs/modules/Ucptour/assets/js/global.js:243
+msgid "Side Bar Widgets"
+msgstr "Widgety bočního panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:267
+msgid ""
+"Side Bar widgets are grouped in a single category called 'Side Bar Widgets'"
+msgstr ""
+"Widgety bočního panelu jsou seskupeny do jedné kategorie s názvem \"Widgety "
+"bočního panelu\""
+
+#: htdocs/modules/Ucptour/assets/js/global.js:251
+#, perl-format
+msgid ""
+"Side bar Widgets can also be added by clicking the '%s' symbol. These appear "
+"under the '%s' symbol in this side bar"
+msgstr ""
+"Widgety bočního panelu lze také přidat kliknutím na symbol \"%s\". Ty se "
+"zobrazují pod symbolem '%s' v této postranní liště"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:312
+#: htdocs/modules/Ucptour/assets/js/global.js:324
+#: htdocs/modules/Ucptour/assets/js/global.js:329
+#: htdocs/modules/Ucptour/assets/js/global.js:334
+msgid "Small Widget Display"
+msgstr "Zobrazení malého widgetu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:278
+msgid ""
+"Small Widgets are listed on the right. The titles and descriptions will be "
+"shown for each widget"
+msgstr ""
+"Malé widgety jsou vpravo. Tituly a popisy se zobrazí pro každý widget zvlášť"
+
+#: htdocs/modules/Widgets/assets/js/global.js:1252
+#: htdocs/modules/Widgets/assets/js/global.js:1290
+msgid "Something went wrong getting the settings from the widget"
+msgstr "Chyba při získání nastavení z widgetu"
+
+#: htdocs/modules/Widgets/assets/js/global.js:871
+#: htdocs/modules/Widgets/assets/js/global.js:925
+msgid "Something went wrong removing the dashboard"
+msgstr "Napodařilo se odstranit ovládací panel"
+
+#: Ucp.class.php:1284
+#, php-format
+msgid "Started UCP Node Server. PID is %s"
+msgstr "Spuštěn UCP Node Server. PID je %s"
+
+#: Ucp.class.php:305
+#, php-format
+msgid "Started with PID %s!"
+msgstr "Spuštěno s PID %s!"
+
+#: Ucp.class.php:1255
+msgid "Starting UCP Node Server..."
+msgstr "Spouštění UCP Node serveru..."
+
+#: Ucp.class.php:300
+msgid "Starting new UCP Node Process..."
+msgstr "Spouštění nového UCP Node procesu..."
+
+#: Ucp.class.php:1357
+msgid "Stopped UCP Node Server"
+msgstr "Zastaven UCP Node server"
+
+#: Ucp.class.php:1326
+msgid "Stopping UCP Node Server"
+msgstr "Zastavování UCP Node serveru"
+
+#: Ucp.class.php:293 Ucp.class.php:319
+msgid "Stopping old running processes..."
+msgstr "Zastavování starých běžících procesů..."
+
+#: htdocs/includes/User.class.php:89
+msgid "Submitted"
+msgstr ""
+
+#: htdocs/modules/Settings/assets/js/global.js:106
+#: htdocs/modules/Settings/assets/js/global.js:119
+msgid "Success!"
+msgstr "Podařilo se!"
+
+#: Ucp.class.php:121
+msgid "System"
+msgstr ""
+
+#: htdocs/views/templates/phone.php:69
+msgid "TUV"
+msgstr "TUV"
+
+#: views/users_hook.php:136 views/users_hook.php:153
+msgid "Template List"
+msgstr ""
+
+#: htdocs/modules/Settings/assets/js/global.js:61
+msgid "The Browser Language could not be determined"
+msgstr "Nebyl zjištěn jazyk prohlížeče"
+
+#: htdocs/modules/Settings/assets/js/global.js:83
+msgid "The Browser Timezone could not be determined"
+msgstr "Nebylo zjištěno časové pásmo prohlížeče"
+
+#: htdocs/modules/Settings/assets/js/global.js:72
+msgid "The PBX Language is not set"
+msgstr "Není nastaven jazyk ústředny"
+
+#: htdocs/modules/Settings/assets/js/global.js:94
+msgid "The PBX Timezone is not set"
+msgstr "Není nastaveno časové pásmo ústředny"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:33
+msgid ""
+"The User Control Panel is now separated by 'Dashboards'. You can add a new "
+"dashboard by clicking this symbol"
+msgstr ""
+"Uživatelský kontrolní panel je nyní rozdělen 'Ovládacích panelů'. Nový "
+"ovládací panel můžete přidat kliknutím na tento symbol"
+
+#: htdocs/includes/Ajax.class.php:86
+#, php-format
+msgid "The class %s already existed. Ajax MUST load it, for security reasons"
+msgstr "Třída %s již existuje. Ajax si ho MUSÍ z bezpečnostních důvodů načíst"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:116
+msgid "The dashboard's name can be changed by clicking the pencil"
+msgstr "Název ovládacího panelu lze změnit kliknutím na tužku"
+
+#: htdocs/modules/Settings/views/settings.php:159
+#, php-format
+msgid ""
+"The format dates and times should display in. The default of \"llll\" is "
+"locale aware. If left blank this will use the group/system format. For more "
+"formats please see: %s"
+msgstr ""
+"Formáty dat a časů by měly být zobrazeny. Výchozí nastavení je \"llll\". "
+"Pokud bude ponecháno prázdné, použije se formát skupiny/systému. Další "
+"formáty naleznete na: %s"
+
+#: htdocs/modules/Settings/views/settings.php:167
+#, php-format
+msgid ""
+"The format dates should display in. The default of \"l\" is locale aware. If "
+"left blank this will use the group/system format. For more formats please "
+"see: %s"
+msgstr ""
+"Formáty dat by měly být zobrazeny. Výchozí hodnota je \"l\". Pokud bude "
+"ponecháno prázdné, použije se formát skupiny/systému. Další formáty "
+"naleznete na: %s"
+
+#: htdocs/modules/Settings/views/settings.php:175
+#, php-format
+msgid ""
+"The format times should display in. The default of \"LT\" is locale aware. "
+"If left blank this will use the group/system format. For more formats please "
+"see: %s"
+msgstr ""
+"Formáty časů by měly být zobrazeny. Výchozí hodnota je \"LT\". Pokud bude "
+"ponecháno prázdné, použije se formát skupiny/systému. Další formáty "
+"naleznete na: %s"
+
+#: htdocs/modules/Settings/views/settings.php:29
+#: htdocs/modules/Settings/views/settings.php:34
+msgid "The password used to login to User Control Panel and other services"
+msgstr ""
+"Heslo, které se používá pro přihlášení k uživatelskému portálu (UCP) a "
+"dalším službám"
+
+#: htdocs/assets/js/ucp.js:575
+msgid "The session has expired and you are being forcibly logged out"
+msgstr "Čas relace vypršel, byli jste odhlášeni"
+
+#: ucp.i18n.php:8
+msgid ""
+"The user control panel is a way for users to control call handling and "
+"personal settings from a web browser."
+msgstr ""
+"Uživatelský portál (UCP) je způsob, jak mohou uživatelé ovládat volání a "
+"osobní nastavení z webového prohlížeče."
+
+#: htdocs/modules/Settings/views/settings.php:20
+msgid "The username used to login to User Control Panel and other services"
+msgstr ""
+"Uživatelské jméno používané k přihlášení do uživatelského portálu (UCP) a "
+"dalších služeb"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:325
+msgid "The widget's content is displayed here"
+msgstr "Obsah widgetu se zobrazuje zde"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:156
+msgid ""
+"There are two different types of widgets. Dashboard Widgets and Side Bar "
+"widgets. Let's start with dashboard widgets"
+msgstr ""
+"Existují dva různé typy widgetů. Widgety ovládacího panelu a boční widgety. "
+"Začneme s widgety ovládacího panelu"
+
+#: htdocs/modules/Widgets/assets/js/global.js:988
+msgid "There is no active dashboard to add widgets to"
+msgstr "Není aktivní ovládací panel pro přidání widgetů"
+
+#: htdocs/modules/Widgets/assets/js/global.js:1066
+#: htdocs/modules/Widgets/assets/js/global.js:1151
+msgid "There was an error getting the widget information, try again later"
+msgstr ""
+"Vyskytla se chyba při získání informací o widgetu, zkuste to prosím později"
+
+#: htdocs/assets/js/ucp.js:33 htdocs/assets/js/ucp.js:48
+msgid "There was an error. See the console log for more details"
+msgstr "Vyskytla se chyba. Podrobnější informace naleznete v protokolu konzole"
+
+#: views/users_hook.php:220
+msgid ""
+"These are the assigned and active extensions which will be allowed to edit "
+"extension settings such as Call Waiting, Call Forwarding, Find Me/Follow Me "
+"and others"
+msgstr ""
+"Jedná se o přiřazené a aktivní pobočky, které budou moci upravovat nastavení "
+"pobočky, jako jsou Čekání na hovor, Přesměrování hovorů, Find Me/Follow Me a "
+"další"
+
+#: htdocs/modules/Home/Home.class.php:80
+msgid "This feed is not found in RSS Feed list."
+msgstr ""
+
+#: htdocs/modules/Ucptour/assets/js/global.js:244
+msgid ""
+"This is where side bar widgets live. Side bar widgets do not change when you "
+"change dashboards. They are global throughout UCP"
+msgstr ""
+"Toto je místo, kde jsou widgety bočního panelu. Widgety bočního panelu se "
+"nemění při změně ovládacích panelů. Jsou globální v rámci UCP"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:25
+msgid ""
+"This tour will take you on a brief walkthrough of the new User Control Panel "
+"in a few simple steps."
+msgstr ""
+"Tato prohlídka vás provede v několika jednoduchých krocích novým "
+"uživatelským ovládacím panelem."
+
+#: htdocs/modules/Settings/views/settings.php:170
+msgid "Time Format"
+msgstr "Formát času"
+
+#: htdocs/modules/Settings/views/settings.php:131
+msgid "Timezone"
+msgstr "Časové pásmo"
+
+#: htdocs/modules/Settings/views/settings.php:62
+msgid "Title"
+msgstr "Název"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:25
+msgid "To continue just click Next"
+msgstr "Chcete-li pokračovat, klikněte na Další"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:335
+#, perl-format
+msgid "To just close/hide the widget's content click the '%s' symbol"
+msgstr "Chcete-li zavřít/skrýt obsah widgetu, klikněte na symbol '%s'"
+
+#: htdocs/index.php:94
+#, php-format
+msgid ""
+"To protect the integrity of your server, you must allow overrides in your "
+"webserver's configuration file for the User Control Panel. For more "
+"information see: %s"
+msgstr ""
+"Chcete-li chránit integritu vašeho serveru, musíte povolit přepsání "
+"konfiguračního souboru webového serveru pro uživatelský portál (UCP). Další "
+"informace naleznete na adrese: %s"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:330
+msgid "To remove this widget from the side bar click 'Remove Widget'"
+msgstr ""
+"Chcete-li odstranit tento widget z bočního panelu, klikněte na položku "
+"'Odebrat widget'"
+
+#: ucp.i18n.php:10
+msgid "UCP"
+msgstr "UCP"
+
+#: views/header.php:1
+msgid "UCP Admin"
+msgstr "Administrator UCP"
+
+#: Ucp.class.php:1219
+msgid "UCP Daemon"
+msgstr "UCP Daemon"
+
+#: Ucp.class.php:1222
+msgid "UCP Node Disabled in Advanced Settings."
+msgstr ""
+
+#: Ucp.class.php:1361
+#, php-format
+msgid "UCP Node Server Failed: %s"
+msgstr "Chyba UCP Node serveru: %s"
+
+#: Ucp.class.php:1249
+#, php-format
+msgid "UCP Node Server has already been running on PID %s for %s"
+msgstr "Server UCP Node již běží na PID %s pro %s"
+
+#: Ucp.class.php:1319
+msgid "UCP Node Server is not running"
+msgstr "UCP Node server neběží"
+
+#: Ucp.class.php:1230
+msgid "UCP Node is not running"
+msgstr "UCP Node neběží"
+
+#: htdocs/index.php:23
+msgid "UCP is currently disabled. Please talk to your system Administrator"
+msgstr ""
+"UCP je momentálně deaktivováno. Prosím, poraďte se s administrátorem systému"
+
+#: htdocs/assets/js/ucp.js:379
+msgid "UCP is not supported in your browser"
+msgstr "UCP není podporován ve vašem prohlížeči"
+
+#: htdocs/modules/Settings/assets/js/global.js:107
+#: htdocs/modules/Settings/assets/js/global.js:122
+msgid "UCP needs to reload, ok?"
+msgstr "UCP se musí restartovat, ok?"
+
+#: views/users_hook.php:9
+msgid ""
+"UCP, otherwise known as the User Control Panel, is a user interface for "
+"FreePBX."
+msgstr ""
+"UCP, jinak známý jako uživatelský portál, je uživatelské rozhraní pro "
+"FreePBX."
+
+#: htdocs/assets/js/ucp.js:488
+#, perl-format
+msgid "Unable to connect to the UCP Node Server.<br>%s"
+msgstr ""
+
+#: htdocs/includes/User.class.php:95
+msgid "Unable to send Password Reset Email"
+msgstr "Nelze odeslat e-mail s obnovením hesla"
+
+#: Ucp.class.php:1219
+msgid "Unknown"
+msgstr "Neznámý"
+
+#: htdocs/modules/Settings/assets/js/global.js:289
+msgid "Unsupported file type"
+msgstr "Nepodporovaný typ souboru"
+
+#: htdocs/modules/Settings/views/settings.php:36
+msgid "Update Password"
+msgstr "Aktualizovat heslo"
+
+#: htdocs/modules/Settings/views/settings.php:122
+msgid "Use Browser Language"
+msgstr "Použijte jazyk prohlížeče"
+
+#: htdocs/modules/Settings/views/settings.php:135
+msgid "Use Browser Timezone"
+msgstr "Použij časové pásmo prohlížeče"
+
+#: htdocs/modules/Settings/views/settings.php:111
+msgid "Use Gravatar"
+msgstr "Použij Gravatar"
+
+#: htdocs/modules/Settings/views/settings.php:125
+msgid "Use PBX Language"
+msgstr "Použij jazyk ústředny"
+
+#: htdocs/modules/Settings/views/settings.php:138
+msgid "Use PBX Timezone"
+msgstr "Použij časové pásmo ústředny"
+
+#: htdocs/modules/Settings/Settings.class.php:163
+msgid "User"
+msgstr "Uživatel"
+
+#: htdocs/views/forgot.php:27 htdocs/views/header.php:6
+#: htdocs/views/login.php:5 ucp.i18n.php:4
+#: htdocs/modules/Widgets/assets/js/global.js:47
+msgid "User Control Panel"
+msgstr "Uživatelský portál (UCP)"
+
+#: htdocs/modules/Settings/views/settings.php:2
+msgid "User Control Panel Settings"
+msgstr "Nastavení uživatelského portálu"
+
+#: Ucp.class.php:432
+#, php-format
+msgid "User Control Panel: %s"
+msgstr "Uživatelský portál: %s"
+
+#: htdocs/modules/Settings/views/settings.php:6
+msgid "User Details"
+msgstr "Podrobnosti o uživateli"
+
+#: Ucp.class.php:355 Ucp.class.php:369
+msgid "User Primary Extension"
+msgstr "Hlavní linka uživatele"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:346
+msgid "User Settings"
+msgstr "Nastavení uživatele"
+
+#: htdocs/modules/Settings/views/settings.php:18 htdocs/views/login.php:16
+msgid "Username"
+msgstr "Jméno uživatele"
+
+#: htdocs/views/templates/phone.php:73
+msgid "WXYZ"
+msgstr "WXYZ"
+
+#: htdocs/views/header.php:78
+#, php-format
+msgid "Welcome %s"
+msgstr "Vítejte %s"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:24
+#, perl-format
+msgid "Welcome to %s!"
+msgstr "Vítejte v %s!"
+
+#: views/users_hook.php:4
+msgid "What is UCP"
+msgstr "Co je UCP"
+
+#: htdocs/modules/Settings/views/settings.php:151
+msgid "When set to yes the tour will restart when this window closes"
+msgstr ""
+"Pokud je nastaveno na Ano, po uzavření tohoto okna se prohlídka restartuje"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:70
+msgid ""
+"When you are finished simply hit 'Create Dashboard' to create your dashboard"
+msgstr "Pro dokončení jednoduše klikněte na 'Vytvořit ovládací panel'"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:223
+msgid "Widget Locking"
+msgstr "Uzamčení widgetu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:207
+msgid "Widget Placement"
+msgstr "Umístění widgetu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:233
+msgid "Widget Removal"
+msgstr "Odstranění widgetu"
+
+#: htdocs/views/dashboard-footer.php:178
+#: htdocs/modules/Ucptour/assets/js/global.js:228
+msgid "Widget Settings"
+msgstr "Nastavení widgetu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:215
+msgid "Widget Size"
+msgstr "Velikost widgetu"
+
+#: htdocs/modules/Widgets/Widgets.class.php:192
+msgid "Widgets"
+msgstr "Widgety"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:175
+#: htdocs/modules/Ucptour/assets/js/global.js:285
+msgid ""
+"Widgets are listed on the right. The titles and descriptions will be shown "
+"for each widget"
+msgstr ""
+"Widgety jsou umístěny vpravo. Tituly a popisy se zobrazí pro každý widget "
+"zvlášť"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:203
+msgid ""
+"Widgets are placed automatically on the dashboard after they have been added"
+msgstr "Widgety se po přidání automaticky zobrazí na ovládacím panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:234
+#, perl-format
+msgid "Widgets can also be removed by clicking the '%s' symbol"
+msgstr "Widgety můžete také odstranit kliknutím na symbol '%s'"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:140
+#, perl-format
+msgid "Widgets can be added by clicking the '%s' symbol"
+msgstr "Widgety lze přidat kliknutím na symbol '%s'"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:224
+msgid "Widgets can be locked into place to prevent their movement"
+msgstr "Widgety lze uzamknout, aby se zabránilo jejich pohybu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:208
+msgid "Widgets can be moved around by clicking and dragging on the title bar"
+msgstr "Widgety lze přesunout kliknutím na záhlaví a přetažením"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:216
+msgid ""
+"Widgets can be resized by placing your mouse near the corner of the widget. "
+"Click and drag to resize the widget."
+msgstr ""
+"Velikost widgetů lze měnit umístěním myši poblíž rohu widgetu. Kliknutím a "
+"tažením změníte velikost."
+
+#: htdocs/modules/Ucptour/assets/js/global.js:229
+msgid "Widgets settings can be changed by clicking this icon"
+msgstr "Nastavení widgetů lze změnit kliknutím na tuto ikonu"
+
+#: htdocs/modules/Settings/views/settings.php:77
+msgid "Work Phone"
+msgstr "Telefon do práce"
+
+#: Api/Rest/Dashboard.php:15
+msgid "Write UCP Dashboard Information"
+msgstr ""
+
+#: views/users_hook.php:51 views/users_hook.php:81 views/users_hook.php:111
+#: views/users_hook.php:235
+msgid "Yes"
+msgstr "Ano"
+
+#: htdocs/modules/Widgets/assets/js/global.js:1159
+msgid "You already have this widget on the side bar"
+msgstr "Tento widget už máte na bočním panelu"
+
+#: htdocs/modules/Widgets/assets/js/global.js:1074
+msgid "You already have this widget on this dashboard"
+msgstr "Tento widget už máte na ovládacím panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:25
+msgid ""
+"You can always exit the tour if you'd like, and you can restart the tour at "
+"anytime by clicking your User Settings and then 'Restart Tour'"
+msgstr ""
+"Prohlídku můžete kdykoli ukončit a restartovat klepnutím na tlačítko "
+"Nastavení uživatele a poté na možnost Restart prohlídky"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:356
+#, perl-format
+msgid ""
+"You have finished the tour of User Control Panel for %s 14. You can restart "
+"this tour at any time in your User Settings"
+msgstr ""
+"Ukončili jste prohlídku uživatelského ovládacího panelu pro %s 14. Tuto "
+"prohlídku můžete kdykoli restartovat v nastavení uživatele"
+
+#: htdocs/modules/Widgets/Widgets.class.php:42
+#: htdocs/modules/Widgets/assets/js/global.js:916
+msgid "You have no dashboards. Click here to add one"
+msgstr ""
+"Nemáte žádné ovládací panely. Klikněte zde pro přidání ovládacího panelu"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:25
+msgid "You just successfully logged in for the first time!"
+msgstr "Právě jste se úspěšně poprvé přihlásili!"
+
+#: htdocs/modules/Widgets/assets/js/global.js:1400
+msgid "You must set a dashboard name!"
+msgstr "Musíte zadat název ovládacího panelu!"
+
+#: htdocs/assets/js/ucp.js:366
+msgid "Your Browser is unsupported at this time."
+msgstr "Váš prohlížeč není v současné době podporován."
+
+#: htdocs/modules/Settings/views/settings.php:74
+msgid "Your Cell Phone Number"
+msgstr "Vaše číslo mobilního telefonu"
+
+#: htdocs/modules/Settings/views/settings.php:69
+msgid "Your Company"
+msgstr "Tvoje firma"
+
+#: htdocs/modules/Settings/views/settings.php:49
+msgid "Your Email Address"
+msgstr "Tvoje emailová adresa"
+
+#: htdocs/modules/Settings/views/settings.php:89
+msgid "Your Fax Number"
+msgstr "Tvoje faxové číslo"
+
+#: htdocs/modules/Settings/views/settings.php:54
+msgid "Your First Name"
+msgstr "Tvoje jméno"
+
+#: htdocs/modules/Settings/views/settings.php:84
+msgid "Your Home Number"
+msgstr "Tvůj telefon domů"
+
+#: htdocs/modules/Settings/views/settings.php:128
+msgid "Your Language"
+msgstr "Tvůj jazyk"
+
+#: htdocs/modules/Settings/views/settings.php:59
+msgid "Your Last Name"
+msgstr "Tvoje příjmení"
+
+#: htdocs/modules/Settings/views/settings.php:141
+msgid "Your Timezone"
+msgstr "Tvoje časové pásmo"
+
+#: htdocs/modules/Settings/views/settings.php:64
+msgid "Your Title"
+msgstr "Tvůj titul"
+
+#: htdocs/modules/Settings/views/settings.php:79
+msgid "Your Work Number"
+msgstr "Tvůj telefon do práce"
+
+#: htdocs/assets/js/ucp.js:368
+msgid ""
+"Your browser is unsupported at this time. Please upgrade or talk to your "
+"system administrator"
+msgstr ""
+"Váš prohlížeč není v současné době podporován. Aktualizujte prosím nebo "
+"kontaktujte správce systému"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:352
+msgid "Your can logout of UCP by clicking this logout button"
+msgstr "Můžete se odhlásit z UCP kliknutím na toto tlačítko odhlášení"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:94
+msgid "Your dashboard has been added here"
+msgstr "Zde byl přidán váš ovládací panel"
+
+#: htdocs/modules/Ucptour/assets/js/global.js:347
+msgid ""
+"Your specific settings are defined when clicking the 'gear' icon in the side "
+"bar"
+msgstr ""
+"Vaše uživatelská nastavení jsou definována při kliknutí na ikonu 'ozubeného "
+"kola' na bočním panelu"
+
+#: htdocs/assets/js/lodash-4.17.2.js:15638
+#: htdocs/assets/js/lodash-4.17.2.js:15642
+msgid "fred"
+msgstr "fred"
+
+#: Ucp.class.php:93
+msgid "gcc-c++ is not installed"
+msgstr "Není nainstalován gcc-c++"
+
+#: htdocs/index.php:107
+#, php-format
+msgid ""
+"htaccess files help protect the integrity of your server. Please make sure "
+"file paths and directories are locked down properly. For more information "
+"see: %s"
+msgstr ""
+"Soubory htaccess pomáhají chránit integritu vašeho serveru. Ujistěte se, že "
+"cesty a adresáře souborů jsou správně uzamčené. Další informace naleznete na "
+"adrese: %s"
+
+#: Ucp.class.php:137
+msgid "icu is not installed. You need to run: yum install icu libicu-devel"
+msgstr "Není nainstalován icu. Musíte spustit: yum install icu libicu-devel"
+
+#: Ucp.class.php:129
+msgid ""
+"icu, pkg-config or pkgconf is not installed. You need to run: apt-get "
+"install icu libicu-devel pkg-config pkgconf"
+msgstr ""
+
+#: htdocs/views/login.php:33
+msgid "or"
+msgstr "nebo"
+
+#: views/users_hook.php:125
+msgid "select template"
+msgstr ""
+
+#: htdocs/assets/js/jquery-ui-1.13.2.min.js:6
+msgid "string"
+msgstr ""
+
+#~ msgid "Something went wrong getting the content of the widget"
+#~ msgstr "Chyba při získání obsahu widgetu"
+
+#~ msgid "Address to bind to. Default is "
+#~ msgstr "Addresa k připojení. Výchozí hodnota je "
+
+#~ msgid "Allow Password Changes"
+#~ msgstr "Povolit změny hesla"
+
+#~ msgid "Allow Username Changes"
+#~ msgstr "Povolit změny jména uživatele"
+
+#~ msgid "Allow users to change their username in UCP"
+#~ msgstr "Umožnit uživatelům změnit jejich uživatelské jméno v UCP"
+
+#~ msgid "Allow users to change thier password in UCP"
+#~ msgstr "Umožnit uživatelům změnit jejich heslo v UCP"
+
+#~ msgid "Enable TLS for the NodeJS Server"
+#~ msgstr "Povolit TLS pro NodeJS Server"
+
+#~ msgid "Enable the NodeJS Server"
+#~ msgstr "Povolit NodeJS Server"
+
+#~ msgid "NodeJS Bind Address"
+#~ msgstr "Adresa NodeJS Bind"
+
+#~ msgid "NodeJS Bind Port"
+#~ msgstr "Port NodeJS Bind"
+
+#~ msgid "NodeJS HTTPS Bind Address"
+#~ msgstr "Adresa NodeJS HTTPS Bind"
+
+#~ msgid "NodeJS HTTPS Bind Port"
+#~ msgstr "Port NodeJS HTTPS Bind"
+
+#~ msgid "NodeJS HTTPS TLS Certificate Location"
+#~ msgstr "Umístění NodeJS HTTPS TLS Certifikátu"
+
+#~ msgid "NodeJS HTTPS TLS Private Key Location"
+#~ msgstr "Umístění NodeJS HTTPS TLS soukromého klíče"
+
+#~ msgid "Port to bind to. Default is 8001"
+#~ msgstr "Bind port. Výchozí hodnota je 8001"
+
+#~ msgid "Port to bind to. Default is 8003"
+#~ msgstr "Bind port. Výchozí hodnota je 8003"
+
+#~ msgid "RSS Feeds that are displayed in UCP. This overrides "
+#~ msgstr "Kanály RSS, které jsou zobrazeny v UCP. To nahrazuje "
+
+#~ msgid "Sets the path to the HTTPS private key. This is required if "
+#~ msgstr "Nastaví cestu k soukromému klíči HTTPS. Je to nutné, pokud "
+
+#~ msgid "Sets the path to the HTTPS server certificate. This is required if "
+#~ msgstr "Nastaví cestu k certifikátu HTTPS serveru. Je to nutné, pokud "
+
+#~ msgid "Styling and Logos"
+#~ msgstr "Styl a loga"
+
+#~ msgid ""
+#~ "The number of days a session token will be valid for. Clear this setting "
+#~ "if you want tokens to last forever (Not Recommended)"
+#~ msgstr ""
+#~ "Počet dnů, na kdy bude token relace platný. Zrušte toto nastavení, pokud "
+#~ "chcete aby tokeny trvaly navždy (není doporučeno)"
+
+#~ msgid "UCP NodeJS Server"
+#~ msgstr "UCP NodeJS Server"
+
+#~ msgid "UCP Session Timeout"
+#~ msgstr "Časový limit relace UCP"
+
+#~ msgid ""
+#~ "UCP icons folder. This should never be changed except for very advanced "
+#~ "layout changes"
+#~ msgstr ""
+#~ "Složka ikon UCP. Toto by se nikdy nemělo měnit, s výjimkou velmi "
+#~ "pokročilých změn uspořádání"
+
+#~ msgid "View: UCP dashfootercontent.php"
+#~ msgstr "Zobraz: UCP dashfootercontent.php"
+
+#~ msgid "View: UCP icons"
+#~ msgstr "Zobraz: UCP ikony"
+
+#~ msgid ""
+#~ "Whether to enable TLS for the backend server for UCP which allows "
+#~ "instantaneous updates to the interface"
+#~ msgstr ""
+#~ "Zda povolit TLS pro backendový server pro protokol UCP, který umožňuje "
+#~ "okamžité aktualizace rozhraní"
+
+#~ msgid ""
+#~ "Whether to enable the backend server for UCP which allows instantaneous "
+#~ "updates to the interface"
+#~ msgstr ""
+#~ "Zda povolit záložní server pro protokol UCP, který umožňuje okamžité "
+#~ "aktualizace rozhraní"
+
+#~ msgid ""
+#~ "dashfootercontent.php view. This should never be changed except for very "
+#~ "advanced layout changes"
+#~ msgstr ""
+#~ "Zobrazení dashfootercontent.php. Toto by se nikdy nemělo měnit, s "
+#~ "výjimkou velmi pokročilých změn uspořádání"
+
+#~ msgid "The removal of this copyright notice is stricly prohibited"
+#~ msgstr "Odstranění tohoto oznámení o autorských právech je přísně zakázáno"
+
+#~ msgid "There was an error trying to load UCP"
+#~ msgstr "Při pokusu o načtení UCP došlo k chybě"
+
+#~ msgid "User Control Panel is released as %s or newer"
+#~ msgstr "Uživatelský portál je publikovaný jako %s nebo vyšší"
+
+#~ msgid "Email address unknown!"
+#~ msgstr "Neznámá e-mailová adresa!"
+
+#~ msgid " + field + "
+#~ msgstr " + pole + "
+
+#~ msgid "Are you sure you wish to change your username?"
+#~ msgstr "Opravdu chcete změnit své uživatelské jméno?"
+
+#~ msgid "Contact Image"
+#~ msgstr "Obrázek kontaktu"
+
+#~ msgid "Endpoint Settings"
+#~ msgstr "Nastavení telefonu"
+
+#~ msgid "Excuse us while we try to retrieve your content"
+#~ msgstr "Omluvte nás, když se snažíme načíst svůj obsah"
+
+#~ msgid "Forbidden"
+#~ msgstr "Zakázáno"
+
+#~ msgid "Loading"
+#~ msgstr "Načítání"
+
+#~ msgid "New password and old password do not match"
+#~ msgstr "Nové a staré heslo se neshodují"
+
+#~ msgid "No email defined"
+#~ msgstr "Žádný e-mail nebyl definován"
+
+#~ msgid "Password Confirmation Didn't Match!"
+#~ msgstr "Potvrzení hesla se neshodovalo!"
+
+#~ msgid "Password fields can't be blank!"
+#~ msgstr "Pole hesla nesmí být prázdné!"
+
+#~ msgid "Password has not changed!"
+#~ msgstr "Heslo se nezměnilo!"
+
+#~ msgid "Please enter either a username or email address"
+#~ msgstr "Zadejte buď uživatelské jméno nebo e-mailovou adresu"
+
+#~ msgid "UCP Language"
+#~ msgstr "Jazyk UCP"
+
+#~ msgid "Unable to get a token to use UCP Node Server because: '%s'"
+#~ msgstr "Nelze získat token pro použití serveru UCP, protože: '%s'"
+
+#~ msgid "Unknown Module %s"
+#~ msgstr "Neznámý modul %s"
+
+#~ msgid "Username has been changed, reloading"
+#~ msgstr "Uživatelské jméno bylo změněno, načítání"
+
+#~ msgid "You are currently working in offline mode."
+#~ msgstr "V současné době pracujete v offline režimu."
+
+#~ msgid "Your reset link is in the mail!"
+#~ msgstr "Tvůj odkaz s obnovením hesla je v e-mailu!"
+
+#~ msgid ""
+#~ "\n"
+#~ "    );\n"
+#~ "  });\n"
+#~ "\n"
+#~ "Cookie.prototype.inspect = function inspect() {\n"
+#~ "  var now = Date.now();\n"
+#~ "  return "
+#~ msgstr ""
+#~ "\n"
+#~ "    );\n"
+#~ "  });\n"
+#~ "\n"
+#~ "Cookie.prototype.inspect = function inspect() {\n"
+#~ "  var now = Date.now();\n"
+#~ "  return "
+
+#~ msgid ""
+#~ "()*+,;=:@\\/?]|%[0-9a-f]{2})*)?$/i,P=/^(?:urn\\:uuid\\:)?[0-9a-f]{8}-(?:"
+#~ "[0-9a-f]{4}-){3}[0-9a-f]{12}$/i,E=/^(?:\\/(?:[^~\\/]|~0|~1)*)*$|^\\#(?:\\/"
+#~ "(?:[a-z0-9_\\-\\.!$&"
+#~ msgstr ""
+#~ "()*+,;=:@\\/?]|%[0-9a-f]{2})*)?$/i,P=/^(?:urn\\:uuid\\:)?[0-9a-f]{8}-(?:"
+#~ "[0-9a-f]{4}-){3}[0-9a-f]{12}$/i,E=/^(?:\\/(?:[^~\\/]|~0|~1)*)*$|^\\#(?:\\/"
+#~ "(?:[a-z0-9_\\-\\.!$&"

@@ -1,0 +1,57 @@
+<module>
+	<rawname>cidlookup</rawname>
+	<repo>standard</repo>
+	<name>CallerID Lookup</name>
+	<version>17.0.1.1</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<description>Allows CallerID Lookup of incoming calls against different sources (OpenCNAM, MySQL, HTTP, ENUM, Phonebook Module)</description>
+  	<more-info>https://wiki.freepbx.org/display/F2/CallerID+Lookup+Sources+Module</more-info>
+	<category>Admin</category>
+	<changelog>
+		*17.0.1.1* 17.0.1.1  release
+	</changelog>
+	<menuitems>
+		<cidlookup>CallerID Lookup Sources</cidlookup>
+	</menuitems>
+	<depends>
+		<engine>asterisk 1.6</engine>
+		<module>framework ge 17.0.1</module>
+		<module>core ge 17.0.1</module>
+	</depends>
+	<database>
+	  <table name="cidlookup">
+	    	<field name="cidlookup_id" type="integer" primaryKey="true" autoincrement="true"/>
+	    	<field name="description" type="string" length="50"/>
+	    	<field name="sourcetype" type="string" length="100"/>
+	    	<field name="cache" type="smallint" default="0"/>
+	    	<field name="deptname" type="string" length="30" notnull="false"/>
+	    	<field name="http_host" type="string" length="100" notnull="false"/>
+	    	<field name="http_port" type="string" length="30" notnull="false"/>
+	    	<field name="http_username" type="string" length="50" notnull="false"/>
+	    	<field name="http_password" type="string" length="50" notnull="false"/>
+	    	<field name="http_path" type="string" length="100" notnull="false"/>
+	    	<field name="http_query" type="string" length="100" notnull="false"/>
+	    	<field name="mysql_host" type="string" length="60" notnull="false"/>
+			<field name="mysql_port" type="string" length="5" notnull="false"/>
+	    	<field name="mysql_dbname" type="string" length="60" notnull="false"/>
+	    	<field name="mysql_query" type="string" length="255" notnull="false"/>
+	    	<field name="mysql_username" type="string" length="30" notnull="false"/>
+	    	<field name="mysql_password" type="string" length="30" notnull="false"/>
+	    	<field name="mysql_charset" type="string" length="60" notnull="false"/>
+	    	<field name="opencnam_account_sid" type="string" length="34" notnull="false"/>
+	    	<field name="opencnam_auth_token" type="string" length="34" notnull="false"/>
+	    	<field name="cm_group" type="string" length="60" default="" notnull="false"/>
+	    	<field name="cm_format" type="string" length="5" default="" notnull="false"/>
+	  	</table>
+		<table name="cidlookup_incoming">
+			<field name="cidlookup_id" type="integer"/>
+			<field name="extension" type="string" length="100" notnull="false"/>
+			<field name="cidnum" type="string" length="30" notnull="false"/>
+		</table>
+	</database>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

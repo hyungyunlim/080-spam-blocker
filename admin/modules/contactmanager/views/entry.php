@@ -1,0 +1,404 @@
+<?php
+$userlist[''] = '';
+foreach ($users as $u) {
+	if (isset($entry['user']) && $entry['user'] == $u['id']) {
+		$user = $u;
+	}
+
+	if ($u['displayname']) {
+		$desc = $u['displayname'];
+	} else if ($u['fname'] && $u['lname']) {
+		$desc = $u['fname'] . ' ' . $u['lname'];
+	} else if ($u['default_extension'] && $u['default_extension'] != 'none') {
+		$desc = 'Ext. ' . $u['default_extension'];
+	} else if ($u['description']) {
+		$desc = $u['description'];
+	} else {
+		$desc = '';
+	}
+
+	$userlist[$u['id']] = ($desc ? $desc . ' ' : '') . '(' . $u['username'] . ')';
+}
+?>
+<script language="javascript">var users = <?php echo json_encode($users)?>, numbertypes = <?php echo json_encode($numbertypes)?>, regionlist = <?php echo json_encode($regionlist)?>;</script>
+<div class="fpbx-container">
+	<div class="display full-border">
+		<form name="entry" class="fpbx-submit" method="post" action="config.php?display=contactmanager" <?php if(isset($entry['id'])) {?>data-fpbx-delete="config.php?display=contactmanager&amp;group=<?php echo $group['id']?>&amp;entry=<?php echo $entry['id']?>&amp;action=delentry<?php }?>">
+			<input type="hidden" name="group" id="group" value="<?php echo $group['id']?>">
+			<input type="hidden" name="grouptype" id="grouptype" value="<?php echo $group['type']?>">
+			<?php if(!empty($entry)) {?>
+				<input type="hidden" name="entry" id="entry" value="<?php echo $entry['id']?>">
+				<h1><a href="config.php?display=contactmanager&amp;action=showgroup&amp;group=<?php echo $group['id']?>"><?php echo $group['name']?></a> - <?php echo _("Edit Entry")?></h1>
+			<?php } else { ?>
+				<input type="hidden" name="entry" id="entry" value="">
+				<h1><a href="config.php?display=contactmanager&amp;action=showgroup&amp;group=<?php echo $group['id']?>"><?php echo $group['name']?></a> - <?php echo _("Add Entry")?></h1>
+			<?php } ?>
+			<?php if($group['type'] == "internal") {?>
+				<div class="element-container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-3">
+										<label class="control-label" for="user"><?php echo _('User')?></label>
+										<i class="fa fa-question-circle fpbx-help-icon" data-for="user"></i>
+									</div>
+									<div class="col-md-9">
+										<select name="user" id="user" class="form-control">
+											<?php foreach($userlist as $key => $val) {?>
+												<option value="<?php echo $key?>" <?php echo (!empty($entry['user']) && $entry['user'] == $key) ? "selected" : ""?>><?php echo $val?></option>
+											<?php } ?>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<span id="user-help" class="help-block fpbx-help-block"><?php echo _('A user from the User Management module')?></span>
+						</div>
+					</div>
+				</div>
+			<?php } ?>
+			<div class="element-container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-3">
+									<label class="control-label" for="displayname"><?php echo _('Display Name')?></label>
+									<i class="fa fa-question-circle fpbx-help-icon" data-for="displayname"></i>
+								</div>
+								<div class="col-md-9"><input class="form-control" id="displayname" name="displayname" value="<?php echo $entry['displayname'] ?? ""?>" <?php echo !empty($user) ? 'placeholder="' . $user['displayname'] . '"' : ''?>></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span id="displayname-help" class="help-block fpbx-help-block"><?php echo _('Display Name (overrides Display Name from User Manager)')?></span>
+					</div>
+				</div>
+			</div>
+			<div class="element-container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-3">
+									<label class="control-label" for="fname"><?php echo _('First Name')?></label>
+									<i class="fa fa-question-circle fpbx-help-icon" data-for="fname"></i>
+								</div>
+								<div class="col-md-9"><input class="form-control" id="fname" name="fname" value="<?php echo $entry['fname'] ?? ""?>" <?php echo !empty($user) ? 'placeholder="' . $user['fname'] . '"' : ''?>></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span id="fname-help" class="help-block fpbx-help-block"><?php echo _('First Name (overrides First Name from User Manager)')?></span>
+					</div>
+				</div>
+			</div>
+			<div class="element-container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-3">
+									<label class="control-label" for="lname"><?php echo _('Last Name')?></label>
+									<i class="fa fa-question-circle fpbx-help-icon" data-for="lname"></i>
+								</div>
+								<div class="col-md-9"><input class="form-control" id="lname" name="lname" value="<?php echo $entry['lname'] ?? ""?>" <?php echo !empty($user) ? 'placeholder="' . $user['lname'] . '"' : ''?>></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span id="lname-help" class="help-block fpbx-help-block"><?php echo _('Last Name (overrides Last Name from User Manager)')?></span>
+					</div>
+				</div>
+			</div>
+			<div class="element-container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-3">
+									<label class="control-label" for="title"><?php echo _('Title')?></label>
+									<i class="fa fa-question-circle fpbx-help-icon" data-for="title"></i>
+								</div>
+								<div class="col-md-9"><input class="form-control" id="title" name="title" value="<?php echo $entry['title'] ?? ""?>" <?php echo !empty($user) ? 'placeholder="' . $user['title'] . '"' : ''?>></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span id="title-help" class="help-block fpbx-help-block"><?php echo _('Title (overrides Title from User Manager)')?></span>
+					</div>
+				</div>
+			</div>
+			<div class="element-container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-3">
+									<label class="control-label" for="imageupload"><?php echo _('Contact Image')?></label>
+									<i class="fa fa-question-circle fpbx-help-icon" data-for="image"></i>
+								</div>
+								<div class="col-md-9 row">
+									<div class="col-md-4">
+										<div id="dropzone" class="image">
+											<div class="message"><?php echo _("Drop a new image here")?></div>
+											<img class="<?php echo (!empty($entry) && !empty($entry['image'])) ? '' : 'hidden'?>" src="<?php echo (!empty($entry) && !empty($entry['image'])) ? 'ajax.php?module=contactmanager&amp;command=limage&amp;entryid='.$entry['id'] : ''?>">
+										</div>
+										<button id="del-image" data-entryid="<?php echo !empty($entry) ? $entry['id'] : ''?>" class="btn btn-danger btn-sm <?php echo (!empty($entry) && !empty($entry['image'])) ? '' : 'hidden'?>"><?php echo _("Delete Image")?></button>
+									</div>
+									<div class="col-md-8">
+										<input type="hidden" name="image" id="image">
+										<span class="btn btn-default btn-file">
+											<?php echo _("Browse")?>
+											<input id="imageupload" type="file" class="form-control" name="files[]" data-url="ajax.php?module=contactmanager&amp;command=uploadimage" class="form-control" multiple>
+										</span>
+										<span class="filename"></span>
+										<div id="upload-progress" class="progress">
+											<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+										</div>
+										<div class="radioset">
+											<input name="gravatar" id="gravatar" data-entryid="<?php echo !empty($entry) ? $entry['id'] : ''?>" type="checkbox" value="on" <?php echo (!empty($entry) && !empty($entry['image'])) && !empty($entry['image']['gravatar']) ? 'checked' : ''?>>
+											<label for="gravatar">Use Gravatar</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span id="image-help" class="help-block fpbx-help-block"><?php echo _('Contact Image for this user')?></span>
+					</div>
+				</div>
+			</div>
+			<div class="element-container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-3">
+									<label class="control-label" for="company"><?php echo _('Company')?></label>
+									<i class="fa fa-question-circle fpbx-help-icon" data-for="company"></i>
+								</div>
+								<div class="col-md-9"><input class="form-control" id="company" name="company" value="<?php echo $entry['company'] ?? ""?>" <?php echo !empty($user) ? 'placeholder="' . $user['company'] . '"' : ''?>></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span id="company-help" class="help-block fpbx-help-block"><?php echo _('Company (overrides Company from User Manager)')?></span>
+					</div>
+				</div>
+			</div>
+			<div class="element-container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-3">
+									<label class="control-label" for="address"><?php echo _('Address')?></label>
+									<i class="fa fa-question-circle fpbx-help-icon" data-for="address"></i>
+								</div>
+								<div class="col-md-9">
+									<textarea name="address" class="form-control"><?php echo !empty($entry['address']) ? $entry['address'] : ""?></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span id="address-help" class="help-block fpbx-help-block"><?php echo _('Address')?></span>
+					</div>
+				</div>
+			</div>
+			<?php switch ($group['type']) {
+						case "private" :
+						case "external":?>
+						<div class="element-container">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="row">
+										<div class="form-group">
+											<div class="col-md-3">
+												<label class="control-label" for="numbers"><?php echo _('Numbers')?></label>
+												<i class="fa fa-question-circle fpbx-help-icon" data-for="numbers"></i>
+											</div>
+											<div class="col-md-9">
+												<table id="numbers" class="items table table-striped">
+													<?php $numcount = 0;
+													$entry['numbers'] = !empty($entry['numbers']) ? $entry['numbers'] : array();
+													foreach ($entry['numbers'] as $number) {?>
+														<tr id="number_<?php echo $numcount?>">
+															<td><a class="clickable" onclick="delNumber('<?php echo $numcount?>')"><i class="fa fa-ban fa-fw"></i></a></td>
+															<td class="form-group">
+																<div class="form-inline mt-1">
+																<input type="text" class="form-control mr-sm-2" name="number[<?php echo $numcount?>]" value="<?php echo $number['number']?>"> <label><?php echo _("Ext.")?></label> <input type="text" class="form-control mr-sm-2" name="extension[<?php echo $numcount?>]" value="<?php echo $number['extension']?>">
+																<label><?php echo _("Type")?></label>
+																<select class="custom-select mx-sm-1" name="numbertype[<?php echo $numcount?>]">
+																	<?php foreach($numbertypes as $key => $val) {
+																		$selected = ($number['type'] == $key)?'SELECTED':'';
+																	?>
+																		<option value="<?php echo $key?>" <?php echo $selected?>><?php echo $val?></option>
+																	<?php } ?>
+																</select>
+																</div>
+																<div class="form-inline mt-3">
+																<label><?php echo _("Dialing Country")?></label>
+																<select class="custom-select number locale mx-sm-2" name="numberlocale[<?php echo $numcount?>]" data-locale="<?php echo !empty($number['locale']) ? $number['locale'] : ''?>" data-id="<?php echo $numcount?>">
+																	<?php foreach($regionlist as $key => $val) {
+																		$selected = ($number['locale'] == $key)?'SELECTED':'';
+																	?>
+																		<option value="<?php echo $key?>" <?php echo $selected?>><?php echo $val?></option>
+																	<?php } ?>
+															    </select>
+																</div>
+																<?php if($speeddialcode['enabled']) { ?>
+																	<div class="form-inline mt-3">
+																	<label><?php echo _("Speed Dial")?></label>
+																	<div class="input-group mx-sm-2">
+																		<span class="input-group-addon"><?php echo $speeddialcode['code']?></span>
+																		<input type="number" class="form-control number-sd" name="numbersd[<?php echo $numcount?>]" min="0" data-id="<?php echo $numcount?>" <?php echo (trim((string) $number['speeddial']) == "") ? "disabled" : ""?> value="<?php echo $number['speeddial']?>">
+																		<span class="input-group-addon">
+																			<input type="checkbox" name="numbersde[<?php echo $numcount?>]" id="numbersde[<?php echo $numcount?>]" data-id="<?php echo $numcount?>" class="enable-sd" <?php echo (trim((string) $number['speeddial']) == "") ? "" : "checked"?>><label for="numbersde[<?php echo $numcount?>]" style="margin-bottom: 0px;"><?php echo _("Enable")?></label>
+																		</span>
+																	</div>
+																	</div>
+																<?php } ?>
+															</td>
+															<td style="vertical-align: top;">
+																<input type="checkbox" class="form-check-input" name="sms[<?php echo $numcount?>]" value="1" <?php echo in_array('sms', $number['flags']) ? "checked" : ""?>>SMS<br>
+																<input type="checkbox" class="form-check-input" name="fax[<?php echo $numcount?>]" value="1" <?php echo in_array('fax', $number['flags']) ? "checked" : ""?>>FAX</td>
+														</tr>
+													<?php $numcount++;} ?>
+												</table>
+												<a class="clickable" onclick="addNumber()"><i class="fa fa-plus fa-fw"></i>Add Number</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<span id="numbers-help" class="help-block fpbx-help-block"><?php echo _('A list of numbers belonging to this entry')?></span>
+								</div>
+							</div>
+						</div>
+						<div class="element-container">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="row">
+										<div class="form-group">
+											<div class="col-md-3">
+												<label class="control-label" for="xmpps"><?php echo _('XMPP')?></label>
+												<i class="fa fa-question-circle fpbx-help-icon" data-for="xmpps"></i>
+											</div>
+											<div class="col-md-9">
+												<table id="xmpps" class="items table table-striped">
+													<?php $numcount = 0;
+													$entry['xmpps'] = !empty($entry['xmpps']) ? $entry['xmpps'] : array();
+													foreach ($entry['xmpps'] as $number) {?>
+														<tr id="xmpp_<?php echo $numcount?>">
+															<td><a class="clickable" onclick="delXMPP('<?php echo $numcount?>')"><i class="fa fa-ban fa-fw"></i></a></td>
+															<td><input type="text" class="form-control" name="xmpp[<?php echo $numcount?>]" value="<?php echo $number['xmpp']?>"></td>
+														</tr>
+													<?php $numcount++;} ?>
+												</table>
+												<a class="clickable" onclick="addXMPP()"><i class="fa fa-plus fa-fw"></i><?php echo _('Add XMPP')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<span id="xmpps-help" class="help-block fpbx-help-block"><?php echo _('A list of XMPP addresses belonging to this entry')?></span>
+								</div>
+							</div>
+						</div>
+						<div class="element-container">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="row">
+										<div class="form-group">
+											<div class="col-md-3">
+												<label class="control-label" for="emails"><?php echo _('Email')?></label>
+												<i class="fa fa-question-circle fpbx-help-icon" data-for="emails"></i>
+											</div>
+											<div class="col-md-9">
+												<table id="emails" class="items table table-striped">
+													<?php $numcount = 0;
+													$entry['emails'] = !empty($entry['emails']) ? $entry['emails'] : array();
+													foreach ($entry['emails'] as $number) {?>
+														<tr id="email_<?php echo $numcount?>">
+															<td><a class="clickable" onclick="delEmail('<?php echo $numcount?>')"><i class="fa fa-ban fa-fw"></i></a></td>
+															<td><input type="text" class="form-control" name="email[<?php echo $numcount?>]" value="<?php echo $number['email']?>"></td>
+														</tr>
+													<?php $numcount++;} ?>
+												</table>
+												<a class="clickable" onclick="addEmail()"><i class="fa fa-plus fa-fw"></i><?php echo _('Add Email')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<span id="emails-help" class="help-block fpbx-help-block"><?php echo _('A list of E-Mail addresses belonging to this entry')?></span>
+								</div>
+							</div>
+						</div>
+						<div class="element-container">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="row">
+										<div class="form-group">
+											<div class="col-md-3">
+												<label class="control-label" for="websites"><?php echo _('Website')?></label>
+												<i class="fa fa-question-circle fpbx-help-icon" data-for="websites"></i>
+											</div>
+											<div class="col-md-9">
+												<table id="websites" class="items table table-striped">
+													<?php $numcount = 0;
+													$entry['websites'] = !empty($entry['websites']) ? $entry['websites'] : array();
+													foreach ($entry['websites'] as $number) {?>
+														<tr id="website_<?php echo $numcount?>">
+															<td><a class="clickable" onclick="delWebsite('<?php echo $numcount?>')"><i class="fa fa-ban fa-fw"></i></a></td>
+															<td><input type="text" class="form-control" name="website[<?php echo $numcount?>]" value="<?php echo $number['website']?>"></td>
+														</tr>
+													<?php $numcount++;} ?>
+												</table>
+												<a class="clickable" onclick="addWebsite()"><i class="fa fa-plus fa-fw"></i><?php echo _('Add Website')?></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<span id="websites-help" class="help-block fpbx-help-block"><?php echo _('A list of websites belonging to this entry')?></span>
+								</div>
+							</div>
+						</div>
+			<?php break;
+			}?>
+		</form>
+	</div>
+</div>
+<script>
+	var speeddialcode = <?php echo json_encode($speeddialcode)?>;
+</script>

@@ -7,6 +7,7 @@
 class SMSSender {
     private $quectelCommand = "quectel sms quectel0";
     private $config;
+    private $db;
     
     public function __construct() {
         $configFile = __DIR__ . '/sms_config.php';
@@ -14,6 +15,98 @@ class SMSSender {
             $this->config = include $configFile;
         } else {
             $this->config = ['message_mode' => 'short', 'single_sms_max_length' => 300];
+        }
+        
+        // 데이터베이스 연결 초기화
+        try {
+            $this->db = new SQLite3(__DIR__ . '/spam.db');
+            // 스키마 적용
+            $schemaFile = __DIR__ . '/schema.sql';
+            if (file_exists($schemaFile)) {
+                $this->db->exec(file_get_contents($schemaFile));
+            }
+        } catch (Exception $e) {
+            error_log('SMSSender DB initialization failed: ' . $e->getMessage());
+            $this->db = null;
+        }
+    }
+    
+    /**
+     * 사용자 알림 설정 조회
+     * @param string $phoneNumber 전화번호
+     * @return array 알림 설정
+     */
+    private function getUserNotificationSettings($phoneNumber) {
+        if (!$this->db) {
+            return $this->getDefaultNotificationSettings();
+        }
+        
+        try {
+            $cleanPhone = preg_replace('/[^0-9]/', '', $phoneNumber);
+            
+            // 사용자 ID 조회
+            $userStmt = $this->db->prepare('SELECT id FROM users WHERE phone = :phone');
+            $userStmt->bindValue(':phone', $cleanPhone, SQLITE3_TEXT);
+            $userResult = $userStmt->execute();
+            $user = $userResult->fetchArray(SQLITE3_ASSOC);
+            
+            if (!$user) {
+                return $this->getDefaultNotificationSettings();
+            }
+            
+            // 알림 설정 조회
+            $settingsStmt = $this->db->prepare('SELECT * FROM user_notification_settings WHERE user_id = :user_id');
+            $settingsStmt->bindValue(':user_id', $user['id'], SQLITE3_INTEGER);
+            $settingsResult = $settingsStmt->execute();
+            $settings = $settingsResult->fetchArray(SQLITE3_ASSOC);
+            
+            if ($settings) {
+                return [
+                    'notify_on_start' => (bool)$settings['notify_on_start'],
+                    'notify_on_success' => (bool)$settings['notify_on_success'],
+                    'notify_on_failure' => (bool)$settings['notify_on_failure'],
+                    'notify_on_retry' => (bool)$settings['notify_on_retry'],
+                    'notification_mode' => $settings['notification_mode']
+                ];
+            } else {
+                // 설정이 없으면 기본값으로 생성
+                $this->createDefaultUserSettings($user['id']);
+                return $this->getDefaultNotificationSettings();
+            }
+            
+        } catch (Exception $e) {
+            error_log('Failed to get user notification settings: ' . $e->getMessage());
+            return $this->getDefaultNotificationSettings();
+        }
+    }
+    
+    /**
+     * 기본 알림 설정 반환
+     * @return array 기본 알림 설정
+     */
+    private function getDefaultNotificationSettings() {
+        return [
+            'notify_on_start' => true,
+            'notify_on_success' => true,
+            'notify_on_failure' => true,
+            'notify_on_retry' => true,
+            'notification_mode' => 'short'
+        ];
+    }
+    
+    /**
+     * 사용자에게 기본 알림 설정 생성
+     * @param int $userId 사용자 ID
+     */
+    private function createDefaultUserSettings($userId) {
+        if (!$this->db) return;
+        
+        try {
+            $stmt = $this->db->prepare('INSERT OR IGNORE INTO user_notification_settings (user_id) VALUES (:user_id)');
+            $stmt->bindValue(':user_id', $userId, SQLITE3_INTEGER);
+            $stmt->execute();
+        } catch (Exception $e) {
+            error_log('Failed to create default user settings: ' . $e->getMessage());
         }
     }
     
@@ -214,6 +307,30 @@ class SMSSender {
     }
     
     /**
+     * 080 수신거부 처리 시작 알림 SMS 전송
+     * @param string $phoneNumber 알림 받을 전화번호
+     * @param string $targetNumber 수신거부 신청할 080번호
+     * @param string $identificationNumber 사용할 식별번호
+     * @return array 전송 결과
+     */
+    public function sendProcessStartNotification($phoneNumber, $targetNumber, $identificationNumber) {
+        $settings = $this->getUserNotificationSettings($phoneNumber);
+        
+        if (!$settings['notify_on_start']) {
+            return ['success' => true, 'message' => 'Notification disabled by user', 'phone' => $phoneNumber, 'bytes' => 0];
+        }
+        
+        $message = "[080 수신거부 자동화]\n";
+        $message .= "🔄 처리 시작\n\n";
+        $message .= "대상번호: {$targetNumber}\n";
+        $message .= "식별번호: {$identificationNumber}\n";
+        $message .= "시작시간: " . date('Y-m-d H:i:s') . "\n\n";
+        $message .= "처리가 완료되면 결과를 알려드립니다.";
+        
+        return $this->sendSMS($phoneNumber, $message);
+    }
+
+    /**
      * 080 수신거부 완료 알림 SMS 전송
      * @param string $phoneNumber 알림 받을 전화번호
      * @param string $targetNumber 수신거부 신청한 080번호
@@ -252,8 +369,18 @@ class SMSSender {
      * @return array 전송 결과
      */
     public function sendAnalysisCompleteNotification($phoneNumber, $targetNumber, $identificationNumber, $analysisResult, $confidence, $recordingFile) {
-        // 설정에 따라 메시지 모드 선택
-        $messageMode = $this->config['message_mode'] ?? 'short';
+        $settings = $this->getUserNotificationSettings($phoneNumber);
+        
+        // 알림 설정 확인
+        if ($analysisResult === 'success' && !$settings['notify_on_success']) {
+            return ['success' => true, 'message' => 'Success notification disabled by user', 'phone' => $phoneNumber, 'bytes' => 0];
+        }
+        if ($analysisResult === 'failed' && !$settings['notify_on_failure']) {
+            return ['success' => true, 'message' => 'Failure notification disabled by user', 'phone' => $phoneNumber, 'bytes' => 0];
+        }
+        
+        // 사용자 설정에 따라 메시지 모드 선택
+        $messageMode = $settings['notification_mode'] ?? 'short';
         
         if ($messageMode === 'detailed') {
             return $this->sendAnalysisCompleteNotificationDetailed($phoneNumber, $targetNumber, $identificationNumber, $analysisResult, $confidence, $recordingFile);
@@ -267,20 +394,94 @@ class SMSSender {
      */
     private function sendAnalysisCompleteNotificationShort($phoneNumber, $targetNumber, $identificationNumber, $analysisResult, $confidence, $recordingFile) {
         $statusText = [
-            'success' => '✅성공',
-            'failed' => '❌실패', 
-            'uncertain' => '⚠️불명',
-            'attempted' => '🔄시도'
+            'success' => '✅ 수신거부 성공',
+            'failed' => '❌ 수신거부 실패', 
+            'uncertain' => '⚠️ 결과 불분명',
+            'attempted' => '🔄 처리 완료'
         ];
         
-        $statusEmoji = $statusText[$analysisResult] ?? '❓';
+        $statusEmoji = $statusText[$analysisResult] ?? '❓ 알 수 없음';
         $serverIP = '192.168.1.254';
         
-        // 간결한 메시지 (140바이트 이내로 제한)
-        $message = "[080분석] {$statusEmoji}\n";
-        $message .= "{$targetNumber}\n";
-        $message .= "ID:{$identificationNumber} ({$confidence}%)\n";
-        $message .= "{$serverIP}/spam/player.php?file=" . urlencode($recordingFile);
+        // 개선된 메시지 (더 명확한 정보 제공)
+        $message = "[080 수신거부 완료]\n";
+        $message .= "{$statusEmoji}\n\n";
+        $message .= "📞 {$targetNumber}\n";
+        $message .= "🔑 ID: {$identificationNumber}\n";
+        $message .= "📊 신뢰도: {$confidence}%\n";
+        $message .= "⏰ " . date('Y-m-d H:i:s') . "\n\n";
+        
+        // 결과별 추가 안내
+        if ($analysisResult === 'success') {
+            $message .= "🎉 수신거부가 성공적으로 처리되었습니다!\n";
+        } elseif ($analysisResult === 'failed') {
+            $message .= "⚠️ 수신거부 처리에 문제가 있을 수 있습니다.\n";
+        } elseif ($analysisResult === 'uncertain') {
+            $message .= "🤔 결과 확인이 필요합니다.\n";
+        }
+        
+        $message .= "\n🎙️ 녹음 확인: http://{$serverIP}/spam/player.php?file=" . urlencode($recordingFile);
+        
+        return $this->sendSMS($phoneNumber, $message);
+    }
+
+    /**
+     * 실패 시 재시도 알림 SMS 전송
+     * @param string $phoneNumber 알림 받을 전화번호
+     * @param string $targetNumber 수신거부 신청할 080번호
+     * @param string $identificationNumber 사용할 식별번호
+     * @param int $retryCount 재시도 횟수
+     * @param string $reason 실패 사유
+     * @return array 전송 결과
+     */
+    public function sendRetryNotification($phoneNumber, $targetNumber, $identificationNumber, $retryCount, $reason = '') {
+        $settings = $this->getUserNotificationSettings($phoneNumber);
+        
+        if (!$settings['notify_on_retry']) {
+            return ['success' => true, 'message' => 'Retry notification disabled by user', 'phone' => $phoneNumber, 'bytes' => 0];
+        }
+        
+        $message = "[080 수신거부 재시도]\n";
+        $message .= "🔄 {$retryCount}차 재시도 중\n\n";
+        $message .= "📞 {$targetNumber}\n";
+        $message .= "🔑 ID: {$identificationNumber}\n";
+        
+        if (!empty($reason)) {
+            $message .= "📝 사유: {$reason}\n";
+        }
+        
+        $message .= "⏰ " . date('Y-m-d H:i:s') . "\n\n";
+        $message .= "⚠️ 이전 시도가 실패하여 다시 시도합니다.\n";
+        $message .= "결과는 처리 완료 후 알려드립니다.";
+        
+        return $this->sendSMS($phoneNumber, $message);
+    }
+
+    /**
+     * 최종 실패 알림 SMS 전송 (모든 재시도 실패 시)
+     * @param string $phoneNumber 알림 받을 전화번호
+     * @param string $targetNumber 수신거부 신청한 080번호
+     * @param string $identificationNumber 사용된 식별번호
+     * @param int $totalAttempts 총 시도 횟수
+     * @return array 전송 결과
+     */
+    public function sendFinalFailureNotification($phoneNumber, $targetNumber, $identificationNumber, $totalAttempts) {
+        $settings = $this->getUserNotificationSettings($phoneNumber);
+        
+        if (!$settings['notify_on_failure']) {
+            return ['success' => true, 'message' => 'Final failure notification disabled by user', 'phone' => $phoneNumber, 'bytes' => 0];
+        }
+        
+        $message = "[080 수신거부 최종 실패]\n";
+        $message .= "❌ 처리 불가\n\n";
+        $message .= "📞 {$targetNumber}\n";
+        $message .= "🔑 ID: {$identificationNumber}\n";
+        $message .= "🔄 총 시도: {$totalAttempts}회\n";
+        $message .= "⏰ " . date('Y-m-d H:i:s') . "\n\n";
+        $message .= "⚠️ 모든 시도가 실패했습니다.\n";
+        $message .= "수동으로 직접 수신거부 요청하시거나\n";
+        $message .= "웹 관리자에서 패턴을 확인해주세요.\n\n";
+        $message .= "🌐 관리자: http://192.168.1.254/spam/";
         
         return $this->sendSMS($phoneNumber, $message);
     }

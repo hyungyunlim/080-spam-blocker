@@ -1,0 +1,56 @@
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td,
+.bootstrap-table .table > thead > tr > th,
+.bootstrap-table .table,
+.fixed-table-container {
+  border-color: @border-color;
+  outline: 0;
+}
+
+.bootstrap-table .table>thead>tr>th {
+	border-bottom: none !important;
+}
+.bootstrap-table .table {
+	border-bottom: none;
+}
+
+.fixed-table-container tbody tr:last-child {
+	td {
+		&:last-child {
+			border-bottom-right-radius: 4px;
+		}
+
+		&:first-child {
+			border-bottom-left-radius: 4px;
+		}
+	}
+}
+
+.fixed-table-container tbody tr td {
+	padding: 8px 10px !important;
+}
+
+.bootstrap-table .fixed-table-container .table tbody tr.selected td {
+	background-color: transparent !important;
+}
+.table {
+	border-collapse: collapse;
+}
+
+.fixed-table-container thead th:first-child:not([data-not-first-th]) {
+	border-left: none;
+	border-top-left-radius: 4px;
+	-webkit-border-top-left-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+}
+
+.fa-caret-square-down:before{
+	content:"\f150"
+}
+.fa-caret-square-up:before{
+	content:"\f151"
+}

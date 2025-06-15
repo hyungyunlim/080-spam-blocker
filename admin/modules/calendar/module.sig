@@ -1,0 +1,315 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+;################################################
+;#        FreePBX Module Signature File         #
+;################################################
+;# Do not alter the contents of this file!  If  #
+;# this file is tampered with, the module will  #
+;# fail validation and be marked as invalid!    #
+;################################################
+
+[config]
+version=1
+hash=sha256
+signedwith=B53D215A755231A3
+signedby='FreePBX Mirror Servers <security@freepbx.org>'
+repo=standard
+timestamp=1745330154.4993
+[hashes]
+Api/Rest/Calendar.php = d4eda0f65c79a8a8c70181002a22facc6ba9862b8ec416e7c642315cf6540f20
+Backup.php = 7a71d7cb0eccae1f155e95c28ea958898d2d5ea22b0fca60878198cadb845cd8
+Calendar.class.php = 27ef025c3f608c368d51dba085f182e1dcb02404d50d8bcfec8f9c0465706bdf
+Console/Calendar.class.php = 0426307e9b6ebe52b7324e8efb152ab86793f8b42e587bb61eabf981fc79f793
+IcalParser/Frequency.php = edd4952957436ab7a00b3cd3f39aaaa3a27233d0d26acb85cb117c4cc2c8dbc9
+IcalParser/IcalRangedParser.php = a18e49521ef618be51fa69ca92e67adf0fb3f4ae589981ce1ba789fbd59ddc80
+Job.php = adf9b6b920e30caa35c73dea20f5b11b8554b63b5dbe573e7e89daccda380585
+LICENSE = 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
+Oauth.php = a4c8653201b04b882dcc0dc45400e4f8013e44730ceef735e32b83801d028525
+README.md = dbc42459aefa82d23fb38f7f8a470fc4d30556bf4c291c864a030b7ba3af3511
+Restore.php = b944bc8333f01b4161d3b37a1745c3a46b227e633b632c6d556a667de3670375
+agi-bin/calendar.agi = 15b007bfd47bac9852707a47a5cc909fcf48de3235fcefcb5301dc164796b7d3
+assets/css/flatpickr-4.2.4.min.css = 17a40d04152971d5c3389ba7cc8c8dd0bcaeae1946c4d66de070fd6ba4622ce9
+assets/css/fullcalendar-3.8.2.min.css = ce4c703eecce57f07d1e91887191fc7bf868673768ecaa6435a4103fc8ead88e
+assets/js/calendar/calendar.js = 8a110a8b535e808a7cc5bdb4da3101807031fe98ca7a4b2497026be1c613170f
+assets/js/calendar/flatpickr-4.2.4.min.js = a0e45fce19ebf6fc6d109ebb5d8729bff696de17e7b04bcdf71eddd346b6c60f
+assets/js/calendar/flatpickr-l10n/ar.ts = c2d615046c8425e1bfa9440fbf7971b07524a18c8d52d92a78c5579412f6d6cb
+assets/js/calendar/flatpickr-l10n/bg.ts = f8ed334aefde537f4df8d97edb958d716f5024e91f947abb90d17954bf925621
+assets/js/calendar/flatpickr-l10n/bn.ts = 62e21b944d17ef8c313c8262568fee64b3eabad7a8b2cf06b79a4b00ca3ad728
+assets/js/calendar/flatpickr-l10n/cat.ts = ba1a8e21d35c389ad8eae233bd719ce966b82c19cb182dd884460c12910d74b7
+assets/js/calendar/flatpickr-l10n/cs.ts = 22fd03b2a7e56c7f6088750d3e2fad1b04ca861ac501a91cc0c4e0b8c5b6dfac
+assets/js/calendar/flatpickr-l10n/cy.ts = 096b87185cc90fcb95200625f39727353ac46dcb544e66381faa72fceebfa75c
+assets/js/calendar/flatpickr-l10n/da.ts = 6a396074fb322648a3ffbd69cb47757962f6fba095c70455d62c4f32d0a717fc
+assets/js/calendar/flatpickr-l10n/de.ts = 33d9e4aed2a644aef6b3ae5403174ae8364c6e7f16dccd919db6bd73c4d1ee80
+assets/js/calendar/flatpickr-l10n/default.ts = 2747d4486fa2ea7aef17175582c4f49b9a215a7155836ecb4303507c357e6b15
+assets/js/calendar/flatpickr-l10n/eo.ts = f72292bcf70039f1c554635cdbece9a9b09d2cbf0396d36644030640bcf36502
+assets/js/calendar/flatpickr-l10n/es.ts = 6e1e42601f6e37f608e7d0f9703aad0796f663e75b281084c0dcd15d95aebebe
+assets/js/calendar/flatpickr-l10n/et.ts = 5c7366edf39daa060616b4d89f4ea656ea1ad792a9f9d2b5f5cea071f2cfad98
+assets/js/calendar/flatpickr-l10n/fa.ts = 744670cab3ed8a4dff16300b02f5696b806b3ad31154966255c6034c2c881ec6
+assets/js/calendar/flatpickr-l10n/fi.ts = 205693fc35c5a1bcf6997dc1fdf14f65e530069a970eace6f1d3a4d1afce7663
+assets/js/calendar/flatpickr-l10n/fr.ts = a19d602657a07959863130fd655874b04509effb3c15977f741b17f7e9c26682
+assets/js/calendar/flatpickr-l10n/gr.ts = 0dc5e598b9a38f4a3f382671331b5675e60c2b30e3f0d584066b52e68ae21a4c
+assets/js/calendar/flatpickr-l10n/he.ts = 263686b004f4b5440ecfc268286557646625a8c93f7c5d1da330927e50c811f2
+assets/js/calendar/flatpickr-l10n/hi.ts = 49fd7bfe64e10169562f705c61b977bfbb9dd692653adeeddbb275a622a03a3b
+assets/js/calendar/flatpickr-l10n/hr.ts = c2fe4ecfd8b6555018b312ef9385c0b2229c82c996fd59c56175360bea37b25a
+assets/js/calendar/flatpickr-l10n/hu.ts = fbc9e334896ce248b301389bead9d1067314984f1a19f8aa70abed3fe8a86978
+assets/js/calendar/flatpickr-l10n/id.ts = 6f3a1dfa9116dee79f11d351622db291d1c61bfc84ec1420a9cf3a4566c697cf
+assets/js/calendar/flatpickr-l10n/index.ts = 9758cdfccebe3c3b0bae7757712bd8793e79910749185aa3540773dbe8fc9da3
+assets/js/calendar/flatpickr-l10n/it.ts = b55c30740b9411f9f881635a6ae8a9236f3b5998598e8ac0642c149c45798507
+assets/js/calendar/flatpickr-l10n/ja.ts = acfee872ec4722fbcf4a745449a0d2f82719cf678d5b8f467e03c41075ff1d6e
+assets/js/calendar/flatpickr-l10n/ko.ts = 8c086c70c226fed591d05e237dac2ee97e4521d5df8117f624de84f835d5b82e
+assets/js/calendar/flatpickr-l10n/lt.ts = 700933ced276e54788db83201dee7fc9de5e58c703f88dd173a14ee4762fba2d
+assets/js/calendar/flatpickr-l10n/lv.ts = dd405907bf79ffe9ec541a4dd76f79236cb189f86425e04cabddc95ee622eaf3
+assets/js/calendar/flatpickr-l10n/mk.ts = 5d4a3b9a4ae69f55a9062c4589a781972ce64abba76702c29d9402b5ab63cfd0
+assets/js/calendar/flatpickr-l10n/mn.ts = 3f71ceaf8b0aca2a7c222505efa14a51d8e141c1f71af69fc5ce5293c9b2c981
+assets/js/calendar/flatpickr-l10n/ms.ts = 7c64481094a5673aa88bd1c4b709901abf7f00d58d677ae2f2b7f056f14cfc1b
+assets/js/calendar/flatpickr-l10n/my.ts = 04aec0b94d46239a44eb5c1b1535df6964cf34719596f398b7470557b44f7a21
+assets/js/calendar/flatpickr-l10n/nl.ts = 4ae0961fe7298609ad6c564862ba29e0420631b462b1d5080f3a127b2ef70e84
+assets/js/calendar/flatpickr-l10n/no.ts = c1d583c30b24efc3d44452dbc2556c62b772676ed6eed61ccf5af0a1f09020e6
+assets/js/calendar/flatpickr-l10n/pa.ts = 0aff6ddc85c0dfea49b8651d3e034ff54bf58843215a6fc8f2b969c4e20eb6b8
+assets/js/calendar/flatpickr-l10n/pl.ts = da6217f6710a973520ebadbb8accad31f8636468cd518aa09acc51610727b306
+assets/js/calendar/flatpickr-l10n/pt.ts = a0cc313b6157dbeb73c72e342f4106aaf4f9c3176ced2ef33468db24d3987b4a
+assets/js/calendar/flatpickr-l10n/ro.ts = 4df528c7323ad015d33d4a2e193658524f3dbf6cfda766a5dd1afcaf03573152
+assets/js/calendar/flatpickr-l10n/ru.ts = 0346b83b1fc3134506e3f8ccbc218e247763f7cd9cd83dfebccf80bd8aed5882
+assets/js/calendar/flatpickr-l10n/si.ts = b72603b4309c5302ceb69ae830ce6afe1ad91c7024eff2c90cc7a86461c7f6ce
+assets/js/calendar/flatpickr-l10n/sk.ts = a221de24144f8a5b0ac06df292203446f2a80081b3b204b9217b372d5e4f7c87
+assets/js/calendar/flatpickr-l10n/sl.ts = 57c001414a6815d2112300a3afbedc6332c2d20de0ffcfc11ac22693da8d7b95
+assets/js/calendar/flatpickr-l10n/sq.ts = 8349b6d53a292e25d2b8c1278d31b0c3eb74f62c2bee4b2808950d39a3e949f4
+assets/js/calendar/flatpickr-l10n/sr.ts = a080fd1dc29d1da059963181741e8daf854dbfdca3230f11ac95f76182355bb2
+assets/js/calendar/flatpickr-l10n/sv.ts = 3f9cad470a70b939e86e20b7cf01807e6ead5f5866c4292882b553f61abc1fdb
+assets/js/calendar/flatpickr-l10n/th.ts = cb4bd49d170741e66b10ec67af5f8542fc44dc1dd07ae064760be210ccf98e68
+assets/js/calendar/flatpickr-l10n/tr.ts = 83175c15a15862cad5ee948d649071fd3e35b3f72ac5dd34136ead41cd0bb5be
+assets/js/calendar/flatpickr-l10n/uk.ts = 17f9b9862a3bc73625167229f6d3f98a68604b5f646818e857dda5cb9ad87ba6
+assets/js/calendar/flatpickr-l10n/vn.ts = 04b316c6a21e4feb0fa1aa9263ea66adf9a24aac7b3de630e33fd7c278a08756
+assets/js/calendar/flatpickr-l10n/zh.ts = 5cd54529f1d03386a7886884e27c629e604cdd06e93cceeecd812d1be0190bbe
+assets/js/calendar/fullcalendar-3.8.2.min.js = 10ca5491e7c31962a8e3ce7df17210f5300517d52275177503dfc95270f9080e
+assets/js/calendar/fullcalendar-locale/af.js = c63936ac7a42df9c8174741cfa479a8eed88ed4e515d0b6b7fc8ceee72eecbd1
+assets/js/calendar/fullcalendar-locale/ar-dz.js = aa12ae7a833e668e10b701d7f31f2e8ea3838f17a865f6823ce71b253c5fff0b
+assets/js/calendar/fullcalendar-locale/ar-kw.js = d401fba130559ee31be340b2e5375cbffc7c931833f84ff3a431dd7620ab400a
+assets/js/calendar/fullcalendar-locale/ar-ly.js = f0e2d5026d7b3ef709cc19d290c859a409718e8b22d342d1730120bed90fde7a
+assets/js/calendar/fullcalendar-locale/ar-ma.js = 0e38f17ea91ef01d3357b21fac9609b1420c67a19e496bd7421cecf351d74a85
+assets/js/calendar/fullcalendar-locale/ar-sa.js = 89f8e9e5242750bdf18aa183c3805cc6fd45f4e432ad70ad5433bfe8bac100cd
+assets/js/calendar/fullcalendar-locale/ar-tn.js = a5673cd6023ac480ddad78481aa63e0f919bc112d5f38148cc92782a9d527ca4
+assets/js/calendar/fullcalendar-locale/ar.js = e8fb65b900446e5509ba301a2eed7293eee1df212343b933beeb814d396dfcd9
+assets/js/calendar/fullcalendar-locale/bg.js = 53570a08c69239fee8f6e34f2e15816794d0214ff954defd008f12fc3d0783a4
+assets/js/calendar/fullcalendar-locale/bs.js = 6d9ec704558219bf2389029d0c6585abcfdfe98bffd43329fced585ed7a8a8c4
+assets/js/calendar/fullcalendar-locale/ca.js = 05194fc6c443920e30b9ffe8084e5b4d03cf2e8973cad210bf82ac01edae8631
+assets/js/calendar/fullcalendar-locale/cs.js = f9b6730ce265432a5d638e8950a6c79235898ddbdc5aca433c95f896a7969905
+assets/js/calendar/fullcalendar-locale/da.js = 14a47b9bcf753e0333998bcf464f434e72a7051c89a8fc5b6b53b99e9bec36c1
+assets/js/calendar/fullcalendar-locale/de-at.js = 56664021249636f79ad153e73b9a1f0f99d800a43c06f83e30113f6cb5b05cae
+assets/js/calendar/fullcalendar-locale/de-ch.js = 5cd551cd770cb81952f6ccd04c43a753bb4dc62186e408041bc1c0cf9ac14288
+assets/js/calendar/fullcalendar-locale/de.js = 35240cb0e9ac1ebb123cf663f7c166c290530078f69d668d3a6c84cb874e6ca5
+assets/js/calendar/fullcalendar-locale/el.js = ed979eae9c2531e3990f3072af8849d3884c263338d0c1ad2795763222b63dad
+assets/js/calendar/fullcalendar-locale/en-au.js = 8fd12269413e1ea5f6b82e29a30609a85663a4dff13fe9ebdd3c9d26760a229b
+assets/js/calendar/fullcalendar-locale/en-ca.js = 7438b369e0e8ef37540f0e9307dc4e31e27da251418e01e32f5adf36ef925f82
+assets/js/calendar/fullcalendar-locale/en-gb.js = fd9df63cfb2b7ca584c9fd817022ae07988dc2f66e18be97732167f5e7f50480
+assets/js/calendar/fullcalendar-locale/en-ie.js = 99da8001fd98458d6908ff8e25d9cdce5c0249cf9b16fa16f2c52e838f22f7d4
+assets/js/calendar/fullcalendar-locale/en-nz.js = bd180d1b411caf2a31bd4f285eca84c74a3a7edd8fcf44185726636e9b61fc8b
+assets/js/calendar/fullcalendar-locale/es-do.js = 97e27d3e238ea995d01640c8c02be7775a2625c17c2808aa987aafbb4cbd5500
+assets/js/calendar/fullcalendar-locale/es-us.js = 7e69c867f7a20718cbcf2e88ba449aac6e1371191d34ad9061537d32e83464a0
+assets/js/calendar/fullcalendar-locale/es.js = e7b96cd8d73501eb5adbb7a5ccf99fc3ac0bb0e5bf731a450720101722b3d1ce
+assets/js/calendar/fullcalendar-locale/et.js = 7006735a31a1ceaa3d05ce63e9e8a6edb9a69f8dc77cac3843ad675bf0183f2b
+assets/js/calendar/fullcalendar-locale/eu.js = 09d8c87eb6fd6112fd4eb51e3e1fd4716fa4991ae97de9e3ae79ef3d9ca4878e
+assets/js/calendar/fullcalendar-locale/fa.js = 273be3d3905417cd333acd2ebd207005bc40d872b1276e1ae20ac6b61341349c
+assets/js/calendar/fullcalendar-locale/fi.js = ac99d0cd48db70259b09f1d499f8d9ae6a4456aaed2ad2420c8e998e4c6a6a12
+assets/js/calendar/fullcalendar-locale/fr-ca.js = a8bff2e674fb2c5b88a21cabadf966ae6586fc108b5dedc3f86f52301d758177
+assets/js/calendar/fullcalendar-locale/fr-ch.js = e8bde5cd6fbd7776897a0f312f2e2daa4b7c2f30b395470a6f25b3a7f6e6cdf8
+assets/js/calendar/fullcalendar-locale/fr.js = fd041e483b9f9e83d7f9ade681a1a3b6386ebde8c96219fc8e4a21c3e9cdeab3
+assets/js/calendar/fullcalendar-locale/gl.js = d6fd44cbf5e9c34e7d0f0b8645206959ce75164a1719b71c79b3855592b7365f
+assets/js/calendar/fullcalendar-locale/he.js = 4f460970c2faee8f3ef10e6ae51afab16966a4f000a4361a3fe07858d6ea5f8a
+assets/js/calendar/fullcalendar-locale/hi.js = 1cf7b4af9d3048743c2b00bc379627a86312b012d48a4ec96b8ecd2f6d0de73a
+assets/js/calendar/fullcalendar-locale/hr.js = 20bf1a674007b9fb3fc31e22d6d251ed4aa07b9b3dd6b31add836f36f7c59ea7
+assets/js/calendar/fullcalendar-locale/hu.js = 16de1ccb0ac38223f4c63ba3c15debfaeaca7ee2be5236d6cd46c5fa20599b56
+assets/js/calendar/fullcalendar-locale/id.js = 73b89c14f8774e3de26ba9277673af643e51865a3d532b8b54553621c5c68303
+assets/js/calendar/fullcalendar-locale/is.js = 0e78a198f30ffaccf95e6f0d66a562b7c1cf63223a6dd0a546601a89101d015d
+assets/js/calendar/fullcalendar-locale/it.js = 6360fcc534e54ab0537233ca28e781b34cf1769f6bba900842241991bc5501fa
+assets/js/calendar/fullcalendar-locale/ja.js = 748253c5b8e4a0e8034612b28cfc6ac985d5b6bdcec1f7f0f1d4910a18c8570e
+assets/js/calendar/fullcalendar-locale/ka.js = 8d0becdcd229cc9857ad8b24b622a97d1be0a61e00dfd74000fac8d0e8c24240
+assets/js/calendar/fullcalendar-locale/kk.js = 53324baf3c84208aec77642508b37b919eba064e00e6b063d643349b011db689
+assets/js/calendar/fullcalendar-locale/ko.js = 08de7cf124c33d8a6ebc9d11a399254aa1ea99d4add7fbe86955dd0de928b984
+assets/js/calendar/fullcalendar-locale/lb.js = 4017f099ab4137154414ef7cae41370a40fe3621b68b5128bbfd33b6ebfe036c
+assets/js/calendar/fullcalendar-locale/lt.js = 8748b3adaab70f7b9dbc2306b35caabb819f456d77ac5b3ad3a27021f1420b2d
+assets/js/calendar/fullcalendar-locale/lv.js = 245173f62df10f8b883816ea6c51dbd39494cc8db36627d7d5f3f4c229b2d1ae
+assets/js/calendar/fullcalendar-locale/mk.js = 5058728f68888ecb508f2e17b2a3de1fb2628c0831ca3af070f427312a2ef2b3
+assets/js/calendar/fullcalendar-locale/ms-my.js = 58db0ba2ccfd792042d384a0de59567849516a1ad6df5aceef8d47f3ff74347b
+assets/js/calendar/fullcalendar-locale/ms.js = 99dd2c31bbf747d33809228614837ce2a1f92baea49a269343458220bc1d9a4b
+assets/js/calendar/fullcalendar-locale/nb.js = 4ad7cca73521b9723fbf0504eafbf8ed491d399c814188be48b007a4e1330bbb
+assets/js/calendar/fullcalendar-locale/nl-be.js = 59aa2fdd034ef3ac35766ba32cc586260dad3492f01daec2eafbcfe44233a994
+assets/js/calendar/fullcalendar-locale/nl.js = dba5b7b9767ed53d77cc0ecabaef6b5b63cdc5a68eaca90927c36f7998a94cfd
+assets/js/calendar/fullcalendar-locale/nn.js = 66a65843a7a6abac15070cb051dae3b1a5eecb0244e03e92f87eb9e4efbfd2b9
+assets/js/calendar/fullcalendar-locale/pl.js = 6c88b74883bfd8f4dcb83f1ae854de274b37d2ca01a8bc919e54f2ec287d0f5e
+assets/js/calendar/fullcalendar-locale/pt-br.js = 97cd252ce1ed0cd468dbc00447d2eacc5b9c8d74b0c85321f4ef6789ff35528e
+assets/js/calendar/fullcalendar-locale/pt.js = a5e2105b9d2215a6fc7189638aa7eb5e5a49b75e428947b8d4e539a97179e632
+assets/js/calendar/fullcalendar-locale/ro.js = c05effff7db4d089482c1a1a2c6fe957e1498cdcba4173a1a581c60bb8c100ac
+assets/js/calendar/fullcalendar-locale/ru.js = 708242d8d3052758f328990b7b8f59f7a470d133d3e0db8769e59425993e81b3
+assets/js/calendar/fullcalendar-locale/sk.js = 6d238975a9f60847d456f3a380156387d60e4a597f1bff30f4d682a98022fdf0
+assets/js/calendar/fullcalendar-locale/sl.js = 49b51ecd0edf9d0adc7c150e807742def13a9cff65f5e4cb7ba38cef257745bc
+assets/js/calendar/fullcalendar-locale/sq.js = c394fa27a1ac46b2b17c0793214ad984c5c4494c8b15d89ea002fe0c82a81e23
+assets/js/calendar/fullcalendar-locale/sr-cyrl.js = 9a13ac1a14abfe504614f521a3a0f045e4ba6e383fcb5b4bb07c32c52c42b760
+assets/js/calendar/fullcalendar-locale/sr.js = b2c4ac49dd330c772f39d335612e0e133354b40f53fd49cd6ce33d3e2664830c
+assets/js/calendar/fullcalendar-locale/sv.js = 0410edf48352130b76792534bea60cdd5fdf870fd4fc047765e537edf271325d
+assets/js/calendar/fullcalendar-locale/th.js = 7085e7aab4723a8a377891b88de587564b14dfc1c204da486fbcfdfb20582508
+assets/js/calendar/fullcalendar-locale/tr.js = 53ab91cb2e9d952cbd9b166b0bc870f8be2449640d27b502c85994f4ea92ad25
+assets/js/calendar/fullcalendar-locale/uk.js = ba9b1fe4b8d0f6fa411d44b5ea1f41e6e600608064d4acf3c2442577b22449be
+assets/js/calendar/fullcalendar-locale/vi.js = 20dbd2f562a32437e6db151875cd7255e842ea3eab7bfd639842564fa09b23b8
+assets/js/calendar/fullcalendar-locale/zh-cn.js = 5c3c98f3b695cfe449ebd76fbec0ecf6b5abb92d72fae41e01991c188796db36
+assets/js/calendar/fullcalendar-locale/zh-tw.js = 60f43a1a24a166fc6fce0d40c395faf402d91d60544bb14e396dd75e4ca0bb71
+assets/js/calendargroups/calendargroups.js = b85c306b6ed9e18bf9ebaf9cfa68666f3cf3e3dc1754afe743da949dc01cc902
+assets/less/calendar.less = 598d77ac6cd7dc0b6f6347561175ebc8291f74c8a28f2a1d5c5b814ae9ab2ec8
+composer.json = ecb41d9dbd35b40da57f0576ddd0457afc64f0ab5144d10d8f14411a3450496f
+composer.lock = b1373699ef472382c0869aaf83c70fe514c15552b2ef7e1ae61f33e1819c121e
+drivers/Base.php = 1aed33b890dd438c066bfc6e118765129e475ba5da8a314e0de592be3e26efb0
+drivers/Caldav.php = ff73a9fe47d2236a4827a4e4ef7aee04dad45405d8be883f6f6b8f7b78832a61
+drivers/Ews/Autodiscover.php = 5dfe26d14cde37ec57265ab8a2d95afbb8d4b01731de334c7f5ff8c47e854376
+drivers/Ews/Calendar.php = 3e5a3af1bd5798793ba92e4d807ba1e986171b335d0c1b65f0afc5aa254455a6
+drivers/Ical.php = 8138a5056ac027f73673a89781f2a911d35b0c93b5f259ca0436ca9540d1e980
+drivers/Local.php = b4592c8c2592b1520c4b673b525c4e07e8a558226c641b16386be4aced0d3459
+drivers/Oauth.php = cdfc0a329e3cd34b9a85921a012e3ca4df44cf454acfb85f110afcf470f0ff88
+functions.inc.php = 8e324efa856355be6876cb57bf455bd2d851c816efca138097b5d43a3c75f057
+install.php = 9cc949fbafded1e3619ea7da8eb816fa654e447751b51e75daa848da66b8e30a
+module.xml = ab2238e43f6d65897aa9029f7bf8ed8bc1e9ec2af542da7a88ef1d7a18daee15
+page.calendar.php = b9dd94a4203e62743e1b915b2cb5f4f81aa3a6d3a017c01514a28c1b99d2ad30
+page.calendargroups.php = 63d4eb55b6f2412606611b5cfcbc9756eebfab595518eb52ad73a22fae9f8795
+phpunit.xml = dd031d90cceeaebe93562ef58af7692dfc849250ae1f29c63e9c9702b59415f7
+utests/IcalRangedParserTest.php = b97b0a18bccc46a1154e0113908b864d6fec959ab3556e12505555881057ecc7
+utests/icals/FREEPBX17403.ics = 433cc0e03d25161dbbc65dc62517618e9df61ba6c99d74e84c482db617ee97c7
+utests/icals/FREEPBX17809.ics = ded799e722e5520d31975f46f25c14c8a7aaa9610feddc610b02407cac4d829c
+utests/icals/FREEPBX17873.ics = a9dc6d3854e8ae9a04dd04d98ba721d25596cdf26745af064a81b1bedc6c91f3
+utests/icals/FREEPBX18903.ics = 55264570b2767af6b59def6846ea1d8615cf9d6c231a43d9ec47d0bf817c925b
+utests/icals/FREEPBX18919.ics = 3b152657b7c517ecf483d752c9f95c461982f184d4380c0fe33fc314d7726a26
+utests/icals/countlimit.ics = 38595a3d1100828a7a2b0f8f0a3b35d456045e2b88f05b941a4cd6fe9d6d3819
+vendor/autoload.php = 5e7bed34fbea305e9c80bc9f4b09c9fc0d73c9f25476fe6532b1d0db213af440
+vendor/composer/ClassLoader.php = d4b2313e562edf942838ec316d983c1a3459ca67da3e5658e861200b0b3693c2
+vendor/composer/InstalledVersions.php = 21f4ba19e7859cb3f85b8b1680c970ee25d972546c1606dcae0e7e5f43f626f0
+vendor/composer/LICENSE = c8cce4b6b9729f264ffdf9296d505d63432497feeed1f586d1902b942197e024
+vendor/composer/autoload_classmap.php = 5e07e83acc6a588b4739423138ae759d9b4eec0b786f2022f5d1216cc6436d05
+vendor/composer/autoload_namespaces.php = ede505407590638a435137f4e060136f1008de79fc169b3de9793423b0cea38c
+vendor/composer/autoload_psr4.php = 235658fa2c72e68c35286abd6b68a170fc70fc23bd58d557fa79ca41b88c7a29
+vendor/composer/autoload_real.php = 2e4ad48e14302bc70cd5522a8133d057c7b5c89a7b2c9c9a0733ba0f1a3a0a3e
+vendor/composer/autoload_static.php = 26e2151696572eaa6f0561bbfe221aaf6e23ae9d428a5126ba9277c84b88b86b
+vendor/composer/installed.json = 89b00ba50b6b42061e0da618d98b25c868ce83f944aef074f35a13a40db9e84b
+vendor/composer/installed.php = 9c3badc5b038403e4f2402af834c96a6698455133d6a6cebde89b0fbdccb1110
+vendor/composer/platform_check.php = bab4df5d83dfdacde4974e195054cf7e576cc1814fff215381fec4da66ee97c9
+vendor/eluceo/ical/LICENSE = 4f5ace65b0e4ce64c5acfcf3a01f77b5ee7660dfda60e83c36ea7afcf8fb9a9a
+vendor/eluceo/ical/composer.json = 45317ba67f50af997a277488e7928b28b96e1e9abab982b0181e6688ccd73659
+vendor/eluceo/ical/src/Component/Alarm.php = 52f12767b301aad6368897c75726ec191c608c9bb024ff6802edc619ebf8cfd2
+vendor/eluceo/ical/src/Component/Calendar.php = cefca083721dc70273ed86913b17c63740d334fed95954ac2d72ad32bcda9c56
+vendor/eluceo/ical/src/Component/Event.php = 9c9054a9ba27a333285a924b587712313d6ba2447af034934cb686ef10ec5bf4
+vendor/eluceo/ical/src/Component/Timezone.php = aff0baf18dc8d3e74d93e7ede35c0959acca80eb9e698e4cd3dbdd2d30cda81d
+vendor/eluceo/ical/src/Component/TimezoneRule.php = 22d9e0f29fb1cdd175ee98463f3f999f617b3585a2faff1d8c355c516877b04b
+vendor/eluceo/ical/src/Component.php = bc55dbb5c4f9966055bbe5378416d78f2cd27bc8c55459720baaa41cb5b28865
+vendor/eluceo/ical/src/ParameterBag.php = dbca985c7632a5c7c855e3a51e47a7ce48c44831c0bc85c3d6814eb934fecdd6
+vendor/eluceo/ical/src/Property/ArrayValue.php = 28c5de68c644e738c65f99a02cab3ecd404ae4cdbf5948786b0598a34221345e
+vendor/eluceo/ical/src/Property/DateTimeProperty.php = c47e2a4281f1f71949214123041304c71896e7e9e9fb80d0335fcb85920c3427
+vendor/eluceo/ical/src/Property/DateTimesProperty.php = 586e68fd5945ad680abd00076c2bee298ff6036abd9b92c8cbf365debc52d3fc
+vendor/eluceo/ical/src/Property/Event/Attachment.php = c82853f9b07df01d72a4510d297c07bdbf55c59784c14261f9bec27b7a1ff881
+vendor/eluceo/ical/src/Property/Event/Attendees.php = 1ed5467cdee4246351d4e2b06dd321e9dc4674aea3e18869ae0628ff801fcf9d
+vendor/eluceo/ical/src/Property/Event/Geo.php = 13f3433f60130374360216acc8290822f748234b900936678283d8312bd09440
+vendor/eluceo/ical/src/Property/Event/Organizer.php = cd5d91641b03872a344fb564a7744d2645932d326577764775e685f800979036
+vendor/eluceo/ical/src/Property/Event/RecurrenceId.php = bc0bcae49b9d80475aa08b719f24679129b0b95b81feb75a63c7128cc3748b8f
+vendor/eluceo/ical/src/Property/Event/RecurrenceRule.php = d4b7f8e906e2ea7de9df5fceaf06fcc2edd05e2c0805438ffe439a0fac25b56e
+vendor/eluceo/ical/src/Property/RawStringValue.php = 7aa42cc3d7f60b8767f365c2250b9379ae86e49584a95b14da1bb7119ee27185
+vendor/eluceo/ical/src/Property/StringValue.php = baaa0bf9b706ed876d356a993c731d117ef310fdd46c63ed081f70137bda6564
+vendor/eluceo/ical/src/Property/ValueInterface.php = 10643abc295d7d473e8c86eed642ecaa71d2d67938b0ddfba19b2e6c944bfbd6
+vendor/eluceo/ical/src/Property.php = d4a79b9a8da017ae9e082bf1c01dff551c81cb46ea12a67ab17d2f27dc7bcf51
+vendor/eluceo/ical/src/PropertyBag.php = 8ac731fc3f6c8c20162d2ce88046bcd0f86878f8e80f1dcedfd18ce90829c1ac
+vendor/eluceo/ical/src/Util/ComponentUtil.php = f86f8cf45f45133430dbcdff394eebed0263984ed2a354a5ca369637ba52cc55
+vendor/eluceo/ical/src/Util/DateUtil.php = a7d9ac06de6c6387ad32b46f8e192e133214479ece2199f7b8800091d16a1834
+vendor/om/icalparser/LICENSE = 61aa292dd03dd75863150f563e16373448a6f42946219026a7a8614c207d7279
+vendor/om/icalparser/bin/timezones.php = 79399c3a3918ca3c5bc90a4665870caef368ec31e37fb6e7c3746364888a905e
+vendor/om/icalparser/composer.json = 2b02fc6873f24d7506d40c44aa14fe78f50f829ed2241bda63e98aa02e6ad027
+vendor/om/icalparser/example/index.php = 6addaab9b66561e8746d9ff6599c757c2444e4546f70849aef1418c8eeed3f74
+vendor/om/icalparser/readme.md = 91ee7472c63444ee71c7a33fe40d91a38712630a97cd46a9186b524b64ae679b
+vendor/om/icalparser/src/EventsList.php = 0698a5faa3609de0ef7513e6b2b7947483c3d77289ad5e9f5ccabd942bb3612d
+vendor/om/icalparser/src/Freq.php = 812ed33af1ef885f195bb9a5141ed48772e0d05bf1aea7ef77b7d4a127ecc74a
+vendor/om/icalparser/src/IcalParser.php = a242c5c6101cd12b33fd6bc7382e512a4f5602f71d5c10d92669baa25603b90f
+vendor/om/icalparser/src/Recurrence.php = 945784555521fe632e1e791e2ad2648b08fe1da34ff7cadab6db33d5a0ab9f75
+vendor/om/icalparser/src/WindowsTimezones.php = 484386d2843ddd160962f9fa6c119c4f7836cbea7a048b9b8b02130e2be347ae
+vendor/om/icalparser/tests/bootstrap.php = 88f684a683741f666e3f3050e534da3ff0ab41aedcf613db33c24b4a3aef6157
+vendor/om/icalparser/tests/cal/38_weekly_recurring_event_missing_day.ics = 8d88197e30f98cadcff930255693c45474292cd31c56bf5f8c16dec8028c51fb
+vendor/om/icalparser/tests/cal/FrenchHolidays.ics = f7582e7ecade131c1d0ecf5e0876ea5ca75dc2f2f19b87986de2d7d2761821fc
+vendor/om/icalparser/tests/cal/basic.ics = e528e3882902835093e384ce30e56d4645d1d3477a0e34632f9671f163df854c
+vendor/om/icalparser/tests/cal/blank_description.ics = 3412f57ff5d568dbac388e484f49a765ece56ed4c243740cff4f4db3d4f6ed03
+vendor/om/icalparser/tests/cal/blank_line_end.ics = 34fd09634ff420db319cd710d56ee5c9e6768c3b686a057b75dca416be1d668f
+vendor/om/icalparser/tests/cal/blank_line_mid.ics = 210447323578fbbdb09f5283c6f40d34ec8e4ca392be24b9e64f4d86212e6fec
+vendor/om/icalparser/tests/cal/daily_recur.ics = f701b2df8523e43f1d63ffaa851d858f90075273b341ba1bb02dfc68ecdde97a
+vendor/om/icalparser/tests/cal/daily_recur2.ics = 6652bdab3f0ade214813cd1862617d51c9209e0ce8c5f01331d6327c2a8cced9
+vendor/om/icalparser/tests/cal/day_long_recur_yearly.ics = 447d9e5311be264c8ab19126b944f3d7e6eb00f6476985b2f0f3d57b76f5f054
+vendor/om/icalparser/tests/cal/forced_types.ics = dd1582682b7a694d3a76e0f94f171d5a44b6d291891e142f905aa3677f95d59a
+vendor/om/icalparser/tests/cal/google_birthday.ics = e4f0b8493cbaeb16f7d761ad0dd1b184881c0ce26a24cf4c8434bf1c664a0aec
+vendor/om/icalparser/tests/cal/minimal.ics = 80d8b4a0acb2c31997da6ca3991effd6efce144ba5d62226e7386a93c6e34a91
+vendor/om/icalparser/tests/cal/missing-timezone.ics = 6ce5b4dd056b28ff7fdbcd62e9b96c0fa5be3ddbb9ad425842ba7e394f88b934
+vendor/om/icalparser/tests/cal/missing_RRULE_notice.ics = cfb38ab3aa17d72745690834505771b1f99e534311402a644ace6d74d4bde749
+vendor/om/icalparser/tests/cal/multiline_description.ics = 1677981752d8cde967974556da26c915cd8d7bf5bf002cdbf0d35aafe99b5512
+vendor/om/icalparser/tests/cal/multiple_attachments.ics = fa0242bc4aefe9bbec4e1c2aa3da9959b4fd165ac6e94b4603cc4497615e868c
+vendor/om/icalparser/tests/cal/multiple_categories.ics = e70be0cae47d9031bb1daf0dffa6f01b9bb6f4275b5c2b88199ed9052cbdb03e
+vendor/om/icalparser/tests/cal/multiple_rrules.ics = 1006c4737ba50f6294a095c1a1fcfa4ac64d2a9a449cfb07b8494547ee9ec23c
+vendor/om/icalparser/tests/cal/parserv2.ics = 25533257ba63bde320a24d109b6d63b94f2d9a0529c09e7f86b760384e0ac5cf
+vendor/om/icalparser/tests/cal/readme.md = 4c71bb90aeddead1690577250ba209abef6ace6a942716c5f18352744e6457c8
+vendor/om/icalparser/tests/cal/recur_instances.ics = 89f05e5199aae2aa70d8a282d12ea612bc060ba4e7241945df3c22c77efbf3ab
+vendor/om/icalparser/tests/cal/recur_instances_finite.ics = 2fc67975bc9caf086cf93e60148f1e043c91a22ffed632aba23e9e775c7d4e77
+vendor/om/icalparser/tests/cal/recur_instances_with_modifications.ics = 12a1b0babe82b5e135abf8b267d8e18f418888bd9246757959a7b29bf2c62f09
+vendor/om/icalparser/tests/cal/recur_instances_with_modifications_and_interval.ics = d8664c69d223bc8708e0f0f14d0b4c1e1583478c127930c91bfeb2dd891df909
+vendor/om/icalparser/tests/cal/recur_instances_with_modifications_to_first_day.ics = 3bfb73d98297bab4bfaa11db504407509ca2834d28d7b11362409307141c8006
+vendor/om/icalparser/tests/cal/rrule_interval.ics = 902db126b5224b4a2ee186f6ccbc530d8fb1fff37a33aa12c7beae28844eba47
+vendor/om/icalparser/tests/cal/url.ics = 78a7c58f0dcb13b280c5b4bc387265719fbd9e22da94dee236632563a2a21c79
+vendor/om/icalparser/tests/cal/utc_negative_zero.ics = c9538176a562559ad4bb16ff56aa81fafd637008c02f6b28e8851e58de05a57c
+vendor/om/icalparser/tests/cal/weird_windows_timezones.ics = ac072d54c6acd4e884633e465de4828301d11c07f80c737e6288102e4c1bfbd9
+vendor/om/icalparser/tests/cal/wrong_dates.ics = 7051235e499c156d7ddc4da29a2cae42a41fdcb93e3414e2edcdc48f97d5def7
+vendor/om/icalparser/tests/event.attachements.phpt = b8621f94960c6aa4ee5407438b775989e985a165daceeddf7ae5247c50e19398
+vendor/om/icalparser/tests/event.categories.phpt = 3dbf63d31302caf29ffaf32ca1d51b4f0c2b4f4b3f46b2f0b2a9b1dd48059ecb
+vendor/om/icalparser/tests/event.dates.phpt = 8bc95a7194222fcf4b2abb58aab6fe9f86f79e14d2544949e8b86fc7a798f71b
+vendor/om/icalparser/tests/event.description.phpt = 36ba13b6c4c5e7dd73932632335a9c35acffa70f05b7f40482535d2a9e187c8c
+vendor/om/icalparser/tests/event.timezones.phpt = 039ad77ebb5f7e59701e84fc2b779ba282dd7118e88d1b2728aa6544027cbd72
+vendor/om/icalparser/tests/event.url.phpt = 4620701bce1c170580b0fb54c2239c43ec37ab365e48d1003f4e9198942f543d
+vendor/om/icalparser/tests/events.recurring.phpt = 26d6694f0c12057eb3ea7a036437a56428f065d83b05b79fa83810f8c3486be6
+vendor/om/icalparser/tests/events.sorting.phpt = 140d4ac6a662fedb434c672b6d301a33da7a160e62f881f9f19ebaeaa8963490
+vendor/om/icalparser/tests/missing.timezone.phpt = 6719d9fce8cc35565cc8ba4a52e1d9bbdbceebd91dc3ef4b46bb193c633950f2
+vendor/thecsea/simple-caldav-client/COPYING = ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
+vendor/thecsea/simple-caldav-client/LICENSE = c03cea027b4b40e4402fabd08557736727ec3d5bc54ad64ab6472de432198cad
+vendor/thecsea/simple-caldav-client/README.md = c7b363d74a157846e31fbbd581bbc118f6372b0220ec140397ec884ee06a68fe
+vendor/thecsea/simple-caldav-client/TODO = 8660df098b3d54560206f57d2823000d507aec8b6321cb376bcc9a8252671828
+vendor/thecsea/simple-caldav-client/composer.json = 8af886310ab4e25eada75edcc4e25ccbcc475e2e9c937009afd66daec512060e
+vendor/thecsea/simple-caldav-client/config/listCalendars.php = 2cbf457466183fc5f6d6e60bd01a164aa8f6bc8d67b759e17092011b8ecc75b5
+vendor/thecsea/simple-caldav-client/example code/example.php = 4ab0ac801d319761bba1cfc1317698d1beacde488a39332da59a866371c5b2a7
+vendor/thecsea/simple-caldav-client/src/CalDAVCalendar.php = 2269a48aafc33be4d39db5b4de1085f66f9b9aa78da688a4de3a8f8113b48a75
+vendor/thecsea/simple-caldav-client/src/CalDAVClient.php = b2ee7ebf2b5ba6c70b3e8b6dd6271e34e1ba2ba083c43b841ae6c02c059fc389
+vendor/thecsea/simple-caldav-client/src/CalDAVException.php = b5a35890adc68b5c0f8a6bd80ee0365208c6578003c3505132e9b2ed1a503803
+vendor/thecsea/simple-caldav-client/src/CalDAVFilter.php = 30f2d52e304d39f0da957a1a92436af38085d5c6765e1ac9eb570b9b88c253ee
+vendor/thecsea/simple-caldav-client/src/CalDAVObject.php = 88caece95f4c146b1cd0f2a594de8a5c4715433d8c240a57bbf017217017daa6
+vendor/thecsea/simple-caldav-client/src/SimpleCalDAVClient.php = 6cf44ceae40c8be082deb47534f354b2c700049c497e02f74fe29dbaca4cb621
+vendor/thecsea/simple-caldav-client/src/includes/AWLUtilities.php = 9ff504e3c5c3ff8700ff3ca7e21e76a89961aae452e9734e66175036b9d2017b
+vendor/thecsea/simple-caldav-client/src/includes/README = c83b0849328ca150a470a29d3f93a17265e4c17e7678ad313fbcafba2e54cef0
+vendor/thecsea/simple-caldav-client/src/includes/Translation.php = 931e0b679a5094379622039a1fb47274b6da83cbe830a9f630b6ca36452c06eb
+vendor/thecsea/simple-caldav-client/src/includes/XMLDocument.php = a834d6157e4fd25255b98b2c95cf0402bf8f0c1191a380b5e5aa35217f60f44a
+vendor/thecsea/simple-caldav-client/src/includes/XMLElement.php = 1417dbd4e3f4d54a64635d3aa4128203ebedae8dec20aa77701028fb0208cfbf
+views/calendar.php = 2732249da0eafcd4d0e3e135caf627d23bf573f3b1d9ef8d3c54193b0233c326
+views/calendargroupgrid.php = b9fdb68de48ed82d5930a289ea7598befc802c31df60a4528c5903e932d8ac93
+views/calendargroups.php = 108d8710e8fc899c7ed8e3bffba68d572fed351d8b24a98deed38cd5703b3347
+views/grid.php = 55377113797d4c5b40cd33ad72d6b025bc419cbca88f324551129bb78deade63
+views/local_settings.php = cd6d40ef3bb38b140f2ab58b5bff8bd68d5b325cf6f161996f177345d8a5ec09
+views/oauth_calendar_form.php = 4df2929247e694431a46b02bdf2b8901941aa4c8695b795f9f5476290dbdd90f
+views/outlook_config_form.php = 2fc493de6da4e1abfdd80d6ba89fcc0060e8ecc08fbd197399accaa4a50c1332
+views/outlook_configs_grid.php = 343c795be65a5abd70953b92ceb32f0cc34e9ff039a2afbce81b70a4737cf2a4
+views/remote_caldav_settings.php = d7381cdad3a639ac071efc321ae2d525193984d9842fa46403fc8761528b5953
+views/remote_ical_settings.php = c09a18514346ada505a89e1e316ffb0596182f58c5838814ed01b54ad894b12e
+views/rnav.php = 87ee2a22d6a6a9f94583f94f7c91cf8aa99b5e291ad2e517a3d1af6157720210
+views/ucp_config.php = a31c17d88a56d1942654f8420cd7a62d497b07c4310d8dff631570aaa5dcd33d
+;# End
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.22 (GNU/Linux)
+
+iQIcBAEBAgAGBQJoB5/qAAoJELU9IVp1UjGjLrwP/2s8U+HzLXC2hG0PQ+hWpoHC
++2JQmTQU0kAspKubVRIUtQ0i+cGRLkYBrOu5W9JNfuApc2CMBh+5UVBEef9cJFJy
+uDfEY+fRoBBqbeYYLjWBnNUNbTYGdWBRn/OrD2Vvh5+Kr10TvJ4clxNZKk3YBcRO
+Vt+9Pjs0LOaCJ63iGn14WTqG+TU/N1q4IjyrFh8Vc76LTNWxrLjpT/hCzxierB7Z
+EtDU5hiUKiR0ArE+Zd96qLEzuEY26ueu6xX6YHKlunCUNOG5170gwrwvDKxphd/A
+pd9X/cydEVP8tTOmWKREUFhoodeTP8aAG/4GVPGhbWZoBv/jXBFdkMld7ylKYBJO
+CqTMfZlQFhVRVB2pD3Jf1ST/mw5FQJ4jC9wx1ne9mMTn4aSKsqNLm08laJJhftQy
+SY9CRD6pSUIeWjKE+emp9Hc6D9mcRC3V3ilFLbJ6XPFNYZjI0O0n0R9R3QHEza7W
+LBo0SkXF/61Yov5fNlPygs226ZXJkPhvoLMBSBbdu63S7WD+Ocgs16v5nc8hgnVm
+mROCvTLZGtN8KeHjyIWxMV02AgDoomGnYFQqnC4Jr6blCc2UlAp11vnlvejxAfLk
+QoMOI9a9vR2isJIeeM0CHr/UsXdV+jwryiRFFiuCriElWaEopJO+mo7eZhs/8LLd
+WSEX9ul1LTuWw9SOP0sQ
+=tNzl
+-----END PGP SIGNATURE-----

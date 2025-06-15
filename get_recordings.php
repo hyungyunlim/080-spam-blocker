@@ -343,6 +343,52 @@ if (is_dir($recording_dir)) {
                 if($extra && isset($extra['notification_phone'])){
                     $recording_info['notification_phone'] = $extra['notification_phone'];
                 }
+
+                // 스팸 문자 내용 조회
+                try {
+                    $dbPath = __DIR__ . '/spam.db';
+                    if (file_exists($dbPath)) {
+                        $db = new SQLite3($dbPath);
+                        
+                        // 080번호 추출 (TO_08... 또는 discovery-08... 패턴)
+                        $phone080 = '';
+                        if (preg_match('/TO_(\d{10,11})/i', $file, $m)) {
+                            $phone080 = $m[1];
+                        } elseif (preg_match('/discovery-(\d{10,11})/i', $file, $m)) {
+                            $phone080 = $m[1];
+                        }
+                        
+                        if ($phone080) {
+                            // 해당 080번호와 관련된 스팸 내용 조회 (최신 순)
+                            $query = "SELECT raw_text, identification, received_at 
+                                     FROM sms_incoming 
+                                     WHERE phone080 = '{$phone080}' 
+                                     ORDER BY received_at DESC 
+                                     LIMIT 1";
+                            $smsData = $db->querySingle($query, true);
+                            
+                            if ($smsData && !empty($smsData['raw_text'])) {
+                                $recording_info['spam_content'] = $smsData['raw_text'];
+                                $recording_info['spam_received_at'] = $smsData['received_at'];
+                            }
+                            
+                            // 패턴 소스 정보 조회 (call_id 기반)
+                            if (preg_match('/-ID_([A-Za-z0-9]+)/i', $file, $id_match)) {
+                                $call_id = $id_match[1];
+                                $callQuery = "SELECT pattern_source FROM unsubscribe_calls WHERE call_id = '{$call_id}' LIMIT 1";
+                                $callData = $db->querySingle($callQuery, true);
+                                
+                                if ($callData && !empty($callData['pattern_source'])) {
+                                    $recording_info['pattern_source'] = $callData['pattern_source'];
+                                }
+                            }
+                        }
+                        
+                        $db->close();
+                    }
+                } catch (Exception $e) {
+                    // 조용히 실패 (로그는 남기지 않음)
+                }
                 
                 // 최신 수정 시각 계산
                 if ($recording_info['timestamp'] > $lastUpdated) {

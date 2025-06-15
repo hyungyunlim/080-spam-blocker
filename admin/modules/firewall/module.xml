@@ -1,0 +1,58 @@
+<module>
+	<rawname>firewall</rawname>
+	<repo>standard</repo>
+	<name>System Firewall</name>
+	<version>17.0.1.35</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>AGPLv3+</license>
+	<licenselink>https://www.gnu.org/licenses/agpl-3.0.txt</licenselink>
+	<category>Connectivity</category>
+	<candisable>no</candisable>
+	<description>Integrated PBX Firewall. Currently works with RHEL 6 and RHEL 7 compatible distributions. Note: This requires the Sysadmin RPM. Please see wiki for further information.</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26181828/Firewall</more-info>
+	<changelog>
+		*17.0.1.35* #Issue-645 Fixing getNfsPorts API for Debian OS. 
+		*17.0.1.34* #Issue-625 repeated custom whitelisted ip are removed in UI 
+		*17.0.1.33* #Issue-625 repeated custom whitelisted ip are removed in UI 
+		*17.0.1.32* Github #625 adding whitelist ips to trusted network 
+		*17.0.1.31* Fixing FREEI-1595 Undefined index error on fresh non-activated system 
+		*17.0.1* 17.0.1 alpha release
+	</changelog>
+	<depends>
+		<file>/usr/lib/sysadmin/includes.php</file>
+		<module>sipsettings ge 17.0.1</module>
+		<module>manager ge 17.0.1</module>
+		<version>17.0.1</version>
+	</depends>
+	<menuitems>
+		<firewall>Firewall</firewall>
+	</menuitems>
+	<location>compatibility</location>
+	<md5sum>compatibility</md5sum>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<console>
+		<command>
+			<name>firewall</name>
+		</command>
+	</console>
+	<hooks>
+		<dashboard class="Overview" namespace="FreePBX\modules\Dashboard\Sections">
+			<method callingMethod="getSummary" class="Firewall" namespace="FreePBX\modules">dashboardService</method>
+		</dashboard>
+		<framework class="Start" namespace="FreePBX\Console\Command">
+			<method callingMethod="preAsteriskHooks" class="Firewall" namespace="FreePBX\modules">startFirewall</method>
+		</framework>
+		<framework class="Stop" namespace="FreePBX\Console\Command">
+			<method callingMethod="postAsteriskHooks" class="Firewall" namespace="FreePBX\modules">stopFirewall</method>
+		</framework>
+		<framework class="Chown" namespace="FreePBX\Console\Command">
+			<method callingMethod="fwcChownFiles" class="Firewall" namespace="FreePBX\modules">chownFreepbx</method>
+		</framework>
+		<Backup class="Backup" namespace="FreePBX\modules">
+			<method callingMethod="postrestoreModulehook" class="Firewall" namespace="FreePBX\modules">postrestorehook</method>
+		</Backup>
+	</hooks>
+	<oobe method="oobeHook" priority="200"/>
+</module>

@@ -1,0 +1,215 @@
+# Copyright (C) 2008 PostMet GmbH
+# This file is distributed under the same license as the PACKAGE package.
+# Alexander Kozyrev <ceo@postmet.com>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-25 01:53-0400\n"
+"PO-Revision-Date: 2021-12-08 06:04+0000\n"
+"Last-Translator: Dmitriy Q <krotesk@ya.ru>\n"
+"Language-Team: Russian <http://weblate.freepbx.org/projects/freepbx/"
+"printextensions/ru/>\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.0.1\n"
+
+#: PDF.php:147
+#, php-format
+msgid "%s - Page %s/%s"
+msgstr ""
+
+#: Printextensions.class.php:53 Printextensions.class.php:158
+#, php-format
+msgid "%s Extensions"
+msgstr ""
+
+#: views/view.extensions.header.php:54
+msgid "All"
+msgstr ""
+
+#: assets/js/printextensions.js:11
+msgid "All Selected"
+msgstr ""
+
+#: Printextensions.class.php:149
+msgid "Command not found!"
+msgstr ""
+
+#: printextensions.i18n.php:8
+msgid ""
+"Creates a printable list of extension numbers used throughout the system "
+"from all modules that provide an internal callable number"
+msgstr ""
+"Создает пригодный для печати список внутренних номеров, используемых в "
+"системе всеми модулями, на которые есть возможность позвонить"
+
+#: views/view.extensions.header.php:66
+msgid "Date Format"
+msgstr ""
+
+#: views/view.extensions.header.php:73
+msgid "Date Print Alignment"
+msgstr ""
+
+#: views/view.extensions.header.php:2 views/view.extensions.header.php:28
+msgid "Download PDF"
+msgstr "Скачать PDF"
+
+#: Printextensions.class.php:381 views/view.extensions.list.php:21
+msgid "Empty"
+msgstr ""
+
+#: Printextensions.class.php:286
+msgid "Extension"
+msgstr "Внутренний номер"
+
+#: views/view.extensions.header.php:62
+msgid "Footer"
+msgstr ""
+
+#: views/view.extensions.header.php:37
+msgid "Header"
+msgstr ""
+
+#: Printextensions.class.php:122
+msgid "Missing data!"
+msgstr ""
+
+#: views/view.extensions.header.php:31
+msgid "More Options"
+msgstr ""
+
+#: views/view.extensions.header.php:52
+msgid "Only First"
+msgstr ""
+
+#: PDF.php:156
+#, php-format
+msgid "Page %s/%s"
+msgstr ""
+
+#: Printextensions.class.php:58
+#, php-format
+msgid "Page Not Found (%s)!!!!"
+msgstr ""
+
+#: views/view.extensions.header.php:90
+msgid "Pagination Print Alignment"
+msgstr ""
+
+#: printextensions.i18n.php:4 printextensions.i18n.php:10
+#: views/page.extensions.list.php:2
+msgid "Print Extensions"
+msgstr "Распечатать список внутренних номеров"
+
+#: views/view.extensions.header.php:48
+msgid "Print Header in Page"
+msgstr ""
+
+#: printextensions.i18n.php:6
+msgid "Reports"
+msgstr "Отчеты"
+
+#: views/view.extensions.header.php:107 views/view.extensions.header.php:109
+msgid "Save Settings"
+msgstr ""
+
+#: views/view.extensions.header.php:11
+msgid "Select Groups to Print"
+msgstr ""
+
+#: views/view.extensions.header.php:111 views/view.extensions.header.php:113
+msgid "Set Default Settings"
+msgstr ""
+
+#: assets/js/printextensions.js:46
+msgid "Skip, not selected data!"
+msgstr ""
+
+#: Printextensions.class.php:128 Printextensions.class.php:140
+msgid "Successful Update"
+msgstr ""
+
+#: views/view.extensions.header.php:41
+msgid "Title"
+msgstr ""
+
+#: Printextensions.class.php:132 Printextensions.class.php:144
+msgid "Update process failed!"
+msgstr ""
+
+#: Printextensions.class.php:285
+msgid "User"
+msgstr "Пользователь"
+
+#: Printextensions.class.php:284
+msgid "Users"
+msgstr "Пользователи"
+
+#~ msgid "Extensions"
+#~ msgstr "Внутренние номера"
+
+#~ msgid "Print"
+#~ msgstr "Печать"
+
+#, fuzzy
+#~ msgid "No Matches for the Requested Search"
+#~ msgstr ""
+#~ "#-#-#-#-#  - (1.4)  #-#-#-#-#\n"
+#~ "По данному запросу, ничего не найдено\n"
+#~ "#-#-#-#-#  - (1.4)  #-#-#-#-#\n"
+#~ "По данному запросу, ничего не найдено."
+
+#~ msgid "Destination"
+#~ msgstr "Назначение"
+
+#~ msgid "FreePBX Extension Layout"
+#~ msgstr "Список внутренних абонентов"
+
+#~ msgid "Name"
+#~ msgstr "Имя"
+
+#~ msgid "Printer Friendly Page"
+#~ msgstr "Страница к печати"
+
+#~ msgid "Search Bounded Regex"
+#~ msgstr "Поиск по ограниченным регулярным выражениям"
+
+#~ msgid "Search Exact Exten"
+#~ msgstr "Искать конкретный номер"
+
+#~ msgid "Search Unbounded Regex"
+#~ msgstr "Поиск по неограниченным регулярным выражениям"
+
+#~ msgid "Search:"
+#~ msgstr "Поиск:"
+
+#~ msgid ""
+#~ "You can narrow the list of extensions based on a search criteria. If you "
+#~ "search for an exact extension number the page will redirect to the edit "
+#~ "page for the given number. You can also do a bounded or unbounded regex "
+#~ "search. The bounded search simply encloses you search criteria between a "
+#~ "'^' and '$' where as an unbounded one is completely free form. All normal "
+#~ "regex patterns are acceptable in your search. So for example, a bounded "
+#~ "search of 20\\d\\d would search for all extensions of the form 20XX. The "
+#~ "resulting lists of numbers all contain links to go directly to the edit "
+#~ "pages and the Printer Friendly page will reflect the filtered list of "
+#~ "numbers."
+#~ msgstr ""
+#~ "Можно получить выборочный лист внутренних номеров, фильтруя по критериям "
+#~ "запроса. Если задан точный внутренний номер, то результат поиска будет "
+#~ "автоматически перенаправлен на страницу настроек этого номера для "
+#~ "редакции. Также при выставлении критериев поиска можно использовать "
+#~ "регулярные выражения. В общем случае критерий запроса при помощи "
+#~ "регулярных выражений должен содержать данные между '^' и '$', где "
+#~ "допускаются различные свободные формы. Например, поиск по критерию "
+#~ "20\\d\\d найдёт все внутренние Caller IDа 20ХХ. Результатом поиска будет "
+#~ "список внутренних номеров, каждый из которых будет иметь линк на сруницу "
+#~ "редактирования настроек этого номера, а также линк на страницу этого же "
+#~ "результата, оптимизированную для принтера."

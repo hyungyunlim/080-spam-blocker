@@ -1,0 +1,50 @@
+<module>
+	<rawname>presencestate</rawname>
+	<repo>standard</repo>
+	<name>Presence State</name>
+	<version>17.0.2.4</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<category>Admin</category>
+	<description>Manage list of presence states.</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/20611576/Presence+State+Module</more-info>
+	<menuitems>
+		<presencestate needsenginedb="yes">Presence State</presencestate>
+	</menuitems>
+	<depends>
+		<phpversion>8.2.0</phpversion>
+		<version>17.0</version>
+	</depends>
+	<changelog>
+		*17.0.2.3* bump 
+		*17.0.2* Packaging of ver 17.0.2
+		*17.0.1* 17.0
+	</changelog>
+	<hooks>
+		<ucp class="Ucp">
+			<method callingMethod="constructModuleConfigPages" class="Presencestate">ucpConfigPage</method>
+			<method callingMethod="addUser" class="Presencestate">ucpAddUser</method>
+			<method callingMethod="updateUser" class="Presencestate">ucpUpdateUser</method>
+			<method callingMethod="delUser" class="Presencestate">ucpDelUser</method>
+			<method callingMethod="addGroup" class="Presencestate">ucpAddGroup</method>
+			<method callingMethod="updateGroup" class="Presencestate">ucpUpdateGroup</method>
+			<method callingMethod="delGroup" class="Presencestate">ucpDelGroup</method>
+		</ucp>
+	</hooks>
+	<database>
+		<table name="presencestate_list">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="type" type="string" length="25" notnull="false"/>
+			<field name="message" type="string" length="80" notnull="false"/>
+		</table>
+		<table name="presencestate_prefs">
+			<field name="extension" type="string" length="20" primarykey="true"/>
+			<field name="item_id" type="integer" primarykey="true"/>
+			<field name="pref" type="string" length="25" notnull="false"/>
+		</table>
+	</database>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

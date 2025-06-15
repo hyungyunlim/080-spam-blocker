@@ -5,9 +5,11 @@ CREATE TABLE IF NOT EXISTS users (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     phone         TEXT UNIQUE NOT NULL,
     verified      INTEGER DEFAULT 0,
+    blocked       INTEGER DEFAULT 0,
     created_at    TEXT DEFAULT CURRENT_TIMESTAMP,
     verified_at   TEXT,
-    last_login_at TEXT
+    last_login_at TEXT,
+    last_access   TEXT
 );
 
 -- Verification codes for phone confirmation
@@ -46,4 +48,18 @@ CREATE TABLE IF NOT EXISTS unsubscribe_calls (
     confidence       INTEGER,
     recording_file   TEXT,
     FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+-- User notification preferences
+CREATE TABLE IF NOT EXISTS user_notification_settings (
+    id                    INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id              INTEGER UNIQUE,
+    notify_on_start      INTEGER DEFAULT 1,    -- 처리 시작 알림
+    notify_on_success    INTEGER DEFAULT 1,    -- 성공 알림
+    notify_on_failure    INTEGER DEFAULT 1,    -- 실패 알림
+    notify_on_retry      INTEGER DEFAULT 1,    -- 재시도 알림
+    notification_mode    TEXT DEFAULT 'short', -- 'short' 또는 'detailed'
+    created_at           TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at           TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 ); 

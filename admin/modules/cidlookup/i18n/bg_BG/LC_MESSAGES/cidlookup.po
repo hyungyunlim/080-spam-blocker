@@ -1,0 +1,563 @@
+# This file is part of FreePBX.
+#
+#    FreePBX is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    FreePBX is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with FreePBX.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Copyright (C) 2009 Chavdar Iliev <chavdar_75@yahoo.com>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FreePBX v2.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-01 03:41+0000\n"
+"PO-Revision-Date: 2014-07-21 15:37+0200\n"
+"Last-Translator: Chavdar <chavdar_75@yahoo.com>\n"
+"Language-Team: Bulgarian <http://git.freepbx.org/projects/freepbx/cidlookup/"
+"bg/>\n"
+"Language: bg_BG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 1.10-dev\n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-Country: BULGARIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: views/form.php:26
+msgid ""
+" It executes an HTTP GET passing the caller number as argument to retrieve "
+"the correct name"
+msgstr ""
+
+#: views/form.php:27
+msgid ""
+" It executes an HTTPS GET passing the caller number as argument to retrieve "
+"the correct name"
+msgstr ""
+
+#: views/form.php:25
+msgid ""
+" Use DNS to lookup caller names, it uses ENUM lookup zones as configured in "
+"enum.conf"
+msgstr ""
+
+#: views/form.php:23
+msgid " Use OpenCNAM [https://www.opencnam.com/]"
+msgstr ""
+
+#: views/form.php:24
+msgid " use astdb as lookup source, use phonebook module to populate it"
+msgstr ""
+
+#: views/form.php:209
+msgid ""
+"<p>If you need to create an OpenCNAM account, you can visit their website: "
+"<a href=\"https://www.opencnam.com/register\" target=\"_blank\">https://www."
+"opencnam.com/register</a></p>"
+msgstr ""
+
+#: page.cidlookup.php:8
+msgid ""
+"A Lookup Source let you specify a source for resolving numeric CallerIDs of "
+"incoming calls, you can then link an Inbound route to a specific CID source. "
+"This way you will have more detailed CDR reports with information taken "
+"directly from your CRM. You can also install the phonebook module to have a "
+"small number <-> name association. Pay attention, name lookup may slow down "
+"your PBX"
+msgstr ""
+"Източникът на Следене ви позволява да определите източник за анализиране на "
+"цифрови CallerID-та на входящите обаждания, след което можете да свържете "
+"Входящ Маршрут с определен CID източник. По този начин ще имате по-детайлни "
+"CDR отчети с информация взета директно от CRM. Също така можете да "
+"инсталирате модула Телефонен Указател за да имате някаква номер <-> име "
+"асоциация. Имайте предвид, че следенето може да натовари вашата телефонна "
+"централа"
+
+#: views/form.php:218
+msgid "Account SID:"
+msgstr ""
+
+#: views/grid.php:40
+msgid "Actions"
+msgstr ""
+
+#: views/grid.php:26
+msgid "Add CIDLookup Source"
+msgstr ""
+
+#: cidlookup.i18n.php:6
+msgid "Admin"
+msgstr "Админ"
+
+#: cidlookup.i18n.php:8
+msgid ""
+"Allows CallerID Lookup of incoming calls against different sources "
+"(OpenCNAM, MySQL, HTTP, ENUM, Phonebook Module)"
+msgstr ""
+
+#: views/form.php:242
+msgid "Auth Token"
+msgstr ""
+
+#: views/coreDIDHook.php:9
+msgid "CID Lookup Source"
+msgstr "Източник на CID Следене"
+
+#: page.cidlookup.php:7
+msgid "CIDLookup"
+msgstr ""
+
+#: views/form.php:127
+msgid "Cache Results"
+msgstr ""
+
+#: views/form.php:183
+msgid "Caller ID Format"
+msgstr ""
+
+#: cidlookup.i18n.php:4
+msgid "CallerID Lookup"
+msgstr "CallerID Следене"
+
+#: cidlookup.i18n.php:10
+msgid "CallerID Lookup Sources"
+msgstr "CallerID Следене"
+
+#: views/form.php:562
+msgid "Character Set"
+msgstr ""
+
+#: views/form.php:190
+msgid "Company"
+msgstr ""
+
+#: views/form.php:102
+msgid "Contact Manager"
+msgstr ""
+
+#: views/form.php:156
+msgid "Contact Manager Group(s)"
+msgstr ""
+
+#: views/form.php:46
+msgid "Contact Manager Not Installed"
+msgstr ""
+
+#: views/form.php:29
+msgid "Contact Manager:"
+msgstr ""
+
+#: views/form.php:442
+msgid "Database"
+msgstr ""
+
+#: views/form.php:454
+msgid "Database Name"
+msgstr ""
+
+#: views/form.php:142
+msgid ""
+"Decide whether or not cache the results to astDB; it will overwrite present "
+"values. It does not affect Internal source behavior"
+msgstr ""
+"Преценете дали да кеширате или не резултатите в astDB; това ще отмени "
+"настоящите настройки. Не се отразява на  Вътрешните източници"
+
+#: Cidlookup.class.php:42
+msgid "Delete"
+msgstr ""
+
+#: views/grid.php:38
+msgid "Description"
+msgstr ""
+
+#: views/form.php:191
+msgid "Display Name"
+msgstr ""
+
+#: views/form.php:25
+msgid "ENUM:"
+msgstr ""
+
+#: views/form.php:83
+msgid "Enter a description for this source."
+msgstr "Въведете описание за този източник."
+
+#: views/form.php:170
+msgid "Filter results to these contact manager groups"
+msgstr ""
+
+#: views/form.php:188
+msgid "First Last"
+msgstr ""
+
+#: views/form.php:26
+msgid "HTTP:"
+msgstr ""
+
+#: views/form.php:27
+msgid "HTTPS:"
+msgstr ""
+
+#: views/form.php:270 views/form.php:418
+msgid "Host"
+msgstr ""
+
+#: views/form.php:282
+msgid "Host name or IP address"
+msgstr "Ине на хост или IP адрес"
+
+#: views/form.php:200
+msgid "How to format the returned data"
+msgstr ""
+
+#: views/form.php:101
+msgid "Internal"
+msgstr "Вътрешен"
+
+#: views/form.php:24
+msgid "Internal:"
+msgstr ""
+
+#: views/form.php:28
+msgid "It queries a MySQL database to retrieve caller name"
+msgstr ""
+
+#: views/form.php:189
+msgid "Last First"
+msgstr ""
+
+#: views/bootnav.php:6
+msgid "List Sources"
+msgstr ""
+
+#: views/form.php:574
+msgid "MySQL Character Set. Leave blank for MySQL default latin1"
+msgstr ""
+
+#: views/form.php:430
+msgid "MySQL Host"
+msgstr "MySQL Хост"
+
+#: views/form.php:550
+msgid "MySQL Password"
+msgstr "MySQL Парола"
+
+#: views/form.php:478
+msgid "MySQL Port"
+msgstr ""
+
+#: views/form.php:526
+msgid "MySQL Username"
+msgstr "MySQL Потребителско Име"
+
+#: views/form.php:28
+msgid "MySQL:"
+msgstr ""
+
+#: views/form.php:134
+msgid "No"
+msgstr ""
+
+#: Cidlookup.class.php:128
+msgid "None"
+msgstr "Няма"
+
+#: views/form.php:583 views/form.php:588
+msgid "Not yet implemented"
+msgstr "Все още не е реализиран"
+
+#: views/form.php:14 views/form.php:19
+msgid "OpenCNAM"
+msgstr ""
+
+#: functions.inc.php:97
+msgid "OpenCNAM Requires Authentication"
+msgstr ""
+
+#: bin/opencnam-alert.php:22
+msgid "OpenCNAM Throttle Reached!"
+msgstr ""
+
+#: views/form.php:23
+msgid "OpenCNAM:"
+msgstr ""
+
+#: views/form.php:342 views/form.php:538
+msgid "Password"
+msgstr ""
+
+#: views/form.php:354
+msgid "Password to use in HTTP authentication"
+msgstr "Парола за HTTP оторизиране"
+
+#: views/form.php:366
+msgid "Path"
+msgstr ""
+
+#: views/form.php:378
+msgid ""
+"Path of the file to GET<br/>e.g.: /cidlookup.php<br>Special token '[NUMBER]' "
+"will be replaced with caller number<br/>e.g.: /cidlookup/[NUMBER]/<br/"
+">'[NAME]' will be replaced with existing caller id name<br/>'[LANGUAGE]' "
+"will be replaced with channel language"
+msgstr ""
+
+#: views/form.php:294 views/form.php:466
+msgid "Port"
+msgstr ""
+
+#: views/form.php:306
+msgid "Port HTTP(s) server is listening at (default http 80, https 443)"
+msgstr ""
+
+#: views/form.php:390 views/form.php:490
+msgid "Query"
+msgstr ""
+
+#: views/form.php:402
+msgid ""
+"Query string, special token '[NUMBER]' will be replaced with caller "
+"number<br/>e.g.: number=[NUMBER]&source=crm<br/>'[NAME]' will be replaced "
+"with existing caller id name<br/>'[LANGUAGE]' will be replaced with channel "
+"language<br/>'[UNIQUEID]' will be replaced with unique Asterisk callID"
+msgstr ""
+
+#: views/form.php:502
+msgid ""
+"Query, special token '[NUMBER]' will be replaced with caller number<br/>e."
+"g.: SELECT name FROM phonebook WHERE number LIKE '%[NUMBER]%'"
+msgstr ""
+"Запитване, определеното означение '[NUMBER]' ще бъде заменено с номера на "
+"обаждащия се<br/>например: SELECT name FROM phonebook WHERE number LIKE "
+"'%[NUMBER]%'"
+
+#: Cidlookup.class.php:52
+msgid "Reset"
+msgstr ""
+
+#: views/form.php:29
+msgid "Searches a contact manager group"
+msgstr ""
+
+#: views/form.php:21
+msgid "Select the source type, you can choose between:"
+msgstr ""
+
+#: views/bootnav.php:16
+msgid "Source"
+msgstr "Източник"
+
+#: views/form.php:71
+msgid "Source Description"
+msgstr ""
+
+#: assets/js/sources.js:23
+msgid "Source Description Already Exist"
+msgstr ""
+
+#: views/form.php:95
+msgid "Source type"
+msgstr ""
+
+#: views/coreDIDHook.php:23
+msgid "Sources can be added in Caller Name Lookup Sources section"
+msgstr "Източниците могат да бъдат добавяни в меню 'CallerID Следене'"
+
+#: Cidlookup.class.php:47
+msgid "Submit"
+msgstr ""
+
+#: views/form.php:53
+#, php-format
+msgid ""
+"There are %s DIDs using this source that will no longer have lookups if "
+"deleted."
+msgstr ""
+"Има %s DID използващи този източник, които няма да могат да се следят ако го "
+"изтриете."
+
+#: views/grid.php:39
+msgid "Type"
+msgstr ""
+
+#: functions.inc.php:97
+msgid ""
+"Unauthenticated calls to the OpenCNAM API will soon fail. You will need an "
+"OpenCNAM account to continue using their API"
+msgstr ""
+
+#: views/form.php:318 views/form.php:514
+msgid "Username"
+msgstr ""
+
+#: views/form.php:330
+msgid "Username to use in HTTP authentication"
+msgstr "Потребителско Име за HTTP оторизиране"
+
+#: views/form.php:132
+msgid "Yes"
+msgstr ""
+
+#: bin/opencnam-alert.php:22
+msgid ""
+"You have gone past the free OpenCNAM usage limits.<br/><br/>To continue "
+"getting caller ID name information, you need to create an OpenCNAM "
+"Professional Account.<br/><br/>You can create an OpenCNAM account at: <a "
+"href=\"https://www.opencnam.com/register\">https://www.opencnam.com/"
+"register</a>.<br/><br/>Once you have created an account, visit the CallerID "
+"Lookup Sources menu and enter your OpenCNAM Professional Tier credentials."
+"<br/>"
+msgstr ""
+
+#: views/form.php:230
+msgid ""
+"Your OpenCNAM Account SID. This can be found on your OpenCNAM dashboard "
+"page: https://www.opencnam.com/dashboard"
+msgstr ""
+
+#: views/form.php:254
+msgid ""
+"Your OpenCNAM Auth Token. This can be found on your OpenCNAM dashboard page: "
+"https://www.opencnam.com/dashboard"
+msgstr ""
+
+#~ msgid "Checking for cidlookup field in core's incoming table.."
+#~ msgstr "Проверка за cidlookup поле в таблицата за входящи на ядрото.."
+
+#~ msgid "ERROR: failed: "
+#~ msgstr "ГРЕШКА: неуспех: "
+
+#~ msgid "FATAL: failed to transform old routes: "
+#~ msgstr "ГРЕШКА: не мога да трансформирам старите маршрути: "
+
+#~ msgid "Migrating channel routing to Zap DID routing.."
+#~ msgstr "Преместване на маршрут на канал в Zap DID маршрут.."
+
+#~ msgid "Not Needed"
+#~ msgstr "Не е Необходимо"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Removing deprecated channel field from incoming.."
+#~ msgstr "Премахване полета на неизползвани канали от входящи.."
+
+#~ msgid "not present"
+#~ msgstr "не присъства"
+
+#~ msgid "removed"
+#~ msgstr "премахнат"
+
+#~ msgid "Path of the file to GET<br/>e.g.: /cidlookup.php"
+#~ msgstr "Път до файла за GET<br/>например: /cidlookup.php"
+
+#~ msgid ""
+#~ "Query string, special token '[NUMBER]' will be replaced with caller "
+#~ "number<br/>e.g.: number=[NUMBER]&source=crm"
+#~ msgstr ""
+#~ "Стринг за запитване, определеното означение '[NUMBER]' ще бъде заменено с "
+#~ "номера на обаждащия се<br/>например: number=[NUMBER]&source=crm"
+
+#~ msgid "Add CID Lookup Source"
+#~ msgstr "Добави Източник на CID Следене"
+
+#~ msgid "Add Source"
+#~ msgstr "Добави Източник"
+
+#~ msgid "Cache results:"
+#~ msgstr "Кеширане на резултати:"
+
+#~ msgid "Database name"
+#~ msgstr "Име на База Данни"
+
+#~ msgid "Database:"
+#~ msgstr "База Данни:"
+
+#~ msgid "Delete CID Lookup source"
+#~ msgstr "Изтрий източник на CID Следене"
+
+#~ msgid "Edit Source"
+#~ msgstr "Редактирай Източник"
+
+#~ msgid "Host:"
+#~ msgstr "Хост:"
+
+#~ msgid "MySQL"
+#~ msgstr "MYSQL"
+
+#~ msgid "Password:"
+#~ msgstr "Парола:"
+
+#~ msgid "Path:"
+#~ msgstr "Път:"
+
+#~ msgid "Port HTTP server is listening at (default 80)"
+#~ msgstr "Порт на който HTTP сървъра слуша (по-подразбиране 80)"
+
+#~ msgid "Port:"
+#~ msgstr "Порт:"
+
+#~ msgid "Query:"
+#~ msgstr "Запитване:"
+
+#~ msgid "Source Description:"
+#~ msgstr "Описание на Източник:"
+
+#~ msgid "Source type:"
+#~ msgstr "Тип на източник:"
+
+#~ msgid "Source: %s (id %s)"
+#~ msgstr "Източник: %s (id %s)"
+
+#~ msgid "Submit Changes"
+#~ msgstr "Приеми Промените"
+
+#~ msgid "SugarCRM"
+#~ msgstr "Sugar CRM"
+
+#~ msgid "Username:"
+#~ msgstr "Потребителско Име:"
+
+#~ msgid ""
+#~ "Allows CallerID Lookup of incoming calls against different sources "
+#~ "(MySQL, HTTP, ENUM, Phonebook Module)"
+#~ msgstr ""
+#~ "Предоставя CallerID Следене на входящите обаждания спрямо различни "
+#~ "източници (MySQL, HTTP, ENUM, Телефонен Указател)"
+
+#~ msgid "CID Lookup source"
+#~ msgstr "Източник на CID следене"
+
+#~ msgid "deleted"
+#~ msgstr "изтрит"
+
+#~ msgid ""
+#~ "Select the source type, you can choose between:<ul><li>Internal: use "
+#~ "astdb as lookup source, use phonebook module to populate it</li><li>ENUM: "
+#~ "Use DNS to lookup caller names, it uses ENUM lookup zones as configured "
+#~ "in enum.conf</li><li>HTTP: It executes an HTTP GET passing the caller "
+#~ "number as argument to retrieve the correct name</li><li>MySQL: It queries "
+#~ "a MySQL database to retrieve caller name</li></ul>"
+#~ msgstr ""
+#~ "Изберете тип на източника, можете да избирате между:<ul><li>Вътрешен: "
+#~ "Използва astdb като източник на следене, използва модул Телефонен "
+#~ "Указател за попълването си</li><li>ENUM: Използва DNS да следи имената на "
+#~ "обаждащите се, използва ENUM зони за следене конфигурирани в enum.conf</"
+#~ "li><li>HTTP: Изпълнява  HTTP GET одобрение номера на обаждащия се като "
+#~ "аргумент за възстановяване на правилното име</li><li>MySQL: Запитва MySQL "
+#~ "базата данни за възстановяване на правилното име</li></ul>"
+
+#~ msgid "HTTP"
+#~ msgstr "HTTP"

@@ -1,0 +1,209 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FreePBX - módulo printextensions module spanish "
+"translation\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-25 01:53-0400\n"
+"PO-Revision-Date: 2016-12-10 21:46+0200\n"
+"Last-Translator: Ernesto <ecasas@sangoma.com>\n"
+"Language-Team: Spanish <http://weblate.freepbx.org/projects/freepbx/"
+"printextensions/es_ES/>\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.4\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: SPAIN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: PDF.php:147
+#, php-format
+msgid "%s - Page %s/%s"
+msgstr ""
+
+#: Printextensions.class.php:53 Printextensions.class.php:158
+#, php-format
+msgid "%s Extensions"
+msgstr ""
+
+#: views/view.extensions.header.php:54
+msgid "All"
+msgstr ""
+
+#: assets/js/printextensions.js:11
+msgid "All Selected"
+msgstr ""
+
+#: Printextensions.class.php:149
+msgid "Command not found!"
+msgstr ""
+
+#: printextensions.i18n.php:8
+msgid ""
+"Creates a printable list of extension numbers used throughout the system "
+"from all modules that provide an internal callable number"
+msgstr ""
+"Crea una lista imprimible de los números de extensión usados en el sistema "
+"para todos los módulos que proveen un numero interno destino valido"
+
+#: views/view.extensions.header.php:66
+msgid "Date Format"
+msgstr ""
+
+#: views/view.extensions.header.php:73
+msgid "Date Print Alignment"
+msgstr ""
+
+#: views/view.extensions.header.php:2 views/view.extensions.header.php:28
+msgid "Download PDF"
+msgstr "Descargar PDF"
+
+#: Printextensions.class.php:381 views/view.extensions.list.php:21
+msgid "Empty"
+msgstr ""
+
+#: Printextensions.class.php:286
+msgid "Extension"
+msgstr "Extensión"
+
+#: views/view.extensions.header.php:62
+msgid "Footer"
+msgstr ""
+
+#: views/view.extensions.header.php:37
+msgid "Header"
+msgstr ""
+
+#: Printextensions.class.php:122
+msgid "Missing data!"
+msgstr ""
+
+#: views/view.extensions.header.php:31
+msgid "More Options"
+msgstr ""
+
+#: views/view.extensions.header.php:52
+msgid "Only First"
+msgstr ""
+
+#: PDF.php:156
+#, php-format
+msgid "Page %s/%s"
+msgstr ""
+
+#: Printextensions.class.php:58
+#, php-format
+msgid "Page Not Found (%s)!!!!"
+msgstr ""
+
+#: views/view.extensions.header.php:90
+msgid "Pagination Print Alignment"
+msgstr ""
+
+#: printextensions.i18n.php:4 printextensions.i18n.php:10
+#: views/page.extensions.list.php:2
+msgid "Print Extensions"
+msgstr "Imprimir extensiones"
+
+#: views/view.extensions.header.php:48
+msgid "Print Header in Page"
+msgstr ""
+
+#: printextensions.i18n.php:6
+msgid "Reports"
+msgstr "Reportes"
+
+#: views/view.extensions.header.php:107 views/view.extensions.header.php:109
+msgid "Save Settings"
+msgstr ""
+
+#: views/view.extensions.header.php:11
+msgid "Select Groups to Print"
+msgstr ""
+
+#: views/view.extensions.header.php:111 views/view.extensions.header.php:113
+msgid "Set Default Settings"
+msgstr ""
+
+#: assets/js/printextensions.js:46
+msgid "Skip, not selected data!"
+msgstr ""
+
+#: Printextensions.class.php:128 Printextensions.class.php:140
+msgid "Successful Update"
+msgstr ""
+
+#: views/view.extensions.header.php:41
+msgid "Title"
+msgstr ""
+
+#: Printextensions.class.php:132 Printextensions.class.php:144
+msgid "Update process failed!"
+msgstr ""
+
+#: Printextensions.class.php:285
+msgid "User"
+msgstr "Usuario"
+
+#: Printextensions.class.php:284
+msgid "Users"
+msgstr "Usuarios"
+
+#~ msgid "Extensions"
+#~ msgstr "Extensiones"
+
+#~ msgid "Print"
+#~ msgstr "Imprimir"
+
+#~ msgid "Destination"
+#~ msgstr "Destino"
+
+#~ msgid "FreePBX Extension Layout"
+#~ msgstr "Distribución de extensiones de la centralita"
+
+#~ msgid "No Matches for the Requested Search"
+#~ msgstr "Nada encontrado para la búsqueda solucitada"
+
+#~ msgid "Printer Friendly Page"
+#~ msgstr "Versión para imprimir"
+
+#~ msgid "Search Bounded Regex"
+#~ msgstr "Búsqueda acotada Regex"
+
+#~ msgid "Search Exact Exten"
+#~ msgstr "Búsqueda exacta Exten"
+
+#~ msgid "Search Unbounded Regex"
+#~ msgstr "Búsqueda no acotada Regex"
+
+#~ msgid "Search:"
+#~ msgstr "Búsqueda:"
+
+#~ msgid ""
+#~ "You can narrow the list of extensions based on a search criteria. If you "
+#~ "search for an exact extension number the page will redirect to the edit "
+#~ "page for the given number. You can also do a bounded or unbounded regex "
+#~ "search. The bounded search simply encloses you search criteria between a "
+#~ "'^' and '$' where as an unbounded one is completely free form. All normal "
+#~ "regex patterns are acceptable in your search. So for example, a bounded "
+#~ "search of 20\\d\\d would search for all extensions of the form 20XX. The "
+#~ "resulting lists of numbers all contain links to go directly to the edit "
+#~ "pages and the Printer Friendly page will reflect the filtered list of "
+#~ "numbers."
+#~ msgstr ""
+#~ "Puede limitar la lista de extensiones basadas en un criterio de búsqueda. "
+#~ "Si busca un número de extensión exacta, la página redirigirá a la página "
+#~ "de edición del número dado. También puede hacer una búsqueda de "
+#~ "expresiones regulares limitada o ilimitada. La búsqueda acotada "
+#~ "simplemente encierra buscar criterios entre un '^' y '$', donde como una "
+#~ "ilimitada es completamente de forma libre. Todos los patrones de "
+#~ "expresiones regulares normales son aceptables en su búsqueda. Así, por "
+#~ "ejemplo, una búsqueda limitada de 20\\d\\d sería buscar todas las "
+#~ "extensiones de la forma 20XX. Las listas resultantes de los números de "
+#~ "todos contienen enlaces para ir directamente a las páginas de edición y "
+#~ "la página Printer Friendly reflejará la lista filtrada de números."
+
+#~ msgid "Name"
+#~ msgstr "Nombre"

@@ -115,6 +115,43 @@ if (empty($identificationNumber)) {
     }
 }
 
+// 웹 요청일 경우 스팸 내용을 데이터베이스에 저장
+if (php_sapi_name() !== 'cli' && !empty($spamMessage) && $spamMessage !== 'AUTO_CALL ' . $phoneNumber) {
+    try {
+        $dbPath = __DIR__ . '/spam.db';
+        $db = new SQLite3($dbPath);
+        
+        // 사용자 ID 확인/생성
+        $cleanNotifyDigits = preg_replace('/[^0-9]/', '', $notificationPhone);
+        $stmt = $db->prepare("SELECT id FROM users WHERE phone = :phone");
+        $stmt->bindValue(':phone', $cleanNotifyDigits, SQLITE3_TEXT);
+        $result = $stmt->execute();
+        $user = $result->fetchArray(SQLITE3_ASSOC);
+        
+        if (!$user) {
+            $stmt = $db->prepare("INSERT INTO users(phone, verified, created_at) VALUES(:phone, 1, datetime('now'))");
+            $stmt->bindValue(':phone', $cleanNotifyDigits, SQLITE3_TEXT);
+            $stmt->execute();
+            $userId = $db->lastInsertRowID();
+        } else {
+            $userId = $user['id'];
+        }
+        
+        // SMS 내용 저장
+        $stmt = $db->prepare('INSERT INTO sms_incoming (user_id, raw_text, phone080, identification, received_at, processed) VALUES (:uid, :raw, :ph080, :ident, datetime("now"), 1)');
+        $stmt->bindValue(':uid', $userId, SQLITE3_INTEGER);
+        $stmt->bindValue(':raw', $spamMessage, SQLITE3_TEXT);
+        $stmt->bindValue(':ph080', $phoneNumber, SQLITE3_TEXT);
+        $stmt->bindValue(':ident', $identificationNumber, SQLITE3_TEXT);
+        $stmt->execute();
+        
+        file_put_contents($logFile, "Spam content saved to database for user {$userId}\n", FILE_APPEND);
+        $db->close();
+    } catch (Exception $e) {
+        file_put_contents($logFile, "Error saving spam content: " . $e->getMessage() . "\n", FILE_APPEND);
+    }
+}
+
 // 4. 패턴 데이터베이스 로드
 $patternsFile = __DIR__ . '/patterns.json';
 $patterns = [];
@@ -130,9 +167,40 @@ if (file_exists($patternsFile)) {
     file_put_contents($logFile, "patterns.json not found.\n", FILE_APPEND);
 }
 
-// 5. 해당 번호의 패턴 조회
-$pattern = $patterns[$phoneNumber] ?? null;
-file_put_contents($logFile, "Pattern for {$phoneNumber}: " . ($pattern ? 'Found' : 'Not Found') . "\n", FILE_APPEND);
+// 5. 패턴 조회 - 우선순위: 사용자 소유 → 성공한 커뮤니티 패턴 → 기본 패턴
+$pattern = null;
+$patternSource = 'none'; // 'user', 'community', 'default', 'none'
+
+// 현재 사용자 식별
+$currentUserPhone = preg_replace('/[^0-9]/', '', $notificationPhone);
+
+// 1차: 현재 사용자가 소유한 패턴 찾기
+if (isset($patterns[$phoneNumber])) {
+    $candidatePattern = $patterns[$phoneNumber];
+    if (!isset($candidatePattern['owner_phone']) || $candidatePattern['owner_phone'] === $currentUserPhone) {
+        $pattern = $candidatePattern;
+        $patternSource = 'user';
+        file_put_contents($logFile, "Found user-owned pattern for {$phoneNumber}\n", FILE_APPEND);
+    }
+}
+
+// 2차: 사용자 패턴이 없으면 성공한 커뮤니티 패턴 찾기
+if (!$pattern && isset($patterns[$phoneNumber])) {
+    $candidatePattern = $patterns[$phoneNumber];
+    
+    // 다른 사용자 소유이지만 성공 기록이 있는 패턴
+    if (isset($candidatePattern['owner_phone']) && 
+        $candidatePattern['owner_phone'] !== $currentUserPhone &&
+        isset($candidatePattern['success_stats']) &&
+        $candidatePattern['success_stats']['success'] > 0) {
+        
+        $pattern = $candidatePattern;
+        $patternSource = 'community';
+        file_put_contents($logFile, "Found community pattern for {$phoneNumber} (owner: {$candidatePattern['owner_phone']}, success: {$candidatePattern['success_stats']['success']})\n", FILE_APPEND);
+    }
+}
+
+file_put_contents($logFile, "Pattern search result for {$phoneNumber}: " . ($pattern ? "Found ({$patternSource})" : 'Not Found') . "\n", FILE_APPEND);
 
 // 자동호출 지원 여부 확인
 if ($pattern && isset($pattern['auto_supported']) && !$pattern['auto_supported']) {
@@ -148,11 +216,10 @@ if ($pattern && isset($pattern['auto_supported']) && !$pattern['auto_supported']
 
 // 6. 패턴이 없을 경우 → ① 기본 패턴으로 먼저 시도, ② 실패 시 디스커버리 전환
 if (!$pattern) {
-    $usingDefault = false;
     if (isset($patterns['default'])) {
-        $pattern          = $patterns['default'];
-        $usingDefault     = true;
-        $pattern['name']  = $pattern['name'] ?? '기본 패턴';
+        $pattern = $patterns['default'];
+        $patternSource = 'default';
+        $pattern['name'] = $pattern['name'] ?? '기본 패턴';
         echo "ℹ️  등록된 패턴이 없어 기본 패턴으로 먼저 시도합니다.\n";
         file_put_contents($logFile, "Pattern not found – using default pattern first.\n", FILE_APPEND);
     } else {
@@ -172,6 +239,20 @@ if (!$pattern) {
 
 // 7. 패턴이 존재할 경우, Call File 생성 준비
 file_put_contents($logFile, "Pattern found. Preparing to create Call File.\n", FILE_APPEND);
+
+// 패턴 소스에 따른 메시지 표시
+switch($patternSource) {
+    case 'user':
+        echo "✅ 사용자 패턴으로 수신거부를 시작합니다.\n";
+        break;
+    case 'community':
+        echo "🌐 커뮤니티 검증 패턴으로 수신거부를 시작합니다.\n";
+        echo "   (다른 사용자가 성공한 패턴을 사용합니다)\n";
+        break;
+    case 'default':
+        echo "⚙️ 기본 패턴으로 수신거부를 시도합니다.\n";
+        break;
+}
 
 $dtmfToSend = $pattern['dtmf_pattern'];
 
@@ -208,11 +289,12 @@ try{
     $dbUC = new SQLite3($dbPath);
     $uidRow = $dbUC->querySingle("SELECT id FROM users WHERE phone='{$cleanNotifyDigits}'",true);
     $uidVal = $uidRow ? (int)$uidRow['id'] : null;
-    $stmtUC = $dbUC->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status) VALUES (:cid,:uid,:p080,:ident,datetime("now"),"pending")');
+    $stmtUC = $dbUC->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status,pattern_source) VALUES (:cid,:uid,:p080,:ident,datetime("now"),"pending",:pattern_source)');
     $stmtUC->bindValue(':cid',$uniqueId,SQLITE3_TEXT);
     if($uidVal!==null){$stmtUC->bindValue(':uid',$uidVal,SQLITE3_INTEGER);} else {$stmtUC->bindValue(':uid',null,SQLITE3_NULL);}
     $stmtUC->bindValue(':p080',$phoneNumber,SQLITE3_TEXT);
     $stmtUC->bindValue(':ident',$identificationNumber,SQLITE3_TEXT);
+    $stmtUC->bindValue(':pattern_source',$patternSource,SQLITE3_TEXT);
     $stmtUC->execute();
 }catch(Throwable $e){ /* ignore db errors */ }
 
@@ -308,9 +390,8 @@ if (rename($tempFile, $finalFile)) {
     echo "알림 연락처: {$notificationPhone}\n";
 
     $smsSender = new SmsSender();
-    $message = "[시도] 080 수신거부 요청 진행중\n번호: {$phoneNumber}";
-    $smsSender->sendSms($notificationPhone, $message);
-    $smsSender->logSMS($message, 'call_attempt_started');
+    $result = $smsSender->sendProcessStartNotification($notificationPhone, $phoneNumber, $identificationNumber);
+    $smsSender->logSMS($result, 'call_start_notification');
 
     // 패턴 사용 통계 업데이트
     require_once __DIR__ . '/PatternManager.php';

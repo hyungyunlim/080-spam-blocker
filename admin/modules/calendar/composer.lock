@@ -1,0 +1,180 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "1a2e6e4cf377207c42bee0d5d4523d70",
+    "packages": [
+        {
+            "name": "eluceo/ical",
+            "version": "0.16.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/markuspoerschke/iCal.git",
+                "reference": "7043337feaeacbc016844e7e52ef41bba504ad8f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/markuspoerschke/iCal/zipball/7043337feaeacbc016844e7e52ef41bba504ad8f",
+                "reference": "7043337feaeacbc016844e7e52ef41bba504ad8f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1 || ~8.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0"
+            },
+            "suggest": {
+                "ext-mbstring": "Massive performance enhancement of line folding"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Eluceo\\iCal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Markus Poerschke",
+                    "email": "markus@eluceo.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The eluceo/iCal package offers a abstraction layer for creating iCalendars. You can easily create iCal files by using PHP object instead of typing your *.ics file by hand. The output will follow RFC 5545 as best as possible.",
+            "homepage": "https://github.com/markuspoerschke/iCal",
+            "keywords": [
+                "calendar",
+                "iCalendar",
+                "ical",
+                "ics",
+                "php calendar"
+            ],
+            "support": {
+                "issues": "https://github.com/markuspoerschke/iCal/issues",
+                "source": "https://github.com/markuspoerschke/iCal"
+            },
+            "time": "2020-10-04T17:41:11+00:00"
+        },
+        {
+            "name": "om/icalparser",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OzzyCzech/icalparser.git",
+                "reference": "5830e952f9b72d8a8014582fab036d9c19ed22f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OzzyCzech/icalparser/zipball/5830e952f9b72d8a8014582fab036d9c19ed22f9",
+                "reference": "5830e952f9b72d8a8014582fab036d9c19ed22f9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1.0"
+            },
+            "require-dev": {
+                "nette/tester": "^2.5.1"
+            },
+            "suggest": {
+                "ext-dom": "for timezone tool"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Ožana",
+                    "email": "roman@ozana.cz"
+                }
+            ],
+            "description": "Simple iCal parser",
+            "keywords": [
+                "calendar",
+                "ical",
+                "parser"
+            ],
+            "support": {
+                "issues": "https://github.com/OzzyCzech/icalparser/issues",
+                "source": "https://github.com/OzzyCzech/icalparser/tree/v3.1.0"
+            },
+            "time": "2023-12-12T09:47:00+00:00"
+        },
+        {
+            "name": "thecsea/simple-caldav-client",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FreePBX/simpleCalDAV.git",
+                "reference": "0b32b2ff132a466a1e4d5d7dcebd430d7c272218"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FreePBX/simpleCalDAV/zipball/0b32b2ff132a466a1e4d5d7dcebd430d7c272218",
+                "reference": "0b32b2ff132a466a1e4d5d7dcebd430d7c272218",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-xml": "*",
+                "php": ">=5.3.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "it\\thecsea\\simple_caldav_client\\": "src/"
+                }
+            },
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "claudio cardinale",
+                    "email": "cardi@thecsea.it",
+                    "homepage": "http://thecsea.it"
+                }
+            ],
+            "description": "A simple and complete php caldav client",
+            "homepage": "http://www.thecsea.it",
+            "keywords": [
+                "caldav",
+                "client",
+                "simple"
+            ],
+            "support": {
+                "source": "https://github.com/FreePBX/simpleCalDAV/tree/master"
+            },
+            "time": "2024-05-17T11:05:35+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [
+        {
+            "package": "thecsea/simple-caldav-client",
+            "version": "9999999-dev",
+            "alias": "dev-master",
+            "alias_normalized": "dev-master"
+        }
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}

@@ -1,0 +1,396 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for directory
+# Copyright (C) 2008-2016 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-17 05:31-0500\n"
+"PO-Revision-Date: 2016-12-12 22:05+0200\n"
+"Last-Translator: Alexander <alexander.schley@paranagua.pr.gov.br>\n"
+"Language-Team: Portuguese (Brazil) <http://weblate.freepbx.org/projects/"
+"freepbx/directory/pt_BR/>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.4\n"
+
+#: functions.inc.php:51 views/form.php:150
+msgid ""
+"ALERT_INFO to be sent when called from this Directory. Can be used for "
+"distinctive ring for SIP devices."
+msgstr ""
+"ALERT_INFO que será enviado quando chamado a partir deste Diretório. Pode "
+"ser usado para o toque diferenciado para dispositivos SIP."
+
+#: functions.inc.php:208 views/grid.php:21
+msgid "Actions"
+msgstr "Ações"
+
+#: functions.inc.php:12 views/bootnav.php:2 views/form.php:5 views/grid.php:6
+msgid "Add Directory"
+msgstr "Adicionar Diretório"
+
+#: functions.inc.php:252
+msgid "Add new entry."
+msgstr "Adicionar novo elemento."
+
+#: functions.inc.php:51 views/form.php:136
+msgid "Alert Info"
+msgstr "Informação de Alerta"
+
+#: functions.inc.php:244
+msgid "All Users"
+msgstr "Todos os Usuários"
+
+#: assets/js/directory.js:90
+msgid "An Error occurred trying to contact the server adding a row, no reply."
+msgstr ""
+"Ocorreu um erro ao tentar entrar em contato com o servidor ao adicionar uma "
+"linha,não há resposta."
+
+#: functions.inc.php:73 views/form.php:379
+msgid "Announce Extension"
+msgstr "Anunciar Ramal"
+
+#: functions.inc.php:67 views/form.php:197
+msgid "Announcement"
+msgstr "Anúncio"
+
+#: directory.i18n.php:6
+msgid "Applications"
+msgstr "Aplicações"
+
+#: functions.inc.php:50 views/form.php:107
+msgid "CallerID Name Prefix"
+msgstr "Nome do Prefixo do ID Chamador"
+
+#: functions.inc.php:243
+msgid "Choose One"
+msgstr "Selecione Um"
+
+#: functions.inc.php:303
+msgid "Click here to remove this entry"
+msgstr "Clique aqui para remover este elemento"
+
+#: functions.inc.php:245
+msgid "Custom"
+msgstr "Personalizado"
+
+#: functions.inc.php:56 views/form.php:13 views/form.php:20 views/form.php:27
+msgid "Default"
+msgstr "Padrão"
+
+#: functions.inc.php:447 views/grid.php:20
+msgid "Default Directory"
+msgstr "Diretório Padrão"
+
+#: functions.inc.php:434
+msgid "Default Group Inclusion"
+msgstr "Inclusão de Grupo Padrão"
+
+#: Directory.class.php:254
+msgid "Delete"
+msgstr "Apagar"
+
+#: functions.inc.php:40
+#, php-format
+msgid "Delete Directory %s"
+msgstr "Apagar Diretório %s"
+
+#: functions.inc.php:49 views/form.php:93
+msgid "Description of this directory."
+msgstr "Descrição deste diretório."
+
+#: functions.inc.php:71 views/form.php:330
+msgid "Destination to send the call to after Invalid Recording is played."
+msgstr ""
+"Destino para enviar a chamada após a Gravação Inválida ser reproduzida."
+
+#: functions.inc.php:208
+msgid "Dial"
+msgstr "Discar"
+
+#: directory.i18n.php:4 directory.i18n.php:10 page.directory.php:8
+#: views/bootnav.php:14 views/grid.php:19
+msgid "Directory"
+msgstr "Diretório"
+
+#: functions.inc.php:520
+#, php-format
+msgid "Directory %s: "
+msgstr "Diretório %s: "
+
+#: functions.inc.php:49 views/form.php:78
+msgid "Directory Description"
+msgstr "Descrição do Diretório"
+
+#: functions.inc.php:46
+msgid "Directory General Options"
+msgstr "Opções Gerais do Diretório"
+
+#: functions.inc.php:48 views/form.php:49
+msgid "Directory Name"
+msgstr "Nome do Diretório"
+
+#: assets/js/directory.js:23
+msgid "Directory Name Already Exist"
+msgstr ""
+
+#: assets/js/directory.js:20
+msgid "Directory Name Can not be Blank"
+msgstr ""
+
+#: functions.inc.php:53
+msgid "Directory Options (DTMF)"
+msgstr "Opções (DTMF) do Diretório"
+
+#: functions.inc.php:78
+msgid "Directory&nbsp;Entries"
+msgstr "Diretório&nbsp;Entradas"
+
+#: functions.inc.php:549
+#, php-format
+msgid "Directory: %s"
+msgstr "Diretório: %s"
+
+#: functions.inc.php:496
+#, php-format
+msgid "Directory: %s "
+msgstr "Diretório: %s "
+
+#: Directory.class.php:272
+msgid "Disabled"
+msgstr "Desabilitado"
+
+#: functions.inc.php:297
+#, php-format
+msgid "Edit %s: %s"
+msgstr "Editar %s: %s"
+
+#: views/form.php:9
+msgid "Edit Directory"
+msgstr "Editar Diretório"
+
+#: functions.inc.php:26
+#, php-format
+msgid "Edit Directory: %s"
+msgstr "Editar Diretório: %s"
+
+#: Directory.class.php:273
+msgid "Enabled"
+msgstr "Habilitado"
+
+#: functions.inc.php:417
+msgid "Exclude"
+msgstr "Excluir"
+
+#: functions.inc.php:67 views/form.php:213
+msgid "Greeting to be played on entry to the directory."
+msgstr "Saudação para ser reproduzida ao entrar no diretório."
+
+#: functions.inc.php:418
+msgid "Include"
+msgstr "Incluir"
+
+#: functions.inc.php:71 views/form.php:316
+msgid "Invalid Destination"
+msgstr "Destino Inválido"
+
+#: functions.inc.php:70 views/form.php:286
+msgid "Invalid Recording"
+msgstr "Gravação Inválida"
+
+#: functions.inc.php:68 views/form.php:227
+msgid "Invalid Retries"
+msgstr "Tentativas Inválidas"
+
+#: functions.inc.php:69 views/form.php:256
+msgid "Invalid Retry Recording"
+msgstr "Tentativa de Gravação Inválida"
+
+#: views/bootnav.php:3
+msgid "List Directories"
+msgstr "Listar Diretórios"
+
+#: functions.inc.php:208 functions.inc.php:211
+msgid "Name"
+msgstr "Nome"
+
+#: functions.inc.php:208
+msgid "Name Announcement"
+msgstr "Anúncio de Nome"
+
+#: views/form.php:64
+msgid "Name of this directory"
+msgstr "Nome deste diretório"
+
+#: functions.inc.php:48
+msgid "Name of this directory."
+msgstr "Nome deste diretório."
+
+#: views/form.php:355 views/form.php:390
+msgid "No"
+msgstr "Não"
+
+#: views/form.php:170
+msgid "None"
+msgstr "Nenhum"
+
+#: functions.inc.php:68 views/form.php:242
+msgid ""
+"Number of times to retry when receiving an invalid/unmatched response from "
+"the caller"
+msgstr ""
+"Número de vezes para tentar novamente ao receber uma resposta inválida/não "
+"coincidente do usuário chamador"
+
+#: views/form.php:184
+#, php-format
+msgid ""
+"Override the ringer volume. Note: This is only valid for %s phones at this "
+"time"
+msgstr ""
+"Substituir o volume do toque. Observação: isso só é válido para telefones %s "
+"neste momento"
+
+#: functions.inc.php:50 views/form.php:122
+msgid "Prefix to be appended to current CallerID Name."
+msgstr "Prefixo a ser anexado ao atual Nome do ID Chamador."
+
+#: functions.inc.php:70 views/form.php:302
+msgid ""
+"Prompt to be played before sending the caller to an alternate destination "
+"due to the caller pressing 0 or receiving the maximum amount of invalid/"
+"unmatched responses (as determined by Invalid Retries)"
+msgstr ""
+"Aviso a ser reproduzido antes de enviar o usuário chamador para um destino "
+"alternativo por ter pressionando 0 ou recebido a quantidade máxima de "
+"respostas inválidas/incompatíveis (conforme determinado em Tentativas "
+"Inválidas)"
+
+#: functions.inc.php:69 views/form.php:272
+msgid ""
+"Prompt to be played when an invalid/unmatched response is received, before "
+"prompting the caller to try again"
+msgstr ""
+"Aviso a ser reproduzido quando uma resposta inválida/incompatível for "
+"recebida, antes de solicitar que o usuário chamador tente novamente"
+
+#: Directory.class.php:254
+msgid "Reset"
+msgstr "Reiniciar"
+
+#: functions.inc.php:72 views/form.php:344
+msgid "Return to IVR"
+msgstr "Voltar para a URA"
+
+#: views/form.php:163
+msgid "Ringer Volume Override"
+msgstr "Substituição do Volume do Toque"
+
+#: assets/js/directory.js:110
+msgid "Select"
+msgstr "Selecionar"
+
+#: functions.inc.php:287
+msgid "Spell Name"
+msgstr "Dizer Nome"
+
+#: Directory.class.php:254
+msgid "Submit"
+msgstr "Enviar"
+
+#: functions.inc.php:288
+msgid "System Recordings:"
+msgstr "Gravações do Sistema:"
+
+#: functions.inc.php:286
+msgid "Text to Speech"
+msgstr "Texto para Falar"
+
+#: directory.i18n.php:8
+msgid ""
+"The directory module allows you to create directories of users that can be "
+"accessed by callers through modules like the IVR."
+msgstr ""
+
+#: assets/js/directory.js:31
+msgid "This entry has already been added"
+msgstr "Este elemento já foi adicionado"
+
+#: functions.inc.php:211
+msgid ""
+"This should auto-populate with the extension's descriptive name. This is "
+"what users will search by when asked to enter the first 3 letters of the "
+"person's name. For example, if the name is Bartholomew, the caller would "
+"enter 227 for BAR. This field should be a name as the search option is based "
+"on Name and not the number."
+msgstr ""
+
+#: functions.inc.php:95
+msgid ""
+"Tied to a Directory allowing all entries in that directory to be dialed "
+"directly, as they appear in the directory"
+msgstr ""
+"Ligado a um Diretório que permite que todos os elemento nesse diretório "
+"sejam discado diretamente, conforme aparecem no diretório"
+
+#: functions.inc.php:285
+msgid "Voicemail Greeting"
+msgstr "Saudação de Correio de Voz"
+
+#: functions.inc.php:73 views/form.php:400
+msgid ""
+"When checked, the extension number being transferred to will be announced "
+"prior to the transfer"
+msgstr ""
+"Quando selecionado, o número do ramal a ser transferido será anunciado antes "
+"da transferência"
+
+#: functions.inc.php:72 views/form.php:365
+msgid ""
+"When selected, if the call passed through an IVR that had \"Return to IVR\" "
+"selected, the call will be returned there instead of the Invalid destination."
+msgstr ""
+"Quando selecionado, se a chamada passar por uma URA que estava selecionado "
+"\"Voltar para a URA\", a chamada será retornada para lá ao invés do destino "
+"inválido."
+
+#: views/form.php:351 views/form.php:386
+msgid "Yes"
+msgstr "Sim"
+
+#: functions.inc.php:447
+msgid ""
+"You can include or exclude this extension/user from being part of the "
+"default directory when creating or editing."
+msgstr ""
+"Você pode incluir ou excluir este ramal/usuário do diretório padrão ao criar "
+"ou editar."
+
+#: functions.inc.php:29
+msgid "[SYSTEM DEFAULT]"
+msgstr "[SISTEMA PADRÃO]"
+
+#: uninstall.php:7
+msgid "deleting default_directory and migration tracking keys.."
+msgstr "Excluindo default_directory e chaves de rastreamento de migração .."
+
+#: uninstall.php:3
+msgid "dropping directory_details, directory_entries.."
+msgstr "parando directory_details, directory_entries.."
+
+#: uninstall.php:5 uninstall.php:10
+msgid "ok"
+msgstr "ok"
+
+#: functions.inc.php:303
+msgid "remove"
+msgstr "remover"

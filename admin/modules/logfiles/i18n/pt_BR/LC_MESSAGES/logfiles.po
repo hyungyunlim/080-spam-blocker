@@ -1,0 +1,620 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for logfiles
+# Copyright (C) 2008-2016 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-25 00:05-0400\n"
+"PO-Revision-Date: 2017-03-24 12:30+0200\n"
+"Last-Translator: Luis <suporte@kingvoice.com.br>\n"
+"Language-Team: Portuguese (Brazil) <http://weblate.freepbx.org/projects/"
+"freepbx/logfiles/pt_BR/>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.4\n"
+
+#: Logfiles.class.php:366
+msgid "?"
+msgstr ""
+
+#: views/view.settings.logfiles.php:78
+msgid "Actions"
+msgstr ""
+
+#: views/view.log.header.php:69
+msgid "Activate full screen mode. Press ESC to exit full screen mode."
+msgstr ""
+
+#: views/view.settings.logfiles.php:90
+msgid "Activate remote log"
+msgstr ""
+
+#: views/view.settings.general.php:30
+msgid "Append Hostname"
+msgstr "Anexar Nome do Host"
+
+#: views/view.settings.general.php:31
+msgid "Appends the hostname to the name of the log files"
+msgstr "Acrescenta o nome do host ao nome dos arquivos de registro"
+
+#: views/view.log.header.php:87
+msgid "Apply Filter"
+msgstr ""
+
+#: views/view.log.header.php:105
+msgid "Apply Highlight"
+msgstr ""
+
+#: Logfiles.class.php:377 Logfiles.class.php:384
+#, php-format
+msgid "Are you confirming that you want to remove this file (%s)?"
+msgstr ""
+
+#: logfiles.i18n.php:12
+msgid "Asterisk Logfile Settings"
+msgstr "Configurações de Log do Asterisk"
+
+#: logfiles.i18n.php:4
+msgid "Asterisk Logfiles"
+msgstr "Arquivos de Registro do Asterisk"
+
+#: views/view.log.header.php:119
+msgid "Auto-Scroll"
+msgstr ""
+
+#: views/view.log.header.php:197
+msgid "Buffer Size"
+msgstr ""
+
+#: Logfiles.class.php:383
+msgid "Cancel"
+msgstr ""
+
+#: views/view.log.header.php:90
+msgid "Clean Filter"
+msgstr ""
+
+#: views/view.log.header.php:108
+msgid "Clean Highlight"
+msgstr ""
+
+#: Logfiles.class.php:407
+msgid "Command not found!"
+msgstr ""
+
+#: Logfiles.class.php:374
+msgid "Copy to clipboard successful."
+msgstr ""
+
+#: Logfiles.class.php:385
+msgid "Create"
+msgstr ""
+
+#: views/view.settings.logfiles.php:35
+msgid "Critical errors and issues"
+msgstr "Erros críticos e problemas"
+
+#: views/view.settings.general.php:6
+msgid ""
+"Customize the display of debug message time stamps. See strftime(3) Linux "
+"manual for format specifiers. Note that there is also a fractional second "
+"parameter which may be used in this field.  Use %1q for tenths, %2q for "
+"hundredths, etc."
+msgstr ""
+"Personalize a exibição de marcadores de tempo de mensagem de depuração. "
+"Consulte o manual do Linux do strftime (3) para especificadores de formato. "
+"Observe que há também um segundo parâmetro fracionário que pode ser usado "
+"neste campo. Use %1q para décimos, %2q para centésimos, etc."
+
+#: views/view.settings.logfiles.php:27
+msgid "DTMF"
+msgstr "DTMF"
+
+#: views/view.settings.general.php:5
+msgid "Date Format"
+msgstr "Formato de Data"
+
+#: views/view.settings.logfiles.php:18
+msgid "Debug"
+msgstr "Depurar"
+
+#: views/view.log.header.php:19
+msgid "Delete File"
+msgstr ""
+
+#: Logfiles.class.php:367 Logfiles.class.php:386 views/view.log.header.php:47
+#: views/view.log.header.php:52
+msgid "Disabled"
+msgstr ""
+
+#: Logfiles.class.php:387
+msgid "Enabled"
+msgstr ""
+
+#: views/view.settings.logfiles.php:34
+msgid "Error"
+msgstr "Erro"
+
+#: views/view.log.header.php:22
+msgid "Export File"
+msgstr ""
+
+#: Logfiles.class.php:354
+msgid "Failure Removal Process!"
+msgstr ""
+
+#: views/view.settings.logfiles.php:41
+msgid "Fax"
+msgstr "Fax"
+
+#: views/view.settings.logfiles.php:4
+msgid "File Name"
+msgstr "Nome do Arquivo"
+
+#: Logfiles.class.php:229
+msgid "File clean successfully."
+msgstr ""
+
+#: Logfiles.class.php:402
+msgid "File not found!"
+msgstr ""
+
+#: Logfiles.class.php:225
+msgid "File removed successfully."
+msgstr ""
+
+#: views/view.log.header.php:9
+msgid "Files"
+msgstr ""
+
+#: views/view.log.header.php:83
+msgid "Filter"
+msgstr "Filtro"
+
+#: views/page.settings.php:10
+msgid "General Settings"
+msgstr "Configurações Gerais"
+
+#: views/view.log.header.php:101
+msgid "Highlight"
+msgstr ""
+
+#: views/view.settings.logfiles.php:12
+msgid ""
+"If the file status is disabled it will be skipped during the asterisk "
+"configuration files creation process."
+msgstr ""
+
+#: Logfiles.class.php:838
+msgid "Invalid pattern to filter!"
+msgstr ""
+
+#: views/view.settings.logfiles.php:28
+msgid ""
+"Keypresses as understood by asterisk. Usefull for debuging IVR and VM issues."
+msgstr ""
+"Pressione a tecla como entendido pelo Asterisk. Útil para depurar problemas "
+"de URA e VM."
+
+#: views/view.settings.general.php:9
+msgid ""
+"Leave blank for default: ISO 8601 date format yyyy-mm-dd HH:MM:SS (%F %T)"
+msgstr ""
+"Deixe em branco por padrão: Formato de data ISO 8601 yyyy-mm-dd HH:MM:SS (%F "
+"%T)"
+
+#: views/view.log.header.php:33
+msgid "Lines"
+msgstr "Linhas"
+
+#: views/view.settings.general.php:132
+msgid "Loading..."
+msgstr "Carregando..."
+
+#: views/page.settings.php:2
+msgid "Log File Settings"
+msgstr "Configurações de Log"
+
+#: views/page.settings.php:13
+msgid "Log Files"
+msgstr "Arquivos de Registro"
+
+#: views/view.settings.general.php:40
+msgid "Log Queues"
+msgstr "Filas de Registro"
+
+#: views/view.settings.general.php:15
+msgid "Log Rotation"
+msgstr "Rotação de Registro"
+
+#: Logfiles.class.php:376
+msgid "Log loading completed successfully."
+msgstr ""
+
+#: views/view.settings.general.php:41
+msgid "Log queue events to a file"
+msgstr "Registre eventos de fila em um arquivo"
+
+#: views/view.settings.logfiles.php:49
+msgid ""
+"Messages of specific actions, such as a phone registration or call completion"
+msgstr ""
+"Mensagens de ações específicas, como registro de telefone ou conclusão de "
+"chamada"
+
+#: views/view.settings.logfiles.php:19
+msgid ""
+"Messages used for debuging. Do not report these as error's unless you have a "
+"specific issue that you are attempting to debug. Also note that Debug "
+"messages are also very verbose and can and do fill up logfiles (and disk "
+"storage) quickly."
+msgstr ""
+"Mensagens usadas para depuração. Não relatar esses como erro a menos que "
+"você tenha um problema específico que você esteja tentando depurar. Observe "
+"também que as mensagens de depuração também são muito detalhadas e podem "
+"preencher os arquivos de registro (e armazenamento em disco) rapidamente."
+
+#: Logfiles.class.php:243 Logfiles.class.php:262 Logfiles.class.php:307
+msgid "Missing data!"
+msgstr ""
+
+#: Logfiles.class.php:181 Logfiles.class.php:218
+msgid "Missing file name!"
+msgstr ""
+
+#: Logfiles.class.php:290 Logfiles.class.php:303 Logfiles.class.php:333
+msgid "Missing name!"
+msgstr ""
+
+#: Logfiles.class.php:389
+msgid "Missing the name of the file!"
+msgstr ""
+
+#: views/view.log.header.php:135
+msgid "More Options"
+msgstr ""
+
+#: Logfiles.class.php:391
+msgid "Name is not defined!"
+msgstr ""
+
+#: views/view.settings.logfiles.php:5
+msgid ""
+"Name of file, relative to Asterisk logpath. Use absolute path for a "
+"different location"
+msgstr ""
+"Nome do arquivo, relativo ao logpath do Asterisk. Usar caminho completo para "
+"um local diferente"
+
+#: views/view.settings.logfiles.php:98
+msgid "New Log"
+msgstr ""
+
+#: Logfiles.class.php:368 Logfiles.class.php:392
+#: views/view.settings.general.php:34 views/view.settings.general.php:44
+msgid "No"
+msgstr "Não"
+
+#: Logfiles.class.php:369 views/view.settings.general.php:21
+msgid "None"
+msgstr ""
+
+#: views/view.settings.general.php:16
+msgid ""
+"None: Do not perform any log rotation at all.  You should make very sure to "
+"set up some external log rotate mechanism as the asterisk logs can get very "
+"large, very quickly."
+msgstr ""
+
+#: views/view.settings.logfiles.php:48
+msgid "Notice"
+msgstr "Notícia"
+
+#: Logfiles.class.php:393
+msgid "Off"
+msgstr "Desligado"
+
+#: Logfiles.class.php:394
+msgid "On"
+msgstr "Ligado"
+
+#: Logfiles.class.php:315 Logfiles.class.php:345
+msgid "Operation not allowed!"
+msgstr ""
+
+#: views/view.settings.logfiles.php:64
+msgid "Possible issues with dialplan syntaxt or call flow, but not critical."
+msgstr ""
+"Problemas possíveis com a sintaxe do plano de discagem ou fluxo de chamada, "
+"mas não é crítico."
+
+#: views/view.log.header.php:43
+msgid "Refresh Interval"
+msgstr ""
+
+#: views/view.settings.general.php:110
+msgid "Reload"
+msgstr ""
+
+#: views/view.log.header.php:16
+msgid "Reload File"
+msgstr ""
+
+#: views/view.log.header.php:10
+msgid "Reload List"
+msgstr ""
+
+#: Logfiles.class.php:395
+msgid "Remove"
+msgstr ""
+
+#: Logfiles.class.php:349
+msgid "Remove Successful"
+msgstr ""
+
+#: logfiles.i18n.php:6
+msgid "Reports"
+msgstr "Relatórios"
+
+#: views/view.settings.general.php:23
+msgid "Rotate"
+msgstr "Rotacionar"
+
+#: views/view.settings.general.php:18
+msgid ""
+"Rotate: Rotate all the old files, such that the oldest has the highest "
+"sequence number (expected behavior for Unix administrators)."
+msgstr ""
+"Rotacionar: Rotaciona todos os arquivos antigos, de forma que o mais antigo "
+"tenha o maior número de seqüência (comportamento esperado para "
+"administradores Unix)."
+
+#: Logfiles.class.php:396
+msgid "Save"
+msgstr ""
+
+#: Logfiles.class.php:324
+msgid "Save Failed!"
+msgstr ""
+
+#: Logfiles.class.php:319
+msgid "Save Successful"
+msgstr ""
+
+#: Logfiles.class.php:370
+msgid "Searching..."
+msgstr ""
+
+#: Logfiles.class.php:371 views/view.log.header.php:59
+msgid "Seconds"
+msgstr ""
+
+#: views/view.settings.logfiles.php:71
+msgid "Security"
+msgstr "Segurança"
+
+#: views/view.settings.general.php:22
+msgid "Sequential"
+msgstr "Sequencial"
+
+#: views/view.settings.general.php:17
+msgid ""
+"Sequential: Rename archived logs in order, such that the newest has the "
+"highest sequence number"
+msgstr ""
+"Sequencial: Renomeia registros arquivados em ordem, de modo que o mais novo "
+"tenha o maior número de seqüência"
+
+#: Logfiles.class.php:247 Logfiles.class.php:266
+msgid "Setting not allowed!"
+msgstr ""
+
+#: views/view.settings.general.php:31
+msgid ""
+"Setting this to yes will interfere with log rotation and Intrusion "
+"Detection.  It is strongly recommended that this setting be set to 'no'."
+msgstr ""
+
+#: Logfiles.class.php:1041
+msgid ""
+"Setting this to yes will interfere with log rotation and Intrusion "
+"Detection. It is strongly recommended that this setting be set to: no."
+msgstr ""
+
+#: views/view.log.header.php:163
+msgid "Show Line Spacing"
+msgstr ""
+
+#: views/view.log.header.php:180
+msgid "Show Only Row's Highlight"
+msgstr ""
+
+#: views/view.log.header.php:146
+msgid "Show Row Numbers"
+msgstr ""
+
+#: views/view.settings.logfiles.php:11
+msgid "Status"
+msgstr ""
+
+#: views/view.settings.logfiles.php:56
+msgid ""
+"Step-by-step messages of every step of a call flow. Always enable and review "
+"if calls dont flow as expected"
+msgstr ""
+
+#: Logfiles.class.php:272
+msgid "Successful Update"
+msgstr ""
+
+#: views/page.logs.php:2
+msgid "System Log Files"
+msgstr ""
+
+#: logfiles.i18n.php:10
+msgid "System Logfiles"
+msgstr ""
+
+#: logfiles.i18n.php:8
+msgid ""
+"The Asterisk Logfiles Module is an easy way to view portions of the Asterisk "
+"Log."
+msgstr ""
+
+#: Logfiles.class.php:750 Logfiles.class.php:805
+msgid "The file was not found!"
+msgstr ""
+
+#: Logfiles.class.php:339
+msgid "The filename not exist!"
+msgstr ""
+
+#: Logfiles.class.php:758 Logfiles.class.php:813
+msgid "The log file does not exist!"
+msgstr ""
+
+#: Logfiles.class.php:375
+msgid "The log file has fewer lines, the reload was successful."
+msgstr ""
+
+#: Logfiles.class.php:388
+msgid "The name of the file is already in use!"
+msgstr ""
+
+#: Logfiles.class.php:828
+msgid "The specified lines value is not a numeric value!"
+msgstr ""
+
+#: Logfiles.class.php:763 Logfiles.class.php:818
+msgid "The specified name is not from a file!"
+msgstr ""
+
+#: Logfiles.class.php:823
+msgid "There is no permission to read this log file!"
+msgstr ""
+
+#: Logfiles.class.php:768
+msgid "There is no permission to write this log file!"
+msgstr ""
+
+#: views/view.settings.general.php:24
+msgid "Timestamp"
+msgstr "Marca de Tempo"
+
+#: views/view.settings.general.php:19
+msgid ""
+"Timestamp: Rename the logfiles using a timestamp instead of a sequence "
+"number when \"logger rotate\" is executed."
+msgstr ""
+"Marca de Tempo: Renomeia os arquivos de registro usando uma marca de data e "
+"hora em vez de um número de seqüência quando \"rotacionar\" é executado."
+
+#: views/view.settings.logfiles.php:91
+msgid ""
+"To activate the remote log, you must enable the file \"syslog.local0\" and "
+"add the following line in syslog."
+msgstr ""
+
+#: views/view.settings.logfiles.php:42
+msgid "Transmition and receiving of faxes"
+msgstr "Transmissão e recepção de fax"
+
+#: Logfiles.class.php:390
+msgid "Unknow error!"
+msgstr ""
+
+#: Logfiles.class.php:277
+msgid "Update process failed!"
+msgstr ""
+
+#: views/view.settings.logfiles.php:55
+msgid "Verbose"
+msgstr "Verboso"
+
+#: views/view.settings.logfiles.php:63
+msgid "Warning"
+msgstr "Atenção"
+
+#: Logfiles.class.php:372 Logfiles.class.php:397
+#: views/view.settings.general.php:33 views/view.settings.general.php:43
+msgid "Yes"
+msgstr "Sim"
+
+#: Logfiles.class.php:1041
+msgid "appendhostname is set to: Yes."
+msgstr ""
+
+#~ msgid "Asterisk Log Files"
+#~ msgstr "Arquivos de Registro do Asterisk"
+
+#~ msgid "Add Log"
+#~ msgstr "Adicionar Registro"
+
+#~ msgid ""
+#~ "Apply PCRE regex filter to the log output. <br/>This filters through the "
+#~ "lines specified."
+#~ msgstr ""
+#~ "Aplicar o filtro regex PCRE para a saída de registro. <br/>Isso filtra "
+#~ "através das linhas especificadas."
+
+#~ msgid "Delete"
+#~ msgstr "Apagar"
+
+#~ msgid "Error parsing log file or file not found!"
+#~ msgstr "Erro ao analisar arquivo de registro ou arquivo não encontrado!"
+
+#~ msgid "Field"
+#~ msgstr "Campo"
+
+#~ msgid "File"
+#~ msgstr "Arquivo"
+
+#~ msgid "Information"
+#~ msgstr "Informação"
+
+#~ msgid "Invalid pattern"
+#~ msgstr "Padrão Inválido"
+
+#~ msgid "Log file settings"
+#~ msgstr "Configurações de arquivos de registro"
+
+#~ msgid "Logfile Help"
+#~ msgstr "Ajuda do Arquivo de Registro"
+
+#~ msgid "No lines returned"
+#~ msgstr "Nenhuma linha retornada"
+
+#~ msgid "Reset"
+#~ msgstr "Reiniciar"
+
+#~ msgid "Show"
+#~ msgstr "Mostrar"
+
+#~ msgid "Submit"
+#~ msgstr "Enviar"
+
+#~ msgid "View Logs"
+#~ msgstr "Visualizar Registros"
+
+#~ msgid "failed"
+#~ msgstr "falhou"
+
+#~ msgid "logger.conf symlinked to incorrect file:"
+#~ msgstr "logger.conf link simbólico para arquivo incorreto:"
+
+#~ msgid "ok"
+#~ msgstr "ok"
+
+#~ msgid "removing.."
+#~ msgstr "removendo..."
+
+#~ msgid "Settings"
+#~ msgstr "Configurações"

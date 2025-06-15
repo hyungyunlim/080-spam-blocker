@@ -1,0 +1,193 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for presencestate
+# Copyright (C) 2008-2016 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-28 09:47-0400\n"
+"PO-Revision-Date: 2018-01-03 15:24+0200\n"
+"Last-Translator: Petr <petrv@atlantis.cz>\n"
+"Language-Team: Czech <http://weblate.freepbx.org/projects/freepbx/"
+"presencestate/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 2.4\n"
+
+#: views/grid.php:17
+msgid "Actions"
+msgstr "Akce"
+
+#: views/bootnav.php:2 views/grid.php:2
+msgid "Add State"
+msgstr "Přidat stav"
+
+#: presencestate.i18n.php:6
+msgid "Admin"
+msgstr "Administrator"
+
+#: functions.inc.php:6
+msgid "Available"
+msgstr "Online"
+
+#: functions.inc.php:6
+msgid "Away"
+msgstr "Přijdu hned"
+
+#: functions.inc.php:6
+msgid "Chat"
+msgstr "Chat"
+
+#: functions.inc.php:6
+msgid "DND"
+msgstr "DND"
+
+#: ucp/views/settings.php:23
+msgid "Define Actions on A Status Change"
+msgstr "Definujte akce na změnu stavu"
+
+#: Presencestate.class.php:205
+msgid "Delete"
+msgstr "Smazat"
+
+#: ucp/views/settings.php:7 ucp/views/settings.php:16
+msgid "Do Not Change"
+msgstr "Neměnit"
+
+#: ucp/Presencestate.class.php:256
+msgid "Do Not Disturb"
+msgstr "Nerušit"
+
+#: ucp/Presencestate.class.php:255
+msgid "Do Nothing"
+msgstr "Nedělat nic"
+
+#: views/ucp_config.php:7
+msgid "Enable Presence"
+msgstr "Povolit prezenci"
+
+#: functions.inc.php:6
+msgid "Extended Away"
+msgstr "Pryč"
+
+#: ucp/Presencestate.class.php:257
+msgid "Findme/Follow Me"
+msgstr "Find me/Follow Me"
+
+#: views/ucp_config.php:18
+msgid "Inherit"
+msgstr "Zdědit"
+
+#: Presencestate.class.php:195
+msgid "Invalid Request"
+msgstr "Neplatná žádost"
+
+#: views/bootnav.php:3
+msgid "List States"
+msgstr "Přehled stavů"
+
+#: presencestate.i18n.php:8
+msgid "Manage list of presence states."
+msgstr "Upravit seznam prezenčních stavů."
+
+#: views/bootnav.php:16 views/grid.php:16
+msgid "Message"
+msgstr "Zpráva"
+
+#: views/ucp_config.php:15
+msgid "No"
+msgstr "Ne"
+
+#: ucp/views/settings.php:14
+msgid "On Browser Close or UCP Logout Set Status to"
+msgstr "Při zavření prohlížeče nebo při odhlášení z UCP změnit stav na"
+
+#: ucp/views/settings.php:5
+msgid "On UCP Login Set Status to"
+msgstr "Při přihlášení do UCP nastavit stav na"
+
+#: views/form.php:50
+msgid "Optional Message"
+msgstr "Volitelná zpráva"
+
+#: views/form.php:62
+msgid "Optional message, example: Lunch"
+msgstr "Volitelná zpráva, příklad: Oběd"
+
+#: ucp/Presencestate.class.php:180 ucp/Presencestate.class.php:190
+#: ucp/Presencestate.class.php:229
+msgid "Presence"
+msgstr "Prezence"
+
+#: ucp/Presencestate.class.php:263
+msgid "Presence Settings"
+msgstr ""
+
+#: Presencestate.class.php:121 presencestate.i18n.php:4
+#: presencestate.i18n.php:10
+msgid "Presence State"
+msgstr "Stav prezence"
+
+#: ucp/Presencestate.class.php:211
+msgid "Presence State is not enabled for this user."
+msgstr ""
+
+#: page.presencestate.php:6
+msgid "Presence States"
+msgstr "Prezence stavy"
+
+#: Presencestate.class.php:205
+msgid "Reset"
+msgstr "Resetovat"
+
+#: views/form.php:38
+msgid "State type"
+msgstr "Typ stavu"
+
+#: Presencestate.class.php:205
+msgid "Submit"
+msgstr "Potvrdit"
+
+#: ucp/Presencestate.class.php:215
+msgid "This user doesn't have a default extension."
+msgstr ""
+
+#: views/bootnav.php:15 views/form.php:24 views/grid.php:15
+msgid "Type"
+msgstr "Typ"
+
+#: functions.inc.php:6
+msgid "Unavailable"
+msgstr "Nedostupný"
+
+#: views/ucp_config.php:28
+msgid ""
+"Whether to allow this user to be able to change their presence state/status "
+"in UCP"
+msgstr "Povolit uživateli, aby mohl změnit stav přítomnosti / stavu v UCP"
+
+#: views/ucp_config.php:13
+msgid "Yes"
+msgstr "Ano"
+
+#~ msgid "Actions List"
+#~ msgstr "Seznam akcí"
+
+#~ msgid "Offline"
+#~ msgstr "Offline"
+
+#~ msgid "Presence State Settings"
+#~ msgstr "Nastavení stavu prezence"
+
+#~ msgid "Status Not Set"
+#~ msgstr "Stav nenastaven"
+
+#~ msgid "Your settings have been saved"
+#~ msgstr "Vaše nastavení bylo uloženo"

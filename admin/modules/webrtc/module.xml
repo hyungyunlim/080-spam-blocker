@@ -1,0 +1,69 @@
+<module>
+	<rawname>webrtc</rawname>
+	<name>WebRTC Phone</name>
+	<version>17.0.3.1</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<repo>standard</repo>
+	<description>
+		The WebRTC Module allows an Administrator to enable a "WebRTC phone" that can be attached to a user's
+		extension which they can connect to through FreePBX User Control Panel, this WebRTC phone will then
+		receive phone calls at the same time as the users extension using user and device mode behind the scenes.
+		If you have User and Device Mode enabled any extension you enable the WebRTC Phone a duplicate extension of 99XXXX
+		will be created (where XXXX is the original extension number), when the user then views the web interface of the WebRTC
+		phone they will be connected to device 99XXXX which will receive calls from the original extension
+	</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/38634428/WebRTC+Phone-UCP</more-info>
+	<changelog>
+		*17.0.3.1* Fixing FREEI-1507 Webrtc call not showing callerid issue 
+		*17.0.3* Fixing FREEI-1408 UCP Web Phone cannot Hangup call before it is answered issue. 
+		*17.0.2* 17.0.2  release
+	</changelog>
+	<info/>
+	<category>Connectivity</category>
+	<depends>
+		<engine>asterisk 11.5</engine>
+		<module>certman ge 17.0.1</module>
+		<module>core ge 17.0.1</module>
+		<module>ucp ge 17.0.1</module>
+		<version>17.0</version>
+	</depends>
+	<hooks>
+		<ucp class="Ucp">
+			<method callingMethod="constructModuleConfigPages" class="Webrtc" namespace="FreePBX\modules">ucpConfigPage</method>
+			<method callingMethod="addUser" class="Webrtc" namespace="FreePBX\modules">ucpAddUser</method>
+			<method callingMethod="updateUser" class="Webrtc" namespace="FreePBX\modules">ucpUpdateUser</method>
+			<method callingMethod="delUser" class="Webrtc" namespace="FreePBX\modules">ucpDelUser</method>
+			<method callingMethod="addGroup" class="Webrtc" namespace="FreePBX\modules">ucpAddGroup</method>
+			<method callingMethod="updateGroup" class="Webrtc" namespace="FreePBX\modules">ucpUpdateGroup</method>
+			<method callingMethod="delGroup" class="Webrtc" namespace="FreePBX\modules">ucpDelGroup</method>
+		</ucp>
+		<dashboard class="Dashboard" namespace="">
+			<method callingMethod="extIgnoreList" class="Webrtc" namespace="FreePBX\Modules">dashboardIgnoreExt</method>
+		</dashboard>
+		<core class="Core" namespace="FreePBX\modules">
+			<method callingMethod="delUser" class="Webrtc" namespace="FreePBX\modules">delUser</method>
+			<method callingMethod="addUser" class="Webrtc" namespace="FreePBX\modules">updatefromcore</method>
+		</core>
+	</hooks>
+	<database>
+		<table name="webrtc_clients">
+			<field name="user" type="string" length="190"/>
+			<field name="device" type="string" length="190"/>
+			<field name="prefix" type="string" length="10"/>
+			<field name="module" type="string" length="100"/>
+			<field name="certid" type="integer" notnull="false"/>
+			<key name="userandprefix" type="unique">
+				<column name="user"/>
+				<column name="prefix"/>
+			</key>
+			<key name="device" type="unique">
+				<column name="device"/>
+			</key>
+		</table>
+	</database>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

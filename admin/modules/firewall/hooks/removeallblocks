@@ -1,0 +1,51 @@
+#!/usr/bin/env php
+<?php
+// vim: :set filetype=php tabstop=4 shiftwidth=4 autoindent smartindent:
+
+// Make sure we have a param
+if (empty($argv[1])) {
+	throw new \Exception("Needs a param");
+}
+
+// Underp the base64 that the param is using.
+$b = str_replace('_', '/', $argv[1]);
+$settings = @json_decode(gzuncompress(@base64_decode($b)), true);
+
+if (!is_array($settings)) {
+	throw new \Exception("Invalid param");
+}
+
+// Make sure our host is an IP address
+if (!filter_var($settings['unblock'], \FILTER_VALIDATE_IP)) {
+	throw new \Exception("Not an IP address");
+}
+
+// Now remove it from all recent chains
+$recent = array ("ATTACKER", "CLAMPED", "REPEAT", "SIGNALLING", "TEMPWHITELIST");
+foreach ($recent as $chain) {
+	$fh = fopen("/proc/net/xt_recent/$chain", "w");
+	fwrite($fh, "-".$settings['unblock']."\n");
+	fclose($fh);
+}
+
+if (!empty($settings['login'])) {
+	$ip = $settings['unblock'];
+	if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+		$iptables = "ip6tables";
+	} else {
+		$iptables = "iptables";
+	}
+	// The user has been logged in by an external process. Add this IP to the logged in table.
+	$cmd = "$iptables -A fpbxregistrations -s $ip -j fpbxknownreg";
+	`$cmd`;
+	// Did we add it at the same time as something else did?
+	$cmd = "${iptables}-save | grep fpbxregistrations | grep '$ip' | wc -l";
+	$res = trim(`$cmd`);
+	if ($res == 2) {
+		// Something else added it at the same time. Remove one.
+		$delcmd = "$iptables -D fpbxregistrations -s $ip -j fpbxknownreg";
+		`$delcmd`;
+	}
+}
+
+

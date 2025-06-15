@@ -1,0 +1,346 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for sms
+# Copyright (C) 2008-2016 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-28 10:09-0400\n"
+"PO-Revision-Date: 2017-03-03 14:59+0200\n"
+"Last-Translator: Franck <fdanard@sangoma.com>\n"
+"Language-Team: French <http://weblate.freepbx.org/projects/fpbxc/sms/fr_FR/"
+">\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.4\n"
+
+msgid "A id used to identify sms webhook"
+msgstr ""
+
+msgid "API's Deleted"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Adaptor not loaded"
+msgstr "Adaptateur non chargé"
+
+msgid "Add New Web Hook"
+msgstr ""
+
+msgid "Add or Edit Web Hook"
+msgstr ""
+
+msgid "Adding..."
+msgstr ""
+
+msgid "Are you sure to delete the selected records?"
+msgstr ""
+
+msgid "Are you sure you want to delete the Web Hook?"
+msgstr ""
+
+msgid "Are you sure you wish to delete this conversation?"
+msgstr "Êtes-vous sur de vouloir supprimer cette conversation ?"
+
+msgid "Body"
+msgstr "Corps"
+
+msgid "Close"
+msgstr "Fermer"
+
+msgid "Controls"
+msgstr "Contrôles"
+
+#, perl-format, php-format
+msgid "Conversation Detail with %s"
+msgstr "Détail de la conversation avec %s"
+
+msgid "DID"
+msgstr "DID"
+
+msgid "DID is blocklisted."
+msgstr ""
+
+msgid "Data sent to web hook"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete Selected"
+msgstr ""
+
+msgid "Delete an SMS web hook"
+msgstr ""
+
+msgid "Direction"
+msgstr "Direction"
+
+msgid "Enable this web hook"
+msgstr ""
+
+#, php-format
+msgid "Exporting Databases from %s"
+msgstr ""
+
+#, php-format
+msgid "Extract sms module tables from mysqldump Done....  %s  "
+msgstr ""
+
+msgid "Failed to send data to the configured web hook. Due to"
+msgstr ""
+
+msgid "File Size is too large. Max: 1.5mb"
+msgstr ""
+
+msgid "File size is too large. Max: 1.5mb"
+msgstr ""
+
+msgid "Initiate"
+msgstr ""
+
+msgid "Invalid webhook url"
+msgstr ""
+
+msgid "Last Message Date"
+msgstr "Date du dernier message"
+
+msgid "List of sms webhooks"
+msgstr ""
+
+msgid "Loading"
+msgstr ""
+
+msgid "Me"
+msgstr "Moi"
+
+msgid "Message for the request"
+msgstr ""
+
+#, perl-format
+msgid "New Message from %s"
+msgstr "Nouveau message de %s"
+
+msgid "No"
+msgstr ""
+
+msgid "No SMS DIDs assigned to this user."
+msgstr ""
+
+msgid "On both event"
+msgstr ""
+
+msgid "On which SMS events fire the webhook"
+msgstr ""
+
+msgid "Please select when data has to be sent to webhook"
+msgstr ""
+
+#, php-format
+msgid "Processing sms module Done....  %s  "
+msgstr ""
+
+msgid "Receive"
+msgstr ""
+
+msgid "Received"
+msgstr "Reçu"
+
+msgid "Returns sms webhook id"
+msgstr ""
+
+msgid "Returns sms webhook url"
+msgstr ""
+
+msgid "SMS"
+msgstr "SMS"
+
+msgid "SMS Web Hooks"
+msgstr ""
+
+msgid "SMS data to be sent on"
+msgstr ""
+
+#, php-format
+msgid "SMS for %s"
+msgstr ""
+
+msgid "SMS webhook id to be deleted"
+msgstr ""
+
+msgid "Save Changes"
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Send Message"
+msgstr "Envoyer message"
+
+msgid "Send SMS"
+msgstr "Envoyer SMS"
+
+msgid "Send and Receive"
+msgstr ""
+
+msgid "Sent"
+msgstr "Envoyé"
+
+msgid "Sms webhook deleted successfully"
+msgstr ""
+
+msgid "Sms webhook does not exists"
+msgstr ""
+
+msgid "Sms webhooks data found successfully..!!"
+msgstr ""
+
+msgid "Sorry unable to find the sms webhooks data"
+msgstr ""
+
+msgid "Start Conversation"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Status for the request"
+msgstr ""
+
+msgid "Status of sms webhook"
+msgstr ""
+
+msgid "Status of the request"
+msgstr ""
+
+msgid "The Sms Webhook Id to be fetched"
+msgstr ""
+
+msgid "The url for which sms data has to be sent."
+msgstr ""
+
+msgid ""
+"This section is used to add web hook urls. The sms data will be sent to this "
+"web hook based the web hook settings."
+msgstr ""
+
+msgid "Time"
+msgstr "Heure"
+
+msgid "To"
+msgstr "À"
+
+msgid "URL cannot be blank"
+msgstr ""
+
+msgid "Unsupported file format"
+msgstr "Format de fichier non supporté"
+
+msgid "Unsupported file type"
+msgstr ""
+
+msgid "Update sms web hook"
+msgstr ""
+
+msgid "Updating..."
+msgstr ""
+
+msgid "Web Hook Enabled"
+msgstr ""
+
+msgid "Web Hook Url"
+msgstr ""
+
+msgid "Web Hook created successfully"
+msgstr ""
+
+msgid "Web Hook deleted successfully"
+msgstr ""
+
+msgid "Web hook updated successfully"
+msgstr ""
+
+msgid "Webhook Base URL"
+msgstr ""
+
+msgid "Webhook added successfully..!!"
+msgstr ""
+
+msgid "Webhook updated successfully..!!"
+msgstr ""
+
+msgid "What is SMS Web Hooks ?"
+msgstr ""
+
+msgid "When SMS is received"
+msgstr ""
+
+msgid "When SMS is sent"
+msgstr ""
+
+msgid "When data has to be sent ?"
+msgstr ""
+
+msgid ""
+"When the data has to sent to web hook url. On sending message , On receiving "
+"mesage, Or Both"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "add new sms web hook"
+msgstr ""
+
+msgid "dataToBeSentOn is required"
+msgstr ""
+
+msgid "enablewebHook is required"
+msgstr ""
+
+#, php-format
+msgid "web hook already exists for data to be sent on %s sms events"
+msgstr ""
+
+msgid "web hook already exists for data to be sent on send sms events"
+msgstr ""
+
+msgid "web hook url is required"
+msgstr ""
+
+#~ msgid "Connectivity"
+#~ msgstr "Connectivité"
+
+#~ msgid ""
+#~ "This module is used to configure and manage SMS chat interfaces inside of "
+#~ "the new UCP."
+#~ msgstr ""
+#~ "Ce module sert à configurer et gérer l'interface les SMS à l'intérieur du "
+#~ "nouveau UCP."
+
+#~ msgid "Invalid Number"
+#~ msgstr "Numéro invalide"
+
+#~ msgid "New SMS"
+#~ msgstr "Nouveau SMS"
+
+#~ msgid "Message could not be delivered"
+#~ msgstr "Le message n'a pu être acheminé"
+
+#~ msgid "System"
+#~ msgstr "Système"
+
+#~ msgid "There was an error sending this message: "
+#~ msgstr "Il y a eu une erreur lors de l'envoi de ce message: "

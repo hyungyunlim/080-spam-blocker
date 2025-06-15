@@ -1,0 +1,194 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for presencestate
+# Copyright (C) 2008-2016 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-28 09:47-0400\n"
+"PO-Revision-Date: 2018-02-16 20:01+0200\n"
+"Last-Translator: Nils <Nils@heckenkamp.info>\n"
+"Language-Team: German <http://weblate.freepbx.org/projects/freepbx/"
+"presencestate/de_DE/>\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.4\n"
+
+#: views/grid.php:17
+msgid "Actions"
+msgstr "Aktionen"
+
+#: views/bootnav.php:2 views/grid.php:2
+msgid "Add State"
+msgstr "Status hinzufügen"
+
+#: presencestate.i18n.php:6
+msgid "Admin"
+msgstr "Administrator"
+
+#: functions.inc.php:6
+msgid "Available"
+msgstr "Verfügbar"
+
+#: functions.inc.php:6
+msgid "Away"
+msgstr "Abwesend"
+
+#: functions.inc.php:6
+msgid "Chat"
+msgstr "Chat"
+
+#: functions.inc.php:6
+msgid "DND"
+msgstr "DND"
+
+#: ucp/views/settings.php:23
+msgid "Define Actions on A Status Change"
+msgstr "Aktion bei Statusänderung"
+
+#: Presencestate.class.php:205
+msgid "Delete"
+msgstr "Löschen"
+
+#: ucp/views/settings.php:7 ucp/views/settings.php:16
+msgid "Do Not Change"
+msgstr "Nichts ändern"
+
+#: ucp/Presencestate.class.php:256
+msgid "Do Not Disturb"
+msgstr "Bitte nicht stören"
+
+#: ucp/Presencestate.class.php:255
+msgid "Do Nothing"
+msgstr "Nichts tun"
+
+#: views/ucp_config.php:7
+msgid "Enable Presence"
+msgstr "Aktiviere Anwesenheitsstatus"
+
+#: functions.inc.php:6
+msgid "Extended Away"
+msgstr "Länger abwesend"
+
+#: ucp/Presencestate.class.php:257
+msgid "Findme/Follow Me"
+msgstr "Finde Mich/Folge Mir"
+
+#: views/ucp_config.php:18
+msgid "Inherit"
+msgstr "Übernehmen"
+
+#: Presencestate.class.php:195
+msgid "Invalid Request"
+msgstr "ungültige Anfrage"
+
+#: views/bootnav.php:3
+msgid "List States"
+msgstr "Statusliste"
+
+#: presencestate.i18n.php:8
+msgid "Manage list of presence states."
+msgstr "Liste der Anwesenheitsstatus verwalten."
+
+#: views/bootnav.php:16 views/grid.php:16
+msgid "Message"
+msgstr "Nachricht"
+
+#: views/ucp_config.php:15
+msgid "No"
+msgstr "Nein"
+
+#: ucp/views/settings.php:14
+msgid "On Browser Close or UCP Logout Set Status to"
+msgstr "Bei schließen des Browsers oder UPC Logout setze Status auf"
+
+#: ucp/views/settings.php:5
+msgid "On UCP Login Set Status to"
+msgstr "Bei UPC Login setze Status auf"
+
+#: views/form.php:50
+msgid "Optional Message"
+msgstr "Optionale Nachricht"
+
+#: views/form.php:62
+msgid "Optional message, example: Lunch"
+msgstr "Optionale Nachricht, z.B. Mittag"
+
+#: ucp/Presencestate.class.php:180 ucp/Presencestate.class.php:190
+#: ucp/Presencestate.class.php:229
+msgid "Presence"
+msgstr "Anwesenheit"
+
+#: ucp/Presencestate.class.php:263
+msgid "Presence Settings"
+msgstr ""
+
+#: Presencestate.class.php:121 presencestate.i18n.php:4
+#: presencestate.i18n.php:10
+msgid "Presence State"
+msgstr "Anwesenheitsstatus"
+
+#: ucp/Presencestate.class.php:211
+msgid "Presence State is not enabled for this user."
+msgstr ""
+
+#: page.presencestate.php:6
+msgid "Presence States"
+msgstr "Anwesenheitsstatus"
+
+#: Presencestate.class.php:205
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+#: views/form.php:38
+msgid "State type"
+msgstr "Status Typ"
+
+#: Presencestate.class.php:205
+msgid "Submit"
+msgstr "Absenden"
+
+#: ucp/Presencestate.class.php:215
+msgid "This user doesn't have a default extension."
+msgstr ""
+
+#: views/bootnav.php:15 views/form.php:24 views/grid.php:15
+msgid "Type"
+msgstr "Typ"
+
+#: functions.inc.php:6
+msgid "Unavailable"
+msgstr "Nicht verfügbar"
+
+#: views/ucp_config.php:28
+msgid ""
+"Whether to allow this user to be able to change their presence state/status "
+"in UCP"
+msgstr ""
+"Erlaubt dem Benutzer seinen Anwesenheitsstatus/ Status im UCP zu ändern"
+
+#: views/ucp_config.php:13
+msgid "Yes"
+msgstr "Ja"
+
+#~ msgid "Actions List"
+#~ msgstr "Aktionsliste"
+
+#~ msgid "Offline"
+#~ msgstr "Offline"
+
+#~ msgid "Presence State Settings"
+#~ msgstr "Anwesenheitsstatus Einstellungen"
+
+#~ msgid "Status Not Set"
+#~ msgstr "Status nicht gesetzt"
+
+#~ msgid "Your settings have been saved"
+#~ msgstr "Ihre Einstellungen wurden gespeichert"

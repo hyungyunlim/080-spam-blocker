@@ -1,0 +1,69 @@
+SANGOMA TECHNOLOGIES
+FreePBX Commercial Modules End User License Agreement
+
+These Terms and Conditions (the ?Terms and Conditions?) entered into between Sangoma Technologies, referred to as (Sangoma) in this document and Customer referred to as (Customer). 
+
+Sangoma reserves the right to modify these Terms and Conditions from time to time.  Any modification to these Terms and Conditions will be effective on the first day of the month following the posting of the modified Terms and Conditions at our websites.  Customer should therefore check the siteÿregularly for updated versions.  
+
+1 DEFINITIONS
+1.1 ?FreePBX GUI? means the opensource GUI that is used worldwide to manage Asterisk based system.
+1.2 ?Commercial Modules? means any module sold in the FreePBX Store or licensed as a Commercial Module regardless of cost.
+1.3 ?Outright Purchase? A commercial module that is bought as a outright purchase includes a 25 year license to use the module.
+1.4 ?Monthly Purchase?  A commercial module that is bought on a month to month basis includes a 1 month license to use the module and must be renewed each month to continue to use the module.
+1.5 ?Yearly Upgrade Fee? A yearly fee charged to allow the ability to install upgrades of the module for a 12 month period.
+
+2 USAGE
+2.1 User is granted a non-exclusive, non-transferable, non-sublicensable, perpetual license to use the Sangoma Software unless otherwise stated.
+2.2 By downloading, installing, viewing or using this software you agree not to copy, reproduce, alter, merge, modify, or adapt the Software in any way including but not limited to reverse engineering, disassembling, decompiling or creating derivative works, and may not take any other steps intended to produce a source language statement of the Sangoma Software contained within the software. 
+2.3 Any modification of the software not authorized in writing by Sangoma will void any applicable warranty and result in violation of this agreement. In the event of violation of this agreement all software shall be returned to Sangoma and no refund for software will be due back to the customer.
+2.4 Sangoma retains absolute right, title and interest in the Software. Sangoma has absolute rights, including but not limited to patents, trademarks, trade names, copyrights, and all other proprietary rights applicable to the Software and the concepts embodied therein.
+2.5 All Commercial software modules that are purchased are licensed for a single install/machine. We allow you to reset the hardware lock to move the license to a new machine twice from the user portal.
+
+3 OUTRIGHT PURCHASE
+3.1  All Commercial modules come with a license for 25 years when bought using the ?outright purchase? option
+3.2  All Commercial modules bought under this option come with the ability to upgrade the module to any newer version for free for the first 12 months after purchase.
+3.2.1 After 12 months a ?Yearly Upgrade Fee? will need to be purchased to have access to upgrade the module for another 12 months.
+3.2.2 For all modules under $100.00 the yearly upgrade fee is 33% of the module price.  For all modules over $100.00 the yearly upgrade fee is 18% of the module price.  
+
+4 MONTHLY PURCHASE
+4.1 All Commercial modules come with a 1-month license when bought using the ?Monthly Purchase? and will quit working after 1 month and will auto renew each month unless you log into the portal and cancel the renewal.
+4.2 All Commercial modules bought under this option include access for upgrades for as long as you have the product being renewed monthly.
+
+5 SUPPORT
+5.1 All commercial modules include free support on bugs found on the product. To report a bug please open a bug report at http://issues.freepbx.org.
+5.1.1 Once the bug report has been received and the bug is confirmed we will make all reasonable attempts to resolve the bug in a timely fashion.
+5.2 Purchasing the module does not entitle you to free support to help setup, use or train on using the module.  All support for help on setup or use must be purchased from www.freepbx.org under the paid support option.
+5.3 All Commercial Modules have a wiki with admin guide, videos or other articles on how to use and setup the module at http://wiki.freepbx.org/display/FCM/FreePBX+Commercial+Modules+Home
+5.4 You can also use the FreePBX public forums for assistance in using the modules for free at http://www.freepbx.org/forums
+
+6 EXPORT
+6.1 User shall comply with all laws and regulations of the United States governing the use, access or export of the software or any part thereof. Without limitation, the System or Products or any part thereof may not be used or accessed within or by, or otherwise exported to, (a) any United States embargoed country; or (b) anyone on the United States Treasury Department\'s list of Specially Designated Nations, the United States Department of Commerce\'s Table of Denial Orders, or other similar list.
+
+7 WARRANTY
+7.1 OTHER THAN AS PROVIDED IN THIS AGREEMENT, THE SYSTEM AND PRODUCTS ARE PROVIDED ?AS IS? AND SANGOMA MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, OF ANY KIND WHATSOEVER INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NONINFRINGEMENT, OR ANY WARRANTIES ARISING FROM A COURSE OF DEALING, CUSTOM, USAGE, OR TRADE PRACTICE. SANGOMA DOES NOT WARRANTS THAT THE SYSTEM OR PRODUCTS WILL BE BUG FREE OR MEET END USER?S REQUIREMENTS OR THAT THE SYSTEM OR PRODUCTS WILL OPERATE IN COMBINATION WITH ANY HARDWARE, SOFTWARE, SYSTEMS OR DATA NOT PROVIDED OR AUTHORIZED IN WRITING BY SANGOMA.
+7.2 IN NO EVENT SHALL EITHER PARTY BE LIABLE TO THE OTHER PARTY OR ANY THIRD PARTY FOR ANY INCIDENTAL, PUNITIVE, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOSS ARISING FROM OR RELATED TO THIS AGREEMENT, INCLUDING BUT NOT LIMITED TO LOST REVENUE, LOST PROFITS, REPLACEMENT GOODS, COST OF COVER, LOSS OF OR DAMAGE TO DATA, LOSS OF GOOD WILL, WORK STOPPAGE OR COMPUTER FAILURE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, WHETHER BASED IN CONTRACT, WARRANTY, INDEMNITY, TORT, STRICT LIABILITY OR ANY OTHER THEORY OF LAW OR IN EQUITY. NEITHER PARTY?S TOTAL AGGREGATE LIABILITY TO THE OTHER PARTY FOR BREACH OF THIS AGREEMENT SHALL EXCEED THE AMOUNTS PAID FOR THE PRODUCT. 
+
+
+8 TERMINATION
+8.1 This Agreement may be terminated upon any breach of any of the outlined terms of use as stated above. Upon termination of this Agreement, End User shall, at Sangoma?s option, return to Sangoma or destroy any Products and any monies paid for the software or product will notbe refunded.
+
+9 INDEMNIFICATION
+9.1 Sangoma shall indemnify, defend and hold harmless End User from and against any third-party claim asserted against End User that the Sangoma Commercial Module Purchased, when used in accordance with this Agreement and as outlined in our wiki for each commercial module purchased at https://wiki.freepbx.org/display/FPG/Commercial+Modules directly infringes or misappropriates a patent or copyright (an ?IP Claim?), and Sangoma will pay those costs and damages finally awarded or settled (upon settlement terms acceptable to Sangoma) against End User based on such IP Claim not to exceed amount paid from Customer to Sangoma for purchase of Commercial Module that infringes on IP Claim; provided that: (a) End User promptly notifies Sangoma in writing of such IP Claim, but in no case later than reasonably required to prevent Sangoma?s ability to defend such IP Claim from being prejudiced; (b) Sangoma has sole control of and End User reasonably cooperates in all respects in the defense of each such IP Claim and all related settlement negotiations and End User does not make any admission or disclosure or otherwise take any action prejudicial to Sangoma; and (c) such IP Claim does not relate to any act of End User including (without limitation) a change in the Sangoma Software or using the software in a non documented way as found at https://wiki.freepbx.org/display/FPG/Commercial+Modules, a combination of the Sangoma Software with or the addition of the Sangoma Software to products or other software which have not been developed and supplied by Sangoma, or any breach of this Agreement by End User.
+9.2 If a final judgment is entered against End User on any such IP Claim, or if in Sangoma?s reasonable opinion End User is likely to become subject to a successful IP Claim, then End User shall permit Sangoma, at Sangoma?s option and expense, either to: (a) procure for End User the right to continue using the Sangoma Software; or (b) replace or modify the same so that it becomes non-infringing, with functionality essentially being equal.  If neither (a) nor (b) is commercially practicable, Sangoma shall remove the Sangoma Software and provide a pro rata refund of the fees paid by End User to Sangoma pursuant to this Agreement after an appropriate deduction for depreciation over a sixty month period based on End User?s usage prior to such removal. Sangoma shall have no authority to compromise or settle any IP Claim on terms that would obligate End User to make any payment or would have a material adverse effect on End User, without End User?s prior written consent, which shall not be unreasonably withheld or delayed.
+9.3 Sections 6.1 and 6.2 set forth the entire and exclusive liability of Sangoma with respect to any claimed infringement or misappropriation by the Licensed Software of any patent, trademark, trade dress, trade secret, copyright or other intellectual property rights of any third party.
+
+10 MISCELLANEOUS
+10.1 Entire Agreement.  THIS AGREEMENT AND ANY ATTACHMENTS AND ADDENDA CONSTITUTE THE ENTIRE UNDERSTANDING BETWEEN THE PARTIES WITH RESPECT TO THE SUBJECT MATTER HEREOF. THERE ARE NO REPRESENTATIONS, PROMISES, WARRANTIES OR UNDERSTANDINGS RELIED UPON BY PARTNER THAT ARE NOT CONTAINED HEREIN.  This Agreement may be modified only in writing by mutual agreement.  
+10.2 Waiver.  The failure by either party to insist upon strict enforcement of any terms and conditions of this Agreement shall not be construed as a waiver or relinquishment of the right to assert or rely upon any such terms on any future occasion.
+10.3 Enforceability.  If any provision of this Agreement or the application of such provision to any person, entity, or circumstance is found invalid or unenforceable by a court of competent jurisdiction, such determination shall not affect the other provisions of this Agreement and all other provisions of this Agreement shall be deemed valid and enforceable.  Any provision deemed unenforceable shall automatically be revised with the least changes necessary to effect, to the fullest extent permitted by law, the intent of the parties as set forth in this Agreement.
+10.4 Assignment.  Neither this Agreement nor any rights granted hereunder may be sold, leased, assigned or otherwise transferred in whole or in part by Partner, and any such attempted assignment shall be void and of no effect without the prior written consent of Sangoma.  This Agreement shall inure to the benefit of Sangoma and its corporate successors or the purchaser of substantially all of its assets.
+10.5 Force Majeure.  Neither party will be liable to the other for delays in performing or failure to perform its obligations hereunder (other than payment of monetary obligations) to the extent that such delay or failure results from a cause beyond its control, including, without limitation, strikes, lockouts, or other industrial disturbances; civil disturbances; fires; acts of God; acts of a public enemy; compliance with any regulation, order, or requirement of any governmental body or agency; or inability to obtain transportation or necessary materials in the open market.
+10.6 Dispute Requirements. This Agreement will be governed by and construed in accordance with the laws in force in the Province of Ontario.  Partner hereby submits to the exclusive jurisdiction of the courts of Ontario for any legal action arising out of this Agreement or the performance of the obligations hereunder.
+10.7 Independent Contractors.  The parties are independent contractors and this Agreement shall not establish any fiduciary relationship or other relationship of partnership, joint venture, employment, franchise or agency between them.  Neither party will have the authority to bind the other or incur obligations on the other?s behalf without the other?s prior written consent.
+
+18
+
+
+5
+
+

@@ -1,0 +1,424 @@
+# CREDITS for JAPANESE TRANSLATION
+# ================================
+# Current translation & maintenance: QLOOG, Inc. (Kobe, Japan)
+# Inquiries: info@qloog.com / www.qloog.com
+#
+# This translation is a culmination of the hard work of
+# several outstanding individuals, which started in 2009 with the 
+# first-ever Japanese localization of FreePBX by Kenichi Fukaumi 
+# and Kazuhiro Tokuyama (FreePBX Japanized Project).
+#
+# Beginning in 2013, with the approval of the original authors, 
+# QLOOG undertook a large scale overhaul of the translation to 
+# expand it for compatibility with FreePBX 2.11. Our work is, 
+# of course, released under the same GPLv2 license as FreePBX. 
+# We only ask that you kindly retain these credits in honor of 
+# the time and effort that all of us have contributed. Enjoy!
+#
+# This file is part of FreePBX.
+#
+#    FreePBX is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    FreePBX is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with FreePBX.  If not, see <http://www.gnu.org/licenses/>.
+#
+# FreePBX language template for manager
+# Copyright (C) 2008, 2009, 2010 Bandwith.com
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FreePBX\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-12 02:03-0400\n"
+"PO-Revision-Date: 2014-02-19 22:17+0200\n"
+"Last-Translator: Kenichi Fukaumi <k.fukaumi@qloog.com>\n"
+"Language-Team: Japanese <http://example.com/projects/freepbx/manager/ja/>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 1.8\n"
+
+#: assets/js/manager.js:232
+msgid ""
+");\n"
+"    var errDeny         = _("
+msgstr ""
+
+#: views/page.main.php:10
+#, php-format
+msgid "AMI current settings for Bind Address : %s and bind port : %s."
+msgstr ""
+
+#: views/view.grid.php:31
+msgid "Actions"
+msgstr ""
+
+#: views/view.grid.php:4
+msgid "Add Manager"
+msgstr "マネージャーを追加"
+
+#: Manager.class.php:48
+msgid "Agent"
+msgstr ""
+
+#: assets/js/manager.js:23
+#, perl-format
+msgid "Are you sure you want to delete (%s)?"
+msgstr ""
+
+#: manager.i18n.php:4
+msgid "Asterisk API"
+msgstr "Asterisk API"
+
+#: views/page.main.php:5
+msgid "Asterisk Manager"
+msgstr ""
+
+#: manager.i18n.php:10
+msgid "Asterisk Manager Users"
+msgstr ""
+
+#: Manager.class.php:54
+msgid "CDR"
+msgstr ""
+
+#: Manager.class.php:44
+msgid "Call"
+msgstr ""
+
+#: Manager.class.php:348
+msgid "Can't create, we are conflicting with FreePBX Asterisk Admin User!"
+msgstr ""
+
+#: Manager.class.php:409
+msgid "Can't delete, we are conflicting with FreePBX Asterisk Admin User!"
+msgstr ""
+
+#: Manager.class.php:405
+msgid "Cannot be deleted as it does not exist!"
+msgstr ""
+
+#: functions.inc.php:24
+msgid "Choose Manager:"
+msgstr "マネージャーを選択："
+
+#: functions.inc.php:24
+msgid "Choose the user that PHPAGI will use to connect the Asterisk API."
+msgstr ""
+"PHP AGIがAsterisk APIへ接続するために使用するユーザーを選択してください。"
+
+#: views/view.grid.form.php:225
+msgid "Close"
+msgstr ""
+
+#: Manager.class.php:47
+msgid "Command"
+msgstr ""
+
+#: Manager.class.php:269
+msgid "Command not found!"
+msgstr ""
+
+#: Manager.class.php:51
+msgid "Config"
+msgstr ""
+
+#: Manager.class.php:215
+msgid "Create Successfully"
+msgstr ""
+
+#: Manager.class.php:52
+msgid "DTMF"
+msgstr ""
+
+#: views/view.grid.form.php:78 views/view.grid.php:25
+msgid "Deny"
+msgstr ""
+
+#: Manager.class.php:55
+msgid "Dialplan"
+msgstr ""
+
+#: views/view.grid.form.php:143
+msgid ""
+"For information on individual permissions please see the Asterisk Manager "
+"Documentation"
+msgstr ""
+
+#: views/view.grid.form.php:21
+msgid "General"
+msgstr ""
+
+#: assets/js/manager.js:18
+msgid "ID not detected!"
+msgstr ""
+
+#: views/view.grid.form.php:88
+msgid ""
+"If you want to deny many hosts or networks, use & char as separator.<br/><br/"
+">Example: 192.168.1.0/255.255.255.0&10.0.0.0/255.0.0.0"
+msgstr ""
+"もし複数のホストやネットワークを拒否する場合は & で列挙します。<br/><br/>"
+"例： 192.168.1.0/255.255.255.0&10.0.0.0/255.0.0.0"
+
+#: views/view.grid.form.php:108
+msgid ""
+"If you want to permit many hosts or networks, use & char as separator. Look "
+"at deny example."
+msgstr ""
+"もし複数のホストやネットワークを許可する場合は & で列挙します。<br/><br/>拒否"
+"の例を参照ください。"
+
+#: views/view.grid.form.php:13
+msgid "Loading..."
+msgstr ""
+
+#: Manager.class.php:45
+msgid "Log"
+msgstr ""
+
+#: views/view.grid.form.php:35 views/view.grid.php:22
+msgid "Name"
+msgstr ""
+
+#: views/view.grid.form.php:45
+msgid ""
+"Name of the manager without spaces and special characters except _ and -. "
+"Limit upto 15 characters only."
+msgstr ""
+
+#: views/view.grid.form.php:177 views/view.grid.form.php:185
+#: views/view.grid.form.php:202 views/view.grid.form.php:210
+#: assets/js/manager.js:24
+msgid "No"
+msgstr ""
+
+#: Manager.class.php:197
+msgid "No data received!"
+msgstr ""
+
+#: Manager.class.php:401
+msgid "No manager has been selected to be removed!"
+msgstr ""
+
+#: Manager.class.php:364
+msgid "No manager has been selected!"
+msgstr ""
+
+#: Manager.class.php:340
+msgid "No name specified!"
+msgstr ""
+
+#: Manager.class.php:56
+msgid "Originate"
+msgstr ""
+
+#: Manager.class.php:303
+#, php-format
+msgid "Page Not Found (%s)!!!!"
+msgstr ""
+
+#: views/view.grid.form.php:68
+msgid "Password for the manager."
+msgstr "マネージャーのパスワード"
+
+#: views/view.grid.form.php:24
+msgid "Permissions"
+msgstr ""
+
+#: views/view.grid.form.php:98 views/view.grid.php:28
+msgid "Permit"
+msgstr ""
+
+#: views/page.main.php:9
+#, php-format
+msgid ""
+"Please refer to  <a href=\"%s\" target=\"_blank\"> <b>wiki</b> </a> for more "
+"information."
+msgstr ""
+
+#: Manager.class.php:259
+msgid "Removed Failed!"
+msgstr ""
+
+#: Manager.class.php:255
+msgid "Removed Successfully"
+msgstr ""
+
+#: Manager.class.php:53
+msgid "Reporting"
+msgstr ""
+
+#: views/view.grid.form.php:226
+msgid "Save Changes"
+msgstr ""
+
+#: views/view.grid.form.php:55
+msgid "Secret"
+msgstr ""
+
+#: views/view.grid.form.php:131
+msgid ""
+"Sets the timeout used by Asterisk when writing data to the AMI connection "
+"for this user"
+msgstr ""
+
+#: manager.i18n.php:6
+msgid "Settings"
+msgstr "設定"
+
+#: Manager.class.php:43
+msgid "System"
+msgstr ""
+
+#: views/page.main.php:8
+msgid ""
+"The default Asterisk Manager Interface (AMI) configuration has changed "
+"starting in version 16. "
+msgstr ""
+
+#: Manager.class.php:373
+msgid "The manager does not exist!"
+msgstr ""
+
+#: Manager.class.php:344
+msgid "This manager already exists!"
+msgstr ""
+
+#: manager.i18n.php:8
+msgid "This module is used to add AMI Users"
+msgstr ""
+
+#: views/view.grid.form.php:195
+msgid "Toggle All"
+msgstr ""
+
+#: Manager.class.php:243
+msgid "Type not found!"
+msgstr ""
+
+#: Manager.class.php:230
+msgid "Update Successfully"
+msgstr ""
+
+#: Manager.class.php:234
+msgid "Update is Failed!"
+msgstr ""
+
+#: Manager.class.php:49
+msgid "User"
+msgstr ""
+
+#: Manager.class.php:46
+msgid "Verbose"
+msgstr ""
+
+#: views/view.grid.form.php:118
+msgid "Write Timeout"
+msgstr ""
+
+#: views/view.grid.form.php:175 views/view.grid.form.php:183
+#: views/view.grid.form.php:200 views/view.grid.form.php:208
+#: assets/js/manager.js:24
+msgid "Yes"
+msgstr ""
+
+#: views/view.grid.form.php:124
+msgid "milliseconds"
+msgstr ""
+
+#~ msgid "Manager"
+#~ msgstr "マネージャー"
+
+#~ msgid "The manager deny is not well formatted."
+#~ msgstr "マネージャー　拒否　のフォーマットが正しくありません。"
+
+#~ msgid "The manager name cannot be empty or may not have any space in it."
+#~ msgstr ""
+#~ "マネージャー名を空にすることはできません、スペースを入れることもできませ"
+#~ "ん。"
+
+#~ msgid "The manager permit is not well formatted."
+#~ msgstr "マネージャー　許可　のフォーマットが正しくありません。"
+
+#~ msgid "The manager read field is not well formatted."
+#~ msgstr "マネージャーの読取フィールドのフォーマットが正しくありません。"
+
+#~ msgid "The manager secret cannot be empty."
+#~ msgstr "パスワードを空にすることはできません。"
+
+#~ msgid "The manager write field is not well formatted."
+#~ msgstr "マネージャーの書込フィールドのフォーマットが正しくありません。"
+
+#~ msgid "This manager already exists"
+#~ msgstr "このマネージャーは既に存在しています"
+
+#~ msgid "Increasing read field size if needed.."
+#~ msgstr "必要に応じてreadフィールドのサイズを増やします.."
+
+#~ msgid "Increasing write field size if needed.."
+#~ msgstr "必要に応じてwriteフィールドのサイズを増やします.."
+
+#~ msgid "error encountered, not altered"
+#~ msgstr "エラー発生、変更されません"
+
+#~ msgid "ok"
+#~ msgstr "ok"
+
+#~ msgid "Check All/None."
+#~ msgstr "全て/なしをチェック。"
+
+#~ msgid "Check Asterisk documentation."
+#~ msgstr "Asteriskのドキュメントを参照してください。"
+
+#~ msgid "Delete Manager"
+#~ msgstr "マネージャーを削除"
+
+#~ msgid "Deny:"
+#~ msgstr "拒否："
+
+#~ msgid "Edit Manager"
+#~ msgstr "マネージャーを編集"
+
+#~ msgid "Manager name:"
+#~ msgstr "マネージャー名："
+
+#~ msgid "Manager secret:"
+#~ msgstr "パスワード："
+
+#~ msgid "Manager:"
+#~ msgstr "マネージャー："
+
+#~ msgid "Name of the manager without space."
+#~ msgstr "スペース抜きのマネージャーの名前"
+
+#~ msgid "Permit:"
+#~ msgstr "許可："
+
+#~ msgid "Read"
+#~ msgstr "読取"
+
+#~ msgid "Rights"
+#~ msgstr "権限"
+
+#~ msgid "Submit Changes"
+#~ msgstr "変更を適用"
+
+#~ msgid "Write"
+#~ msgstr "書込"
+
+#~ msgid "deleted"
+#~ msgstr "削除されました"
+
+#~ msgid "Error writing the manager additional file."
+#~ msgstr "マネージャー追加ファイルの書き込みエラー。"

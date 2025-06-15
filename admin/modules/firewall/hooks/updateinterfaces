@@ -1,0 +1,98 @@
+#!/usr/bin/env php
+<?php
+// vim: :set filetype=php tabstop=4 shiftwidth=4 autoindent smartindent:
+
+// This updates the zone of a specified interface. Will not create a new one.
+
+// Make sure we have a param
+if (empty($argv[1])) {
+	throw new \Exception("Needs a param");
+}
+
+// Underp the base64 that the param is using.
+$b = str_replace('_', '/', $argv[1]);
+$settings = @json_decode(gzuncompress(@base64_decode($b)), true);
+
+if (!is_array($settings)) {
+	throw new \Exception("Invalid param");
+}
+
+// ///////////////////////////////////// //
+// BOILERPLATE SECURITY VALIDATION CODE: // 
+// ------------------------------------- //
+// Ensure this is run before including   //
+// any files from the module. If you're  //
+// including a file IN the module, check //
+// to see if the class exists...         //
+// ///////////////////////////////////// //
+
+// Now we've passed the first checks, we can load the fake (root-owned-file) FreePBX and GPG objects
+require '/usr/lib/sysadmin/includes.php';
+
+$g = new \Sysadmin\GPG();
+$sigfile = \Sysadmin\FreePBX::Config()->get('AMPWEBROOT')."/admin/modules/firewall/module.sig";
+$sig = $g->checkSig($sigfile);
+if (!isset($sig['config']['hash']) || $sig['config']['hash'] !== "sha256") {
+	throw new \Exception("Invalid sig file.. Hash is not sha256 - check $sigfile");
+}
+
+// Check the hash of the validator, before we include it
+if (empty($sig['hashes']['hooks/validator.php'])) {
+	throw new \Exception("Validator not part of module.sig");
+}
+
+$vhash = hash_file('sha256', __DIR__."/validator.php");
+if ($vhash !== $sig['hashes']['hooks/validator.php']) {
+	throw new \Exception("Validator tampered");
+} else {
+	include __DIR__."/validator.php";
+}
+
+// Yay! We instantiate it now so that the Driver loader
+// knows we're running as root, and we have our hashes
+// preloaded.
+$v = new \FreePBX\modules\Firewall\Validator($sig);
+
+// /////////////////////////////////// //
+// END BOILERPLATE SECURITY VALIDATION //
+// /////////////////////////////////// //
+
+if (!isset($settings['ints'])) {
+	throw new \Exception("No Interface list provided");
+}
+
+$ints = @json_decode($settings['ints'], true);
+if (!is_array($ints)) {
+	throw new \Exception("Invalid Interface list provided");
+}
+
+$v->secureInclude('Zones.class.php');
+$v->secureInclude('Network.class.php');
+
+use FreePBX\modules\Firewall\Zones;
+use FreePBX\modules\Firewall\Network;
+
+// Get our list of interfaces and zones to validate against
+$n = new Network();
+$ifaces = $n->discoverInterfaces();
+$z = new Zones();
+$zones = $z->getZones();
+
+// Now loop through the NEW settings and see what needs to be changed
+foreach ($ints as $i => $newconf) {
+	// Validate the new zone and interface
+	$newzone = $newconf['zone'];
+	if (!isset($zones[$newzone])) {
+		throw new \Exception("Invalid zone '$newzone' provided");
+	}
+	if (!isset($ifaces[$i])) {
+		throw new \Exception("Unknown interface '$i' provided");
+	}
+	if (!isset($newconf['description']) || trim($newconf['description']) == "") {
+		$descr = "unset";
+	} else {
+		$descr = trim($newconf['description']);
+	}
+	$n->updateInterfaceZone($i, $newzone, $descr);
+}
+

@@ -64,6 +64,10 @@ function sendAT($fp, $cmd, $waitMs=300){
 }
 
 function processSmsBatch($fp){
+    // 시작 관리자 로드
+    require_once __DIR__ . '/startup_manager.php';
+    $startupManager = new StartupManager();
+    
     // 모뎀 준비 – TEXT 모드 & SIM 스토리지 선택
     sendAT($fp, 'AT');
     sendAT($fp, 'AT+CMGF=1');
@@ -76,12 +80,28 @@ function processSmsBatch($fp){
     // +CMGL: idx,"STO <status>","<sender>",,"YYYY/MM/DD,HH:MM:SS+TZ"
     $msgs = preg_split('/\r?\n/', trim($raw));
     $pending = [];
+    $skipped = 0;
+    
     for($i=0; $i<count($msgs); $i++){
         if(strpos($msgs[$i], '+CMGL:') === 0){
-            if(!preg_match('/\+CMGL: (\d+),"[^"]+","([^"]*)"/', $msgs[$i], $m)) continue;
+            // 전체 +CMGL 라인 파싱 (타임스탬프 포함)
+            if(!preg_match('/\+CMGL: (\d+),"[^"]+","([^"]*)",[^,]*,"([^"]*)"/', $msgs[$i], $m)) continue;
             $idx = (int)$m[1];
             $sender = $m[2];
+            $timestamp = $m[3] ?? '';
             $body  = $msgs[$i+1] ?? '';
+            
+            // 타임스탬프 검증 - 안전한 메시지인지 확인
+            if (!empty($timestamp)) {
+                $msgTime = $startupManager->parseSmsTimestamp($timestamp);
+                if (!$startupManager->isMessageSafeToProcess($msgTime)) {
+                    // 재시작 전 메시지는 건너뜀
+                    sendAT($fp, 'AT+CMGD='.$idx.',0'); // 삭제만 하고 처리하지 않음
+                    $skipped++;
+                    continue;
+                }
+            }
+            
             // === UCS2(UTF-16BE) 헥스 문자열일 경우 디코딩 ===
             if(preg_match('/^[0-9A-F]{4,}$/i', $body) && strlen($body)%4==0){
                 $bin = @pack('H*', $body);
@@ -94,6 +114,12 @@ function processSmsBatch($fp){
             }
             $pending[] = [$idx, $sender, $body];
         }
+    }
+    
+    // 스킵된 메시지 로그
+    if ($skipped > 0) {
+        $logMsg = date('Y-m-d H:i:s') . " [sms_fetcher] Skipped {$skipped} old messages (before startup threshold)\n";
+        file_put_contents(__DIR__ . '/logs/sms_fetcher.log', $logMsg, FILE_APPEND);
     }
 
     foreach($pending as $p){

@@ -1,13 +1,22 @@
 <?php
+require_once __DIR__ . '/auth.php';
+
+// 인증 확인
+if (!is_logged_in()) {
+    header("HTTP/1.1 401 Unauthorized");
+    echo "Authentication required.";
+    exit;
+}
+
 $recording_dir = '/var/spool/asterisk/monitor/';
 
 // GET 파라미터로 파일명 받기
 $filename = $_GET['file'] ?? '';
 
-// 보안 검사: 파일명에 '..'가 포함되어 상위 디렉토리로 이동하는 것을 방지
-if (empty($filename) || strpos($filename, '..') !== false) {
+// 보안 검사: 파일명 형식 및 경로 탐색 방지
+if (empty($filename) || strpos($filename, '..') !== false || !preg_match('/^[\w\-\.]+\.wav$/', $filename)) {
     header("HTTP/1.1 400 Bad Request");
-    echo "Invalid filename.";
+    echo "Invalid filename format.";
     exit;
 }
 

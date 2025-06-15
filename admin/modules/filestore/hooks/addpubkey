@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+
+$key = isset($argv[1])?trim($argv[1]):false;
+if(!$key){
+    echo "Please pass a key".PHP_EOL;
+    exit;
+}
+$fh = fopen("/root/.ssh/authorized_keys", "r+");
+$found = false;
+if ($fh) {
+    while (($line = fgets($fh)) !== false) {
+        if(strpos($line,$key) !== false){
+            echo $line.PHP_EOL;
+            echo "key found skipping".PHP_EOL;
+            exit;
+        }
+    }
+    if(!$found){
+        fwrite($fh,$key);
+    }
+    fclose($fh);
+} else {
+    // error opening the file.
+} 
+echo "key added".PHP_EOL;
+exit;

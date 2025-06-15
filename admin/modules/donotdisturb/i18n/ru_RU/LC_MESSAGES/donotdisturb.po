@@ -1,0 +1,98 @@
+# Russian freePBX ver. translation
+# Copyright (c) 2006-2008 PostMet Corporation
+# This file is distributed under the same license as the freePBX package.
+# Alexander Kozyrev <ceo@postmet.com>, Sergey Nikolayev <sergey@postmet.com>, 2006-2008.
+#
+# Использовать iconv amp.new -f UTF-8 -t ISO-8859-5 -o amp.po
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-28 09:52-0400\n"
+"PO-Revision-Date: 2015-05-01 13:39+0200\n"
+"Last-Translator: Yuriy <alliancesko@gmail.com>\n"
+"Language-Team: Russian <http://weblate.freepbx.org/projects/freepbx/"
+"donotdisturb/ru_RU/>\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 2.2-dev\n"
+
+#: donotdisturb.i18n.php:6
+msgid "Applications"
+msgstr "Приложения"
+
+#: donotdisturb.i18n.php:12 install.php:6
+msgid "DND Activate"
+msgstr "Активировать режим Не беспокоить"
+
+#: donotdisturb.i18n.php:10 install.php:7
+msgid "DND Deactivate"
+msgstr "Деактивировать режим Не беспокоить"
+
+#: donotdisturb.i18n.php:14 install.php:8
+msgid "DND Toggle"
+msgstr "Переключить режим Не беспокоить"
+
+#: ucp/views/widget.php:2
+msgid "Disabled"
+msgstr ""
+
+#: ucp/Donotdisturb.class.php:88
+msgid "Do Not Disturb"
+msgstr "Не беспокоить"
+
+#: ucp/Donotdisturb.class.php:185
+msgid "Do Not Disturb Has Been Updated!"
+msgstr "Не беспокоить обновлено!"
+
+#: ucp/Donotdisturb.class.php:113
+#, php-format
+msgid "Do Not Disturb for %s"
+msgstr ""
+
+#: donotdisturb.i18n.php:8
+msgid ""
+"Do not disturb (DND) allows calls to be rejected at the user's request via a "
+"feature code, UCP setting, or REST App."
+msgstr ""
+
+#: donotdisturb.i18n.php:4 install.php:5
+msgid "Do-Not-Disturb (DND)"
+msgstr "Режим Не беспокоить (DND)"
+
+#: ucp/views/widget.php:2
+msgid "Enabled"
+msgstr ""
+
+#: ucp/Donotdisturb.class.php:136
+msgid "Follow Me"
+msgstr ""
+
+#: ucp/Donotdisturb.class.php:74
+msgid "The given extension is empty."
+msgstr ""
+
+#: ucp/Donotdisturb.class.php:69
+msgid "There are no assigned extensions."
+msgstr ""
+
+#: ucp/Donotdisturb.class.php:78
+msgid "This extension is not assigned to this user."
+msgstr ""
+
+#~ msgid "Provides donotdisturb functionality"
+#~ msgstr "Обеспечивает возможность не беспокоить"
+
+#~ msgid "Enable"
+#~ msgstr "Включить"
+
+#~ msgid "Used to indicate that somebody does not wish to be disturbed."
+#~ msgstr ""
+#~ "Используется для указания, что кто-то не желает, чтобы его беспокоили."
+
+#~ msgid "Provides donotdisturb featurecodes"
+#~ msgstr "Настройка кодов режима Не беспокоить (DND)"

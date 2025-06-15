@@ -1,0 +1,128 @@
+#!/usr/bin/env php
+<?php
+// vim: :set filetype=php tabstop=4 shiftwidth=4 autoindent smartindent:
+
+// If the firewall hasn't started yet, don't do anything.
+if (file_exists("/var/run/firewalld.safemode")) {
+	print "Firewall not started. Ignoring\n";
+	exit;
+}
+
+// This adds a network, or networks, to the trusted zone.
+// Used by 'preconfigured'
+
+// Make sure we have a param
+if (empty($argv[1])) {
+	throw new \Exception("Needs a param");
+}
+
+// Underp the base64 that the param is using.
+$b = str_replace('_', '/', $argv[1]);
+$settings = @json_decode(gzuncompress(@base64_decode($b)), true);
+
+if (!is_array($settings)) {
+	throw new \Exception("Invalid param");
+}
+
+//sleep added to test filrewall wizard issue
+if (isset($settings['sleep'])) {
+	unset($settings['sleep']);
+	sleep(10);
+}
+
+// ///////////////////////////////////// //
+// BOILERPLATE SECURITY VALIDATION CODE: // 
+// ------------------------------------- //
+// Ensure this is run before including   //
+// any files from the module. If you're  //
+// including a file IN the module, check //
+// to see if the class exists...         //
+// ///////////////////////////////////// //
+
+// Now we've passed the first checks, we can load the fake (root-owned-file) FreePBX and GPG objects
+require '/usr/lib/sysadmin/includes.php';
+$g = new \Sysadmin\GPG();
+$sigfile = \Sysadmin\FreePBX::Config()->get('AMPWEBROOT')."/admin/modules/firewall/module.sig";
+$sig = $g->checkSig($sigfile);
+if (!isset($sig['config']['hash']) || $sig['config']['hash'] !== "sha256") {
+	throw new \Exception("Invalid sig file.. Hash is not sha256 - check $sigfile");
+}
+
+// Check the hash of the validator, before we include it
+if (empty($sig['hashes']['hooks/validator.php'])) {
+	throw new \Exception("Validator not part of module.sig");
+}
+
+$vhash = hash_file('sha256', __DIR__."/validator.php");
+if ($vhash !== $sig['hashes']['hooks/validator.php']) {
+	throw new \Exception("Validator tampered");
+} else {
+	include __DIR__."/validator.php";
+}
+
+// Yay! We instantiate it now so that the Driver loader
+// knows we're running as root, and we have our hashes
+// preloaded.
+$v = new \FreePBX\modules\Firewall\Validator($sig);
+
+// /////////////////////////////////// //
+// END BOILERPLATE SECURITY VALIDATION //
+// /////////////////////////////////// //
+
+$v->secureInclude('Zones.class.php');
+$v->secureInclude('Driver.class.php');
+$d = new \FreePBX\modules\Firewall\Driver;
+$driver = $d->getDriver();
+
+$needsreload = false;
+
+foreach ($settings as $zonename => $zone) {
+	foreach ($zone as $n) {
+		// Is this an IP address?
+		if (strpos($n, "/") !== false) {
+			list($addr, $subnet) = explode("/", $n);
+		} else {
+			$addr = $n;
+			$subnet = false;
+		}
+
+		// Make sure this is a valid address
+		if (filter_var($addr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+			if (!$subnet) {
+				$subnet = 32;
+			}
+			$ip = 4;
+		} elseif (filter_var($addr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+			// Note: I hate this. You can't really determine the IP address of
+			// an IPv6 host..
+			if (!$subnet) {
+				$subnet = 128;
+			}
+			$ip = 6;
+		} else {
+			throw new \Exception("$ip is not a valid IP address");
+		}
+
+		// Check subnet.. 
+		$realsubnet = (int) $subnet;
+		if ($ip == 4) {
+			if ($realsubnet < 8 || $realsubnet > 32) {
+				throw new \Exception("Invalid IPv4 subnet $realsubnet");
+			}
+		} else {
+			if ($realsubnet < 8 || $realsubnet > 128) {
+				throw new \Exception("Invalid IPv6 subnet $realsubnet");
+			}
+		}
+
+		print "I want to add $addr with $realsubnet to $zonename\n";
+		// Note zonename is validated by the driver
+		$driver->addNetworkToZone($zonename, $addr, $realsubnet);
+		$needsreload = true;
+	}
+}
+
+if ($needsreload) {
+	$driver->commit();
+}
+

@@ -10,8 +10,13 @@
  *   php call_queue_runner.php --loop   # while 루프(daemon) – 5초 간격
  */
 
-$options = getopt('', ['loop']);
+$options = getopt('', ['loop', 'startup']);
 $loopMode = isset($options['loop']);
+$startupMode = isset($options['startup']);
+
+// 재시작 관리자 초기화
+require_once __DIR__ . '/startup_manager.php';
+$startupManager = new StartupManager();
 
 $queueDir = __DIR__ . '/call_queue/';
 $spoolDir = '/var/spool/asterisk/outgoing/';
@@ -24,6 +29,15 @@ $stateFile  = '/tmp/call_queue_last_move';
 // spool 폴더 파일 → 30분 이상이면 폐기(통화 실패·미완료 가능성)
 $queueTtlSec = 3600;   // 1 h
 $spoolTtlSec = 1800;   // 30 min
+
+// 시작 모드 처리
+if ($startupMode) {
+    echo "[call_queue_runner] Startup mode: cleaning up and marking restart\n";
+    $startupManager->markStartup('asterisk_restart');
+    $cleaned = $startupManager->cleanupOnStartup();
+    echo "Cleaned up {$cleaned} files\n";
+    exit(0);
+}
 
 function purgeOldCallfiles(string $dir, int $ttlSec): void {
     if (!is_dir($dir)) return;

@@ -1,0 +1,64 @@
+<module>
+	<rawname>directory</rawname>
+	<repo>standard</repo>
+	<name>Directory</name>
+	<version>17.0.1.2</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<type>setup</type>
+	<category>Applications</category>
+	<menuitems needsenginedb="yes">
+		<directory>Directory</directory>
+	</menuitems>
+	<popovers>
+		<directory>
+			<display>directory</display>
+			<view>form</view>
+		</directory>
+ 	</popovers>
+    <database>
+        <table name="directory_details">
+            <field name="id" type="integer" primarykey="true" autoincrement="true"/>
+            <field name="dirname" type="string" length="50" notnull="false"/>
+            <field name="description" type="string" length="150" notnull="false"/>
+            <field name="announcement" type="integer" notnull="false"/>
+            <field name="callid_prefix" type="string" length="10" notnull="false"/>
+            <field name="alert_info" type="string" length="50" notnull="false"/>
+            <field name="rvolume" type="string" length="2" default=""/>
+            <field name="repeat_loops" type="string" length="3" notnull="false"/>
+            <field name="repeat_recording" type="integer" notnull="false"/>
+            <field name="invalid_recording" type="integer" notnull="false"/>
+            <field name="invalid_destination" type="string" length="50" notnull="false"/>
+            <field name="retivr" type="string" length="5" notnull="false"/>
+            <field name="say_extension" type="string" length="5" notnull="false"/>
+        </table>
+        <table name="directory_entries">
+            <field name="id" type="integer"/>
+            <field name="e_id" type="integer" notnull="false"/>
+            <field name="name" type="string" length="50" notnull="false"/>
+            <field name="type" type="string" length="25" notnull="false"/>
+            <field name="foreign_id" type="string" length="25" notnull="false"/>
+            <field name="audio" type="string" length="50" notnull="false"/>
+            <field name="dial" type="string" length="50" default="" notnull="false"/>
+        </table>
+    </database>
+	<hooks>
+        <ivr namespace="FreePBX\modules" class="Ivr">
+            <method namespace="FreePBX\Modules" class="Directory" callingMethod="pageHook">ivrHook</method>
+        </ivr>
+    </hooks>
+	<depends>
+		<version>17.0.1</version>
+		<module>recordings ge 17.0.1</module>
+	</depends>
+	<description>The directory module allows you to create directories of users that can be accessed by callers through modules like the IVR.</description>
+	<more-info>https://wiki.freepbx.org/display/FPG/Directory+Module</more-info>
+	<changelog>
+		*17.0.1.2* #584 Set the Default Directory Option to Include as the Default for New Extensions 
+		*17.0.1* 17.0 release
+	</changelog>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

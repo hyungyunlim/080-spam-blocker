@@ -1,0 +1,7 @@
+{
+    "require": {
+        "adldap2/adldap2": "^10.5",
+        "bordoni/phpass": "^0.3.6",
+	    "bjeavons/zxcvbn-php": "^1.3.1"
+    }
+}

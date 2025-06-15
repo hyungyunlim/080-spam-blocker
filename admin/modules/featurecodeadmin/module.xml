@@ -1,0 +1,41 @@
+<module>
+	<rawname>featurecodeadmin</rawname>
+	<repo>standard</repo>
+	<name>Feature Code Admin</name>
+	<version>17.0.2</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<candisable>no</candisable>
+	<canuninstall>no</canuninstall>
+	<category>Admin</category>
+  	<description>The Feature Codes Module is used to enable and disable certain features available in your PBX and Asterisk, and to set the codes that local users will dial on their phones to use that particular feature.</description>
+  	<more-info>https://wiki.freepbx.org/display/FPG/Feature+Codes+Module</more-info>
+	<menuitems>
+		<featurecodeadmin>Feature Codes</featurecodeadmin>
+	</menuitems>
+	<changelog>
+		*17.0.2* Packaging of ver 17.0.2
+		*17.0.1* 17.0 release
+	</changelog>
+	<hooks>
+		<featurecodeadmin class="Printextensions" namespace="FreePBX\modules">
+			<method callingMethod="getSections" class="Featurecodeadmin" namespace="FreePBX\modules">printExtensions</method>
+		</featurecodeadmin>
+		<framework class="Destinations" namespace="FreePBX">
+			<method callingMethod="getModuleDestinations" class="Featurecodeadmin" namespace="FreePBX\modules">destinations</method>
+      		<method callingMethod="getModuleCheckDestinations" class="Featurecodeadmin" namespace="FreePBX\modules">destinations_check</method>
+      		<method callingMethod="getModuleDestinationInfo" class="Featurecodeadmin" namespace="FreePBX\modules">destinations_getdestinfo</method>
+		<method callingMethod="identifyDestinations" class="Featurecodeadmin" namespace="FreePBX\modules">destinations_identif</method>
+		</framework>
+	</hooks>
+	<depends>
+		<version>17.0</version>
+		<module>core ge 13.0.117.1</module>
+	</depends>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<md5sum>8d3a776210d49d0fd03b66cd51e5b23d</md5sum>
+	<location>release/2.11/featurecodeadmin-2.11.0.0.tgz</location>
+</module>

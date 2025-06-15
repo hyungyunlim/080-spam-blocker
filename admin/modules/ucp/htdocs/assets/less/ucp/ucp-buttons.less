@@ -1,0 +1,137 @@
+/** Button Borders **/
+.button-border(@gradient, @color) when (@gradient = false) {
+	border: 1px solid @main_color;
+}
+.button-border (@gradient, @color) when (default()) {
+	border: none;
+}
+
+.button-border-gradient (@gradient, @top, @bottom) when (@gradient = true) {
+	.border-gradient(@top, @bottom);
+}
+.button-border-gradient (@gradient, @top, @bottom) when (default()) {
+}
+
+/** Button Backgrounds **/
+.button-background (@gradient, @color, @image) when (@gradient = false) {
+	background: @main_color;
+}
+.button-background (@gradient, @color, @image) when (default()) {
+	background: none;
+}
+
+.button-background-gradient (@gradient, @top, @bottom) when (@gradient = true) {
+	.gradient (@top, @bottom);
+}
+
+.button-background-gradient (@gradient, @top, @bottom) when (default()) {
+}
+
+.button-layout() {
+	.button-border(@button-gradient, @button-border-color);
+	.button-border-gradient(@button-gradient, @button-border-gradient-top, @button-border-gradient-bottom);
+	.button-background(@button-gradient, @button-background-color, @button-image);
+	.button-background-gradient(@button-gradient, @button-background-gradient-top, @button-background-gradient-bottom);
+	color: #333;
+	background-color: #fff;
+	border-color: #ccc;
+	display: inline-block;
+	position: relative;
+	line-height: 1.42857143;
+	touch-action: manipulation;
+	cursor: pointer;
+	vertical-align: middle;
+	text-align: center;
+	overflow: visible;
+	font-size: 14px;
+	padding: 5px 18px;
+	font-weight: normal;
+	min-height: 31px;
+	min-width: 45px;
+	margin: 0; //reset the margins
+	margin-right: 5px;
+	white-space: nowrap;
+}
+
+.button-hover() {
+	.button-border(@button-gradient, @button-hover-border-color);
+	.button-border-gradient(@button-gradient, @button-hover-border-gradient-top, @button-hover-border-gradient-bottom);
+	.button-background(@button-gradient, @button-hover-background-color, @button-hover-image);
+	.button-background-gradient(@button-gradient, @button-hover-background-gradient-top, @button-hover-background-gradient-bottom);
+	color: #333;
+	background-color: #e6e6e6;
+	border-color: #adadad;
+}
+
+.button-active() {
+	.button-border(@button-gradient, @button-active-border-color);
+	.button-border-gradient(@button-gradient, @button-active-border-gradient-top, @button-active-border-gradient-bottom);
+	.button-background(@button-gradient, @button-active-background-color, @button-active-image);
+	.button-background-gradient(@button-gradient, @button-active-background-gradient-top, @button-active-background-gradient-bottom);
+	background-color: @main_color;
+	border-color: @main_color;
+	color: #FFFFFF;
+}
+
+.button-disabled() {
+	opacity: .50;
+	filter: Alpha(Opacity=50);
+	.button-background(@button-gradient, @button-background-color, @button-image);
+	.button-background-gradient(@button-gradient, @button-background-gradient-top, @button-background-gradient-bottom);
+	.button-border(@button-gradient, @button-border-color);
+	.button-border-gradient(@button-gradient, @button-border-gradient-top, @button-border-gradient-bottom);
+	cursor: not-allowed;
+	background-color: @cancel_color;
+	border-color: @cancel_color;
+	color: #FFFFFF;
+}
+
+/* RADIOSET/CHECKSET */
+.radioset {
+	white-space: nowrap;
+}
+.radioset input[type="radio"],
+.radioset input[type="checkbox"] {
+	display:none;
+}
+.radioset input[type="radio"] + label,
+.radioset input[type="checkbox"] ~ label {
+	.button-layout();
+	margin-right: -5px;
+}
+.radioset input[type="radio"] + label:first-of-type {
+	margin-left: 0px;
+}
+
+.radioset input[type="radio"] + label:last-of-type {
+	margin-right: 0px;
+}
+
+.radioset input[type="checkbox"] ~ label:last-of-type {
+	margin-right: 5px;
+}
+.radioset input[type="radio"] + label:first-of-type,
+.radioset input[type="checkbox"] ~ label:first-of-type {
+	border-top-left-radius: @button-radius;
+	border-bottom-left-radius: @button-radius;
+}
+.radioset input[type="radio"] + label:last-of-type,
+.radioset input[type="checkbox"] ~ label:last-of-type {
+	border-top-right-radius: @button-radius;
+	border-bottom-right-radius: @button-radius;
+}
+.radioset input[type="radio"] + label:hover,
+.radioset input[type="checkbox"] ~ label:hover {
+	.button-hover();
+}
+.radioset input[type="radio"]:checked + label, .radioset input[type="checkbox"]:checked + label {
+	.button-active();
+}
+
+.radioset input[type="radio"]:disabled + label, .radioset input[type="checkbox"]:disabled + label {
+	.button-disabled();
+}
+
+.radioset input[type="radio"]:disabled:checked + label, .radioset input[type="checkbox"]:disabled:checked + label {
+	background-color: darken(@button-background-color,10%);
+}

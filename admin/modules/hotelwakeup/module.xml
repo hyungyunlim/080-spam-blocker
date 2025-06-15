@@ -1,0 +1,45 @@
+<module>
+	<rawname>hotelwakeup</rawname>
+	<name>Wake Up Calls</name>
+	<repo>standard</repo>
+	<version>17.0.1.6</version>
+	<license>GPLv2</license>
+	<licenselink>https://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<category>Applications</category>
+	<description>FreePBX module for generating reminder and wakeup calls</description>
+	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/21299361/Wake+Up+Calls+User+Guide</more-info>
+	<changelog>
+		*17.0.1.6* bump 
+		*17.0.1* 17.0
+	</changelog>
+	<menuitems>
+		<hotelwakeup>Wake Up Calls</hotelwakeup>
+		<settings display="hotelwakeup_settings" needsenginedb="yes" category="Settings">Wake Up Calls Settings</settings>
+	</menuitems>
+    <database>
+        <table name="hotelwakeup_calls">
+            <field name="time" type="integer" primarykey="true"/>
+            <field name="ext" type="integer"/>
+            <field name="maxretries" type="integer"/>
+            <field name="retrytime" type="integer"/>
+            <field name="waittime" type="integer"/>
+            <field name="cid" type="string" length="30" notnull="false"/>
+            <field name="cnam" type="string" length="30" notnull="false"/>
+            <field name="application" type="string" length="30" notnull="false"/>
+            <field name="data" type="string" length="30" notnull="false"/>
+            <field name="tempdir" type="string" length="100" notnull="false"/>
+            <field name="outdir" type="string" length="100" notnull="false"/>
+            <field name="filename" type="string" length="100" notnull="false"/>
+            <field name="frequency" type="integer"/>
+        </table>
+    </database>
+	<depends>
+		<module>ivr gt 17.0</module>
+		<module>soundlang</module>
+		<module>recordings</module>
+	</depends>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

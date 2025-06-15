@@ -1,0 +1,49 @@
+<module>
+	<rawname>cdr</rawname>
+	<repo>standard</repo>
+	<description>Call Data Record report tools for viewing reports of your calls</description>
+	<name>CDR Reports</name>
+	<version>17.0.4.38</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26542152/PBX+GUI+-+CDR+Reports+Module</more-info>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<category>Reports</category>
+	<menuitems>
+		<cdr>CDR Reports</cdr>
+	</menuitems>
+	<changelog>
+		*17.0.4.38* Adding DB index to dstchannel 
+		*17.0.4.36* #issues- 503 Backup &amp;amp; Restore module fails to preserve character encoding in CDRs 
+		*17.0.4.35* FREEI-1804 undefined array 
+		*17.0.4.34* FREEI-1632 move cdr sync job to cron from fwconsole jobs 
+		*17.0.4.33* #629 Recent Scribe Icon fix causes uncaught TypeError 
+		*17.0.4.32* FREEI-1521 Call Recording files are not able to play from CDR report 
+		*17.0.4.31* bump 
+		*17.0.4.30* Fixing typo error 
+		*17.0.1alpha* 17.0.1 alpha release
+	</changelog>
+	<hooks>
+		<ucp class="Ucp">
+			<method namespace="FreePBX\modules" class="Cdr" callingMethod="constructModuleConfigPages">ucpConfigPage</method>
+			<method namespace="FreePBX\modules" class="Cdr" callingMethod="addUser">ucpAddUser</method>
+			<method namespace="FreePBX\modules" class="Cdr" callingMethod="updateUser">ucpUpdateUser</method>
+			<method namespace="FreePBX\modules" class="Cdr" callingMethod="delUser">ucpDelUser</method>
+			<method namespace="FreePBX\modules" class="Cdr" callingMethod="addGroup">ucpAddGroup</method>
+			<method namespace="FreePBX\modules" class="Cdr" callingMethod="updateGroup">ucpUpdateGroup</method>
+			<method namespace="FreePBX\modules" class="Cdr" callingMethod="delGroup">ucpDelGroup</method>
+		</ucp>
+	</hooks>
+	<depends>
+		<module>framework ge 17.0.1</module>
+		<module>core ge 17.0.1</module>
+	</depends>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<console>
+                <command>
+                        <name>cdr</name>
+                </command>
+   </console>
+</module>

@@ -43,17 +43,17 @@ document.addEventListener('DOMContentLoaded',()=>{
       if(codeSent && currentAuthPhone===phone) return;
       
       vMsg.textContent='인증번호를 발송중...';
-      vMsg.className='verify-msg sending';
+      vMsg.className='verify-msg sending show';
       
       fetch('api/send_code.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})})
         .then(r=>r.json()).then(d=>{
           if(d.success){
             codeSent=true;
             currentAuthPhone=phone;
-            verSec.style.display='block';
+            verSec.classList.add('show');
             verSec.scrollIntoView({behavior:'smooth'});
             vMsg.textContent=`${phone}로 인증번호를 전송했습니다.`;
-            vMsg.className='verify-msg success';
+            vMsg.className='verify-msg success show';
             vInput.focus();
             
             // 카운트다운 시작
@@ -62,12 +62,12 @@ document.addEventListener('DOMContentLoaded',()=>{
             }
           }else{
             vMsg.textContent=d.message||'전송 실패';
-            vMsg.className='verify-msg error';
+            vMsg.className='verify-msg error show';
           }
         }).catch(err=>{
           console.error('SMS sending error:',err);
           vMsg.textContent='네트워크 오류로 전송에 실패했습니다.';
-          vMsg.className='verify-msg error';
+          vMsg.className='verify-msg error show';
         });
     }
 
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           ev.preventDefault();
           const phone=notifInput.value.replace(/[^0-9]/g,'');
           if(!phone){
-            alert('알림받을 연락처를 입력하세요');
+            modernAlert('알림받을 연락처를 입력하세요');
             notifInput.focus();
             return;
           }
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           // 인증번호가 발송되었지만 아직 로그인되지 않은 경우
           ev.preventDefault();
           if(!vInput.value.trim()){
-            alert('인증번호를 입력하세요');
+            modernAlert('인증번호를 입력하세요');
             vInput.focus();
             return;
           }
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       
       if(code.length!==6){
         vMsg.textContent='6자리 인증번호를 정확히 입력하세요';
-        vMsg.className='verify-msg error';
+        vMsg.className='verify-msg error show';
         vInput.focus();
         return;
       }
@@ -134,18 +134,18 @@ document.addEventListener('DOMContentLoaded',()=>{
       vBtn.disabled=true;
       vBtn.textContent='인증중...';
       vMsg.textContent='인증번호를 확인중입니다...';
-      vMsg.className='verify-msg checking';
+      vMsg.className='verify-msg checking show';
 
       fetch('api/verify_code.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,code})})
         .then(r=>r.json()).then(d=>{
           if(d.success){
             vMsg.textContent='✅ 인증이 완료되었습니다. 잠시만 기다려주세요...';
-            vMsg.className='verify-msg success';
+            vMsg.className='verify-msg success show';
             // 인증 성공시 페이지 새로고침하여 로그인 상태 반영
             setTimeout(()=>window.location.reload(),1500);
           } else {
             vMsg.textContent=d.message||'인증에 실패했습니다. 다시 시도해주세요.';
-            vMsg.className='verify-msg error';
+            vMsg.className='verify-msg error show';
             vBtn.disabled=false;
             vBtn.textContent='인증하기';
             vInput.focus();
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         }).catch(err=>{
           console.error('Verification error:',err);
           vMsg.textContent='네트워크 오류가 발생했습니다. 다시 시도해주세요.';
-          vMsg.className='verify-msg error';
+          vMsg.className='verify-msg error show';
           vBtn.disabled=false;
           vBtn.textContent='인증하기';
         });

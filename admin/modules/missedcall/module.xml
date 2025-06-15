@@ -1,0 +1,84 @@
+<module>
+	<rawname>missedcall</rawname>
+	<name>Missed Call Notification</name>
+	<version>17.0.3</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<repo>standard</repo>
+	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/24543299/MissedCall+Notification</more-info>
+	<menuitems>
+		<missedcall>Missed Call Notification</missedcall>
+	</menuitems>
+	<changelog>
+		*17.0.3* Fixing Github #607 Minor changes for Missed Calls module 
+		*17.0.2* Fixing Github #449 Missed call not working 
+		*17.0.1.2* Initial release for 17.0
+	</changelog>
+	<description>Send email notifications to users when a call is missed</description>
+	<category>Applications</category>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<depends>
+		<phpversion>7.4</phpversion>
+		<module>framework ge 17.0.1</module>
+		<module>core ge 17.0.1</module>
+		<module>userman ge 17.0.1</module>
+		<module>queues ge 17.0.1</module>
+	</depends>
+	<hooks>
+		<ucp class="Ucp">
+			<method namespace="FreePBX\Modules" class="Missedcall" callingMethod="constructModuleConfigPages">ucpConfigPage</method>
+			<method namespace="FreePBX\Modules" class="Missedcall" callingMethod="addUser">ucpAddUser</method>
+			<method namespace="FreePBX\Modules" class="Missedcall" callingMethod="updateUser">ucpUpdateUser</method>
+			<method namespace="FreePBX\Modules" class="Missedcall" callingMethod="delUser">ucpDelUser</method>
+			<method namespace="FreePBX\Modules" class="Missedcall" callingMethod="addGroup">ucpAddGroup</method>
+			<method namespace="FreePBX\Modules" class="Missedcall" callingMethod="updateGroup">ucpUpdateGroup</method>
+			<method namespace="FreePBX\Modules" class="Missedcall" callingMethod="delGroup">ucpDelGroup</method>
+		</ucp>
+		<userman class="Userman" namespace="FreePBX\modules">
+			<method namespace="FreePBX\modules" class="Missedcall" callingMethod="delGroup">usermanDelGroup</method>
+			<method namespace="FreePBX\modules" class="Missedcall" callingMethod="addGroup">usermanAddGroup</method>
+			<method namespace="FreePBX\modules" class="Missedcall" callingMethod="updateGroup">usermanUpdateGroup</method>
+			<method namespace="FreePBX\modules" class="Missedcall" callingMethod="myShowPage">usermanShowPage</method>
+			<method namespace="FreePBX\modules" class="Missedcall" callingMethod="delUser">usermanDelUser</method>
+			<method namespace="FreePBX\modules" class="Missedcall" callingMethod="addUser">usermanAddUser</method>
+			<method namespace="FreePBX\modules" class="Missedcall" callingMethod="updateUser">usermanUpdateUser</method>
+		</userman>
+		<bulkhandler class="Bulkhandler" namespace="FreePBX\modules">
+			<method callingMethod="getHeaders" class="Missedcall" namespace="FreePBX\modules">bulkhandlerGetHeaders</method>
+			<method callingMethod="getTypes" class="Missedcall" namespace="FreePBX\modules">bulkhandlerGetTypes</method>
+			<method callingMethod="import" class="Missedcall" namespace="FreePBX\modules">bulkhandlerImport</method>
+			<method callingMethod="export" class="Missedcall" namespace="FreePBX\modules">bulkhandlerExport</method>
+		</bulkhandler>
+	</hooks>
+	<database name="asterisk">
+		<table name="missedcall">
+			<field name="userid" type="integer" primarykey="true"/>
+			<field name="notification" type="smallint" default="0" notnull="false"/>
+			<field name="extension" type="string" length="50"/>
+			<field name="queue" type="smallint" notnull="false"/>
+			<field name="ringgroup" type="smallint" notnull="false"/>
+			<field name="internal" type="smallint" notnull="false"/>
+			<field name="external" type="smallint" notnull="false"/>
+		</table>
+		<table name="missedcalllog">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="callerid" type="string" length="50" notnull="false"/>
+			<field name="calleridname" type="string" length="100" notnull="false"/>
+			<field name="destination" type="string" length="50" notnull="false"/>
+			<field name="Call_type" type="string" length="50" notnull="false"/>
+			<field name="uniqueid" type="string" length="100" notnull="false"/>
+			<field name="linkedid" type="string" length="100" notnull="false"/>
+			<field name="dialstatus" type="string" length="50" notnull="false"/>
+			<field name="channel" type="string" length="200" notnull="false"/>
+			<field name="chan_orgin_from" type="string" length="100" notnull="false"/>
+		</table>
+		<table name="missedcall_email_templates">
+			<field name="name" type="string" length="20" primarykey="true"/>
+			<field name="time" type="integer" default="0"/>
+			<field name="templateContent" type="blob" notnull="false"/>
+		</table>
+	</database>
+</module>

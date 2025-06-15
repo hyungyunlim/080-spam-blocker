@@ -1,0 +1,77 @@
+<module>
+	<rawname>sms</rawname>
+	<name>SMS</name>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>Commercial</license>
+	<licenselink>https://portal.sangoma.com/marketing/resources/2808/Sangoma%20Corporate/Terms%20of%20Service%20and%20User%20License%20Agreement/FreePBXCommercialModule-EndUserAgreement.txt</licenselink>
+	<repo>standard</repo>
+	<category>Connectivity</category>
+	<version>17.0.1.18</version>
+	<description>
+		This module is used to configure and manage SMS chat interfaces inside of the new UCP.
+	</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/39190869/SMS-UCP</more-info>
+	<changelog>
+		*17.0.1.18* FREEI-1909 Issue with webhooks 
+		*17.0.1.17* FREEI-1909 Issue with webhooks 
+		*17.0.1.16* FREEI-1583 Add countrycode for to address if not present 
+		*17.0.1.12* bump 
+		*17.0.1alpha* 17.0.1 alpha release
+	</changelog>
+	<menuitems>
+		<sms>SMS Webhook</sms>
+	</menuitems>
+	<database>
+		<table name="sms_messages">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="from" type="string" length="20"/>
+			<field name="to" type="string" length="20"/>
+			<field name="cnam" type="string" length="40" notnull="false"/>
+			<field name="direction" type="string" length="3"/>
+			<field name="tx_rx_datetime" type="datetime"/>
+			<field name="body" type="string" length="1600" notnull="false"/>
+			<field name="delivered" type="boolean" default="0"/>
+			<field name="read" type="boolean" default="0"/>
+			<field name="adaptor" type="string" length="45" notnull="false"/>
+			<field name="emid" type="string" length="255" notnull="false"/>
+			<field name="threadid" type="string" length="50"/>
+			<field name="didid" type="integer"/>
+			<field name="timestamp" type="integer"/>
+		</table>
+		<table name="sms_dids">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="did" type="string" length="45"/>
+			<key name="did" type="unique">
+				<column name="did"/>
+			</key>
+		</table>
+		<table name="sms_routing">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="did" type="string" length="45"/>
+			<field name="uid" type="integer"/>
+			<field name="accepter" type="string" length="45" notnull="false"/>
+			<field name="adaptor" type="string" length="45" notnull="false"/>
+			<field name="didid" type="integer"/>
+		</table>
+		<table name="sms_media">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="mid" type="integer"/>
+			<field name="name" type="string" length="255"/>
+			<field name="raw" type="blob"/>
+		</table>
+		<table name="sms_webhooks">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="webhookUrl" type="string" length="255"/>
+			<field name="enablewebHook" type="boolean" default="0"/>
+			<field name="dataToBeSentOn" type="string" length="10"/>
+		</table>
+	</database>
+	<depends>
+		<engine>asterisk 11</engine>
+		<module>ucp ge 17.0.1</module>
+		<version>17.0.1</version>
+	</depends>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

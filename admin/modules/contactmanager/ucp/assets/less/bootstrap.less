@@ -1,0 +1,202 @@
+@ucp-contact-button-bg-color: #3b8c62;
+
+div[data-rawname='contactmanager'] {
+	.contacts-grid {
+		tr {
+			cursor: pointer;
+		}
+	}
+	.nav-container {
+		margin-bottom: 5px;
+	}
+	.group-container {
+		background-color: aliceblue;
+		border-radius: 5px;
+		padding: 10px;
+		width:80%;
+		@media only screen and (max-width : 991px) {
+			width:100%;
+		}
+	}
+	.contact-container {
+		background-color: aliceblue;
+		border-radius: 5px;
+		padding: 10px;
+		width:80%;
+		@media only screen and (max-width : 991px) {
+			width:100%;
+		}
+		.additional {
+			table {
+				width: 100%;
+				.template {
+					display: none;
+				}
+				tr td:first-child {
+					width: 30px;
+					i {
+						font-size: 150%;
+						cursor: pointer;
+						color: rgb(66, 139, 202);
+					}
+				}
+			}
+		}
+		label {
+			text-decoration: underline;
+		}
+		ul {
+			margin-bottom: 0px;
+			li {
+				.clickable {
+					color: #428bca;
+					text-decoration: none;
+					cursor: pointer;
+				}
+				.clickable:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
+	.group-list, .group-actions {
+		background-color: #f3f5f6;
+		.group, .group-action {
+			margin-bottom: 1px;
+			font-size: 85%;
+			.badge {
+				float: right;
+			}
+			i {
+				float: right;
+				font-size: 120%;
+			}
+			a {
+				position: relative;
+				display: block;
+				padding: 3px 8px;
+				border-radius: 2px;
+				color: #000000;
+				text-decoration:none;
+			}
+			a:hover {
+				text-decoration: none;
+				background-color: #eeeeee;
+			}
+		}
+		.group.active, .group-action.active {
+			background-color: @ucp-contact-button-bg-color;
+			border-radius: 2px;
+			a {
+	        color: #ffffff;
+					text-decoration:none;
+	    }
+	    a:hover {
+	        text-decoration: none;
+	        background-color: #000000;
+	        color: #ffffff;
+	    }
+		}
+	}
+
+	.contact-table {
+		font-size: 90%;
+		margin-bottom: inherit;
+		.contact-header {
+			th:not(.noclick) {
+				i {
+					float: right;
+				}
+				cursor: pointer;
+			}
+			th:not(.noclick):hover {
+				background-color:#f5f5f5;
+			}
+			background-color: aliceblue;
+		}
+		.contact-item {
+			td {
+				cursor: pointer;
+			}
+			color: black;
+			background-color: rgba(255, 255, 255, 0.5);
+			.actions {
+				a {
+					color: black;
+					text-decoration: none;
+					cursor: pointer;
+				}
+				i {
+					color:black;
+				}
+			}
+			i{
+				font-size: large;
+				color: grey;
+			}
+			i.out {
+				color: #7a16af;
+			}
+			i.in {
+				color: #0fc61b;
+			}
+		}
+	}
+}
+
+.contact-container {
+	.item-container-number {
+		margin-left: 0px;
+		border: 1px solid #c9c9c9;
+		padding: 2px;
+		input.number[data-name=number] {
+			width: 165px;
+		}
+		select.number[data-name=locale] {
+			width: 254px;
+			margin-left: 21px;
+		}
+		input.number.number-sd.skip {
+			width: 50px;padding: 3px;
+		}
+		.col-md-7,.col-md-5 {
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+	}
+	.item-container {
+		display: inline-block;width: 100%;
+		.delete {
+			cursor: pointer;
+		}
+	}
+	#contactmanager_dropzone {
+		min-height: 75px;
+		width: 90px;
+		border: 3px dotted #ccc;
+		background-color: #F5F5F5;
+		border-radius: 10px;
+		margin-top: 0px;
+		margin-bottom: 3px;
+	}
+	#contactmanager_dropzone .message {
+		text-align: center;
+		font-weight: bold;
+		font-size: 86%;
+		margin-left: 2px;
+	}
+	#contactmanager_dropzone.image img{
+		width: 100%;
+	}
+	#contactmanager_upload-progress {
+		margin-top: 5px;
+		margin-bottom: 0px;
+	}
+	#contactmanager_dropzone.activate {
+		border-color: black;
+	}
+	#contactmanager_dropzone.activate .message {
+		opacity: .5;
+	}
+}

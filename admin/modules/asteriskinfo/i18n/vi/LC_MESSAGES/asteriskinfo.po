@@ -1,0 +1,417 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for asteriskinfo
+# Copyright (C) 2008-2016 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-07 11:35-0400\n"
+"PO-Revision-Date: 2017-07-10 19:53+0200\n"
+"Last-Translator: PETER <ftek@ymail.com>\n"
+"Language-Team: Vietnamese <http://weblate.freepbx.org/projects/freepbx/"
+"asteriskinfo/vi/>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.4\n"
+
+#: Modules/Fax.php:59
+msgid "AJAX shows up as disabled!"
+msgstr ""
+
+#: Asteriskinfo.class.php:98
+msgid "All"
+msgstr ""
+
+#: asteriskinfo.i18n.php:4 asteriskinfo.i18n.php:10
+#: views/page.asteriskinfo.php:5
+msgid "Asterisk Info"
+msgstr "Thông tin Asterisk"
+
+#: views/page.asteriskinfo.php:8
+msgid "Asterisk doesn't appear to be running!"
+msgstr ""
+
+#: Modules/Conferences.php:21
+msgid ""
+"Can't connect to Asterisk. Is Asterisk running and started by the correct "
+"user?"
+msgstr ""
+
+#: Modules/Channels.php:36
+msgid "Channel Count"
+msgstr ""
+
+#: Modules/Channels.php:11
+msgid "Channels"
+msgstr "Các kênh"
+
+#: Modules/Modules.php:36
+msgid "Clean All Filters"
+msgstr ""
+
+#: Modules/Channels.php:36 Modules/Fax.php:44
+msgid "Clean Filter"
+msgstr ""
+
+#: Asteriskinfo.class.php:257
+msgid "Command not found!"
+msgstr ""
+
+#: Modules/Conferences.php:26
+msgid "Conference Bridge Info"
+msgstr "Thông tin Conference Bridge (cầu hội nghị)"
+
+#: Modules/Conferences.php:12
+msgid "Conferences"
+msgstr "Các hội nghị"
+
+#: Modules/Modules.php:36
+msgid "Core"
+msgstr ""
+
+#: views/page.asteriskinfo.php:13
+msgid "Current Asterisk Version:"
+msgstr "Phiên bản Asterisk hiện tại:"
+
+#: Modules/Dahdi.php:12
+msgid "Dahdi"
+msgstr "Giao thức Dahdi"
+
+#: Modules/Dahdi.php:22
+msgid "Dahdi Channels"
+msgstr ""
+
+#: Modules/Dahdi.php:22
+msgid "Dahdi PRI Spans"
+msgstr "Các khẩu độ Dahdi PRI"
+
+#: Modules/Dahdi.php:31
+msgid ""
+"Dahdi is not loaded into asterisk, hence no channels / spans information to "
+"display."
+msgstr ""
+
+#: Modules/Fax.php:44
+msgid "Data"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Deprecated"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Description"
+msgstr ""
+
+#: Modules/Peers.php:39
+msgid ""
+"Drivers (ChanSIP or PJSIP or IAX or SCCP) are not loaded into asterisk, "
+"hence no Peers information to display."
+msgstr ""
+
+#: Modules/Registries.php:39
+msgid ""
+"Drivers (ChanSIP or PJSIP or IAX) are not loaded into asterisk, hence no "
+"registration information to display."
+msgstr ""
+
+#: Asteriskinfo.class.php:156 Asteriskinfo.class.php:250
+#, php-format
+msgid "Error: Module '%s' not found!"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Extended"
+msgstr ""
+
+#: Modules/Fax.php:13
+msgid "Fax"
+msgstr ""
+
+#: Modules/Fax.php:14
+msgid "Fax Statistics"
+msgstr ""
+
+#: Modules/Fax.php:44
+msgid "Global"
+msgstr ""
+
+#: Modules/Conferences.php:26
+msgid "MeetMe Conference Info"
+msgstr "Thông tin hội nghị MeetMe"
+
+#: Modules/Fax.php:44
+msgid "Module"
+msgstr ""
+
+#: Asteriskinfo.class.php:194
+msgid "Module Not Valid!"
+msgstr ""
+
+#: Modules/Fax.php:44 Modules/Modules.php:11
+msgid "Modules"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Name"
+msgstr ""
+
+#: Modules/Fax.php:101
+msgid "No command detected!"
+msgstr ""
+
+#: Modules/Modules.php:36 assets/js/asteriskinfo.js:138
+msgid "Not Running"
+msgstr ""
+
+#: Modules/Channels.php:36 assets/js/asteriskinfo.js:89
+msgid "Offline"
+msgstr ""
+
+#: Modules/Channels.php:36 assets/js/asteriskinfo.js:84
+msgid "Online"
+msgstr ""
+
+#: Asteriskinfo.class.php:67
+#, php-format
+msgid "Page Not Found (%s)!!!!"
+msgstr ""
+
+#: Modules/Peers.php:12
+msgid "Peers"
+msgstr "Các đồng đẳng"
+
+#: asteriskinfo.i18n.php:8
+msgid "Provides a snapshot of the current Asterisk configuration"
+msgstr "Cung cấp một ảnh chụp của cấu hành Asterisk hiện tại"
+
+#: Modules/Queues.php:11
+msgid "Queues"
+msgstr "Hàng đợi"
+
+#: Modules/Queues.php:15
+msgid "Queues Info"
+msgstr "Thông tin các hàng đợi"
+
+#: Modules/Registries.php:12
+msgid "Registries"
+msgstr "Những nơi đăng ký"
+
+#: Modules/Modules.php:36
+msgid "Remove Filter"
+msgstr ""
+
+#: asteriskinfo.i18n.php:6
+msgid "Reports"
+msgstr "Các báo cáo"
+
+#: Modules/Channels.php:36
+msgid "Resource"
+msgstr ""
+
+#: Modules/Modules.php:36 assets/js/asteriskinfo.js:133
+msgid "Running"
+msgstr ""
+
+#: Modules/Fax.php:18
+msgid "Statistics"
+msgstr ""
+
+#: Modules/Channels.php:36 Modules/Modules.php:36
+msgid "Status"
+msgstr ""
+
+#: assets/js/asteriskinfo.js:102 assets/js/asteriskinfo.js:147
+#, perl-format
+msgid "Status: %s"
+msgstr ""
+
+#: Modules/Subscriptions.php:15
+msgid "Subscribe/Notify"
+msgstr "Theo dõi/ Thông báo"
+
+#: Modules/Subscriptions.php:11
+msgid "Subscriptions"
+msgstr "Các thuê bao"
+
+#: Modules/Modules.php:36
+msgid "Support Level"
+msgstr ""
+
+#: Modules/Channels.php:36
+msgid "Tech"
+msgstr ""
+
+#: Modules/ModuleBase.php:124
+msgid "The Asterisk REST Interface Module is not loaded in asterisk"
+msgstr ""
+
+#: Modules/ModuleBase.php:132
+msgid "The Asterisk REST Interface is Currently Disabled."
+msgstr ""
+
+#: Modules/ModuleBase.php:144
+msgid ""
+"The Asterisk REST Interface is not able to connect please check "
+"configuration in advanced settings."
+msgstr ""
+
+#: views/page.asteriskinfo.php:12
+msgid "This page supplies various information about Asterisk"
+msgstr "Trang này cung cấp những thông tin đa dạng về Asterisk"
+
+#: assets/js/asteriskinfo.js:99
+msgid "Undefined"
+msgstr ""
+
+#: Modules/Channels.php:36 Modules/Modules.php:36 assets/js/asteriskinfo.js:94
+#: assets/js/asteriskinfo.js:143
+msgid "Unknown"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Use Count"
+msgstr ""
+
+#: Modules/Fax.php:44
+msgid "Value"
+msgstr ""
+
+#: Modules/Voicemail.php:11
+msgid "Voicemail"
+msgstr ""
+
+#: Modules/Voicemail.php:15
+msgid "Voicemail Users"
+msgstr "Người dùng hộ thư thoại"
+
+#~ msgid "Active Channel(s)"
+#~ msgstr "Các kênh hoạt động"
+
+#~ msgid "Active IAX2 Channel(s): "
+#~ msgstr "Các kênh IAX2 hoạt động "
+
+#~ msgid "Active PJSIP Channel(s): "
+#~ msgstr "Các kênh PJSIP hoạt động: "
+
+#~ msgid "Active SIP Channel(s): "
+#~ msgstr "Các kênh SIP ( giao thức khởi tạo phiên) hoạt động: "
+
+#~ msgid "Available: "
+#~ msgstr "Khả dụng: "
+
+#~ msgid "Chan_PJSip Channel(s)"
+#~ msgstr "Các kênh Chan_PJSip"
+
+#~ msgid "Chan_PJSip Endpoints"
+#~ msgstr "Các điểm cuối Chan_PJSip"
+
+#~ msgid "Chan_PJSip Info"
+#~ msgstr "Thông tin Chan_PJSip"
+
+#~ msgid "Chan_PJSip Registrations"
+#~ msgstr "Các đăng ký Chan_PJSip"
+
+#~ msgid "Chan_PJSip Transports"
+#~ msgstr "Chuyển tải Chan_PJSip"
+
+#~ msgid "Chan_Sip Channel(s)"
+#~ msgstr "Các kênh Chan_Sip"
+
+#~ msgid "Chan_Sip Info"
+#~ msgstr "Thông tin Chan_Sip"
+
+#~ msgid "Chan_Sip Peers"
+#~ msgstr "Các đồng đẳng Chan_Sip"
+
+#~ msgid "Chan_Sip Registry"
+#~ msgstr "Đăng ký Chan_Sip"
+
+#~ msgid "DAHDi Channels"
+#~ msgstr "Các kênh DAHDi"
+
+#~ msgid "Full Report"
+#~ msgstr "Báo cáo đầy đủ"
+
+#~ msgid "Google Talk Channels"
+#~ msgstr "Các kênh nói chuyện Google"
+
+#~ msgid "IAX Info"
+#~ msgstr "Thông tin IAX ( giao thức trao đổi liên Asterisk)"
+
+#~ msgid "IAX2 Channel(s)"
+#~ msgstr "Các kênh IAX2"
+
+#~ msgid "IAX2 Peers"
+#~ msgstr "Các đồng đẳng IAX2"
+
+#~ msgid "IAX2 Peers: "
+#~ msgstr "Các đồng đẳng IAX2 "
+
+#~ msgid "IAX2 Registry"
+#~ msgstr "Đăng ký IAX2"
+
+#~ msgid "IAX2 Registry: "
+#~ msgstr "Đăng ký IAX2: "
+
+#~ msgid "Jabber Connections"
+#~ msgstr "Các kết nối Jabber"
+
+#~ msgid "Motif Connections"
+#~ msgstr "Các kết nối Motif"
+
+#~ msgid "Offline-Unmonitored: "
+#~ msgstr "Không trực tuyến- Không được điều khiển: "
+
+#~ msgid "Offline: "
+#~ msgstr "Không trực tuyến: "
+
+#~ msgid "Online-Unmonitored: "
+#~ msgstr "Trực tuyến- Không được giám sát: "
+
+#~ msgid "Online: "
+#~ msgstr "Trực tuyến: "
+
+#~ msgid "PJSip Endpoints: "
+#~ msgstr "Các điểm cuối: PJSip "
+
+#~ msgid "PJSip Registrations: "
+#~ msgstr "Các đăng ký PJSip: "
+
+#~ msgid "Sip Peers: "
+#~ msgstr "Các đòng đẳng Sip "
+
+#~ msgid "Sip Registry: "
+#~ msgstr "Nơi đăng ký Sip "
+
+#~ msgid "Summary"
+#~ msgstr "Tóm tắt"
+
+#~ msgid ""
+#~ "The module was unable to connect to the Asterisk manager.<br>Make sure "
+#~ "Asterisk is running and your manager.conf settings are proper.<br><br>"
+#~ msgstr ""
+#~ "Các mô đun không thể kết nối với trình quản lý Asterisk. <br> Hãy đảm bảo "
+#~ "rằng Asterisk đang chạy và các thiết lập manager.conf của bạn hợp lý. <br>"
+
+#~ msgid "Unavailable: "
+#~ msgstr "Không khả dụng: "
+
+#~ msgid "Unknown: "
+#~ msgstr "Không biết được: "
+
+#~ msgid "Unmonitored: "
+#~ msgstr "Không được giám sát: "
+
+#~ msgid "Uptime"
+#~ msgstr "Thời gian thao tác"
+
+#~ msgid "Uptime: "
+#~ msgstr "Thời gian thao tác: "

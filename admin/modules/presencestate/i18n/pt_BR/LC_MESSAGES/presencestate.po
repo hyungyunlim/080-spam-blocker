@@ -1,0 +1,211 @@
+# This file is part of FreePBX.
+#
+#    FreePBX is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    FreePBX is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with FreePBX.  If not, see <http://www.gnu.org/licenses/>.
+#
+# FreePBX language template for presencestate
+# Copyright (C) 2008-2014 Schmoozecom, INC
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-28 09:47-0400\n"
+"PO-Revision-Date: 2016-12-20 23:26+0200\n"
+"Last-Translator: Alexander <alexander.schley@paranagua.pr.gov.br>\n"
+"Language-Team: Portuguese (Brazil) <http://weblate.freepbx.org/projects/"
+"freepbx/presencestate/pt_BR/>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.4\n"
+
+#: views/grid.php:17
+msgid "Actions"
+msgstr "Ações"
+
+#: views/bootnav.php:2 views/grid.php:2
+msgid "Add State"
+msgstr "Adicionar Estado"
+
+#: presencestate.i18n.php:6
+msgid "Admin"
+msgstr "Administrador"
+
+#: functions.inc.php:6
+msgid "Available"
+msgstr "Disponível"
+
+#: functions.inc.php:6
+msgid "Away"
+msgstr "Ausente"
+
+#: functions.inc.php:6
+msgid "Chat"
+msgstr "Bate-papo"
+
+#: functions.inc.php:6
+msgid "DND"
+msgstr "DND"
+
+#: ucp/views/settings.php:23
+msgid "Define Actions on A Status Change"
+msgstr "Definir Ações ao Alterar meu Estado"
+
+#: Presencestate.class.php:205
+msgid "Delete"
+msgstr "Apagar"
+
+#: ucp/views/settings.php:7 ucp/views/settings.php:16
+msgid "Do Not Change"
+msgstr "Não Mudar"
+
+#: ucp/Presencestate.class.php:256
+msgid "Do Not Disturb"
+msgstr "Não Perturbe"
+
+#: ucp/Presencestate.class.php:255
+msgid "Do Nothing"
+msgstr "Fazer Nada"
+
+#: views/ucp_config.php:7
+msgid "Enable Presence"
+msgstr "Habilitar Presença"
+
+#: functions.inc.php:6
+msgid "Extended Away"
+msgstr "Ausência Prolongada"
+
+#: ucp/Presencestate.class.php:257
+msgid "Findme/Follow Me"
+msgstr "Siga-me"
+
+#: views/ucp_config.php:18
+msgid "Inherit"
+msgstr "Herdar"
+
+#: Presencestate.class.php:195
+msgid "Invalid Request"
+msgstr "Solicitação Inválida"
+
+#: views/bootnav.php:3
+msgid "List States"
+msgstr "Listar Estados"
+
+#: presencestate.i18n.php:8
+msgid "Manage list of presence states."
+msgstr "Gerencia lista dos estados de presença."
+
+#: views/bootnav.php:16 views/grid.php:16
+msgid "Message"
+msgstr "Mensagem"
+
+#: views/ucp_config.php:15
+msgid "No"
+msgstr "Não"
+
+#: ucp/views/settings.php:14
+msgid "On Browser Close or UCP Logout Set Status to"
+msgstr "Ao Fechar o Browser ou Sair do PCU Mudar Estado para"
+
+#: ucp/views/settings.php:5
+msgid "On UCP Login Set Status to"
+msgstr "Ao Logar no PCU Mudar Estado para"
+
+#: views/form.php:50
+msgid "Optional Message"
+msgstr "Mensagem Opcional"
+
+#: views/form.php:62
+msgid "Optional message, example: Lunch"
+msgstr "Mensagem opcional, por exemplo: Almoço"
+
+#: ucp/Presencestate.class.php:180 ucp/Presencestate.class.php:190
+#: ucp/Presencestate.class.php:229
+msgid "Presence"
+msgstr "Presença"
+
+#: ucp/Presencestate.class.php:263
+msgid "Presence Settings"
+msgstr ""
+
+#: Presencestate.class.php:121 presencestate.i18n.php:4
+#: presencestate.i18n.php:10
+msgid "Presence State"
+msgstr "Estado de Presença"
+
+#: ucp/Presencestate.class.php:211
+msgid "Presence State is not enabled for this user."
+msgstr ""
+
+#: page.presencestate.php:6
+msgid "Presence States"
+msgstr "Estados de Presença"
+
+#: Presencestate.class.php:205
+msgid "Reset"
+msgstr "Reiniciar"
+
+#: views/form.php:38
+msgid "State type"
+msgstr "Tipo de Estado"
+
+#: Presencestate.class.php:205
+msgid "Submit"
+msgstr "Enviar"
+
+#: ucp/Presencestate.class.php:215
+msgid "This user doesn't have a default extension."
+msgstr ""
+
+#: views/bootnav.php:15 views/form.php:24 views/grid.php:15
+msgid "Type"
+msgstr "Tipo"
+
+#: functions.inc.php:6
+msgid "Unavailable"
+msgstr "Indisponível"
+
+#: views/ucp_config.php:28
+msgid ""
+"Whether to allow this user to be able to change their presence state/status "
+"in UCP"
+msgstr ""
+"Se permitir este usuário ser capaz de mudar estado de presença/estado no PCU"
+
+#: views/ucp_config.php:13
+msgid "Yes"
+msgstr "Sim"
+
+#~ msgid "Actions List"
+#~ msgstr "Lisa de Ações"
+
+#~ msgid "Offline"
+#~ msgstr "Desligado"
+
+#~ msgid "Presence State Settings"
+#~ msgstr "Configurar Estado de Presença"
+
+#~ msgid "Status Not Set"
+#~ msgstr "Estado Não Configurado"
+
+#~ msgid "Your settings have been saved"
+#~ msgstr "Suas configurações foram salvas"
+
+#~ msgid "New Presence State"
+#~ msgstr "Novo Estado de Presença"
+
+#~ msgid "Presence Status"
+#~ msgstr "Estado de Presença"

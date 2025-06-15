@@ -1,4 +1,14 @@
 <?php
+require_once __DIR__ . '/auth.php';
+
+// 로그인 확인
+if (!is_logged_in()) {
+    header('Location: login.php');
+    exit;
+}
+
+$current_user_phone = current_user_phone();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     require_once __DIR__ . '/pattern_manager.php';
     $pm = new PatternManager();
@@ -23,8 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             'notes'             => $_POST['notes'] ?? ''
         ];
         try {
-            $pm->updatePattern($number, $pattern);
-            header('Location: ' . $_SERVER['PHP_SELF']);
+            $pm->updatePattern($number, $pattern, $current_user_phone);
+            if ($action === 'add') {
+                header('Location: ' . $_SERVER['PHP_SELF'] . '?created=1');
+            } else {
+                header('Location: ' . $_SERVER['PHP_SELF'] . '?updated=1');
+            }
             exit;
         } catch (Exception $e) {
             $message = '<div class="alert alert-danger">패턴 저장 실패: '.htmlspecialchars($e->getMessage()).'</div>';
@@ -32,12 +46,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     } elseif ($action === 'delete') {
         try {
             $pm->deletePattern($number);
-            header('Location: ' . $_SERVER['PHP_SELF']);
+            header('Location: ' . $_SERVER['PHP_SELF'] . '?deleted=1');
             exit;
         } catch (Exception $e) {
             $message = '<div class="alert alert-danger">삭제 실패: '.htmlspecialchars($e->getMessage()).'</div>';
         }
     }
+}
+
+// GET 파라미터로 전달된 성공 메시지 처리
+if (isset($_GET['created'])) {
+    $message = '<div class="alert alert-success auto-hide">✅ 새 패턴이 성공적으로 생성되었습니다.</div>';
+} elseif (isset($_GET['updated'])) {
+    $message = '<div class="alert alert-success auto-hide">✅ 패턴이 성공적으로 수정되었습니다.</div>';
+} elseif (isset($_GET['deleted'])) {
+    $message = '<div class="alert alert-success auto-hide">✅ 패턴이 성공적으로 삭제되었습니다.</div>';
 }
 ?>
 <!DOCTYPE html>
@@ -46,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>패턴 매니저 - 080 수신거부 자동화</title>
+    <link rel="stylesheet" href="assets/modal.css?v=1">
     <style>
         * {
             margin: 0;
@@ -776,8 +800,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         </a>
 
         <div class="header">
-            <h1>🧠 패턴 매니저</h1>
-            <p>080 번호별 DTMF 패턴을 관리하고 최적화합니다</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h1 style="margin: 0;">🧠 패턴 매니저</h1>
+                    <p style="margin: 8px 0 0 0;">080 번호별 DTMF 패턴을 관리하고 최적화합니다<?php if (is_admin()): ?> (전체 시스템)<?php endif; ?></p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 16px; color: rgba(139, 128, 249, 0.8);">
+                    <span style="font-size: 14px; font-weight: 500;">
+                        <?php echo is_admin() ? '👑' : '👤'; ?> <?php echo htmlspecialchars($current_user_phone); ?>
+                        <?php if (is_admin()): ?>
+                        <span style="font-size: 11px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 2px 6px; border-radius: 8px; font-weight: 600; letter-spacing: 0.5px; margin-left: 8px;">ADMIN</span>
+                        <?php endif; ?>
+                    </span>
+                    <a href="logout.php" style="color: rgba(139, 128, 249, 0.9); text-decoration: none; background: rgba(139, 128, 249, 0.1); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: all 0.3s ease;">
+                        🚪 로그아웃
+                    </a>
+                </div>
+            </div>
         </div>
 
         <?php
@@ -886,7 +925,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             /**
              * 패턴 추가 또는 업데이트
              */
-            public function updatePattern($phoneNumber, $patternData) {
+            public function updatePattern($phoneNumber, $patternData, $ownerPhone = null) {
                 $patterns = $this->getPatterns();
                 
                 // 업데이트 시간 추가
@@ -898,14 +937,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     $patternData['created_at'] = $existing['created_at'] ?? date('Y-m-d H:i:s');
                     $patternData['usage_count'] = $existing['usage_count'] ?? 0;
                     $patternData['last_used'] = $existing['last_used'] ?? null;
+                    $patternData['owner_phone'] = $existing['owner_phone'] ?? $ownerPhone;
                 } else {
                     $patternData['created_at'] = date('Y-m-d H:i:s');
                     $patternData['usage_count'] = 0;
+                    $patternData['owner_phone'] = $ownerPhone;
                 }
                 
                 $patterns['patterns'][$phoneNumber] = $patternData;
                 
                 return $this->savePatterns($patterns);
+            }
+            
+            /**
+             * 사용자별 패턴 가져오기
+             */
+            public function getUserPatterns($userPhone) {
+                $patterns = $this->getPatterns();
+                $userPatterns = ['patterns' => [], 'variables' => $patterns['variables']];
+                
+                foreach ($patterns['patterns'] as $number => $pattern) {
+                    // 기본 패턴이거나 사용자가 소유한 패턴만 표시
+                    if ($number === 'default' || 
+                        !isset($pattern['owner_phone']) || 
+                        $pattern['owner_phone'] === $userPhone) {
+                        $userPatterns['patterns'][$number] = $pattern;
+                    }
+                }
+                
+                return $userPatterns;
             }
             
             /**
@@ -984,8 +1044,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             /**
              * 패턴 통계 가져오기
              */
-            public function getPatternStats() {
-                $patterns = $this->getPatterns();
+            public function getPatternStats($userPhone = null) {
+                $patterns = $userPhone ? $this->getUserPatterns($userPhone) : $this->getPatterns();
                 $stats = [
                     'total_patterns' => 0,
                     'auto_generated' => 0,
@@ -1117,9 +1177,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 }
             }
             
-            // 현재 패턴 및 통계 로드
-            $patterns = $manager->getPatterns();
-            $stats = $manager->getPatternStats();
+            // 어드민은 모든 패턴, 일반 사용자는 자신의 패턴만 로드
+            if (is_admin()) {
+                $patterns = $manager->getPatterns();
+                $stats = $manager->getPatternStats();
+            } else {
+                $patterns = $manager->getUserPatterns($current_user_phone);
+                $stats = $manager->getPatternStats($current_user_phone);
+            }
             ?>
             
             <?php echo $message; ?>
@@ -1147,7 +1212,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             <!-- 패턴 목록 -->
             <div class="card">
                 <div class="card-header">
-                    📋 등록된 패턴 목록
+                    📋 <?php echo is_admin() ? '전체 패턴 목록' : '내 패턴 목록'; ?>
                     <button class="btn btn-small" onclick="checkForNewPatterns()">
                         🔄 새로고침
                     </button>
@@ -1161,6 +1226,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                 <th>DTMF 패턴</th>
                                 <th>타이밍</th>
                                 <th>상태</th>
+                                <?php if (is_admin()): ?>
+                                <th>소유자</th>
+                                <?php endif; ?>
                                 <th>액션</th>
                             </tr>
                         </thead>
@@ -1218,6 +1286,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                         <span class="label label-manual">수동</span>
                                     <?php endif; ?>
                                 </td>
+                                <?php if (is_admin()): ?>
+                                <td>
+                                    <?php if (isset($pattern['owner_phone']) && $pattern['owner_phone']): ?>
+                                        <div style="font-size: 0.85rem; color: #4a5568;">
+                                            👤 <?php echo htmlspecialchars($pattern['owner_phone']); ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <span style="font-size: 0.8rem; color: #9ca3af; font-style: italic;">시스템</span>
+                                    <?php endif; ?>
+                                </td>
+                                <?php endif; ?>
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn btn-small btn-secondary" onclick="editPattern('<?php echo $number; ?>')">
@@ -1231,7 +1310,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="number" value="<?php echo $number; ?>">
                                             <button type="submit" class="btn btn-small btn-danger" 
-                                                    onclick="return confirm('정말 삭제하시겠습니까?')">
+                                                    onclick="return handleDeletePattern(event)">
                                                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                     <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -1246,6 +1325,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <div style="margin-top: 16px; padding: 12px; background: rgba(139, 128, 249, 0.05); border-radius: 8px; font-size: 13px; color: #64748b;">
+                        💡 <strong>안내:</strong> 기본 패턴과 내가 추가한 패턴만 표시됩니다. 다른 사용자의 패턴은 보이지 않습니다.
+                    </div>
                 </div>
             </div>
             
@@ -1908,6 +1990,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
             // 페이지 로드 시 최초 계산
             document.addEventListener('DOMContentLoaded', recalcTotalDuration);
+        </script>
+        
+        <script src="assets/modal.js?v=1"></script>
+        <script>
+            // 패턴 삭제 처리
+            async function handleDeletePattern(event) {
+                event.preventDefault();
+                
+                const confirmed = await modernConfirmDelete({
+                    message: '정말 삭제하시겠습니까?',
+                    title: '패턴 삭제',
+                    confirmText: '삭제',
+                    cancelText: '취소'
+                });
+                
+                if (confirmed) {
+                    event.target.closest('form').submit();
+                }
+                
+                return false;
+            }
+        </script>
+        
+        <script>
+            // 자동 숨김 알림 처리
+            document.addEventListener('DOMContentLoaded', function() {
+                const autoHideAlerts = document.querySelectorAll('.alert.auto-hide');
+                autoHideAlerts.forEach(alert => {
+                    // 3초 후 페이드아웃 시작
+                    setTimeout(() => {
+                        alert.style.transition = 'all 0.5s ease';
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-10px)';
+                        
+                        // 페이드아웃 완료 후 URL에서 파라미터 제거
+                        setTimeout(() => {
+                            // URL에서 파라미터 제거
+                            const url = new URL(window.location);
+                            url.searchParams.delete('created');
+                            url.searchParams.delete('updated');
+                            url.searchParams.delete('deleted');
+                            window.history.replaceState({}, document.title, url.pathname + url.search);
+                            
+                            // 알림 요소 제거
+                            alert.remove();
+                        }, 500);
+                    }, 3000);
+                });
+            });
         </script>
     </div>
 </body>

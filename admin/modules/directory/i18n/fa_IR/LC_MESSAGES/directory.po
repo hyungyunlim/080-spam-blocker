@@ -1,0 +1,445 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for directory
+# Copyright (C) 2008-2016 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-17 05:31-0500\n"
+"PO-Revision-Date: 2016-04-02 20:25+0200\n"
+"Last-Translator: Media <mousavi.media@gmail.com>\n"
+"Language-Team: Persian <http://weblate.freepbx.org/projects/freepbx/"
+"directory/fa/>\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.4\n"
+
+#: functions.inc.php:51 views/form.php:150
+msgid ""
+"ALERT_INFO to be sent when called from this Directory. Can be used for "
+"distinctive ring for SIP devices."
+msgstr ""
+"ALERT_INFO to be sent when  called from this Directory. Can be used for "
+"distinctive ring for SIP devices."
+
+#: functions.inc.php:208 views/grid.php:21
+msgid "Actions"
+msgstr "عملیات"
+
+#: functions.inc.php:12 views/bootnav.php:2 views/form.php:5 views/grid.php:6
+msgid "Add Directory"
+msgstr "افزودن دایرکتوری"
+
+#: functions.inc.php:252
+msgid "Add new entry."
+msgstr "ورودی جدید."
+
+#: functions.inc.php:51 views/form.php:136
+msgid "Alert Info"
+msgstr "اطلاعات هشدار"
+
+#: functions.inc.php:244
+msgid "All Users"
+msgstr "تمام کاربران"
+
+#: assets/js/directory.js:90
+msgid "An Error occurred trying to contact the server adding a row, no reply."
+msgstr "در هنگام افزودن ردیف به سرور خطایی رخ داد،بدون پاسخ."
+
+#: functions.inc.php:73 views/form.php:379
+msgid "Announce Extension"
+msgstr "اعلام داخلی"
+
+#: functions.inc.php:67 views/form.php:197
+msgid "Announcement"
+msgstr "اعلان"
+
+#: directory.i18n.php:6
+msgid "Applications"
+msgstr "برنامه‌ ها"
+
+#: functions.inc.php:50 views/form.php:107
+msgid "CallerID Name Prefix"
+msgstr "پیشوند نام شناسه تماس گیرنده"
+
+#: functions.inc.php:243
+msgid "Choose One"
+msgstr "انتخاب کنید"
+
+#: functions.inc.php:303
+msgid "Click here to remove this entry"
+msgstr "برای حذف این ورودی اینجا کلیک کنید"
+
+#: functions.inc.php:245
+msgid "Custom"
+msgstr "شخصی"
+
+#: functions.inc.php:56 views/form.php:13 views/form.php:20 views/form.php:27
+msgid "Default"
+msgstr "پیشفرض"
+
+#: functions.inc.php:447 views/grid.php:20
+msgid "Default Directory"
+msgstr "دایرکتوری پیشفرض"
+
+#: functions.inc.php:434
+msgid "Default Group Inclusion"
+msgstr "گنجایش پیشفرض گروه"
+
+#: Directory.class.php:254
+msgid "Delete"
+msgstr "حذف"
+
+#: functions.inc.php:40
+#, php-format
+msgid "Delete Directory %s"
+msgstr "حذف دایرکتوری %s"
+
+#: functions.inc.php:49 views/form.php:93
+msgid "Description of this directory."
+msgstr "شرح این دایرکتوری."
+
+#: functions.inc.php:71 views/form.php:330
+msgid "Destination to send the call to after Invalid Recording is played."
+msgstr "مقصدی که تماس پس از پخش پیام نادرست به آن فرستاده میشود."
+
+#: functions.inc.php:208
+msgid "Dial"
+msgstr "شماره گیری"
+
+#: directory.i18n.php:4 directory.i18n.php:10 page.directory.php:8
+#: views/bootnav.php:14 views/grid.php:19
+msgid "Directory"
+msgstr "دایرکتوری"
+
+#: functions.inc.php:520
+#, php-format
+msgid "Directory %s: "
+msgstr "دایرکتوری %s: "
+
+#: functions.inc.php:49 views/form.php:78
+msgid "Directory Description"
+msgstr "شرح دایرکتوری"
+
+#: functions.inc.php:46
+msgid "Directory General Options"
+msgstr "گزینه های عمومی دایرکتوری"
+
+#: functions.inc.php:48 views/form.php:49
+msgid "Directory Name"
+msgstr "نام دایرکتوری"
+
+#: assets/js/directory.js:23
+msgid "Directory Name Already Exist"
+msgstr ""
+
+#: assets/js/directory.js:20
+msgid "Directory Name Can not be Blank"
+msgstr ""
+
+#: functions.inc.php:53
+msgid "Directory Options (DTMF)"
+msgstr "گزینه های دایرکتوری (DTMF)"
+
+#: functions.inc.php:78
+msgid "Directory&nbsp;Entries"
+msgstr "دایرکتوری&nbsp;ورودی ها"
+
+#: functions.inc.php:549
+#, php-format
+msgid "Directory: %s"
+msgstr "دایرکتوری %s"
+
+#: functions.inc.php:496
+#, php-format
+msgid "Directory: %s "
+msgstr "دایرکتوری :%s "
+
+#: Directory.class.php:272
+msgid "Disabled"
+msgstr "غیر فعال"
+
+#: functions.inc.php:297
+#, php-format
+msgid "Edit %s: %s"
+msgstr "ویرایش %s:%s"
+
+#: views/form.php:9
+msgid "Edit Directory"
+msgstr "ویرایش دایرکتوری"
+
+#: functions.inc.php:26
+#, php-format
+msgid "Edit Directory: %s"
+msgstr "ویرایش دایرکتوری :%s"
+
+#: Directory.class.php:273
+msgid "Enabled"
+msgstr "فعال"
+
+#: functions.inc.php:417
+msgid "Exclude"
+msgstr "گنجایش"
+
+#: functions.inc.php:67 views/form.php:213
+msgid "Greeting to be played on entry to the directory."
+msgstr "خوش آمدگویی که در ورود به دایرکتوری پخش میشود."
+
+#: functions.inc.php:418
+msgid "Include"
+msgstr "شامل"
+
+#: functions.inc.php:71 views/form.php:316
+msgid "Invalid Destination"
+msgstr "داخلی نامعتبر"
+
+#: functions.inc.php:70 views/form.php:286
+msgid "Invalid Recording"
+msgstr "ضبط شده نامعتبر"
+
+#: functions.inc.php:68 views/form.php:227
+msgid "Invalid Retries"
+msgstr "تلاش مجدد نامعتبر"
+
+#: functions.inc.php:69 views/form.php:256
+msgid "Invalid Retry Recording"
+msgstr "تلاش مجدد ضبط نامعتبر"
+
+#: views/bootnav.php:3
+msgid "List Directories"
+msgstr "فهرست دایرکتوری ها"
+
+#: functions.inc.php:208 functions.inc.php:211
+msgid "Name"
+msgstr "نام"
+
+#: functions.inc.php:208
+msgid "Name Announcement"
+msgstr "نام اعلان"
+
+#: views/form.php:64
+msgid "Name of this directory"
+msgstr "نام این دایرکتوری"
+
+#: functions.inc.php:48
+msgid "Name of this directory."
+msgstr "نام این دایرکتوری."
+
+#: views/form.php:355 views/form.php:390
+msgid "No"
+msgstr "خیر"
+
+#: views/form.php:170
+msgid "None"
+msgstr ""
+
+#: functions.inc.php:68 views/form.php:242
+msgid ""
+"Number of times to retry when receiving an invalid/unmatched response from "
+"the caller"
+msgstr ""
+"Number of times to retry when receiving  an invalid/unmatched response from "
+"the caller"
+
+#: views/form.php:184
+#, php-format
+msgid ""
+"Override the ringer volume. Note: This is only valid for %s phones at this "
+"time"
+msgstr ""
+
+#: functions.inc.php:50 views/form.php:122
+msgid "Prefix to be appended to current CallerID Name."
+msgstr "پیشوندی که به نام شناسه تماس گیرنده فعلی اختصاص داده شده."
+
+#: functions.inc.php:70 views/form.php:302
+msgid ""
+"Prompt to be played before sending the caller to an alternate destination "
+"due to the caller pressing 0 or receiving the maximum amount of invalid/"
+"unmatched responses (as determined by Invalid Retries)"
+msgstr ""
+"Prompt to be played before sending the caller to an alternate destination "
+"due to the  caller pressing 0 or receiving the maximum amount of invalid/"
+"unmatched responses (as determined by Invalid Retries)"
+
+#: functions.inc.php:69 views/form.php:272
+msgid ""
+"Prompt to be played when an invalid/unmatched response is received, before "
+"prompting the caller to try again"
+msgstr ""
+"Prompt to be played when an invalid/unmatched  response is received, before "
+"prompting the caller to try again"
+
+#: Directory.class.php:254
+msgid "Reset"
+msgstr "بازنشانی"
+
+#: functions.inc.php:72 views/form.php:344
+msgid "Return to IVR"
+msgstr "بازگشت به منو صوتی"
+
+#: views/form.php:163
+msgid "Ringer Volume Override"
+msgstr ""
+
+#: assets/js/directory.js:110
+msgid "Select"
+msgstr "انتخاب"
+
+#: functions.inc.php:287
+msgid "Spell Name"
+msgstr "نهجی نام"
+
+#: Directory.class.php:254
+msgid "Submit"
+msgstr "ارسال"
+
+#: functions.inc.php:288
+msgid "System Recordings:"
+msgstr "ضبط سیستمی："
+
+#: functions.inc.php:286
+msgid "Text to Speech"
+msgstr "متن به گفتار"
+
+#: directory.i18n.php:8
+msgid ""
+"The directory module allows you to create directories of users that can be "
+"accessed by callers through modules like the IVR."
+msgstr ""
+
+#: assets/js/directory.js:31
+msgid "This entry has already been added"
+msgstr "این ورودی اضافه شده"
+
+#: functions.inc.php:211
+msgid ""
+"This should auto-populate with the extension's descriptive name. This is "
+"what users will search by when asked to enter the first 3 letters of the "
+"person's name. For example, if the name is Bartholomew, the caller would "
+"enter 227 for BAR. This field should be a name as the search option is based "
+"on Name and not the number."
+msgstr ""
+
+#: functions.inc.php:95
+msgid ""
+"Tied to a Directory allowing all entries in that directory to be dialed "
+"directly, as they appear in the directory"
+msgstr ""
+"Tied to a Directory allowing all entries in that directory to be dialed  "
+"directly, as they appear in the directory"
+
+#: functions.inc.php:285
+msgid "Voicemail Greeting"
+msgstr "خوش آمد ایمیل صوتی"
+
+#: functions.inc.php:73 views/form.php:400
+msgid ""
+"When checked, the extension number being transferred to will be announced "
+"prior to the transfer"
+msgstr ""
+"When checked, the extension number being transferred  to will be announced "
+"prior to the transfer"
+
+#: functions.inc.php:72 views/form.php:365
+msgid ""
+"When selected, if the call passed through an IVR that had \"Return to IVR\" "
+"selected, the call will be returned there instead of the Invalid destination."
+msgstr ""
+"When selected, if the call passed through an IVR that had \"Return to IVR\" "
+"selected, the  call will be returned there instead of the Invalid "
+"destination."
+
+#: views/form.php:351 views/form.php:386
+msgid "Yes"
+msgstr "بله"
+
+#: functions.inc.php:447
+msgid ""
+"You can include or exclude this extension/user from being part of the "
+"default directory when creating or editing."
+msgstr ""
+"You can include or exclude this extension/user  from being part of the "
+"default directory when creating or editing."
+
+#: functions.inc.php:29
+msgid "[SYSTEM DEFAULT]"
+msgstr "[سیستم پیشفرض]"
+
+#: uninstall.php:7
+msgid "deleting default_directory and migration tracking keys.."
+msgstr "deleting default_directory and  migration tracking keys.."
+
+#: uninstall.php:3
+msgid "dropping directory_details, directory_entries.."
+msgstr "dropping  directory_details, directory_entries.."
+
+#: uninstall.php:5 uninstall.php:10
+msgid "ok"
+msgstr "تایید"
+
+#: functions.inc.php:303
+msgid "remove"
+msgstr "حذف"
+
+#~ msgid "Adding directory tables if needed"
+#~ msgstr "در صورت نیاز جداول دایرکتوری را اضافه کن"
+
+#~ msgid "Can not create table: "
+#~ msgstr "نمیتواند جدول ایجاد کند： "
+
+#~ msgid ""
+#~ "Error migrating to new directory! ERROR: Could not create new Directory."
+#~ msgstr ""
+#~ "خطا در انتقال به دایرکتوری جدید! خطا: عدم توانایی در ایجاد دایرکتوری جدید."
+
+#~ msgid ""
+#~ "Error migrating to new directory! ERROR: Could not populate new Directory "
+#~ msgstr ""
+#~ "خطا در انتقال به دایرکتوری جدید! خطا: عدم توانایی ایجاد دایرکتوری جدید "
+
+#~ msgid ""
+#~ "Error migrating to new directory! ERROR: Unable to mark Directory as "
+#~ "migrated. Migration will probably be run again at next install/upgrade of "
+#~ "this module. "
+#~ msgstr ""
+#~ "Error migrating to new directory! ERROR: Unable to mark Directory as "
+#~ "migrated. Migration  will probably be run again at next install/upgrade "
+#~ "of this module. "
+
+#~ msgid "Migrating Directory"
+#~ msgstr "انتقال دایرکتوری"
+
+#~ msgid "Migration Complete!"
+#~ msgstr "انتقال کامل شد!"
+
+#~ msgid "Setting migrated directory as default"
+#~ msgstr "تنظیمات دایرکتوری انتقال به صورت پیشفرض"
+
+#~ msgid "adding say_extension field to directory_details.."
+#~ msgstr "adding say_extension field  to directory_details.."
+
+#~ msgid "cannot add field e_id to table directory_entries \n"
+#~ msgstr "cannot add  field e_id to table directory_entries \n"
+
+#~ msgid "cannot set e_id for directory_id = "
+#~ msgstr "cannot set e_id  for directory_id = "
+
+#~ msgid "dropping valid_details field.."
+#~ msgstr "dropping valid_details  field.."
+
+#~ msgid "e_id added to table directory_entries"
+#~ msgstr "e_id added  to table directory_entries"
+
+#~ msgid "fatal error"
+#~ msgstr "خطای سیستمی"
+
+#~ msgid "no valid_recording field???"
+#~ msgstr "no valid_recording  field???"

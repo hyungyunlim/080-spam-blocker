@@ -1,0 +1,31 @@
+<module>
+	<rawname>ttsengines</rawname>
+	<name>Text To Speech Engines</name>
+	<version>17.0.2</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>AGPLv3</license>
+	<licenselink>https://www.gnu.org/licenses/agpl-3.0.txt</licenselink>
+	<repo>standard</repo>
+	<description>Allows you to configure text to speech engines</description>
+  	<more-info>https://wiki.freepbx.org/display/FPG/Text+to+Speech+Engines+Module</more-info>
+	<category>Settings</category>
+	<menuitems>
+		<ttsengines>Text To Speech Engines</ttsengines>
+	</menuitems>
+    <database>
+        <table name="ttsengines">
+            <field name="id" type="integer" primarykey="true" autoincrement="true"/>
+            <field name="name" type="string" length="50" notnull="false"/>
+            <field name="path" type="string" length="255" notnull="false"/>
+        </table>
+    </database>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<depends>
+	</depends>
+	<changelog>
+		*17.0.2* Github #627 Fix issues with TTS module dialplan generation 
+		*17.0.1* 17.0.1  release
+	</changelog>
+</module>

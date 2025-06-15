@@ -1,0 +1,26 @@
+<module>
+  <rawname>printextensions</rawname>
+  <repo>standard</repo>
+  <name>Print Extensions</name>
+  <version>17.0.1.2</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+  <category>Reports</category>
+  <description>Creates a printable list of extension numbers used throughout the system from all modules that provide an internal callable number</description>
+  <more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26574919/Print+Extensions</more-info>
+  <menuitems>
+    <printextensions>Print Extensions</printextensions>
+  </menuitems>
+	<changelog>
+		*17.0.1.1* 17.0.1.1
+	</changelog>
+  <depends>
+		<module>featurecodeadmin</module>
+	</depends>
+  <location>release/2.11/printextensions-2.11.0.0.tgz</location>
+  <md5sum>86a1a93e8a7a13affa3ae858a6c18c29</md5sum>
+  <supported>
+    <version>17.0</version>
+  </supported>
+</module>

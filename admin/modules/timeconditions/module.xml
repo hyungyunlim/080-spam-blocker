@@ -1,0 +1,78 @@
+<module>
+	<rawname>timeconditions</rawname>
+	<repo>standard</repo>
+	<name>Time Conditions</name>
+	<version>17.0.1.18</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<category>Applications</category>
+	<description>
+		Creates a condition where calls will go to one of two destinations (eg, an extension, IVR, ring group..) based on the time and/or date. This can be used for example to ring a receptionist during the day, or go directly to an IVR at night.
+	</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/24248517/Time+Conditions+Module</more-info>
+	<changelog>
+		*17.0.1.17*  Fix php 8 syntax errors
+		*17.0.1* 17.0.1 alpha release
+	</changelog>
+	<depends>
+		<version>17.0.1</version>
+		<module>cel ge 17.0.1</module>
+		<module>calendar ge 17.0.1</module>
+	</depends>
+	<menuitems>
+		<timeconditions needsenginedb="yes">Time Conditions</timeconditions>
+		<timegroups needsenginedb="yes">Time Groups</timegroups>
+	</menuitems>
+	<hooks>
+		<framework namespace="FreePBX\Console\Command" class="Chown">
+			<method namespace="FreePBX\modules" class="Timeconditions" callingMethod="fwcChownFiles">chownFreepbx</method>
+		</framework>
+		<bulkhandler class="Bulkhandler" namespace="FreePBX\modules">
+			<method callingMethod="getHeaders" namespace="FreePBX\modules" class="Timeconditions">bulkhandlerGetHeaders</method>
+			<method callingMethod="getTypes" namespace="FreePBX\modules" class="Timeconditions">bulkhandlerGetTypes</method>
+			<method callingMethod="import" namespace="FreePBX\modules" class="Timeconditions">bulkhandlerImport</method>
+			<method callingMethod="export" namespace="FreePBX\modules" class="Timeconditions">bulkhandlerExport</method>
+		</bulkhandler>
+
+	</hooks>
+	<database>
+		<table name="timeconditions">
+			<field name="timeconditions_id" type="integer" primaryKey="true" autoincrement="true"/>
+			<field name="displayname" type="string" length="50" notnull="false"/>
+			<field name="time" type="integer" notnull="false"/>
+			<field name="truegoto" type="string" length="50" notnull="false"/>
+			<field name="falsegoto" type="string" length="50" notnull="false"/>
+			<field name="deptname" type="string" length="50" notnull="false"/>
+			<field name="generate_hint" type="boolean" default="0" notnull="false"/>
+			<field name="invert_hint" type="boolean" default="0" notnull="false"/>
+			<field name="fcc_password" type="string" length="20" default="" notnull="false"/>
+			<field name="priority" type="string" length="50" notnull="false"/>
+			<field name="timezone" type="string" length="255" notnull="false"/>
+			<field name="mode" type="string" length="20" default="time-group" notnull="false"/>
+			<field name="calendar_id" type="string" length="150" notnull="false"/>
+			<field name="calendar_group_id" type="string" length="150" notnull="false"/>
+		</table>
+		<table name="timegroups_groups">
+			<field name="id" type="integer" primaryKey="true" autoincrement="true"/>
+			<field name="description" type="string" length="50" default=""/>
+			<key name="display" type="unique">
+				<column name="description"/>
+			</key>
+		</table>
+		<table name="timegroups_details">
+			<field name="id" type="integer" primaryKey="true" autoincrement="true"/>
+			<field name="timegroupid" type="integer" default="0"/>
+			<field name="time" type="string" length="100" default=""/>
+		</table>
+	</database>
+	<popovers>
+		<timeconditions>
+			<display>timeconditions</display>
+			<view>form</view>
+		</timeconditions>
+	</popovers>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

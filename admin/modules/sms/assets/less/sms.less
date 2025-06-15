@@ -1,0 +1,47 @@
+
+.modal-body {
+	.fa.fa-question-circle {
+		color: #0f5a59;
+        cursor: pointer;
+        height: 10px;
+        width: 10px;
+        font-size: small;
+        display: inline-block;
+        text-align: center;
+        margin: 2px;
+        padding-right: 1.5px;
+        padding-top: 1px;
+        padding-left: 1px;
+        font-weight: normal;
+	}
+	.help-block {
+		display: none;
+	}
+	.help-block.active {
+		display: block;
+	}
+	.form-group {
+		label {
+			font-weight: bold;
+		}
+	}
+	.element-container:nth-child(even) {
+		background-color: #f5f5f5;
+		color: #000;
+		border-radius: 3px;
+		padding: 5px 9px;
+	}
+	.element-container:nth-child(odd) {
+		background-color: #fff;
+		color: #000;
+		border-radius: 3px;
+		padding: 5px 9px;
+	}
+}
+
+@media (min-width: 768px){
+	.modal-dialog {
+		width: 726px;
+		margin: 30px auto;
+	}
+}

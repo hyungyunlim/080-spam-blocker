@@ -1,0 +1,76 @@
+<module>
+	<rawname>ucp</rawname>
+	<name>User Control Panel</name>
+	<repo>standard</repo>
+	<version>17.0.4.25</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>AGPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/agpl-3.0.txt</licenselink>
+	<description>
+		The user control panel is a way for users to control call handling and personal settings from a web browser.
+	</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/38896213/User+Control+Panel+UCP</more-info>
+	<changelog>
+		*17.0.4.25* Packaging of ver 17.0.4.25
+		*17.0.4.24* #136 UCP Tour - text error 
+		*17.0.4.22* bump 
+		*17.0.4.20* Github issue#19 Improving reset password email template 
+		*17.0.1* Initial Release
+	</changelog>
+	<category>Admin</category>
+	<menuitems>
+		<ucptab access="all" category="User Panel" href="/ucp" requires_auth="false" target="ucp">UCP</ucptab>
+	</menuitems>
+	<fileinclude>
+	    <install>install.inc.php</install>
+	</fileinclude>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<hooks>
+		<userman class="Userman" namespace="FreePBX\modules">
+			<method callingMethod="delGroup" class="Ucp">delGroup</method>
+			<method callingMethod="addGroup" class="Ucp">addGroup</method>
+			<method callingMethod="updateGroup" class="Ucp">updateGroup</method>
+			<method callingMethod="delUser" class="Ucp">delUser</method>
+			<method callingMethod="addUser" class="Ucp">addUser</method>
+			<method callingMethod="updateUser" class="Ucp">updateUser</method>
+			<method callingMethod="sendWelcomeEmail" class="Ucp">usermanSendEmail</method>
+			<method callingMethod="myShowPage" class="Ucp">usermanShowPage</method>
+		</userman>
+		<framework class="Chown" namespace="FreePBX\Console\Command">
+			<method callingMethod="fwcChownFiles" class="Ucp">chownFreepbx</method>
+		</framework>
+		<certman class="Certman" namespace="FreePBX\modules">
+			<method callingMethod="makeCertDefault" class="Ucp">setDefaultCert</method>
+		</certman>
+		<dashboard class="Overview" namespace="FreePBX\modules\Dashboard\Sections">
+			<method callingMethod="getSummary" class="Ucp">dashboardService</method>
+		</dashboard>
+		<framework class="Start" namespace="FreePBX\Console\Command">
+			<method callingMethod="postAsteriskHooks" class="Ucp">startFreepbx</method>
+		</framework>
+		<framework class="Stop" namespace="FreePBX\Console\Command">
+			<method callingMethod="preAsteriskHooks" class="Ucp">stopFreepbx</method>
+		</framework>
+	</hooks>
+	<database>
+		<table name="ucp_sessions">
+			<field name="session" type="string" length="190" primarykey="true"/>
+			<field name="uid" type="integer" notnull="false"/>
+			<field name="address" type="string" length="255" notnull="false"/>
+			<field name="time" type="integer" notnull="false"/>
+			<field name="socketid" type="string" length="255" notnull="false"/>
+			<key name="session_UNIQUE" type="unique">
+				<column name="session"/>
+			</key>
+		</table>
+	</database>
+	<depends>
+		<module>userman ge 17.0.1</module>
+		<module>core ge 17.0.1</module>
+		<version>17.0.1</version>
+		<module>pm2 ge 17.0.1</module>
+		<module>certman ge 17.0.1</module>
+	</depends>
+</module>

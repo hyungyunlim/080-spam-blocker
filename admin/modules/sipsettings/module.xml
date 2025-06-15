@@ -1,0 +1,38 @@
+<module>
+  <rawname>sipsettings</rawname>
+  <repo>standard</repo>
+  <candisable>no</candisable>
+  <canuninstall>no</canuninstall>
+  <name>Asterisk SIP Settings</name>
+  <version>17.0.6.9</version>
+  <publisher>Sangoma Technologies Corporation</publisher>
+  <license>AGPLv3+</license>
+  <licenselink>https://www.gnu.org/licenses/agpl-3.0.txt</licenselink>
+  <category>Settings</category>
+  <menuitems>
+    <sipsettings>Asterisk SIP Settings</sipsettings>
+  </menuitems>
+  <database>
+    <table name="sipsettings">
+      <field name="keyword" type="string" length="50" default="" primarykey="true"/>
+      <field name="data" type="string" length="255" default=""/>
+      <field name="seq" type="boolean" default="0" primarykey="true"/>
+      <field name="type" type="boolean" default="0" primarykey="true"/>
+    </table>
+  </database>
+  <description>
+      Use to configure Various Asterisk SIP and PJSIP Settings
+  </description>
+  <more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26640481/Asterisk+SIP+Settings</more-info>
+  <changelog>
+	  *17.0.6.9* Packaging of ver 17.0.6.9
+	  *17.0.1alpha* 17.0.1 alpha release
+  </changelog>
+  <depends>
+    <module>core ge 17.0.1</module>
+    <module>backup ge 17.0.1</module>
+  </depends>
+  <supported>
+    <version>17.0</version>
+  </supported>
+</module>

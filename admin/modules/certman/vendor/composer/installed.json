@@ -1,0 +1,53 @@
+[
+    {
+        "name": "analogic/lescript",
+        "version": "0.2.4",
+        "version_normalized": "0.2.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/analogic/lescript.git",
+            "reference": "b826ce0196012b44bf62d263367a1b905f494bda"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/analogic/lescript/zipball/b826ce0196012b44bf62d263367a1b905f494bda",
+            "reference": "b826ce0196012b44bf62d263367a1b905f494bda",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-json": "*",
+            "ext-openssl": "*",
+            "php": ">=5.3"
+        },
+        "require-dev": {
+            "psr/log": "^1"
+        },
+        "time": "2019-10-01T10:15:49+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "Lescript.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD"
+        ],
+        "authors": [
+            {
+                "name": "Stanislav Humplik",
+                "email": "sh@analogic.cz",
+                "homepage": "https://analogic.cz",
+                "role": "Developer"
+            }
+        ],
+        "description": "Lescript is simplified concept of ACME client implementation especially for Let's encrypt service. It's goal is to have one easy to use PHP file without dependencies.",
+        "keywords": [
+            "ACME",
+            "encryption",
+            "letsencrypt"
+        ]
+    }
+]

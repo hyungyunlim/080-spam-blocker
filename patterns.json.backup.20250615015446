@@ -1,0 +1,49 @@
+{
+    "patterns": {
+        "default": {
+            "name": "기본값",
+            "description": "알려지지 않은 번호용 기본 설정",
+            "initial_wait": 4,
+            "dtmf_timing": 2,
+            "dtmf_pattern": "{ID}#",
+            "confirmation_wait": 2,
+            "confirmation_dtmf": "1",
+            "total_duration": 19,
+            "notes": "새로운 번호는 이 패턴으로 시작",
+            "confirm_delay": 2,
+            "confirm_repeat": 3,
+            "updated_at": "2025-06-13 08:12:16",
+            "created_at": "2025-06-12 08:26:17",
+            "usage_count": 0,
+            "last_used": null,
+            "pattern_type": "standard"
+        },
+        "0808745425": {
+            "name": "자동 감지 패턴 (0808745425)",
+            "description": "자동 분석됨 (신뢰도: 55%)",
+            "initial_wait": 4,
+            "dtmf_timing": 5,
+            "dtmf_pattern": "{Phone}#",
+            "confirmation_wait": 4,
+            "confirmation_dtmf": "1",
+            "total_duration": 30,
+            "confirm_delay": 2,
+            "confirm_repeat": 3,
+            "pattern_type": "id_only",
+            "auto_supported": true,
+            "confidence": 55,
+            "transcription": " 안녕하십니까? 수신거부 서비스입니다. 수신거부하실 본인의 핸드폰 번호를 입력 후, 우는 선세를 눌러 주십시오. 안녕하십니까? 수신거부 서비스입니다. 수신거부하실 본인의 핸드폰 번호를 입력 후, 우는 선세를 눌러 주십시오. 안녕하십니까? 수신거부 서비스입니다. 수신거부하실 본인의 핸드폰 번호를 입력 후, 우는 선세를 눌러 주십시오.",
+            "analysis_time": "2025-06-14T23:42:15.228741",
+            "auto_generated": true,
+            "registered_via": "auto",
+            "needs_verification": true,
+            "created_at": "2025-06-14 14:42:15",
+            "updated_at": "2025-06-14 14:42:15",
+            "label": "자동 생성",
+            "usage_count": 0
+        }
+    },
+    "variables": {
+        "{ID}": "광고 문자에서 추출한 식별번호"
+    }
+}

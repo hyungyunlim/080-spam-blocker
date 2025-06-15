@@ -1,0 +1,60 @@
+<module>
+	<rawname>ringgroups</rawname>
+	<repo>standard</repo>
+	<name>Ring Groups</name>
+	<version>17.0.2.7</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<category>Applications</category>
+	<description>
+		Creates a group of extensions that all ring together. Extensions can be rung all at once, or in various 'hunt' configurations. Additionally, external numbers are supported, and there is a call confirmation option where the callee has to confirm if they actually want to take the call before the caller is transferred.
+	</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/24477908/Ring+Groups+Module</more-info>
+	<changelog>
+		*17.0.2.7* #issue-724 Refactor addRingGroup and updateRingGroup methods for improved 
+		*17.0.2.3* Packaging of ver 17.0.2.3
+		*17.0.1* 1670.1 alpha release
+	</changelog>
+	<depends>
+		<module>callrecording ge 17.0.1</module>
+		<module>core ge 17.0.1</module>
+		<version>17.0.1</version>
+	</depends>
+	<menuitems>
+		<ringgroups needsenginedb="yes">Ring Groups</ringgroups>
+	</menuitems>
+    <database>
+        <table name="ringgroups">
+            <field name="grpnum" type="string" length="20" primarykey="true"/>
+            <field name="strategy" type="string" length="50"/>
+            <field name="grptime" type="smallint"/>
+            <field name="grppre" type="string" length="100" notnull="false"/>
+            <field name="grplist" type="string" length="255"/>
+            <field name="annmsg_id" type="integer" notnull="false"/>
+            <field name="postdest" type="string" length="255" notnull="false"/>
+            <field name="description" type="string" length="35"/>
+            <field name="alertinfo" type="string" length="255" notnull="false"/>
+            <field name="remotealert_id" type="integer" notnull="false"/>
+            <field name="needsconf" type="string" length="10" notnull="false"/>
+            <field name="toolate_id" type="integer" notnull="false"/>
+            <field name="ringing" type="string" length="80" notnull="false"/>
+            <field name="cwignore" type="string" length="10" notnull="false"/>
+            <field name="cfignore" type="string" length="10" notnull="false"/>
+            <field name="cpickup" type="string" length="10" notnull="false"/>
+            <field name="recording" type="string" length="10" default="dontcare" notnull="false"/>
+            <field name="progress" type="string" length="10" notnull="false"/>
+            <field name="elsewhere" type="string" length="10" notnull="false"/>
+            <field name="rvolume" type="string" length="2" default=""/>
+        </table>
+    </database>
+	<popovers>
+		<ringgroups>
+			<display>ringgroups</display>
+			<view>form</view>
+		</ringgroups>
+ 	</popovers>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

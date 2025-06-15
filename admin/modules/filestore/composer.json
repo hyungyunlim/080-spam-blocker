@@ -1,0 +1,14 @@
+{
+    "require": {
+        "league/flysystem-aws-s3-v3": "^3.28.0",
+        "phpseclib/phpseclib": "^3.0.37",
+        "league/flysystem-sftp-v3":"^3.28.0",
+        "league/flysystem": "^3.28.0",
+        "symfony/cache": "^7.1",
+        "league/flysystem-ftp": "^3.0",
+        "spatie/flysystem-dropbox": "3.0.1"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
