@@ -1547,59 +1547,54 @@
             }
         }
 
-        /* Mobile Progressive Disclosure for Spam Form */
+        /* Mobile Progressive Disclosure for Spam Form - Force hide initially */
+        .progressive-section:not(.show) {
+            display: none !important;
+        }
+        
         @media (max-width: 768px) {
-            .progressive-section {
-                display: none !important;
-                max-height: 0;
-                opacity: 0;
-                overflow: hidden;
-                transform: translateY(-20px);
-                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-                margin-top: 0;
-                margin-bottom: 0;
-            }
-            
             .progressive-section.show {
                 display: block !important;
                 max-height: 200px;
-                opacity: 1;
-                transform: translateY(0);
+                opacity: 0;
+                transform: translateY(-20px);
+                animation: slideInMobile 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
                 margin-top: 20px;
                 margin-bottom: 20px;
             }
             
-            /* Verification section follows same progressive disclosure - high specificity */
-            #verificationSection.verification-container.progressive-section {
-                display: none !important;
-                max-height: 0 !important;
-                opacity: 0 !important;
-                overflow: hidden !important;
-                transform: translateY(-20px) !important;
-                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                margin-top: 0 !important;
-                margin-bottom: 0 !important;
-                padding-top: 0 !important;
-                padding-bottom: 0 !important;
+            @keyframes slideInMobile {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
             
+            /* Verification section follows same progressive disclosure */
             #verificationSection.verification-container.progressive-section.show {
                 display: block !important;
                 max-height: 400px !important;
-                opacity: 1 !important;
-                transform: translateY(0) !important;
                 margin-top: 20px !important;
                 margin-bottom: 20px !important;
                 padding-top: 20px !important;
                 padding-bottom: 20px !important;
+                animation: slideInMobile 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             }
         }
         
         /* Keep normal layout on desktop */
         @media (min-width: 769px) {
-            .progressive-section {
+            .progressive-section.show {
+                display: block !important;
                 opacity: 1;
                 transform: none;
                 transition: none;
+                max-height: none;
+                margin-top: 20px;
+                margin-bottom: 20px;
             }
         }
