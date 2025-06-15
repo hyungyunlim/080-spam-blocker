@@ -1564,13 +1564,21 @@
                 margin-bottom: 20px;
             }
             
-            /* Ensure verification section is always visible */
-            #verificationSection {
-                max-height: none;
+            /* Verification section follows same progressive disclosure */
+            #verificationSection.progressive-section {
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+                transform: translateY(-20px);
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+            
+            #verificationSection.progressive-section.show {
+                max-height: 400px;
                 opacity: 1;
-                overflow: visible;
-                transform: none;
-                transition: none;
+                transform: translateY(0);
                 margin-top: 20px;
                 margin-bottom: 20px;
             }

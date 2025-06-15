@@ -213,26 +213,35 @@
             // Mobile progressive disclosure handler
             function handleProgressiveDisclosure(text) {
                 const notificationSection = document.getElementById('notificationSection');
+                const verificationSection = document.getElementById('verificationSection');
                 const submitSection = document.getElementById('submitSection');
                 
                 // Only apply progressive disclosure on mobile (screen width <= 768px)
                 if (window.innerWidth <= 768) {
                     if (text.length > 0) {
-                        // Show notification and submit sections with animation when content is entered
+                        // Show sections with staggered animations when content is entered
                         if (notificationSection && !notificationSection.classList.contains('show')) {
                             setTimeout(() => {
                                 notificationSection.classList.add('show');
-                            }, 200); // Small delay for better UX
+                            }, 200);
+                        }
+                        if (verificationSection && !verificationSection.classList.contains('show')) {
+                            setTimeout(() => {
+                                verificationSection.classList.add('show');
+                            }, 400);
                         }
                         if (submitSection && !submitSection.classList.contains('show')) {
                             setTimeout(() => {
                                 submitSection.classList.add('show');
-                            }, 400); // Staggered animation
+                            }, 600);
                         }
                     } else {
                         // Hide sections when content is cleared
                         if (notificationSection) {
                             notificationSection.classList.remove('show');
+                        }
+                        if (verificationSection) {
+                            verificationSection.classList.remove('show');
                         }
                         if (submitSection) {
                             submitSection.classList.remove('show');
@@ -242,6 +251,9 @@
                     // On desktop, ensure sections are always visible
                     if (notificationSection) {
                         notificationSection.classList.add('show');
+                    }
+                    if (verificationSection) {
+                        verificationSection.classList.add('show');
                     }
                     if (submitSection) {
                         submitSection.classList.add('show');

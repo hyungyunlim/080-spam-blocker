@@ -69,7 +69,7 @@
             </div>
 
             <!-- 인증 단계 (비로그인시 노출) -->
-            <div id="verificationSection" class="verification-container">
+            <div id="verificationSection" class="verification-container progressive-section">
                 <div class="verification-header">
                     <div class="verification-icon">📱</div>
                     <div class="verification-title">
