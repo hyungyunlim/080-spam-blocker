@@ -16,9 +16,9 @@ if ($IS_LOGGED) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>080 수신거부 자동화 시스템</title>
     <!-- Preload JavaScript files -->
-    <link rel="preload" href="login_flow.js?v=3" as="script">
+    <link rel="preload" href="login_flow.js?v=<?php echo time(); ?>" as="script">
     <link rel="preload" href="assets/modal.js?v=2" as="script">
-    <link rel="preload" href="assets/app.js?v=3" as="script">
+    <link rel="preload" href="assets/app.js?v=<?php echo time(); ?>" as="script">
     
     <!-- Critical inline configuration (minimal) -->
     <script>
@@ -143,10 +143,10 @@ if ($IS_LOGGED) {
     <link rel="preload" href="data:font/woff2;base64," as="font" type="font/woff2" crossorigin>
     
     <!-- Load CSS asynchronously -->
-    <link rel="preload" href="assets/style.css?v=3" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="assets/style.css?v=<?php echo time(); ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="assets/modal.css?v=2" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-        <link rel="stylesheet" href="assets/style.css?v=3">
+        <link rel="stylesheet" href="assets/style.css?v=<?php echo time(); ?>">
         <link rel="stylesheet" href="assets/modal.css?v=2">
     </noscript>
 </head>
@@ -220,9 +220,9 @@ if ($IS_LOGGED) {
     </div>
 
     <!-- Load scripts with improved performance -->
-    <script src="login_flow.js?v=3" defer></script>
+    <script src="login_flow.js?v=<?php echo time(); ?>" defer></script>
     <script src="assets/modal.js?v=2" defer></script>
-    <script src="assets/app.js?v=3" defer></script>
+    <script src="assets/app.js?v=<?php echo time(); ?>" defer></script>
     
     <?php
     // Add performance monitoring in development
