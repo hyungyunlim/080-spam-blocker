@@ -1085,14 +1085,17 @@
             overflow: hidden;
         }
 
-        .verification-container:not(.show) {
-            opacity: 0;
-            transform: translateY(-10px);
-            max-height: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-            margin-top: 0;
-            margin-bottom: 0;
+        /* Desktop verification container behavior */
+        @media (min-width: 769px) {
+            .verification-container:not(.show) {
+                opacity: 0;
+                transform: translateY(-10px);
+                max-height: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                margin-top: 0;
+                margin-bottom: 0;
+            }
         }
 
         .verification-container.show {
