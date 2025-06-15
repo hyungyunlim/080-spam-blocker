@@ -179,14 +179,16 @@
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: clamp(1.4rem, 3.5vw, 2rem);
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            line-height: 1.2;
         }
 
         .header p {
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
             opacity: 0.95;
+            line-height: 1.4;
         }
 
         .card {
@@ -250,7 +252,7 @@
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
@@ -342,6 +344,15 @@
         .btn:active {
             transform: translateY(-1px) scale(1.02);
             transition: all 0.1s ease;
+        }
+        
+        /* 사파리 버튼 focus/active 상태 문제 해결 */
+        .btn:focus {
+            outline: none;
+        }
+        
+        .btn:not(:active):not(:hover) {
+            transform: translateY(0) scale(1);
         }
 
         .btn:disabled {
@@ -754,7 +765,7 @@
             }
             
             .header h1 {
-                font-size: 1.8rem;
+                font-size: clamp(1.2rem, 4.5vw, 1.6rem);
             }
             
             .card-body {
@@ -1350,6 +1361,17 @@
             box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
         }
 
+        /* Small Mobile Responsiveness (iPhone 15 Pro Max 등) */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: clamp(1.3rem, 7vw, 1.6rem) !important;
+            }
+            
+            .header p {
+                font-size: clamp(0.85rem, 3vw, 1rem) !important;
+            }
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .container {
@@ -1362,7 +1384,7 @@
             }
             
             .header h1 {
-                font-size: 1.8rem;
+                font-size: clamp(1.2rem, 4.5vw, 1.6rem);
             }
             
             .user-status-bar {
@@ -1481,5 +1503,43 @@
             .verify-msg {
                 padding: 8px 12px;
                 font-size: 13px;
+            }
+        }
+
+        /* extra mobile style for spam button */
+        @media (max-width: 768px) {
+            .spam-content-btn {
+                flex: 1 1 calc(50% - 10px);
+            }
+            .recording-item .btn {
+                flex: 1 1 calc(50% - 10px);
+                justify-content: center;
+            }
+        }
+
+        /* Buttons container for recordings */
+        .recording-actions{
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+            justify-content:space-between;
+        }
+
+        @media (max-width:768px){
+            .recording-actions .btn{
+                flex:1 1 calc(50% - 8px);
+                text-align:center;
+            }
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            /* iOS / Safari specific flexbox gap workaround */
+            .recording-actions {
+                justify-content: flex-start; /* left align rows */
+                row-gap: 10px; /* explicit row gap since older Safari ignores gap in wrap rows */
+            }
+            .recording-actions .btn {
+                flex: 0 0 calc(50% - 8px); /* exact 2-column width */
+                margin-bottom: 10px; /* fallback for older WebKit with no row-gap */
             }
         }

@@ -740,39 +740,492 @@ if (isset($_GET['created'])) {
 
         /* 반응형 디자인 */
         @media (max-width: 768px) {
-            .container {
+            body {
                 padding: 10px;
             }
             
+            .container {
+                padding: 0;
+            }
+            
+            /* 모바일 헤더 최적화 */
             .header {
-                padding: 32px 24px;
+                padding: 20px 16px;
+                margin-bottom: 20px;
+                border-radius: 16px;
             }
             
             .header h1 {
+                font-size: 1.8rem;
+                margin-bottom: 8px;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            /* 모바일 헤더 내부 레이아웃 */
+            .header > div {
+                flex-direction: column !important;
+                gap: 16px !important;
+                align-items: center !important;
+            }
+            
+            .header > div > div:last-child {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                width: 100%;
+            }
+            
+            /* 뒤로가기 링크 모바일 최적화 */
+            .back-link {
+                margin-bottom: 16px;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+                width: fit-content;
+                border-radius: 20px;
+            }
+            
+            /* 통계 그리드 모바일 최적화 */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+            
+            .stat-card {
+                padding: 20px 16px;
+                border-radius: 16px;
+            }
+            
+            .stat-number {
                 font-size: 2rem;
             }
             
+            .stat-label {
+                font-size: 0.85rem;
+            }
+            
+            /* 카드 최적화 */
+            .card {
+                border-radius: 16px;
+                margin-bottom: 20px;
+            }
+            
+            .card-header {
+                padding: 16px 20px;
+                font-size: 1.1rem;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+            
             .card-body {
-                padding: 24px;
+                padding: 20px 16px;
+            }
+            
+            /* 테이블 모바일 최적화 - 카드형 레이아웃 */
+            .pattern-table {
+                display: none;
+            }
+            
+            .mobile-pattern-list {
+                display: block;
+            }
+            
+            .mobile-pattern-card {
+                background: #ffffff;
+                border-radius: 12px;
+                margin-bottom: 16px;
+                padding: 16px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+                border: 1px solid #e2e8f0;
+                transition: all 0.2s ease;
+            }
+            
+            .mobile-pattern-card:hover {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                transform: translateY(-1px);
+            }
+            
+            .mobile-pattern-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 12px;
+            }
+            
+            .mobile-pattern-number {
+                font-weight: 700;
+                font-size: 1.1rem;
+                color: #1e293b;
+            }
+            
+            .mobile-pattern-usage {
+                font-size: 0.75rem;
+                color: #64748b;
+                background: #f1f5f9;
+                padding: 2px 8px;
+                border-radius: 10px;
+            }
+            
+            .mobile-pattern-info {
+                margin-bottom: 12px;
+            }
+            
+            .mobile-pattern-name {
+                font-weight: 600;
+                font-size: 0.95rem;
+                color: #334155;
+                margin-bottom: 4px;
+            }
+            
+            .mobile-pattern-desc {
+                font-size: 0.85rem;
+                color: #64748b;
+            }
+            
+            .mobile-pattern-details {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-bottom: 12px;
+                font-size: 0.85rem;
+            }
+            
+            .mobile-detail-item {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
+            
+            .mobile-detail-label {
+                font-weight: 600;
+                color: #475569;
+            }
+            
+            .mobile-detail-value {
+                color: #64748b;
+            }
+            
+            .mobile-pattern-dtmf {
+                background: #f1f5f9;
+                padding: 8px 12px;
+                border-radius: 8px;
+                font-family: monospace;
+                font-size: 0.9rem;
+                margin-bottom: 12px;
+                color: #334155;
+            }
+            
+            .mobile-pattern-labels {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+            
+            .mobile-pattern-actions {
+                display: flex;
+                gap: 8px;
+                justify-content: flex-end;
+            }
+            
+            /* 버튼 모바일 최적화 */
+            .btn {
+                padding: 10px 16px;
+                border-radius: 8px;
+                font-size: 0.85rem;
+                min-height: 44px; /* 터치 친화적 */
+                touch-action: manipulation;
+            }
+            
+            .btn-small {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                min-height: 36px;
+            }
+            
+            .action-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            
+            /* 폼 최적화 */
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                font-size: 16px; /* iOS 줌 방지 */
+                min-height: 44px;
+                padding: 12px 16px;
+            }
+            
+            /* 템플릿 선택기 모바일 최적화 */
+            .template-selector {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .template-card {
+                padding: 12px;
+                text-align: center;
+            }
+            
+            .template-icon {
+                font-size: 1.5rem;
+                margin-bottom: 6px;
+            }
+            
+            .template-name {
+                font-size: 0.85rem;
+                margin-bottom: 2px;
+            }
+            
+            .template-desc {
+                font-size: 0.75rem;
+            }
+            
+            /* DTMF 빌더 모바일 최적화 */
+            .dtmf-builder {
+                border-radius: 12px;
+                padding: 16px;
+                margin-top: 16px;
+            }
+            
+            .dtmf-builder-header {
+                flex-direction: column;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+            
+            .dtmf-builder-title {
+                font-size: 1rem;
+                justify-content: center;
             }
             
             .dtmf-step {
                 grid-template-columns: 1fr;
-                gap: 8px;
+                gap: 12px;
+                padding: 12px;
+                border-radius: 10px;
             }
             
-            .pattern-table {
+            .dtmf-step-number {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
+                align-self: center;
+            }
+            
+            .dtmf-step-number::before {
+                display: none; /* 모바일에서 드래그 핸들 숨김 */
+            }
+            
+            .dtmf-step input {
+                font-size: 16px;
+                padding: 10px 12px;
+                border-radius: 6px;
+            }
+            
+            .pattern-preview {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+                padding: 16px;
+                font-size: 1rem;
+            }
+            
+            .pattern-preview-label {
                 font-size: 0.85rem;
             }
             
-            .action-buttons {
+            /* 팁 카드 모바일 최적화 */
+            .tips-card {
+                padding: 16px;
+                border-radius: 12px;
+            }
+            
+            .tips-card h3 {
+                font-size: 1.1rem;
+                margin-bottom: 12px;
+            }
+            
+            .tips-card li {
+                font-size: 0.9rem;
+                line-height: 1.6;
+                padding-left: 24px;
+            }
+            
+            /* 모바일 전용 유틸리티 */
+            .hide-mobile {
+                display: none !important;
+            }
+            
+            .show-mobile {
+                display: block !important;
+            }
+            
+            /* 터치 개선 */
+            button, .btn, a, [onclick] {
+                -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+                touch-action: manipulation;
+            }
+            
+            /* 스크롤 개선 */
+            .card-body {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* 모바일 탭 시스템 */
+            .mobile-form-tabs {
+                display: flex;
+                background: #f8fafc;
+                border-radius: 12px;
+                padding: 4px;
+                margin-bottom: 20px;
+                gap: 4px;
+            }
+            
+            .mobile-tab {
+                flex: 1;
+                text-align: center;
+                padding: 12px 8px;
+                border-radius: 8px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: #64748b;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                user-select: none;
+                touch-action: manipulation;
+            }
+            
+            .mobile-tab.active {
+                background: #8b80f9;
+                color: white;
+                box-shadow: 0 2px 4px rgba(139, 128, 249, 0.2);
+            }
+            
+            .mobile-tab:hover:not(.active) {
+                background: #e2e8f0;
+                color: #475569;
+            }
+            
+            /* 폼 섹션 */
+            .form-section {
+                transition: all 0.3s ease;
+            }
+            
+            .form-section.hide-mobile {
+                display: none !important;
+            }
+            
+            /* 폼 접기/펼치기 */
+            .form-collapse-icon {
+                transition: transform 0.3s ease;
+                font-size: 0.8rem;
+                opacity: 0.7;
+            }
+            
+            .form-collapsed .form-collapse-icon {
+                transform: rotate(-90deg);
+            }
+            
+            .form-collapsed #form-body {
+                max-height: 0;
+                overflow: hidden;
+                padding-top: 0;
+                padding-bottom: 0;
+                transition: all 0.3s ease;
+            }
+            
+            /* 네비게이션 버튼 */
+            .mobile-nav-buttons {
+                display: flex;
+                gap: 8px;
+                margin-top: 20px;
+                padding-top: 16px;
+                border-top: 1px solid #e2e8f0;
+            }
+            
+            .mobile-nav-btn {
+                flex: 1;
+                padding: 12px 16px;
+                border: 2px solid #e2e8f0;
+                background: white;
+                color: #64748b;
+                border-radius: 8px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+            }
+            
+            .mobile-nav-btn:hover:not(:disabled) {
+                border-color: #8b80f9;
+                color: #8b80f9;
+            }
+            
+            .mobile-nav-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            
+            .mobile-nav-btn.primary {
+                background: #8b80f9;
+                color: white;
+                border-color: #8b80f9;
+            }
+            
+            .mobile-nav-btn.primary:hover {
+                background: #7c71f5;
+                border-color: #7c71f5;
+            }
+        }
+        
+        /* 작은 모바일 기기 (320px-480px) */
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .template-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .mobile-pattern-details {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .mobile-pattern-actions {
                 flex-direction: column;
-                width: 100%;
             }
             
             .btn {
                 width: 100%;
                 justify-content: center;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .header p {
+                font-size: 0.9rem;
             }
         }
 
@@ -1224,6 +1677,7 @@ if (isset($_GET['created'])) {
                     </button>
                 </div>
                 <div class="card-body">
+                    <!-- 데스크톱 테이블 -->
                     <table class="pattern-table" id="patternTable">
                         <thead>
                             <tr>
@@ -1331,6 +1785,93 @@ if (isset($_GET['created'])) {
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    
+                    <!-- 모바일 카드 레이아웃 -->
+                    <div class="mobile-pattern-list" style="display: none;">
+                        <?php foreach ($patterns['patterns'] as $number => $pattern): ?>
+                        <div class="mobile-pattern-card" data-number="<?php echo htmlspecialchars($number); ?>">
+                            <div class="mobile-pattern-header">
+                                <div class="mobile-pattern-number"><?php echo htmlspecialchars($number); ?></div>
+                                <?php if (isset($pattern['usage_count']) && $pattern['usage_count'] > 0): ?>
+                                <div class="mobile-pattern-usage">사용 <?php echo $pattern['usage_count']; ?>회</div>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <div class="mobile-pattern-info">
+                                <div class="mobile-pattern-name"><?php echo htmlspecialchars($pattern['name']); ?></div>
+                                <?php if (!empty($pattern['description'])): ?>
+                                <div class="mobile-pattern-desc"><?php echo htmlspecialchars($pattern['description']); ?></div>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <div class="mobile-pattern-dtmf">
+                                DTMF: <?php echo htmlspecialchars($pattern['dtmf_pattern']); ?>
+                            </div>
+                            
+                            <div class="mobile-pattern-details">
+                                <div class="mobile-detail-item">
+                                    <div class="mobile-detail-label">초기 대기</div>
+                                    <div class="mobile-detail-value"><?php echo $pattern['initial_wait']; ?>초</div>
+                                </div>
+                                <div class="mobile-detail-item">
+                                    <div class="mobile-detail-label">DTMF 타이밍</div>
+                                    <div class="mobile-detail-value"><?php echo $pattern['dtmf_timing']; ?>초</div>
+                                </div>
+                                <div class="mobile-detail-item">
+                                    <div class="mobile-detail-label">확인 대기</div>
+                                    <div class="mobile-detail-value"><?php echo $pattern['confirmation_wait']; ?>초</div>
+                                </div>
+                                <div class="mobile-detail-item">
+                                    <div class="mobile-detail-label">총 시간</div>
+                                    <div class="mobile-detail-value"><?php echo $pattern['total_duration'] ?? 30; ?>초</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mobile-pattern-labels">
+                                <?php if (isset($pattern['auto_generated']) && $pattern['auto_generated']): ?>
+                                    <span class="label label-auto">자동</span>
+                                <?php endif; ?>
+                                <?php if (isset($pattern['needs_verification']) && $pattern['needs_verification']): ?>
+                                    <span class="label label-unverified">검증필요</span>
+                                <?php else: ?>
+                                    <span class="label label-verified">검증됨</span>
+                                <?php endif; ?>
+                                <?php if (isset($pattern['pattern_type'])): ?>
+                                    <?php if ($pattern['pattern_type'] === 'confirm_only'): ?>
+                                        <span class="label label-confirm-only">확인전용</span>
+                                    <?php elseif ($pattern['pattern_type'] === 'id_only'): ?>
+                                        <span class="label label-id-only">ID전용</span>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                                <?php if (isset($pattern['auto_supported']) && $pattern['auto_supported'] === false): ?>
+                                    <span class="label label-manual">수동</span>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <?php if (is_admin() && isset($pattern['owner_phone']) && $pattern['owner_phone']): ?>
+                            <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 12px;">
+                                👤 소유자: <?php echo htmlspecialchars($pattern['owner_phone']); ?>
+                            </div>
+                            <?php endif; ?>
+                            
+                            <div class="mobile-pattern-actions">
+                                <button class="btn btn-small btn-secondary" onclick="editPattern('<?php echo $number; ?>')">
+                                    ✏️ 수정
+                                </button>
+                                <?php if ($number !== 'default'): ?>
+                                <form method="post" style="display:inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="number" value="<?php echo $number; ?>">
+                                    <button type="submit" class="btn btn-small btn-danger" 
+                                            onclick="return handleDeletePattern(event)">
+                                        🗑️ 삭제
+                                    </button>
+                                </form>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
                     <div style="margin-top: 16px; padding: 12px; background: rgba(139, 128, 249, 0.05); border-radius: 8px; font-size: 13px; color: #64748b;">
                         💡 <strong>안내:</strong> 기본 패턴과 내가 추가한 패턴만 표시됩니다. 다른 사용자의 패턴은 보이지 않습니다.
                     </div>
@@ -1339,149 +1880,175 @@ if (isset($_GET['created'])) {
             
             <!-- 패턴 추가/수정 폼 -->
             <div class="card">
-                <div class="card-header" id="form-header">
-                    ➕ 새 패턴 추가
+                <div class="card-header" id="form-header" onclick="toggleFormCollapse()" style="cursor: pointer; user-select: none;">
+                    <span>➕ 새 패턴 추가</span>
+                    <span class="form-collapse-icon hide-mobile">▼</span>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="form-body">
                     <form method="post" id="pattern-form">
                         <input type="hidden" name="action" value="add" id="form-action">
                         
-                        <!-- 패턴 템플릿 선택 -->
-                        <h3 style="margin-bottom: 16px; color: #334155; font-size: 1.1rem;">📋 패턴 템플릿 선택</h3>
-                        <div class="template-selector" id="template-selector">
-                            <div class="template-card selected" data-template="standard">
-                                <div class="template-icon">🎯</div>
-                                <div class="template-name">표준 패턴</div>
-                                <div class="template-desc">ID 입력 + 확인</div>
-                            </div>
-                            <div class="template-card" data-template="id_only">
-                                <div class="template-icon">🆔</div>
-                                <div class="template-name">ID 전용</div>
-                                <div class="template-desc">ID만 입력</div>
-                            </div>
-                            <div class="template-card" data-template="confirm_only">
-                                <div class="template-icon">✅</div>
-                                <div class="template-name">확인 전용</div>
-                                <div class="template-desc">확인만 필요</div>
-                            </div>
-                            <div class="template-card" data-template="complex">
-                                <div class="template-icon">🔧</div>
-                                <div class="template-name">복잡한 패턴</div>
-                                <div class="template-desc">다단계 입력</div>
-                            </div>
+                        <!-- 모바일 탭 섹션 -->
+                        <div class="mobile-form-tabs show-mobile" style="display: none;">
+                            <div class="mobile-tab active" data-tab="basic">기본 정보</div>
+                            <div class="mobile-tab" data-tab="timing">타이밍</div>
+                            <div class="mobile-tab" data-tab="dtmf">DTMF</div>
                         </div>
-                        <input type="hidden" name="pattern_type" id="pattern-type" value="standard">
                         
-                        <div class="form-row" style="margin-top: 32px;">
-                            <div class="form-group">
-                                <label for="form-number">080 번호</label>
-                                <input type="text" name="number" id="form-number" placeholder="0801234567" required>
-                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">하이픈(-) 없이 숫자만 입력</div>
+                        <!-- 기본 정보 섹션 -->
+                        <div class="form-section" id="section-basic">
+                            <!-- 패턴 템플릿 선택 -->
+                            <h3 style="margin-bottom: 16px; color: #334155; font-size: 1.1rem;">📋 패턴 템플릿 선택</h3>
+                            <div class="template-selector" id="template-selector">
+                                <div class="template-card selected" data-template="standard">
+                                    <div class="template-icon">🎯</div>
+                                    <div class="template-name">표준 패턴</div>
+                                    <div class="template-desc">ID 입력 + 확인</div>
+                                </div>
+                                <div class="template-card" data-template="id_only">
+                                    <div class="template-icon">🆔</div>
+                                    <div class="template-name">ID 전용</div>
+                                    <div class="template-desc">ID만 입력</div>
+                                </div>
+                                <div class="template-card" data-template="confirm_only">
+                                    <div class="template-icon">✅</div>
+                                    <div class="template-name">확인 전용</div>
+                                    <div class="template-desc">확인만 필요</div>
+                                </div>
+                                <div class="template-card" data-template="complex">
+                                    <div class="template-icon">🔧</div>
+                                    <div class="template-name">복잡한 패턴</div>
+                                    <div class="template-desc">다단계 입력</div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="pattern_type" id="pattern-type" value="standard">
+                            
+                            <div class="form-row" style="margin-top: 32px;">
+                                <div class="form-group">
+                                    <label for="form-number">080 번호</label>
+                                    <input type="text" name="number" id="form-number" placeholder="0801234567" required>
+                                    <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">하이픈(-) 없이 숫자만 입력</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="form-name">패턴 이름</label>
+                                    <input type="text" name="name" id="form-name" placeholder="회사명 패턴" required>
+                                    <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">식별하기 쉬운 이름</div>
+                                </div>
                             </div>
                             
                             <div class="form-group">
-                                <label for="form-name">패턴 이름</label>
-                                <input type="text" name="name" id="form-name" placeholder="회사명 패턴" required>
-                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">식별하기 쉬운 이름</div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="form-description">설명</label>
-                            <input type="text" name="description" id="form-description" placeholder="패턴에 대한 설명">
-                        </div>
-                        
-                        <h3 style="margin: 32px 0 20px; color: #334155;">⏱️ 타이밍 설정</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="form-initial-wait">초기 대기 (초)</label>
-                                <input type="number" name="initial_wait" id="form-initial-wait" value="3" min="0">
-                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">통화 연결 후 대기 시간</div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="form-dtmf-timing">DTMF 타이밍 (초)</label>
-                                <input type="number" name="dtmf_timing" id="form-dtmf-timing" value="6" min="0" max="20">
-                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">첫 DTMF 입력 시점</div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="form-confirmation-wait">확인 대기 (초)</label>
-                                <input type="number" name="confirmation_wait" id="form-confirmation-wait" value="2" min="0" max="15">
-                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">확인 버튼 입력 전 대기</div>
+                                <label for="form-description">설명</label>
+                                <input type="text" name="description" id="form-description" placeholder="패턴에 대한 설명">
                             </div>
                         </div>
                         
-                        <div class="form-row">
-                            <!-- 총 녹음시간 필드를 행의 마지막으로 이동 -->
+                        <!-- 타이밍 섹션 -->
+                        <div class="form-section" id="section-timing" style="display: none;">
+                            <h3 style="margin-bottom: 20px; color: #334155;">⏱️ 타이밍 설정</h3>
                             
-                            <div class="form-group">
-                                <label for="form-confirm-delay">확인 지연 (초)</label>
-                                <input type="number" name="confirm_delay" id="form-confirm-delay" value="2" min="0" max="10">
-                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">반복 확인 DTMF 간격</div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="form-initial-wait">초기 대기 (초)</label>
+                                    <input type="number" name="initial_wait" id="form-initial-wait" value="3" min="0">
+                                    <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">통화 연결 후 대기 시간</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="form-dtmf-timing">DTMF 타이밍 (초)</label>
+                                    <input type="number" name="dtmf_timing" id="form-dtmf-timing" value="6" min="0" max="20">
+                                    <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">첫 DTMF 입력 시점</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="form-confirmation-wait">확인 대기 (초)</label>
+                                    <input type="number" name="confirmation_wait" id="form-confirmation-wait" value="2" min="0" max="15">
+                                    <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">확인 버튼 입력 전 대기</div>
+                                </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="form-confirm-repeat">반복 횟수</label>
-                                <input type="number" name="confirm_repeat" id="form-confirm-repeat" value="3" min="1" max="5">
-                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">확인 DTMF 전송 횟수</div>
-                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="form-confirm-delay">확인 지연 (초)</label>
+                                    <input type="number" name="confirm_delay" id="form-confirm-delay" value="2" min="0" max="10">
+                                    <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">반복 확인 DTMF 간격</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="form-confirm-repeat">반복 횟수</label>
+                                    <input type="number" name="confirm_repeat" id="form-confirm-repeat" value="3" min="1" max="5">
+                                    <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">확인 DTMF 전송 횟수</div>
+                                </div>
 
-                            <div class="form-group">
-                                <label for="form-total-duration">총 녹음시간 (초)</label>
-                                <input type="number" name="total_duration" id="form-total-duration" value="30" min="10" max="60">
-                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">전체 통화 녹음 시간</div>
+                                <div class="form-group">
+                                    <label for="form-total-duration">총 녹음시간 (초)</label>
+                                    <input type="number" name="total_duration" id="form-total-duration" value="30" min="10" max="60">
+                                    <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">전체 통화 녹음 시간</div>
+                                </div>
                             </div>
                         </div>
                         
-                        <h3 style="margin: 32px 0 20px; color: #334155;">📞 DTMF 패턴 설정</h3>
-                        
+                        <!-- DTMF 섹션 -->
+                        <div class="form-section" id="section-dtmf" style="display: none;">
+                            <h3 style="margin-bottom: 20px; color: #334155;">📞 DTMF 패턴 설정</h3>
+                            
                             <div class="form-group">
                                 <label for="form-dtmf-pattern">DTMF 패턴</label>
-                            <input type="text" name="dtmf_pattern" id="form-dtmf-pattern" value="{ID}#" placeholder="DTMF 시퀀스 직접 입력 가능" style="background:#ffffff;">
-                            <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">직접 입력하거나 아래 빌더를 사용하세요</div>
+                                <input type="text" name="dtmf_pattern" id="form-dtmf-pattern" value="{ID}#" placeholder="DTMF 시퀀스 직접 입력 가능" style="background:#ffffff;">
+                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">직접 입력하거나 아래 빌더를 사용하세요</div>
                             </div>
-                            
-                        <!-- DTMF 빌더 -->
-                        <div class="dtmf-builder">
-                            <div class="dtmf-builder-header">
-                                <div class="dtmf-builder-title">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
-                                    </svg>
-                                    DTMF 시퀀스 빌더
+                                
+                            <!-- DTMF 빌더 -->
+                            <div class="dtmf-builder">
+                                <div class="dtmf-builder-header">
+                                    <div class="dtmf-builder-title">
+                                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                                        </svg>
+                                        DTMF 시퀀스 빌더
+                                    </div>
+                                    <button type="button" class="btn btn-small btn-success" onclick="addStep()">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                        </svg>
+                                        단계 추가
+                                    </button>
                                 </div>
-                                <button type="button" class="btn btn-small btn-success" onclick="addStep()">
-                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                    </svg>
-                                    단계 추가
-                                </button>
+                                
+                                <div class="dtmf-timeline">
+                                    <div class="dtmf-steps" id="dtmf-steps"></div>
+                                </div>
+                                
+                                <div class="pattern-preview">
+                                    <span class="pattern-preview-label">패턴 미리보기:</span>
+                                    <span class="pattern-preview-value" id="pattern-preview">{ID}#</span>
+                                </div>
                             </div>
                             
-                            <div class="dtmf-timeline">
-                                <div class="dtmf-steps" id="dtmf-steps"></div>
-                            </div>
-                            
-                            <div class="pattern-preview">
-                                <span class="pattern-preview-label">패턴 미리보기:</span>
-                                <span class="pattern-preview-value" id="pattern-preview">{ID}#</span>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group" style="margin-top: 24px;">
+                            <div class="form-group" style="margin-top: 24px;">
                                 <label for="form-confirmation-dtmf">확인 DTMF</label>
                                 <input type="text" name="confirmation_dtmf" id="form-confirmation-dtmf" value="1" placeholder="1">
-                            <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">확인을 위해 누를 번호</div>
+                                <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">확인을 위해 누를 번호</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="form-notes">메모</label>
+                                <textarea name="notes" id="form-notes" rows="3" placeholder="추가 메모나 특이사항"></textarea>
+                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="form-notes">메모</label>
-                            <textarea name="notes" id="form-notes" rows="3" placeholder="추가 메모나 특이사항"></textarea>
+                        <!-- 모바일 네비게이션 버튼 -->
+                        <div class="mobile-nav-buttons show-mobile" style="display: none;">
+                            <button type="button" class="mobile-nav-btn" onclick="previousSection()" id="prev-btn" disabled>
+                                ◀ 이전
+                            </button>
+                            <button type="button" class="mobile-nav-btn primary" onclick="nextSection()" id="next-btn">
+                                다음 ▶
+                            </button>
                         </div>
                         
-                        <div style="display: flex; gap: 12px; margin-top: 32px;">
+                        <!-- 데스크톱 버튼 -->
+                        <div class="hide-mobile" style="display: flex; gap: 12px; margin-top: 32px;">
                             <button type="submit" class="btn" id="submit-btn">
                                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
@@ -1489,6 +2056,19 @@ if (isset($_GET['created'])) {
                                 패턴 추가
                             </button>
                             <button type="button" class="btn btn-secondary" id="cancel-btn" onclick="cancelEdit()" style="display:none;">
+                                취소
+                            </button>
+                        </div>
+                        
+                        <!-- 모바일 제출 버튼 -->
+                        <div class="show-mobile" style="display: none; margin-top: 20px;">
+                            <button type="submit" class="btn" id="mobile-submit-btn" style="width: 100%; min-height: 48px;">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                                </svg>
+                                패턴 추가
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="mobile-cancel-btn" onclick="cancelEdit()" style="display:none; width: 100%; margin-top: 12px; min-height: 48px;">
                                 취소
                             </button>
                         </div>
@@ -1909,15 +2489,129 @@ if (isset($_GET['created'])) {
                 }, 3000);
             }
             
+            // 모바일 탭 시스템 변수
+            let currentSection = 0;
+            const sections = ['basic', 'timing', 'dtmf'];
+            let isFormCollapsed = false;
+            
+            // 모바일 탭 시스템
+            function switchToSection(sectionName) {
+                const sectionIndex = sections.indexOf(sectionName);
+                if (sectionIndex === -1) return;
+                
+                currentSection = sectionIndex;
+                
+                // 탭 활성화 상태 업데이트
+                document.querySelectorAll('.mobile-tab').forEach((tab, index) => {
+                    tab.classList.toggle('active', index === currentSection);
+                });
+                
+                // 섹션 표시/숨김
+                sections.forEach((section, index) => {
+                    const sectionEl = document.getElementById(`section-${section}`);
+                    if (sectionEl) {
+                        sectionEl.style.display = index === currentSection ? 'block' : 'none';
+                    }
+                });
+                
+                // 네비게이션 버튼 상태 업데이트
+                updateNavButtons();
+            }
+            
+            function nextSection() {
+                if (currentSection < sections.length - 1) {
+                    switchToSection(sections[currentSection + 1]);
+                }
+            }
+            
+            function previousSection() {
+                if (currentSection > 0) {
+                    switchToSection(sections[currentSection - 1]);
+                }
+            }
+            
+            function updateNavButtons() {
+                const prevBtn = document.getElementById('prev-btn');
+                const nextBtn = document.getElementById('next-btn');
+                
+                if (prevBtn) prevBtn.disabled = currentSection === 0;
+                if (nextBtn) {
+                    if (currentSection === sections.length - 1) {
+                        nextBtn.textContent = '완료 ✓';
+                        nextBtn.classList.add('primary');
+                    } else {
+                        nextBtn.textContent = '다음 ▶';
+                        nextBtn.classList.add('primary');
+                    }
+                }
+            }
+            
+            // 폼 접기/펼치기
+            function toggleFormCollapse() {
+                const formCard = document.querySelector('.card:has(#form-header)');
+                const formBody = document.getElementById('form-body');
+                const icon = document.querySelector('.form-collapse-icon');
+                
+                if (window.innerWidth > 768) return; // 데스크톱에서는 동작하지 않음
+                
+                isFormCollapsed = !isFormCollapsed;
+                
+                if (isFormCollapsed) {
+                    formCard.classList.add('form-collapsed');
+                    formBody.style.display = 'none';
+                    if (icon) icon.textContent = '▶';
+                } else {
+                    formCard.classList.remove('form-collapsed');
+                    formBody.style.display = 'block';
+                    if (icon) icon.textContent = '▼';
+                }
+            }
+            
             // 페이지 로드 시 초기화
             document.addEventListener('DOMContentLoaded', function() {
                 // 기본 패턴 추가
                 if (document.getElementById('dtmf-steps').children.length === 0) {
                     addStep(0, '{ID}#');
-            }
-            
-            // 10초마다 새 패턴 확인
-            setInterval(checkForNewPatterns, 10000);
+                }
+                
+                // 모바일 탭 이벤트 리스너 추가
+                document.querySelectorAll('.mobile-tab').forEach((tab, index) => {
+                    tab.addEventListener('click', () => {
+                        switchToSection(sections[index]);
+                    });
+                });
+                
+                // 초기 섹션 설정
+                if (window.innerWidth <= 768) {
+                    switchToSection('basic');
+                } else {
+                    // 데스크톱에서는 모든 섹션 표시
+                    sections.forEach(section => {
+                        const sectionEl = document.getElementById(`section-${section}`);
+                        if (sectionEl) {
+                            sectionEl.style.display = 'block';
+                        }
+                    });
+                }
+                
+                // 화면 크기 변경 감지
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth <= 768) {
+                        // 모바일 모드로 전환
+                        switchToSection(sections[currentSection]);
+                    } else {
+                        // 데스크톱 모드로 전환
+                        sections.forEach(section => {
+                            const sectionEl = document.getElementById(`section-${section}`);
+                            if (sectionEl) {
+                                sectionEl.style.display = 'block';
+                            }
+                        });
+                    }
+                });
+                
+                // 10초마다 새 패턴 확인
+                setInterval(checkForNewPatterns, 10000);
             });
 
             // ---- 컨테이너 레벨 드롭 처리 ----

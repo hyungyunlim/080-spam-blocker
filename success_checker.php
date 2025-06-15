@@ -2,7 +2,10 @@
 // success_checker.php : determine if unsubscribe call succeeded using STT keyword match
 // Usage: php success_checker.php --callfile=ID --record=/path/to.wav
 
-require_once __DIR__.'/vendor/autoload.php'; // if fast-whisper installed via composer (optional)
+// Attempt to include Composer autoloader if present (optional)
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require_once __DIR__ . '/vendor/autoload.php';
+}
 
 $options = getopt('', [
     'callfile:',
@@ -12,11 +15,21 @@ $options = getopt('', [
 $callId = $options['callfile'] ?? '';
 $wav    = $options['record']  ?? '';
 $logDir = '/var/log/asterisk/call_progress';
-if (!$callId || !file_exists($wav)) {
+$fileReady = file_exists($wav);
+if (!$callId || !$fileReady) {
     exit(1);
 }
 $logFile = $logDir . "/{$callId}.log";
 $data = [];
+
+// 일부 Dialplan 경로에서는 녹음 파일이 아직 디스크에 flush 되지 않은 상태로
+// 스크립트가 먼저 호출될 수 있다. 최대 15초까지 폴링하여 파일이 생성되면 진행한다.
+$maxWait = 15; // 초
+$elapsed = 0;
+while ($wav && !file_exists($wav) && $elapsed < $maxWait) {
+    sleep(1);
+    $elapsed++;
+}
 
 file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] STT_START\n", FILE_APPEND);
 
@@ -64,7 +77,7 @@ require_once __DIR__ . '/pattern_manager.php';
 try {
     $pm = new PatternManager(__DIR__ . '/patterns.json');
     // Dialed 080 번호 AstDB 에서 가져오기
-    $recVal = trim(exec("/usr/sbin/asterisk -rx \"database get CallFile {$callId} recnum\""));
+    $recVal = trim(exec("sudo /usr/sbin/asterisk -rx \"database get CallFile/{$callId} recnum\""));
     $phoneNumber = preg_replace('/[^0-9]/', '', str_replace('Value:','', $recVal));
     if ($phoneNumber !== '') {
         $pm->recordPatternUsage($phoneNumber, $success);
@@ -99,11 +112,25 @@ try {
 
 /* ---------- 결과 SMS 알림 ---------- */
 try {
-    $notifyVal = trim(exec("/usr/sbin/asterisk -rx \"database get CallFile {$callId} notification_phone\""));
+    $notifyVal = trim(exec("sudo /usr/sbin/asterisk -rx \"database get CallFile/{$callId} notification_phone\""));
     $notifyPhone = preg_replace('/[^0-9]/', '', str_replace('Value:', '', $notifyVal));
-
-    $identVal = trim(exec("/usr/sbin/asterisk -rx \"database get CallFile {$callId} identification_number\""));
+    
+    $identVal = trim(exec("sudo /usr/sbin/asterisk -rx \"database get CallFile/{$callId} identification_number\""));
     $identNumber = preg_replace('/[^0-9]/', '', str_replace('Value:', '', $identVal));
+
+    // Fallback when AstDB entry missing
+    if ($notifyPhone === '') {
+        $row = $db->querySingle("SELECT u.phone FROM unsubscribe_calls uc JOIN users u ON uc.user_id = u.id WHERE uc.call_id = '{$callId}' LIMIT 1", true);
+        if ($row && !empty($row['phone'])) {
+            $notifyPhone = preg_replace('/[^0-9]/','',$row['phone']);
+        }
+    }
+    if ($phoneNumber === '') {
+        $row2 = $db->querySingle("SELECT phone080 FROM unsubscribe_calls WHERE call_id = '{$callId}' LIMIT 1", true);
+        if ($row2 && !empty($row2['phone080'])) {
+            $phoneNumber = $row2['phone080'];
+        }
+    }
 
     if ($notifyPhone !== '' && $phoneNumber !== '') {
         require_once __DIR__ . '/sms_sender.php';

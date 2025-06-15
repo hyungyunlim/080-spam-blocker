@@ -154,7 +154,7 @@ function get_system_statistics() {
         // 전화 통계
         $callStats = $db->querySingle("
             SELECT COUNT(*) as total,
-                   SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as successful
+                   SUM(CASE WHEN status IN ('completed','success') THEN 1 ELSE 0 END) as successful
             FROM unsubscribe_calls
         ", true);
         
@@ -186,7 +186,7 @@ function get_system_statistics() {
                    uc.phone080,
                    uc.identification,
                    uc.pattern_source,
-                   CASE WHEN uc.status = 'completed' THEN 'success' ELSE 'failed' END as status,
+                   CASE WHEN uc.status IN ('success','completed') THEN 'success' ELSE 'failed' END as status,
                    (SELECT si.raw_text FROM sms_incoming si 
                     WHERE si.phone080 = uc.phone080 
                     ORDER BY si.received_at DESC LIMIT 1) as spam_content
@@ -258,7 +258,7 @@ function get_system_statistics() {
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -312,6 +312,11 @@ function get_system_statistics() {
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 24px;
             margin-bottom: 40px;
+        }
+        
+        /* 데스크톱에서는 스크롤 컨테이너 불필요 */
+        .stats-grid-scroll {
+            /* 기본적으로는 스크롤 없음 */
         }
 
         .stat-card {
@@ -942,40 +947,447 @@ function get_system_statistics() {
             letter-spacing: 0.5px;
         }
 
+        /* 모바일 최적화 */
         @media (max-width: 768px) {
-            .container {
+            body {
                 padding: 10px;
             }
             
+            .container {
+                padding: 0;
+            }
+            
+            /* 모바일 헤더 최적화 */
             .header {
-                padding: 24px;
+                padding: 20px 16px;
+                margin-bottom: 20px;
+                border-radius: 16px;
+                text-align: left;
             }
             
             .header h1 {
-                font-size: 1.8rem;
+                font-size: 1.45rem;
+                margin-bottom: 8px;
+            }
+            
+            .header p {
+                font-size: 1rem;
+                margin-bottom: 16px;
             }
             
             .admin-nav {
                 position: static;
-                justify-content: center;
-                margin-top: 16px;
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+                margin-top: 0;
             }
             
+            .admin-info {
+                text-align: center;
+                font-size: 0.9rem;
+                padding: 8px 12px;
+                background: rgba(102, 126, 234, 0.1);
+                border-radius: 8px;
+            }
+            
+            .back-link {
+                justify-content: center;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+                border-radius: 12px;
+            }
+            
+            /* 통계 그리드 모바일 최적화 */
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+            
+            .stat-card {
+                padding: 16px 12px;
+                border-radius: 12px;
+            }
+            
+            .stat-number {
+                font-size: 1.8rem;
+                margin-bottom: 6px;
+            }
+            
+            .stat-label {
+                font-size: 0.8rem;
+                line-height: 1.2;
+            }
+            
+            /* 카드 최적화 */
+            .card {
+                border-radius: 16px;
+                margin-bottom: 20px;
+            }
+            
+            .card-header {
+                padding: 16px 20px;
+                font-size: 1.1rem;
+                flex-direction: column;
+                gap: 8px;
+                text-align: left;
             }
             
             .card-body {
-                padding: 20px;
+                padding: 20px 16px;
             }
             
+            /* 테이블 모바일 최적화 - 카드형으로 변경 */
             .users-table {
+                display: none;
+            }
+            
+            .mobile-users-list {
+                display: block;
+            }
+            
+            .mobile-user-card {
+                background: #ffffff;
+                border-radius: 12px;
+                margin-bottom: 16px;
+                padding: 16px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+                border: 1px solid #e2e8f0;
+                transition: all 0.2s ease;
+            }
+            
+            .mobile-user-card:hover {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                transform: translateY(-1px);
+            }
+            
+            .mobile-user-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 12px;
+            }
+            
+            .mobile-user-phone {
+                font-weight: 700;
+                font-size: 1.1rem;
+                color: #1e293b;
+            }
+            
+            .mobile-user-id {
+                font-size: 0.75rem;
+                color: #64748b;
+                background: #f1f5f9;
+                padding: 2px 8px;
+                border-radius: 10px;
+            }
+            
+            .mobile-user-stats {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                margin-bottom: 12px;
                 font-size: 0.8rem;
             }
             
-            .user-stats {
+            .mobile-stat-item {
+                text-align: center;
+                padding: 8px 4px;
+                background: #f8fafc;
+                border-radius: 6px;
+            }
+            
+            .mobile-stat-value {
+                display: block;
+                font-weight: 600;
+                color: #1e293b;
+            }
+            
+            .mobile-stat-label {
+                font-size: 0.7rem;
+                color: #64748b;
+                margin-top: 2px;
+            }
+            
+            .mobile-user-access {
+                margin-bottom: 12px;
+            }
+            
+            .mobile-access-time {
+                font-size: 0.85rem;
+                color: #4a5568;
+                margin-bottom: 4px;
+            }
+            
+            .mobile-access-details {
+                display: flex;
                 flex-direction: column;
                 gap: 4px;
+                font-size: 0.75rem;
+            }
+            
+            .mobile-device-info {
+                color: #6b7280;
+                background: #f3f4f6;
+                padding: 4px 8px;
+                border-radius: 6px;
+                word-break: break-word;
+                line-height: 1.3;
+            }
+            
+            .mobile-ip-info {
+                color: #9ca3af;
+                font-family: monospace;
+                font-size: 0.7rem;
+                background: #f9fafb;
+                padding: 2px 6px;
+                border-radius: 4px;
+                word-break: break-all;
+            }
+            
+            .mobile-user-status {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+            
+            .mobile-user-actions {
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+            
+            .mobile-user-actions .btn {
+                flex: 1;
+                min-width: 80px;
+                font-size: 0.8rem;
+                padding: 8px 12px;
+                justify-content: center;
+            }
+            
+            /* 활동 리스트 모바일 최적화 */
+            .activity-list {
+                max-height: 400px;
+            }
+            
+            .activity-item {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 16px;
+                gap: 8px;
+            }
+            
+            .activity-icon {
+                align-self: flex-start;
+                width: 32px;
+                height: 32px;
+                margin-right: 0;
+                margin-bottom: 8px;
+            }
+            
+            .activity-info {
+                order: 2;
+            }
+            
+            .activity-phone {
+                font-size: 0.9rem;
+                margin-bottom: 4px;
+            }
+            
+            .activity-action {
+                font-size: 0.8rem;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            
+            .activity-meta {
+                order: 1;
+                margin-left: 0;
+                padding-left: 0;
+                align-self: flex-end;
+            }
+            
+            .activity-time {
+                font-size: 0.75rem;
+                text-align: left;
+            }
+            
+            .spam-preview,
+            .pattern-source-badge {
+                font-size: 0.65rem;
+                padding: 2px 4px;
+            }
+            
+            /* 폼 최적화 */
+            .add-user-trigger {
+                padding: 16px;
+                border-radius: 12px;
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+            
+            .add-user-form {
+                border-radius: 16px;
+                padding: 20px 16px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .form-group input,
+            .form-group select {
+                font-size: 16px; /* iOS 줌 방지 */
+                min-height: 44px;
+                padding: 12px 16px;
+                border-radius: 8px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .btn-create,
+            .btn-cancel {
+                width: 100%;
+                min-height: 44px;
+                justify-content: center;
+                border-radius: 8px;
+            }
+            
+            /* 편집 폼 모바일 최적화 */
+            .edit-form {
+                border-radius: 12px;
+                padding: 16px;
+            }
+            
+            .edit-form .form-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            /* 알림 최적화 */
+            .alert {
+                padding: 12px 16px;
+                border-radius: 10px;
+                font-size: 0.9rem;
+                margin-bottom: 16px;
+            }
+            
+            /* 터치 최적화 */
+            button, .btn, a, [onclick] {
+                -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+                touch-action: manipulation;
+                min-height: 44px;
+            }
+            
+            .btn-small {
+                min-height: 36px;
+                font-size: 0.8rem;
+            }
+            
+            /* 스크롤 최적화 */
+            .card-body {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* 가로 스크롤이 필요한 영역 */
+            .stats-grid-scroll {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 8px;
+            }
+            
+            .stats-grid-scroll::-webkit-scrollbar {
+                height: 4px;
+            }
+            
+            .stats-grid-scroll::-webkit-scrollbar-track {
+                background: rgba(255,255,255,0.1);
+                border-radius: 2px;
+            }
+            
+            .stats-grid-scroll::-webkit-scrollbar-thumb {
+                background: rgba(255,255,255,0.3);
+                border-radius: 2px;
+            }
+            
+            /* 모바일 최적화 */
+            @media (max-width: 768px) {
+                .activity-item {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 8px;
+                }
+                .activity-meta {
+                    width: 100%;
+                    margin-left: 0;
+                    padding-left: 0;
+                    justify-content: space-between;
+                }
+                .activity-action {
+                    flex-wrap: wrap;
+                }
+            }
+        }
+        
+        /* 작은 모바일 기기 (320px-480px) */
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .stat-card {
+                padding: 12px 8px;
+            }
+            
+            .mobile-user-stats {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            
+            .mobile-user-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .mobile-user-actions .btn {
+                flex: none;
+                width: 100%;
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .mobile-access-details {
+                gap: 3px;
+            }
+            
+            .mobile-device-info {
+                padding: 3px 6px;
+                font-size: 0.7rem;
+            }
+            
+            .mobile-ip-info {
+                font-size: 0.65rem;
+                padding: 2px 4px;
+            }
+            
+            .activity-item {
+                padding: 10px 12px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .stat-number {
+                font-size: 1.5rem;
             }
         }
 
@@ -1025,7 +1437,8 @@ function get_system_statistics() {
         <?php echo $message; ?>
 
         <!-- 시스템 통계 -->
-        <div class="stats-grid">
+        <div class="stats-grid-scroll">
+            <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-number"><?php echo $system_stats['total_users']; ?></div>
                 <div class="stat-label">총 사용자</div>
@@ -1049,6 +1462,7 @@ function get_system_statistics() {
             <div class="stat-card">
                 <div class="stat-number"><?php echo $system_stats['auto_patterns']; ?></div>
                 <div class="stat-label">자동 생성 패턴</div>
+            </div>
             </div>
         </div>
 
@@ -1166,6 +1580,16 @@ function get_system_statistics() {
                                     <div style="font-size: 0.75rem; color: #9ca3af;">
                                         (<?php echo time_ago($lastAccess); ?>)
                                     </div>
+                                    <?php if (!empty($user['last_user_agent'])): ?>
+                                        <div style="font-size: 0.75rem; color: #6b7280; margin-top: 4px;">
+                                            <?php echo parse_user_agent($user['last_user_agent']); ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($user['last_ip_address'])): ?>
+                                        <div style="font-size: 0.7rem; color: #9ca3af; font-family: monospace;">
+                                            🌐 <?php echo htmlspecialchars($user['last_ip_address']); ?>
+                                        </div>
+                                    <?php endif; ?>
                                 <?php else: ?>
                                     <span style="color: #9ca3af; font-size: 0.8rem;">접속 기록 없음</span>
                                 <?php endif; ?>
@@ -1288,6 +1712,182 @@ function get_system_statistics() {
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                
+                <!-- 모바일 사용자 카드 레이아웃 -->
+                <div class="mobile-users-list" style="display: none;">
+                    <?php foreach ($all_users as $user): 
+                        $stats = get_user_stats($user['phone']);
+                        $isAdmin = in_array($user['phone'], get_admin_phones());
+                        $isBlocked = isset($user['blocked']) && $user['blocked'];
+                        $lastAccess = $user['last_access'] ?? null;
+                        $isActive = $lastAccess && strtotime($lastAccess) > strtotime('-30 days');
+                    ?>
+                    <div class="mobile-user-card">
+                        <div class="mobile-user-header">
+                            <div class="mobile-user-phone"><?php echo htmlspecialchars($user['phone']); ?></div>
+                            <div class="mobile-user-id">ID: <?php echo $user['id']; ?></div>
+                        </div>
+                        
+                        <?php if ($stats): ?>
+                        <div class="mobile-user-stats">
+                            <div class="mobile-stat-item">
+                                <span class="mobile-stat-value"><?php echo $stats['total_calls']; ?></span>
+                                <div class="mobile-stat-label">📞 전화</div>
+                            </div>
+                            <div class="mobile-stat-item">
+                                <span class="mobile-stat-value"><?php echo $stats['successful_calls']; ?></span>
+                                <div class="mobile-stat-label">✅ 성공</div>
+                            </div>
+                            <div class="mobile-stat-item">
+                                <span class="mobile-stat-value"><?php echo $stats['patterns_created']; ?></span>
+                                <div class="mobile-stat-label">🧠 패턴</div>
+                            </div>
+                        </div>
+                        <?php else: ?>
+                        <div style="text-align: center; padding: 12px; color: #9ca3af; font-size: 0.9rem;">
+                            통계 데이터 없음
+                        </div>
+                        <?php endif; ?>
+                        
+                        <?php if ($lastAccess): ?>
+                        <div class="mobile-user-access">
+                            <div class="mobile-access-time">
+                                최근 접속: <?php echo date('Y-m-d H:i', strtotime($lastAccess)); ?> 
+                                <span style="color: #9ca3af;">(<?php echo time_ago($lastAccess); ?>)</span>
+                            </div>
+                            <div class="mobile-access-details">
+                                <?php if (!empty($user['last_user_agent'])): ?>
+                                <span class="mobile-device-info">
+                                    <?php echo parse_user_agent($user['last_user_agent']); ?>
+                                </span>
+                                <?php endif; ?>
+                                <?php if (!empty($user['last_ip_address'])): ?>
+                                <span class="mobile-ip-info">
+                                    🌐 <?php echo htmlspecialchars($user['last_ip_address']); ?>
+                                </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <?php else: ?>
+                        <div class="mobile-user-access">
+                            <div class="mobile-access-time" style="color: #9ca3af;">접속 기록 없음</div>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <div class="mobile-user-status">
+                            <?php if ($isAdmin): ?>
+                                <span class="status-badge status-admin">관리자</span>
+                            <?php elseif ($isBlocked): ?>
+                                <span class="status-badge status-blocked">차단됨</span>
+                            <?php elseif ($isActive): ?>
+                                <span class="status-badge status-active">활성</span>
+                            <?php else: ?>
+                                <span class="status-badge status-inactive">비활성</span>
+                            <?php endif; ?>
+                            
+                            <div style="font-size: 0.75rem; color: #64748b; margin-left: auto;">
+                                가입: <?php echo date('Y-m-d', strtotime($user['created_at'] ?? 'now')); ?>
+                            </div>
+                        </div>
+                        
+                        <?php if (!$isAdmin && $user['phone'] !== current_user_phone()): ?>
+                        <div class="mobile-user-actions">
+                            <button type="button" 
+                                    class="btn btn-edit btn-sm" 
+                                    onclick="toggleEditForm('<?php echo $user['id']; ?>')">
+                                ✏️ 편집
+                            </button>
+                            
+                            <?php if ($isBlocked): ?>
+                                <form method="post" style="display: inline;">
+                                    <input type="hidden" name="action" value="unblock_user">
+                                    <input type="hidden" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>">
+                                    <button type="submit" class="btn btn-success btn-sm" onclick="return handleUnblockUser(event)">
+                                        🔓 해제
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <form method="post" style="display: inline;">
+                                    <input type="hidden" name="action" value="block_user">
+                                    <input type="hidden" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return handleBlockUser(event)">
+                                        🚫 차단
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+                            
+                            <form method="post" style="display: inline;">
+                                <input type="hidden" name="action" value="delete_user">
+                                <input type="hidden" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return handleDeleteUser(event)">
+                                    🗑️ 삭제
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <!-- 편집 폼도 모바일에서 표시 -->
+                        <div id="edit-form-<?php echo $user['id']; ?>" class="edit-form" style="margin-top: 12px;">
+                            <h4 style="margin-bottom: 12px; color: #92400e; font-size: 0.9rem;">
+                                ✏️ <?php echo htmlspecialchars($user['phone']); ?> 정보 수정
+                            </h4>
+                            <form method="post">
+                                <input type="hidden" name="action" value="update_user">
+                                <input type="hidden" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="edit_phone_<?php echo $user['id']; ?>">새 전화번호</label>
+                                        <input type="tel" 
+                                               id="edit_phone_<?php echo $user['id']; ?>" 
+                                               name="new_phone" 
+                                               value="<?php echo htmlspecialchars($user['phone']); ?>"
+                                               pattern="[0-9]{11}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                            <input type="hidden" name="verified" value="0">
+                                            <input type="checkbox" 
+                                                   id="edit_verified_<?php echo $user['id']; ?>" 
+                                                   name="verified" 
+                                                   value="1" 
+                                                   <?php echo $user['verified'] ? 'checked' : ''; ?>
+                                                   style="margin: 0;">
+                                            인증됨
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                            <input type="hidden" name="blocked" value="0">
+                                            <input type="checkbox" 
+                                                   id="edit_blocked_<?php echo $user['id']; ?>" 
+                                                   name="blocked" 
+                                                   value="1" 
+                                                   <?php echo $isBlocked ? 'checked' : ''; ?>
+                                                   style="margin: 0;">
+                                            차단됨
+                                        </label>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                                    <button type="submit" class="btn btn-success btn-sm" style="flex: 1;">
+                                        💾 저장
+                                    </button>
+                                    <button type="button" 
+                                            class="btn btn-sm" 
+                                            style="background: #6b7280; flex: 1;" 
+                                            onclick="toggleEditForm('<?php echo $user['id']; ?>')">
+                                        ❌ 취소
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <?php else: ?>
+                        <div style="text-align: center; padding: 8px; color: #9ca3af; font-size: 0.8rem;">
+                            편집 불가
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
 
@@ -1335,7 +1935,9 @@ function get_system_statistics() {
                                     <?php endif; ?>
                                     
                                     <?php if (!empty($activity['spam_content'])): ?>
-                                    <span class="spam-preview" title="<?php echo htmlspecialchars($activity['spam_content']); ?>">
+                                    <span class="spam-preview" 
+                                          data-spam-content="<?php echo htmlspecialchars($activity['spam_content'], ENT_QUOTES); ?>" 
+                                          data-spam-date="<?php echo htmlspecialchars($activity['created_at']); ?>">
                                         📄 스팸내용
                                     </span>
                                     <?php endif; ?>
@@ -1523,6 +2125,17 @@ function get_system_statistics() {
                     }, 500);
                 }, 3000);
             });
+        });
+
+        document.addEventListener('click', function(e){
+            const btn = e.target.closest('.spam-preview');
+            if(btn){
+                e.preventDefault();
+                const content = btn.dataset.spamContent || btn.getAttribute('title') || '내용을 불러올 수 없습니다.';
+                const dateRaw = btn.dataset.spamDate || '';
+                const formatted = dateRaw ? new Date(dateRaw).toLocaleString('ko-KR') : '시간 정보 없음';
+                showCustomAlert('📱 스팸문자 원본', `수신 시간: ${formatted}\n\n${content}`, 'info');
+            }
         });
     </script>
 </body>

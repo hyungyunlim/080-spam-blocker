@@ -251,7 +251,7 @@ class SMSSender {
             }
             
             // 모뎀 사용 상태 체크 (통화 중인지 확인)
-            $statusCommand = "/usr/sbin/asterisk -rx " . escapeshellarg("quectel show device state quectel0");
+            $statusCommand = "sudo /usr/sbin/asterisk -rx " . escapeshellarg("quectel show device state quectel0");
             $statusOutput = [];
             exec($statusCommand, $statusOutput, $statusCode);
             $statusText = implode(' ', $statusOutput);
@@ -267,8 +267,8 @@ class SMSSender {
             // 메시지를 안전하게 처리 (특수문자 및 한글 대응)
             $safeMessage = $this->prepareSafeMessage($message);
             
-            // SMS 전송 명령어 구성 (더 안전한 방식)
-            $command = "/usr/sbin/asterisk -rx " . escapeshellarg("{$this->quectelCommand} {$normalizedPhone} {$safeMessage}");
+            // SMS 전송 명령어 구성 (더 안전한 방식) - sudo 사용
+            $command = "sudo /usr/sbin/asterisk -rx " . escapeshellarg("{$this->quectelCommand} {$normalizedPhone} {$safeMessage}");
             
             // 명령어 실행
             $output = [];
@@ -401,7 +401,7 @@ class SMSSender {
         ];
         
         $statusEmoji = $statusText[$analysisResult] ?? '❓ 알 수 없음';
-        $serverIP = '192.168.1.254';
+        $serverUrl = $this->config['server_url'] ?? 'https://spam.juns.mywire.org';
         
         // 개선된 메시지 (더 명확한 정보 제공)
         $message = "[080 수신거부 완료]\n";
@@ -420,7 +420,7 @@ class SMSSender {
             $message .= "🤔 결과 확인이 필요합니다.\n";
         }
         
-        $message .= "\n🎙️ 녹음 확인: http://{$serverIP}/spam/player.php?file=" . urlencode($recordingFile);
+        $message .= "\n🎙️ 녹음 확인: {$serverUrl}/player.php?file=" . urlencode($recordingFile);
         
         return $this->sendSMS($phoneNumber, $message);
     }
@@ -481,7 +481,7 @@ class SMSSender {
         $message .= "⚠️ 모든 시도가 실패했습니다.\n";
         $message .= "수동으로 직접 수신거부 요청하시거나\n";
         $message .= "웹 관리자에서 패턴을 확인해주세요.\n\n";
-        $message .= "🌐 관리자: http://192.168.1.254/spam/";
+        $message .= "🌐 관리자: " . ($this->config['server_url'] ?? 'https://spam.juns.mywire.org') . "/";
         
         return $this->sendSMS($phoneNumber, $message);
     }
@@ -498,8 +498,8 @@ class SMSSender {
         ];
         
         $statusEmoji = $statusText[$analysisResult] ?? '❓ 알 수 없음';
-        $serverIP = '192.168.1.254';
-        $audioUrl = "http://{$serverIP}/spam/player.php?file=" . urlencode($recordingFile);
+        $serverUrl = $this->config['server_url'] ?? 'https://spam.juns.mywire.org';
+        $audioUrl = "{$serverUrl}/player.php?file=" . urlencode($recordingFile);
         
         $message = "[080 수신거부 분석완료]\n";
         $message .= "{$statusEmoji}\n\n";
@@ -518,7 +518,7 @@ class SMSSender {
         }
         
         $message .= "🎙️ 녹음 재생:\n{$audioUrl}\n\n";
-        $message .= "📱 웹 관리: http://{$serverIP}/spam/";
+        $message .= "📱 웹 관리: {$serverUrl}/";
         
         return $this->sendSMS($phoneNumber, $message);
     }

@@ -36,8 +36,8 @@ class PatternDiscovery
 {
     private $patternManager;
     private $logFile;
-    private $discoveryDir = '/var/www/html/spam/pattern_discovery/';
-    private $lockDir = '/var/www/html/spam/pattern_discovery_active/';
+    private $discoveryDir = '/var/www/html/pattern_discovery/';
+    private $lockDir = '/var/www/html/pattern_discovery_active/';
     private $pythonScript = __DIR__ . '/advanced_pattern_analyzer.py';
     // 자동 재호출(learn → 바로 unsubscribe) 기능 토글. 2025-06-13 요구사항: 끔
     private const ENABLE_AUTO_RETRY_AFTER_LEARN = false;

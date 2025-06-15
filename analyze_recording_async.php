@@ -10,8 +10,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // 진행 상황 추적을 위한 디렉토리
-$progressDir = '/var/www/html/spam/progress/';
-$resultDir = '/var/www/html/spam/analysis_results/';
+$progressDir = '/var/www/html/progress/';
+$resultDir = '/var/www/html/analysis_results/';
 
 // 디렉토리 생성
 if (!is_dir($progressDir)) {
@@ -59,7 +59,7 @@ function startAnalysis($filename, $jobId) {
     updateProgress($jobId, 'file_check', 10, '파일 확인 완료');
     
     // Python 스크립트 경로 – 통합된 runner 사용
-    $scriptPath = '/var/www/html/spam/simple_analyzer_runner.py';
+    $scriptPath = '/var/www/html/simple_analyzer_runner.py';
     
     // 백그라운드에서 Python 스크립트 실행
     $command = sprintf(

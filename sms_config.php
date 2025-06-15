@@ -14,7 +14,7 @@ return [
     'message_mode' => 'short',
     
     // 단일 SMS 최대 길이 (분할 방지)
-    'single_sms_max_length' => 140,
+    'single_sms_max_length' => 300,
     
     // Quectel 명령어 설정
     'quectel_command' => 'quectel sms quectel0',
@@ -39,6 +39,9 @@ return [
             'encoding' => 'ucs2'
         ]
     ],
+    
+    // 서버 설정
+    'server_url' => 'https://spam.juns.mywire.org',  // 외부 도메인으로 설정
     
     // 알림 메시지 템플릿
     'notification_templates' => [

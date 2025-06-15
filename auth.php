@@ -37,6 +37,61 @@ function require_admin() {
     }
 }
 
+function get_real_ip_address() {
+    // Check for various headers that might contain the real IP
+    $ip_headers = [
+        'HTTP_CF_CONNECTING_IP',      // Cloudflare
+        'HTTP_CLIENT_IP',             // Proxy
+        'HTTP_X_FORWARDED_FOR',       // Load balancer/proxy
+        'HTTP_X_FORWARDED',           // Proxy
+        'HTTP_X_CLUSTER_CLIENT_IP',   // Cluster
+        'HTTP_FORWARDED_FOR',         // Proxy
+        'HTTP_FORWARDED',             // Proxy
+        'REMOTE_ADDR'                 // Standard
+    ];
+    
+    foreach ($ip_headers as $header) {
+        if (!empty($_SERVER[$header])) {
+            $ip = $_SERVER[$header];
+            // Handle comma-separated IPs (X-Forwarded-For can contain multiple IPs)
+            if (strpos($ip, ',') !== false) {
+                $ip = trim(explode(',', $ip)[0]);
+            }
+            // Validate IP address
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                return $ip;
+            }
+        }
+    }
+    
+    // Fallback to REMOTE_ADDR
+    return $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+}
+
+function parse_user_agent($user_agent) {
+    if (empty($user_agent)) return 'Unknown Device';
+    
+    // Mobile devices
+    if (preg_match('/Mobile|Android|iPhone|iPad|iPod|Windows Phone|BlackBerry/', $user_agent)) {
+        if (preg_match('/iPhone/', $user_agent)) return '📱 iPhone';
+        if (preg_match('/iPad/', $user_agent)) return '📱 iPad';
+        if (preg_match('/Android/', $user_agent)) return '📱 Android';
+        if (preg_match('/Windows Phone/', $user_agent)) return '📱 Windows Phone';
+        if (preg_match('/BlackBerry/', $user_agent)) return '📱 BlackBerry';
+        return '📱 Mobile';
+    }
+    
+    // Desktop browsers
+    if (preg_match('/Chrome/', $user_agent) && !preg_match('/Edge/', $user_agent)) return '💻 Chrome';
+    if (preg_match('/Firefox/', $user_agent)) return '💻 Firefox';
+    if (preg_match('/Safari/', $user_agent) && !preg_match('/Chrome/', $user_agent)) return '💻 Safari';
+    if (preg_match('/Edge/', $user_agent)) return '💻 Edge';
+    if (preg_match('/Opera/', $user_agent)) return '💻 Opera';
+    if (preg_match('/Trident|MSIE/', $user_agent)) return '💻 Internet Explorer';
+    
+    return '💻 Desktop';
+}
+
 function update_last_access($phone = null) {
     if (!$phone) {
         $phone = current_user_phone();
@@ -45,8 +100,15 @@ function update_last_access($phone = null) {
     
     try {
         $db = new SQLite3(__DIR__ . '/spam.db');
-        $stmt = $db->prepare("UPDATE users SET last_access = datetime('now') WHERE phone = :phone");
+        
+        // Get device information
+        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $ip_address = get_real_ip_address();
+        
+        $stmt = $db->prepare("UPDATE users SET last_access = datetime('now'), last_user_agent = :user_agent, last_ip_address = :ip_address WHERE phone = :phone");
         $stmt->bindValue(':phone', $phone, SQLITE3_TEXT);
+        $stmt->bindValue(':user_agent', $user_agent, SQLITE3_TEXT);
+        $stmt->bindValue(':ip_address', $ip_address, SQLITE3_TEXT);
         $stmt->execute();
         $db->close();
     } catch (Exception $e) {

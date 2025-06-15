@@ -512,6 +512,9 @@
                 showAnalyzeButton = true;
             }
 
+            // 스팸 문자 원본 보기 버튼 (수신거부 통화이고 스팸 내용이 있는 경우)
+            const showSpamContentButton = rec.call_type === 'unsubscribe' && rec.spam_content;
+            
             // 분석 결과 섹션 (없을 경우 display:none)
             const analysisResultSection = `
                 <div class="analysis-result ${statusColor}" style="display: ${analysisDetailsHtml ? 'block' : 'none'};">
@@ -536,7 +539,8 @@
                 <audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;"></audio>
                 ${analysisResultSection}
                 ${showAnalyzeButton ? `
-                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end;">
+                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+                    ${showSpamContentButton ? `<button data-spam-content='${JSON.stringify(rec.spam_content || '').replace(/'/g, '&#39;')}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn">📱 스팸문자 원본</button>` : ''}
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small analyze-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16">
                             <path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 4a.5.5 0 0 0 0 .707l.707.707a.5.5 0 0 0 .707 0L8.707 4a.5.5 0 0 0 0-.707Zm-3.5 1.65A.5.5 0 0 0 3.293 6L2 7.293a.5.5 0 1 0 .707.707L4 6.707a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707 0ZM10 8a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"/>
@@ -550,7 +554,8 @@
                                 </div>
                 ` : ''}
                 ${showReanalyzeButton ? `
-                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end;">
+                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+                    ${showSpamContentButton ? `<button data-spam-content='${JSON.stringify(rec.spam_content || '').replace(/'/g, '&#39;')}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn">📱 스팸문자 원본</button>` : ''}
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small reanalyze-btn analyze-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
@@ -563,6 +568,16 @@
                             </div>
                 ` : ''}
             `;
+
+            // Convert inline action rows to class for responsive styling
+            item.querySelectorAll('div[style*="margin-top: 10px"][style*="gap: 10px"]').forEach(row=>{
+                row.classList.add('recording-actions');
+                row.style.marginTop='10px';
+                row.style.gap='10px';
+                row.style.display='flex';
+                row.style.flexWrap='wrap';
+                row.style.justifyContent='space-between';
+            });
             
             
             // 이벤트 리스너 추가 (이벤트 위임 대신 직접 추가)
@@ -1032,7 +1047,15 @@
                 event.preventDefault();
                 handleDeleteClick(delBtn);
                 return;
-        }
+            }
+
+            // 스팸 문자 원본 보기 버튼 처리
+            const spamBtn = event.target.closest('.spam-content-btn');
+            if (spamBtn) {
+                event.preventDefault();
+                showSpamContentModal(spamBtn);
+                return;
+            }
 
             // 분석(재분석) 버튼 처리
             const analyzeBtn = event.target.closest('.analyze-btn');
@@ -1089,6 +1112,7 @@
 
         // 새로고침 버튼 이벤트 리스너
         refreshBtn.addEventListener('click', function() {
+            this.blur(); // 버튼에서 포커스 제거하여 pressed 상태 해제
             getRecordings();
         });
 
@@ -1695,4 +1719,25 @@
             console.error('Account deletion error:', error);
             showCustomAlert('오류', '탈퇴 처리 중 오류가 발생했습니다.', 'error');
         });
+    }
+
+    // 스팸 문자 원본 모달 표시 함수
+    function showSpamContentModal(button) {
+        const spamContent = button.dataset.spamContent;
+        const spamDate = button.dataset.spamDate;
+        
+        let content;
+        try {
+            content = JSON.parse(spamContent);
+        } catch (e) {
+            content = spamContent || '내용을 불러올 수 없습니다.';
+        }
+
+        const formattedDate = spamDate ? new Date(spamDate).toLocaleString('ko-KR') : '날짜 정보 없음';
+
+        showCustomAlert(
+            '📱 스팸문자 원본',
+            `**수신 시간:** ${formattedDate}\n\n**내용:**\n${content}`,
+            'info'
+        );
     }

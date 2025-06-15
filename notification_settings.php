@@ -210,13 +210,21 @@ if (!$settings) {
             gap: 8px;
             color: #667eea;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 20px;
-            transition: color 0.2s ease;
+            padding: 12px 16px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            border: 2px solid #e0e7ff;
+            transition: all 0.2s ease;
+            font-size: 16px;
         }
         
         .back-link:hover {
             color: #5a67d8;
+            background: #e0e7ff;
+            border-color: #c7d2fe;
+            transform: translateY(-1px);
         }
         
         .success-message {
@@ -251,6 +259,15 @@ if (!$settings) {
             .radio-group {
                 flex-direction: column;
                 gap: 10px;
+            }
+            
+            .back-link {
+                width: 100%;
+                justify-content: center;
+                font-size: 18px;
+                padding: 16px 20px;
+                margin-bottom: 24px;
+                box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
             }
         }
     </style>

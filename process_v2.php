@@ -401,7 +401,7 @@ if (rename($tempFile, $finalFile)) {
     } catch (Exception $e) {
         error_log('Pattern usage update failed: ' . $e->getMessage());
     }
-    echo "\n💡 팁: 이 번호가 처음이거나 패턴이 맞지 않으면, 녹음을 들어보고 patterns.json을 업데이트하세요!";
+    echo "\n💡 안내: 전화 연결 후 '실패'로 표시되면 아래 방법을 시도해 보세요.\n • \"녹음 듣기\" 버튼으로 안내 음성을 확인합니다.\n • 화면의 '패턴 추가' 메뉴에서 안내에 맞게 버튼/번호 입력 순서를 저장하면 다음부터 자동으로 처리됩니다.";
 
 } else {
     $errorMsg = "Error: Failed to move Call File to spool directory. Check permissions.";
