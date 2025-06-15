@@ -1550,6 +1550,7 @@
         /* Mobile Progressive Disclosure for Spam Form */
         @media (max-width: 768px) {
             .progressive-section {
+                display: none !important;
                 max-height: 0;
                 opacity: 0;
                 overflow: hidden;
@@ -1560,6 +1561,7 @@
             }
             
             .progressive-section.show {
+                display: block !important;
                 max-height: 200px;
                 opacity: 1;
                 transform: translateY(0);
@@ -1569,6 +1571,7 @@
             
             /* Verification section follows same progressive disclosure - high specificity */
             #verificationSection.verification-container.progressive-section {
+                display: none !important;
                 max-height: 0 !important;
                 opacity: 0 !important;
                 overflow: hidden !important;
@@ -1581,6 +1584,7 @@
             }
             
             #verificationSection.verification-container.progressive-section.show {
+                display: block !important;
                 max-height: 400px !important;
                 opacity: 1 !important;
                 transform: translateY(0) !important;

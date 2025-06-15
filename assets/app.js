@@ -229,14 +229,12 @@
                         // Show sections with staggered animations when content is entered
                         if (notificationSection && !notificationSection.classList.contains('show')) {
                             setTimeout(() => {
-                                notificationSection.style.display = 'block';
                                 notificationSection.classList.add('show');
                             }, 200);
                         }
                         // Only show verification section if it exists (non-logged users)
                         if (verificationSection && !verificationSection.classList.contains('show')) {
                             setTimeout(() => {
-                                verificationSection.style.display = 'block';
                                 verificationSection.classList.add('show');
                             }, 400);
                         }
@@ -244,7 +242,6 @@
                         const submitDelay = verificationSection ? 600 : 400;
                         if (submitSection && !submitSection.classList.contains('show')) {
                             setTimeout(() => {
-                                submitSection.style.display = 'block';
                                 submitSection.classList.add('show');
                             }, submitDelay);
                         }
@@ -252,29 +249,23 @@
                         // Hide sections when content is cleared
                         if (notificationSection) {
                             notificationSection.classList.remove('show');
-                            notificationSection.style.display = 'none';
                         }
                         if (verificationSection) {
                             verificationSection.classList.remove('show');
-                            verificationSection.style.display = 'none';
                         }
                         if (submitSection) {
                             submitSection.classList.remove('show');
-                            submitSection.style.display = 'none';
                         }
                     }
                 } else {
                     // On desktop, ensure sections are always visible
                     if (notificationSection) {
-                        notificationSection.style.display = 'block';
                         notificationSection.classList.add('show');
                     }
                     if (verificationSection) {
-                        verificationSection.style.display = 'block';
                         verificationSection.classList.add('show');
                     }
                     if (submitSection) {
-                        submitSection.style.display = 'block';
                         submitSection.classList.add('show');
                     }
                 }
@@ -287,18 +278,15 @@
                     const verificationSection = document.getElementById('verificationSection');
                     const submitSection = document.getElementById('submitSection');
                     
-                    // Force remove show class on mobile
+                    // Force remove show class on mobile - CSS handles display
                     if (notificationSection) {
                         notificationSection.classList.remove('show');
-                        notificationSection.style.display = 'none';
                     }
                     if (verificationSection) {
                         verificationSection.classList.remove('show');
-                        verificationSection.style.display = 'none';
                     }
                     if (submitSection) {
                         submitSection.classList.remove('show');
-                        submitSection.style.display = 'none';
                     }
                 }
             }
