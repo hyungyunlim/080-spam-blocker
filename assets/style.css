@@ -1543,3 +1543,44 @@
                 margin-bottom: 10px; /* fallback for older WebKit with no row-gap */
             }
         }
+
+        /* Mobile Progressive Disclosure for Spam Form */
+        @media (max-width: 768px) {
+            .progressive-section {
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+                transform: translateY(-20px);
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+            
+            .progressive-section.show {
+                max-height: 200px;
+                opacity: 1;
+                transform: translateY(0);
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            
+            /* Ensure verification section is always visible */
+            #verificationSection {
+                max-height: none;
+                opacity: 1;
+                overflow: visible;
+                transform: none;
+                transition: none;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* Keep normal layout on desktop */
+        @media (min-width: 769px) {
+            .progressive-section {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }

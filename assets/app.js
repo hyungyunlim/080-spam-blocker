@@ -28,6 +28,7 @@
             // 전역 progressContainer는 숨김 처리
             const globalProgress = document.getElementById('progressContainer');
             if (globalProgress) globalProgress.style.display = 'none';
+            
             });
 
             const spamContent = document.getElementById('spamContent');
@@ -64,6 +65,10 @@
                         resultArea.innerHTML = '';
                     }
                         const text = this.value.trim();
+                        
+                        // Mobile progressive disclosure - show/hide sections based on content
+                        handleProgressiveDisclosure(text);
+                        
                         if (text.length > 10) {
                             analyzeText(text);
                         } else {
@@ -203,6 +208,52 @@
             const selectedRadio = document.querySelector('input[name="selectedId"]:checked');
             if(selectedRadio) selectedRadio.checked = false;
                 confirmedId = null;
+            });
+
+            // Mobile progressive disclosure handler
+            function handleProgressiveDisclosure(text) {
+                const notificationSection = document.getElementById('notificationSection');
+                const submitSection = document.getElementById('submitSection');
+                
+                // Only apply progressive disclosure on mobile (screen width <= 768px)
+                if (window.innerWidth <= 768) {
+                    if (text.length > 0) {
+                        // Show notification and submit sections with animation when content is entered
+                        if (notificationSection && !notificationSection.classList.contains('show')) {
+                            setTimeout(() => {
+                                notificationSection.classList.add('show');
+                            }, 200); // Small delay for better UX
+                        }
+                        if (submitSection && !submitSection.classList.contains('show')) {
+                            setTimeout(() => {
+                                submitSection.classList.add('show');
+                            }, 400); // Staggered animation
+                        }
+                    } else {
+                        // Hide sections when content is cleared
+                        if (notificationSection) {
+                            notificationSection.classList.remove('show');
+                        }
+                        if (submitSection) {
+                            submitSection.classList.remove('show');
+                        }
+                    }
+                } else {
+                    // On desktop, ensure sections are always visible
+                    if (notificationSection) {
+                        notificationSection.classList.add('show');
+                    }
+                    if (submitSection) {
+                        submitSection.classList.add('show');
+                    }
+                }
+            }
+            
+            // Initialize progressive disclosure on page load and handle window resize
+            handleProgressiveDisclosure(spamContent ? spamContent.value.trim() : '');
+            
+            window.addEventListener('resize', function() {
+                handleProgressiveDisclosure(spamContent ? spamContent.value.trim() : '');
             });
 
             function hideDynamicInput() {
