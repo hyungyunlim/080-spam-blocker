@@ -225,15 +225,18 @@
                                 notificationSection.classList.add('show');
                             }, 200);
                         }
+                        // Only show verification section if it exists (non-logged users)
                         if (verificationSection && !verificationSection.classList.contains('show')) {
                             setTimeout(() => {
                                 verificationSection.classList.add('show');
                             }, 400);
                         }
+                        // Adjust submit section timing based on whether verification exists
+                        const submitDelay = verificationSection ? 600 : 400;
                         if (submitSection && !submitSection.classList.contains('show')) {
                             setTimeout(() => {
                                 submitSection.classList.add('show');
-                            }, 600);
+                            }, submitDelay);
                         }
                     } else {
                         // Hide sections when content is cleared
