@@ -12,6 +12,12 @@ CREATE TABLE IF NOT EXISTS users (
     last_access   TEXT
 );
 
+-- Seed default administrator accounts
+-- 이 번호들은 config/admin_config.php의 get_admin_phones_config() 값과 일치해야 합니다
+INSERT OR IGNORE INTO users(phone, verified, created_at) VALUES
+  ('01012345678', 1, CURRENT_TIMESTAMP),
+  ('01021918573', 1, CURRENT_TIMESTAMP);
+
 -- Verification codes for phone confirmation
 CREATE TABLE IF NOT EXISTS verification_codes (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,

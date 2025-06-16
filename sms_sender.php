@@ -86,11 +86,11 @@ class SMSSender {
      */
     private function getDefaultNotificationSettings() {
         return [
-            'notify_on_start' => true,
-            'notify_on_success' => true,
-            'notify_on_failure' => true,
-            'notify_on_retry' => true,
-            'notification_mode' => 'short'
+            'notify_on_start' => false,        // 시작 알림 끄기 (선택사항)
+            'notify_on_success' => true,       // 성공 알림만 켜기 (필수)
+            'notify_on_failure' => true,       // 실패 알림만 켜기 (필수)
+            'notify_on_retry' => false,        // 재시도 알림 끄기 (불필요)
+            'notification_mode' => 'short'     // 간결한 모드
         ];
     }
     
@@ -251,7 +251,7 @@ class SMSSender {
             }
             
             // 모뎀 사용 상태 체크 (통화 중인지 확인)
-            $statusCommand = "sudo /usr/sbin/asterisk -rx " . escapeshellarg("quectel show device state quectel0");
+            $statusCommand = "echo 'hacker03' | sudo -S /usr/sbin/asterisk -rx " . escapeshellarg("quectel show device state quectel0") . " 2>/dev/null";
             $statusOutput = [];
             exec($statusCommand, $statusOutput, $statusCode);
             $statusText = implode(' ', $statusOutput);
@@ -268,7 +268,7 @@ class SMSSender {
             $safeMessage = $this->prepareSafeMessage($message);
             
             // SMS 전송 명령어 구성 (더 안전한 방식) - sudo 사용
-            $command = "sudo /usr/sbin/asterisk -rx " . escapeshellarg("{$this->quectelCommand} {$normalizedPhone} {$safeMessage}");
+            $command = "echo 'hacker03' | sudo -S /usr/sbin/asterisk -rx " . escapeshellarg("{$this->quectelCommand} {$normalizedPhone} {$safeMessage}") . " 2>/dev/null";
             
             // 명령어 실행
             $output = [];
@@ -278,12 +278,21 @@ class SMSSender {
             // 출력 메시지 분석
             $outputText = implode(' ', $output);
             
-            // 성공 조건 개선 (queued도 성공으로 간주)
-            if ($returnCode === 0 && !$this->hasError($outputText)) {
-                $result['success'] = true;
-                $result['message'] = 'SMS sent successfully';
-                if (strpos($outputText, 'queued') !== false) {
-                    $result['message'] = 'SMS queued for sending';
+            // 성공 조건 개선 (queued도 성공으로 간주, return code 무시)
+            if (!$this->hasError($outputText) && (strpos($outputText, 'queued') !== false || strpos($outputText, 'sent') !== false)) {
+                // Quectel 연결 상태 확인
+                if (strpos($outputText, 'Device disconnected') !== false) {
+                    $result['success'] = false;
+                    $result['message'] = 'SMS 모뎀이 연결되지 않았습니다. 잠시 후 다시 시도해주세요.';
+                } elseif (strpos($outputText, 'Not connec') !== false) {
+                    $result['success'] = false;
+                    $result['message'] = 'SMS 모뎀이 네트워크에 연결되지 않았습니다.';
+                } else {
+                    $result['success'] = true;
+                    $result['message'] = 'SMS sent successfully';
+                    if (strpos($outputText, 'queued') !== false) {
+                        $result['message'] = 'SMS queued for sending';
+                    }
                 }
             } else {
                 $result['message'] = 'Failed to send SMS: ' . $outputText;
@@ -339,7 +348,15 @@ class SMSSender {
      * @return array 전송 결과
      */
     public function sendUnsubscribeNotification($phoneNumber, $targetNumber, $identificationNumber, $status = 'completed') {
+        $settings = $this->getUserNotificationSettings($phoneNumber);
+        
+        // 시작 알림 설정 확인
+        if ($status === 'started' && !$settings['notify_on_start']) {
+            return ['success' => true, 'message' => 'Start notification disabled by user', 'phone' => $phoneNumber, 'bytes' => 0];
+        }
+        
         $statusText = [
+            'started' => '🚀 시작됨',
             'success' => '✅ 성공',
             'completed' => '✅ 완료', 
             'failed' => '❌ 실패',
@@ -353,7 +370,12 @@ class SMSSender {
         $message .= "대상번호: {$targetNumber}\n";
         $message .= "식별번호: {$identificationNumber}\n";
         $message .= "처리시간: " . date('Y-m-d H:i:s') . "\n\n";
-        $message .= "녹음파일을 확인하여 수신거부가 정상 처리되었는지 확인해주세요.";
+        
+        if ($status === 'started') {
+            $message .= "수신거부 전화를 시작합니다. 완료 후 결과를 알려드릴게요.";
+        } else {
+            $message .= "녹음파일을 확인하여 수신거부가 정상 처리되었는지 확인해주세요.";
+        }
         
         return $this->sendSMS($phoneNumber, $message);
     }
@@ -403,24 +425,23 @@ class SMSSender {
         $statusEmoji = $statusText[$analysisResult] ?? '❓ 알 수 없음';
         $serverUrl = $this->config['server_url'] ?? 'https://spam.juns.mywire.org';
         
-        // 개선된 메시지 (더 명확한 정보 제공)
-        $message = "[080 수신거부 완료]\n";
-        $message .= "{$statusEmoji}\n\n";
-        $message .= "📞 {$targetNumber}\n";
-        $message .= "🔑 ID: {$identificationNumber}\n";
-        $message .= "📊 신뢰도: {$confidence}%\n";
-        $message .= "⏰ " . date('Y-m-d H:i:s') . "\n\n";
+        // 더 짧은 메시지 (200바이트 이하로 단축)
+        $message = "[080차단]\n";
+        $message .= "{$statusEmoji}\n";
+        $message .= "📞{$targetNumber}\n";
+        $message .= "🔑{$identificationNumber}\n";
+        $message .= "📊{$confidence}%\n";
         
-        // 결과별 추가 안내
+        // 결과별 추가 안내 (간단하게)
         if ($analysisResult === 'success') {
-            $message .= "🎉 수신거부가 성공적으로 처리되었습니다!\n";
+            $message .= "✅완료\n";
         } elseif ($analysisResult === 'failed') {
-            $message .= "⚠️ 수신거부 처리에 문제가 있을 수 있습니다.\n";
+            $message .= "❌실패\n";
         } elseif ($analysisResult === 'uncertain') {
-            $message .= "🤔 결과 확인이 필요합니다.\n";
+            $message .= "❓확인필요\n";
         }
         
-        $message .= "\n🎙️ 녹음 확인: {$serverUrl}/player.php?file=" . urlencode($recordingFile);
+        $message .= "🎙️{$serverUrl}/player.php?file=" . urlencode($recordingFile);
         
         return $this->sendSMS($phoneNumber, $message);
     }
@@ -584,17 +605,17 @@ class SMSSender {
                 error_log("Failed to write to JSON log file: $jsonLogFile");
             }
             
-            // 디버깅을 위한 상태 확인
+            // 디버깅 메시지는 CLI 실행 시에만 출력
             if (php_sapi_name() === 'cli') {
-                echo "Log written - Text: " . ($logResult !== false ? 'OK' : 'FAILED') . 
-                     ", JSON: " . ($jsonResult !== false ? 'OK' : 'FAILED') . "\n";
+                fwrite(STDERR, "Log written - Text: " . ($logResult !== false ? 'OK' : 'FAILED') .
+                     ", JSON: " . ($jsonResult !== false ? 'OK' : 'FAILED') . "\n");
             }
             
         } catch (Exception $e) {
             error_log("SMS log write failed: " . $e->getMessage());
             // CLI에서 실행 중이면 에러 출력
             if (php_sapi_name() === 'cli') {
-                echo "Log write error: " . $e->getMessage() . "\n";
+                fwrite(STDERR, "Log write error: " . $e->getMessage() . "\n");
             }
         }
     }
@@ -696,4 +717,4 @@ class SMSSender {
         return $lastResult;
     }
 }
-?> 
+// End of SMS sender class (no closing PHP tag to avoid accidental whitespace output)

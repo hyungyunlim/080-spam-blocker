@@ -1,4 +1,37 @@
 <?php
+// CLI 모드에서는 HTTP 관련 체크 스킵
+if (php_sapi_name() === 'cli') {
+    $isHttps = false;
+} else {
+    // HTTPS 여부 감지
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') 
+            || $_SERVER['SERVER_PORT'] == 443
+            || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+}
+
+// 세션 쿠키 설정 – 스팸 시스템 전용 도메인 설정
+$currentHost = $_SERVER['HTTP_HOST'] ?? '';
+if (stripos($currentHost, 'spam.juns.mywire.org') !== false) {
+    // 스팸 시스템 전용 호스트 기반 쿠키 (다른 서브도메인과 분리)
+    ini_set('session.cookie_domain', 'spam.juns.mywire.org');
+} elseif (stripos($currentHost, 'juns.mywire.org') !== false) {
+    // 기타 juns.mywire.org 서브도메인
+    ini_set('session.cookie_domain', $currentHost);
+} // IP 접근 또는 다른 도메인일 경우, 기본(host-only) 쿠키 사용
+ini_set('session.cookie_path', '/');
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', $isHttps ? 1 : 0); // HTTPS일 때만 secure
+ini_set('session.cookie_samesite', 'Lax');
+
+// 세션 이름을 호스트별로 고유하게 설정
+$sessionName = 'SPAM_SESSION';
+if (stripos($currentHost, 'spam.juns.mywire.org') !== false) {
+    $sessionName = 'SPAM_080_SESSION';
+} elseif (stripos($currentHost, 'juns.mywire.org') !== false) {
+    // 다른 서브도메인과 구분
+    $sessionName = 'SPAM_' . strtoupper(str_replace('.', '_', $currentHost));
+}
+session_name($sessionName);
 session_start();
 
 function is_logged_in(): bool {
@@ -100,15 +133,29 @@ function update_last_access($phone = null) {
     
     try {
         $db = new SQLite3(__DIR__ . '/spam.db');
-        
-        // Get device information
-        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-        $ip_address = get_real_ip_address();
-        
-        $stmt = $db->prepare("UPDATE users SET last_access = datetime('now'), last_user_agent = :user_agent, last_ip_address = :ip_address WHERE phone = :phone");
+
+        // 현재 users 테이블에 컬럼이 존재하는지 확인 (마이그레이션 호환)
+        $columnsRes = $db->query('PRAGMA table_info(users)');
+        $columns = [];
+        while ($col = $columnsRes->fetchArray(SQLITE3_ASSOC)) {
+            $columns[] = $col['name'];
+        }
+
+        $hasUA = in_array('last_user_agent', $columns, true);
+        $hasIP = in_array('last_ip_address', $columns, true);
+
+        // 동적 SET 절 구성
+        $setParts = ["last_access = datetime('now')"];
+        if ($hasUA)  $setParts[] = 'last_user_agent = :user_agent';
+        if ($hasIP)  $setParts[] = 'last_ip_address = :ip_address';
+        $setClause = implode(', ', $setParts);
+
+        $sql = "UPDATE users SET {$setClause} WHERE phone = :phone";
+        $stmt = $db->prepare($sql);
         $stmt->bindValue(':phone', $phone, SQLITE3_TEXT);
-        $stmt->bindValue(':user_agent', $user_agent, SQLITE3_TEXT);
-        $stmt->bindValue(':ip_address', $ip_address, SQLITE3_TEXT);
+        if ($hasUA) $stmt->bindValue(':user_agent', $_SERVER['HTTP_USER_AGENT'] ?? '', SQLITE3_TEXT);
+        if ($hasIP) $stmt->bindValue(':ip_address', get_real_ip_address(), SQLITE3_TEXT);
+
         $stmt->execute();
         $db->close();
     } catch (Exception $e) {
@@ -422,6 +469,26 @@ function update_user($phone, $data) {
     } catch (Exception $e) {
         return ['success' => false, 'message' => '오류: ' . $e->getMessage()];
     }
+}
+
+// 세션 디버깅 함수
+function debug_session_info() {
+    global $isHttps;
+    
+    return [
+        'session_id' => session_id(),
+        'session_name' => session_name(),
+        'cookie_params' => session_get_cookie_params(),
+        'is_logged_in' => is_logged_in(),
+        'user_id' => $_SESSION['user_id'] ?? null,
+        'phone' => $_SESSION['phone'] ?? null,
+        'server_name' => $_SERVER['SERVER_NAME'] ?? null,
+        'http_host' => $_SERVER['HTTP_HOST'] ?? null,
+        'is_https' => $isHttps,
+        'request_uri' => $_SERVER['REQUEST_URI'] ?? null,
+        'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null,
+        'session_data' => $_SESSION ?? [],
+    ];
 }
 
 // flash message helpers

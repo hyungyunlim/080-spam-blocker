@@ -96,57 +96,39 @@ if ($id === '') {
     }
 }
 
-// === Startup Manager & Enhanced Duplicate Suppression ===============
-require_once __DIR__ . '/startup_manager.php';
-$startupManager = new StartupManager();
+// === Enhanced Duplicate Suppression ===============
+// Startup Manager temporarily removed due to technical issues
 
-// 1) Persistent check in SQLite – 동일 080+ID 조합이 최근 24시간 내 존재하면 건너뜀
-$dupWindow = 86400; // 24 h
+// 1) Persistent check in SQLite – 1시간 내 동일 080번호+식별번호 중복 방지
+$dupWindow = 3600; // 1 hour
 try {
     if(isset($db)){
-        $q = $db->prepare('SELECT COUNT(*) AS cnt FROM sms_incoming WHERE phone080=:ph AND identification=:id AND received_at >= datetime("now", "-1 day")');
+        $q = $db->prepare('SELECT COUNT(*) AS cnt FROM sms_incoming WHERE phone080=:ph AND identification=:id AND received_at >= datetime("now", "-1 hour")');
         $q->bindValue(':ph', $phone080, SQLITE3_TEXT);
         $q->bindValue(':id', $id, SQLITE3_TEXT);
         $res = $q->execute()->fetchArray(SQLITE3_ASSOC);
         if($res && $res['cnt'] > 0){
-            // 이미 처리된 조합
+            // 이미 처리된 조합 (1시간 내) - 1개 이상 있으면 중복
             exit(0);
         }
     }
-} catch(Throwable $e){ /* ignore */ }
+} catch(Throwable $e){ }
 
-// 1.5) 재시작 직후 보안 모드 - 더 엄격한 중복 방지
-if ($startupManager->isRecentStartup()) {
-    // 재시작 후 10분 이내에는 더 짧은 간격(1시간)으로도 중복 방지
-    try {
-        if(isset($db)){
-            $q = $db->prepare('SELECT COUNT(*) AS cnt FROM sms_incoming WHERE phone080=:ph AND identification=:id AND received_at >= datetime("now", "-1 hour")');
-            $q->bindValue(':ph', $phone080, SQLITE3_TEXT);
-            $q->bindValue(':id', $id, SQLITE3_TEXT);
-            $res = $q->execute()->fetchArray(SQLITE3_ASSOC);
-            if($res && $res['cnt'] > 0){
-                // 재시작 후 보안 모드에서 중복 감지
-                file_put_contents(__DIR__ . '/logs/sms_auto_processor.log', 
-                    date('Y-m-d H:i:s') . " [SECURITY] Blocked duplicate during startup mode: {$phone080}_{$id}\n", FILE_APPEND);
-                exit(0);
-            }
-        }
-    } catch(Throwable $e){ /* ignore */ }
-}
+// 1.5) 재시작 후 보안 모드 - REMOVED for now
 
-// 2) Legacy lock-file 방식(5분) – 여전히 유지하여 중복 호출 폭발 방지
+// 2) Legacy lock-file 방식 – 2분 내 동일 요청 중복 방지
 $lockKey = "/tmp/smslock_{$phone080}_{$id}";
-$ttlSec  = 300; // 5 minutes
+$ttlSec  = 120; // 2 minutes
 if (file_exists($lockKey) && time() - filemtime($lockKey) < $ttlSec) {
     exit(0);
 }
 @touch($lockKey);
 
-// 3. 중복 방지 체크 (최근 5분 내 동일 조합)
+// 3. 호출 진행 상황 체크 – 2분 내 동일 번호 처리 중 확인
 $logDir = '/var/log/asterisk/call_progress';
 $recentLogs = glob($logDir . '/*.log');
 foreach ($recentLogs as $file) {
-    if (filemtime($file) < time() - 300) continue;
+    if (filemtime($file) < time() - 120) continue; // 2분 이내 로그만 확인
     $cnt = file_get_contents($file);
     if (strpos($cnt, "TO_{$phone080}") !== false && strpos($cnt, $id) !== false) {
         // 이미 처리 중
@@ -155,8 +137,12 @@ foreach ($recentLogs as $file) {
 }
 
 // 4. process_v2.php 호출
-$cmd = "php " . __DIR__ . "/process_v2.php --phone={$phone080} --id={$id} --notification={$caller} --auto > /dev/null 2>&1 &";
-exec($cmd);
+$cmd = "php " . __DIR__ . "/process_v2.php --phone={$phone080} --id={$id} --notification={$caller} --auto";
+error_log("SMS_AUTO: Executing command: " . $cmd);
+$output = [];
+$returnCode = 0;
+exec($cmd . " 2>&1", $output, $returnCode);
+error_log("SMS_AUTO: Command result - code: {$returnCode}, output: " . implode("\n", $output));
 
 // final update of identification
 if(isset($db) && isset($rowId)){

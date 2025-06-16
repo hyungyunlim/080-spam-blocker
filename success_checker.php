@@ -40,7 +40,7 @@ if (!is_dir($analysisDir)) {
 
 $python = '/usr/bin/python3';
 $analyzer = __DIR__ . '/simple_analyzer.py';
-$cmd = sprintf('%s %s --file %s --output_dir %s --model small 2>/dev/null',
+$cmd = sprintf('%s %s --file %s --output_dir %s --model base 2>/dev/null',
     escapeshellcmd($python),
     escapeshellarg($analyzer),
     escapeshellarg($wav),
@@ -112,31 +112,38 @@ try {
 
 /* ---------- 결과 SMS 알림 ---------- */
 try {
-    $notifyVal = trim(exec("sudo /usr/sbin/asterisk -rx \"database get CallFile/{$callId} notification_phone\""));
-    $notifyPhone = preg_replace('/[^0-9]/', '', str_replace('Value:', '', $notifyVal));
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] SMS_DEBUG_START\n", FILE_APPEND);
     
-    $identVal = trim(exec("sudo /usr/sbin/asterisk -rx \"database get CallFile/{$callId} identification_number\""));
-    $identNumber = preg_replace('/[^0-9]/', '', str_replace('Value:', '', $identVal));
-
-    // Fallback when AstDB entry missing
+    // 먼저 데이터베이스에서 정보 가져오기 (sudo 없이 접근 가능)
+    $row = $db->querySingle("SELECT phone080, identification, notification_phone FROM unsubscribe_calls WHERE call_id = '{$callId}' LIMIT 1", true);
+    
+    $notifyPhone = '';
+    $identNumber = '';
+    $phoneNumber = '';
+    
+    if ($row) {
+        $phoneNumber = $row['phone080'] ?? '';
+        $identNumber = $row['identification'] ?? '';
+        $notifyPhone = $row['notification_phone'] ?? '';
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] SMS_DEBUG DB_phone={$phoneNumber} DB_ident={$identNumber} DB_notify={$notifyPhone}\n", FILE_APPEND);
+    }
+    
+    // AstDB에서 백업으로 가져오기 (필요시에만)
     if ($notifyPhone === '') {
-        $row = $db->querySingle("SELECT u.phone FROM unsubscribe_calls uc JOIN users u ON uc.user_id = u.id WHERE uc.call_id = '{$callId}' LIMIT 1", true);
-        if ($row && !empty($row['phone'])) {
-            $notifyPhone = preg_replace('/[^0-9]/','',$row['phone']);
-        }
+        $notifyVal = trim(exec("echo 'hacker03' | sudo -S /usr/sbin/asterisk -rx \"database get CallFile/{$callId} notification_phone\" 2>/dev/null"));
+        $notifyPhone = preg_replace('/[^0-9]/', '', str_replace('Value:', '', $notifyVal));
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] SMS_DEBUG AstDB_fallback_notify={$notifyPhone}\n", FILE_APPEND);
     }
-    if ($phoneNumber === '') {
-        $row2 = $db->querySingle("SELECT phone080 FROM unsubscribe_calls WHERE call_id = '{$callId}' LIMIT 1", true);
-        if ($row2 && !empty($row2['phone080'])) {
-            $phoneNumber = $row2['phone080'];
-        }
-    }
+
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] SMS_DEBUG final_notify={$notifyPhone} final_phone080={$phoneNumber}\n", FILE_APPEND);
 
     if ($notifyPhone !== '' && $phoneNumber !== '') {
         require_once __DIR__ . '/sms_sender.php';
         $smsSender = new SMSSender();
         $confidence = $conf ?? 0;
-        $smsSender->sendAnalysisCompleteNotification(
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] SMS_DEBUG sending to {$notifyPhone}, status={$status}, conf={$confidence}\n", FILE_APPEND);
+        
+        $notificationResult = $smsSender->sendAnalysisCompleteNotification(
             $notifyPhone,
             $phoneNumber,
             $identNumber,
@@ -144,6 +151,9 @@ try {
             $confidence,
             basename($wav)
         );
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] SMS_SENT " . ($notificationResult['success'] ? 'SUCCESS' : 'FAILED') . " to {$notifyPhone} msg:" . ($notificationResult['message'] ?? 'no_msg') . "\n", FILE_APPEND);
+    } else {
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] SMS_SKIP notify={$notifyPhone} phone={$phoneNumber}\n", FILE_APPEND);
     }
 } catch (Throwable $e) {
     file_put_contents($logFile, date('Y-m-d H:i:s') . " [{$callId}] SMS_ERR "

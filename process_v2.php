@@ -24,7 +24,7 @@ file_put_contents($logFile, "--- Script Start: " . date('Y-m-d H:i:s') . " ---\n
 
 // 필수 클래스 포함
 require_once __DIR__ . '/sms_sender.php';
-require_once __DIR__ . '/pattern_discovery.php';
+// CLI 모드에서는 PatternManager 관련 기능 비활성화
 
 // POST 데이터 로깅
 file_put_contents($logFile, "POST Data: " . json_encode($_POST) . "\n", FILE_APPEND);
@@ -289,12 +289,13 @@ try{
     $dbUC = new SQLite3($dbPath);
     $uidRow = $dbUC->querySingle("SELECT id FROM users WHERE phone='{$cleanNotifyDigits}'",true);
     $uidVal = $uidRow ? (int)$uidRow['id'] : null;
-    $stmtUC = $dbUC->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status,pattern_source) VALUES (:cid,:uid,:p080,:ident,datetime("now"),"pending",:pattern_source)');
+    $stmtUC = $dbUC->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status,pattern_source,notification_phone) VALUES (:cid,:uid,:p080,:ident,datetime("now"),"pending",:pattern_source,:notify)');
     $stmtUC->bindValue(':cid',$uniqueId,SQLITE3_TEXT);
     if($uidVal!==null){$stmtUC->bindValue(':uid',$uidVal,SQLITE3_INTEGER);} else {$stmtUC->bindValue(':uid',null,SQLITE3_NULL);}
     $stmtUC->bindValue(':p080',$phoneNumber,SQLITE3_TEXT);
     $stmtUC->bindValue(':ident',$identificationNumber,SQLITE3_TEXT);
     $stmtUC->bindValue(':pattern_source',$patternSource,SQLITE3_TEXT);
+    $stmtUC->bindValue(':notify',$notificationPhone,SQLITE3_TEXT);
     $stmtUC->execute();
 }catch(Throwable $e){ /* ignore db errors */ }
 
@@ -393,14 +394,22 @@ if (rename($tempFile, $finalFile)) {
     $result = $smsSender->sendProcessStartNotification($notificationPhone, $phoneNumber, $identificationNumber);
     $smsSender->logSMS($result, 'call_start_notification');
 
-    // 패턴 사용 통계 업데이트
-    require_once __DIR__ . '/PatternManager.php';
-    try {
-        $pm = new PatternManager();
-        $pm->recordPatternUsage($phoneNumber, true);
-    } catch (Exception $e) {
-        error_log('Pattern usage update failed: ' . $e->getMessage());
+    // 패턴 사용 통계 업데이트 (웹 모드에서만)
+    if (php_sapi_name() !== 'cli') {
+        require_once __DIR__ . '/pattern_manager.php';
+        try {
+            $pm = new PatternManager(__DIR__ . '/patterns.json');
+            $pm->recordPatternUsage($phoneNumber, true);
+        } catch (Exception $e) {
+            error_log('Pattern usage update failed: ' . $e->getMessage());
+        }
     }
+    
+    // 수신거부 시작 알림 SMS 발송
+    $smsSender = new SmsSender();
+    $notificationResult = $smsSender->sendUnsubscribeNotification($notificationPhone, $phoneNumber, $identificationNumber, 'started');
+    file_put_contents($logFile, "Start notification sent: " . ($notificationResult['success'] ? 'success' : 'failed') . "\n", FILE_APPEND);
+    
     echo "\n💡 안내: 전화 연결 후 '실패'로 표시되면 아래 방법을 시도해 보세요.\n • \"녹음 듣기\" 버튼으로 안내 음성을 확인합니다.\n • 화면의 '패턴 추가' 메뉴에서 안내에 맞게 버튼/번호 입력 순서를 저장하면 다음부터 자동으로 처리됩니다.";
 
 } else {
@@ -410,9 +419,8 @@ if (rename($tempFile, $finalFile)) {
     echo "오류: Call File을 생성하지 못했습니다.\n";
     
     $smsSender = new SmsSender();
-    $message = "[실패] 080 스팸 수신거부 요청 실패\n번호: {$phoneNumber}";
-    $smsSender->sendSms($notificationPhone, $message);
-    $smsSender->logSMS($message, 'call_file_failed');
+    $failureResult = $smsSender->sendUnsubscribeNotification($notificationPhone, $phoneNumber, $identificationNumber, 'error');
+    file_put_contents($logFile, "Error notification sent: " . ($failureResult['success'] ? 'success' : 'failed') . "\n", FILE_APPEND);
 }
 
 file_put_contents($logFile, "--- Script End ---\n\n", FILE_APPEND);
