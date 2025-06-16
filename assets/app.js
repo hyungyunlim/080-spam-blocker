@@ -18,9 +18,9 @@
                 activeAnalysisMap.set(filename, analysisId);
             });
             
-            // 5초 주기로 녹음 목록 자동 갱신 (탭이 활성화된 경우에만)
+            // 5초 주기로 녹음 목록 자동 갱신 (로그인된 상태이고 탭이 활성화된 경우에만)
             setInterval(() => {
-                if (!document.hidden && !document.querySelector('.call-progress') && !document.querySelector('.analysis-progress')) {
+                if (!document.hidden && window.IS_LOGGED) {
                     getRecordings();
                 }
             }, 5000);
@@ -232,14 +232,10 @@
                                 notificationSection.classList.add('show');
                             }, 200);
                         }
-                        // Only show verification section if it exists (non-logged users)
-                        if (verificationSection && !verificationSection.classList.contains('show')) {
-                            setTimeout(() => {
-                                verificationSection.classList.add('show');
-                            }, 400);
-                        }
-                        // Adjust submit section timing based on whether verification exists
-                        const submitDelay = verificationSection ? 600 : 400;
+                        // Verification section visibility controlled by login_flow.js
+                        // Don't automatically show it here
+                        // Adjust submit section timing 
+                        const submitDelay = 400;
                         if (submitSection && !submitSection.classList.contains('show')) {
                             setTimeout(() => {
                                 submitSection.classList.add('show');
@@ -250,9 +246,7 @@
                         if (notificationSection) {
                             notificationSection.classList.remove('show');
                         }
-                        if (verificationSection) {
-                            verificationSection.classList.remove('show');
-                        }
+                        // Don't remove verification section - controlled by login_flow.js
                         if (submitSection) {
                             submitSection.classList.remove('show');
                         }
@@ -262,9 +256,7 @@
                     if (notificationSection) {
                         notificationSection.classList.add('show');
                     }
-                    if (verificationSection) {
-                        verificationSection.classList.add('show');
-                    }
+                    // Verification section controlled by login_flow.js
                     if (submitSection) {
                         submitSection.classList.add('show');
                     }
@@ -278,16 +270,24 @@
                     const verificationSection = document.getElementById('verificationSection');
                     const submitSection = document.getElementById('submitSection');
                     
-                    // Force remove show class on mobile - CSS handles display
-                    if (notificationSection) {
-                        notificationSection.classList.remove('show');
+                    // For logged-in users, keep sections visible
+                    if (window.IS_LOGGED) {
+                        if (notificationSection) {
+                            notificationSection.classList.add('show');
+                        }
+                        if (submitSection) {
+                            submitSection.classList.add('show');
+                        }
+                    } else {
+                        // Force remove show class on mobile - CSS handles display
+                        if (notificationSection) {
+                            notificationSection.classList.remove('show');
+                        }
+                        if (submitSection) {
+                            submitSection.classList.remove('show');
+                        }
                     }
-                    if (verificationSection) {
-                        verificationSection.classList.remove('show');
-                    }
-                    if (submitSection) {
-                        submitSection.classList.remove('show');
-                    }
+                    // Don't remove verification section - controlled by login_flow.js
                 }
             }
             
@@ -295,6 +295,13 @@
             initializeMobileState();
             
             // Initialize progressive disclosure on page load and handle window resize
+            // For logged-in users, ensure all sections are visible
+            if (window.IS_LOGGED) {
+                const notificationSection = document.getElementById('notificationSection');
+                const submitSection = document.getElementById('submitSection');
+                if (notificationSection) notificationSection.classList.add('show');
+                if (submitSection) submitSection.classList.add('show');
+            }
             handleProgressiveDisclosure(spamContent ? spamContent.value.trim() : '');
             
             window.addEventListener('resize', function() {
@@ -354,10 +361,36 @@
 
         // 기존 getRecordings 함수 내부에서, 진행 중인 analysis_id가 있으면 해당 항목에 프로그레스바 추가
         function getRecordings() {
-            fetch('get_recordings.php')
+            // 로그인 상태가 아니면 요청하지 않음 (로그인 플로우가 실행 중일 때)
+            if (!window.IS_LOGGED) {
+                console.log('Not logged in, skipping getRecordings');
+                return;
+            }
+            
+            // 캐시 무효화를 위한 타임스탬프 추가 (브라우저별 일관성 확보)
+            const timestamp = Date.now();
+            fetch(`get_recordings.php?_t=${timestamp}`, {
+                cache: 'no-cache',
+                credentials: 'same-origin', // 세션 쿠키 포함
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache'
+                }
+            })
                 .then(response => {
                     if (!response.ok) {
                         if (response.status === 401) {
+                            // 401 오류 시 로그인 상태 변수 업데이트
+                            window.IS_LOGGED = false;
+                            
+                            // 즉시 새로고침하지 말고 잠시 대기 (로그인 진행 중일 수 있음)
+                            setTimeout(() => {
+                                if (!window.IS_LOGGED) {
+                                    console.log('Session expired, reloading page');
+                                    window.location.reload();
+                                }
+                            }, 2000);
+                            
                             throw new Error('로그인이 필요합니다');
                         }
                         throw new Error(`서버 오류: ${response.status}`);
@@ -375,22 +408,67 @@
                         // 1. 자동 분석 트리거 (DOM 업데이트 전에 먼저 체크)
                         data.recordings.forEach(rec => {
                             if (rec.ready_for_analysis && !autoAnalysisSet.has(rec.filename)) {
-                                // DOM에서 버튼 찾기
-                                const btn = document.querySelector(`button.analyze-btn[data-file="${rec.filename}"]`);
-                                if (btn && !btn.disabled) {
+                                // DOM에서 버튼 찾기 - 특수문자 이스케이프 처리
+                                const escapedFilename = CSS.escape(rec.filename);
+                                const btn = document.querySelector(`button.analyze-btn[data-file="${escapedFilename}"]`);
+                                const recordingItem = btn ? btn.closest('.recording-item') : null;
+                                
+                                // 엄격한 중복 방지 체크
+                                const hasCallProgress = recordingItem && recordingItem.querySelector('.call-progress');
+                                const hasAnalysisProgress = recordingItem && recordingItem.querySelector('.analysis-progress');
+                                const isAlreadyInActiveMap = activeAnalysisMap.has(rec.filename);
+                                
+                                if (btn && !btn.disabled && recordingItem && !hasCallProgress && !hasAnalysisProgress && !isAlreadyInActiveMap) {
                                     autoAnalysisSet.add(rec.filename);
-                                    handleAnalysisClick(btn);
+                                    
+                                    console.log('Auto-triggering analysis for:', rec.filename, 'after delay');
+                                    
+                                    // 브라우저 타입에 관계없이 통일된 지연시간 적용 (중복 실행 방지)
+                                    setTimeout(() => {
+                                        // 다시 한번 엄격한 상태 확인
+                                        const currentItem = btn.closest('.recording-item');
+                                        const currentCallProgress = currentItem && currentItem.querySelector('.call-progress');
+                                        const currentAnalysisProgress = currentItem && currentItem.querySelector('.analysis-progress');
+                                        
+                                        if (btn && !btn.disabled && currentItem && !currentCallProgress && !currentAnalysisProgress) {
+                                            console.log('Executing auto-analysis for:', rec.filename);
+                                            handleAnalysisClick(btn);
+                                        } else {
+                                            console.log('Analysis conditions changed, skipping:', rec.filename);
+                                            autoAnalysisSet.delete(rec.filename); // Set에서 제거
+                                        }
+                                    }, 1000); // 1초로 증가하여 Call progress 완료 대기
+                                } else {
+                                    console.log('Auto-analysis skipped for:', rec.filename, {
+                                        hasBtn: !!btn,
+                                        btnDisabled: btn ? btn.disabled : 'no btn',
+                                        hasItem: !!recordingItem,
+                                        hasCallProgress: !!hasCallProgress,
+                                        hasAnalysisProgress: !!hasAnalysisProgress,
+                                        isInActiveMap: isAlreadyInActiveMap
+                                    });
                                 }
                             }
                         });
 
-                        // 2. 통화 진행바 트리거 (DOM 업데이트 전에 체크)
+                        // 2. 통화 진행바 트리거 (DOM 업데이트 전에 체크) - 중복 방지 강화
                         data.recordings.forEach(rec => {
                             if (rec.analysis_result === '미분석' && !rec.ready_for_analysis) {
-                                const btnEl = document.querySelector(`button.analyze-btn[data-file="${rec.filename}"]`);
+                                const escapedFilename = CSS.escape(rec.filename);
+                                const btnEl = document.querySelector(`button.analyze-btn[data-file="${escapedFilename}"]`);
                                 const recordingItem = btnEl ? btnEl.closest('.recording-item') : null;
-                                if (recordingItem && !recordingItem.querySelector('.call-progress')) {
+                                
+                                // 엄격한 중복 방지: Call Progress와 Analysis Progress 모두 체크
+                                const hasCallProgress = recordingItem && recordingItem.querySelector('.call-progress');
+                                const hasAnalysisProgress = recordingItem && recordingItem.querySelector('.analysis-progress');
+                                
+                                if (recordingItem && !hasCallProgress && !hasAnalysisProgress) {
+                                    console.log('Triggering call progress for:', rec.filename);
                                     trackCallProgress(recordingItem, rec.filename);
+                                } else if (hasCallProgress) {
+                                    console.log('Call progress already exists for:', rec.filename);
+                                } else if (hasAnalysisProgress) {
+                                    console.log('Analysis progress already exists for:', rec.filename);
                                 }
                             }
                         });
@@ -399,7 +477,8 @@
                         activeAnalysisMap.forEach((analysisId, filename) => {
                             const rec = data.recordings.find(r => r.filename === filename);
                             if (rec && rec.analysis_result === '미분석') {
-                                const btnEl = document.querySelector(`button.analyze-btn[data-file="${filename}"]`);
+                                const escapedFilename = CSS.escape(filename);
+                                const btnEl = document.querySelector(`button.analyze-btn[data-file="${escapedFilename}"]`);
                                 const recordingItem = btnEl ? btnEl.closest('.recording-item') : null;
                                 if (recordingItem && !recordingItem.querySelector('.analysis-progress')) {
                                     const progressContainer = createProgressUI(recordingItem);
@@ -418,19 +497,36 @@
                             }
                         });
 
-                        // 4. DOM 업데이트는 실제로 변경이 있을 때만
-                        if (lastRecordingsUpdate === null || data.updated > lastRecordingsUpdate) {
+                        // 4. DOM 업데이트 - Progress UI 상태에 관계없이 항상 신중하게 처리
+                        const shouldUpdateDOM = lastRecordingsUpdate === null || data.updated > lastRecordingsUpdate;
+                        const hasProgressUI = document.querySelector('.call-progress') || document.querySelector('.analysis-progress');
+                        
+                        if (shouldUpdateDOM) {
                             lastRecordingsUpdate = data.updated;
 
-                            // 기존 DOM 업데이트 로직
+                            // 스마트 DOM 업데이트: 기존 요소 재사용 + 새 요소만 추가/제거
                             const existingItems = new Map();
+                            const existingProgressItems = new Map(); // Progress UI가 있는 항목들 별도 추적
+                            
                             recordingsList.querySelectorAll('.recording-item').forEach(item => {
                                 const audio = item.querySelector('audio');
                                 if (audio) {
                                     const src = audio.getAttribute('src');
                                     const match = src.match(/file=([^&]+)/);
                                     if (match) {
-                                        existingItems.set(decodeURIComponent(match[1]), item);
+                                        const filename = decodeURIComponent(match[1]);
+                                        existingItems.set(filename, item);
+                                        
+                                        // Progress UI가 있는 항목인지 확인 (더 정확한 감지)
+                                        const hasCallProgress = item.querySelector('.call-progress');
+                                        const hasAnalysisProgress = item.querySelector('.analysis-progress');
+                                        if (hasCallProgress || hasAnalysisProgress) {
+                                            existingProgressItems.set(filename, item);
+                                            console.log('Preserving progress UI for:', filename, {
+                                                hasCallProgress: !!hasCallProgress,
+                                                hasAnalysisProgress: !!hasAnalysisProgress
+                                            });
+                                        }
                                     }
                                 }
                             });
@@ -439,14 +535,31 @@
                             data.recordings.forEach(rec => {
                                 let item = existingItems.get(rec.filename);
                                 if (item) {
+                                    // 기존 항목 재사용 - Progress UI가 있으면 그대로 유지
+                                    if (existingProgressItems.has(rec.filename)) {
+                                        // Progress UI가 있는 항목은 건드리지 않음
+                                        newItems.push(item);
+                                    } else {
+                                        // Progress UI가 없는 항목은 정보만 업데이트
+                                        updateRecordingItemData(item, rec);
+                                        newItems.push(item);
+                                    }
                                     existingItems.delete(rec.filename);
                                 } else {
+                                    // 새 항목 생성
                                     item = createRecordingItem(rec);
+                                    newItems.push(item);
                                 }
-                                newItems.push(item);
                             });
 
-                            existingItems.forEach(item => item.remove());
+                            // 존재하지 않는 항목들만 제거 (Progress UI가 없는 것들만)
+                            existingItems.forEach((item, filename) => {
+                                if (!existingProgressItems.has(filename)) {
+                                    item.remove();
+                                }
+                            });
+                            
+                            // DOM 재구성
                             recordingsList.innerHTML = '';
                             newItems.forEach(item => recordingsList.appendChild(item));
                         }
@@ -456,13 +569,24 @@
                 })
                 .catch(error => {
                     console.error('Error fetching recordings:', error);
-                    recordingsList.innerHTML = `<div class="analysis-result result-failure">녹음 목록을 불러오는 데 실패했습니다: ${error.message}</div>`;
+                    // 401 오류의 경우 세션 만료로 간주하고 새로고침 유도
+                    if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+                        recordingsList.innerHTML = `<div class="analysis-result result-failure">세션이 만료되었습니다. 페이지를 새로고침하여 다시 로그인해주세요.</div>`;
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
+                    } else {
+                        recordingsList.innerHTML = `<div class="analysis-result result-failure">녹음 목록을 불러오는 데 실패했습니다: ${error.message}</div>`;
+                    }
                 });
         }
 
         function startMonitoringPatternDiscovery() {
             const checkInterval = setInterval(() => {
-                fetch('get_recordings.php')
+                const timestamp = Date.now();
+                fetch(`get_recordings.php?_t=${timestamp}`, {
+                    cache: 'no-cache'
+                })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success && data.recordings) {
@@ -474,15 +598,17 @@
                             );
                             
                             if (discoveryRecording) {
+                                const escapedFilename = CSS.escape(discoveryRecording.filename);
+                                
                                 // 통화 진행 상태 추적
-                                const recordingItem = document.querySelector(`[data-file="${discoveryRecording.filename}"]`)?.closest('.recording-item');
+                                const recordingItem = document.querySelector(`[data-file="${escapedFilename}"]`)?.closest('.recording-item');
                                 if (recordingItem && !recordingItem.querySelector('.call-progress')) {
                                     trackCallProgress(recordingItem, discoveryRecording.filename);
                                 }
                                 
                                 // ready_for_analysis가 true가 되면 자동 분석 시작
                                 if (discoveryRecording.ready_for_analysis && !autoAnalysisSet.has(discoveryRecording.filename)) {
-                                    const btn = document.querySelector(`button.analyze-btn[data-file="${discoveryRecording.filename}"]`);
+                                    const btn = document.querySelector(`button.analyze-btn[data-file="${escapedFilename}"]`);
                                     if (btn && !btn.disabled) {
                                         autoAnalysisSet.add(discoveryRecording.filename);
                                         handleAnalysisClick(btn);
@@ -508,6 +634,9 @@
         function createRecordingItem(rec) {
             const item = document.createElement('div');
             item.className = 'recording-item';
+            
+            // Encode spam content to avoid attribute truncation/HTML issues
+            const spamContentEncoded = rec.spam_content ? btoa(unescape(encodeURIComponent(rec.spam_content))) : '';
             
             const statusColor = rec.analysis_result === '성공' ? 'result-success' : 
                                 rec.analysis_result === '실패' ? 'result-failure' :
@@ -633,48 +762,44 @@
                                 </div>
                     <div class="recording-tags">${callTypeLabel} ${autoLabel} ${patternSourceLabel} ${registrationBadge} ${patternTypeBadge}</div>
                                     </div>
-                <audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;"></audio>
+                <audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;" crossorigin="anonymous" onloadeddata="this.currentTime=0;"></audio>
                 ${analysisResultSection}
                 ${showAnalyzeButton ? `
-                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
-                    ${showSpamContentButton ? `<button data-spam-content='${JSON.stringify(rec.spam_content || '').replace(/'/g, '&#39;')}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn">📱 스팸문자 원본</button>` : ''}
+                <div class="recording-actions" style="margin-top: 10px;">
+                    ${showSpamContentButton ? `<button data-spam-content='${spamContentEncoded}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn"><span class="btn-mobile-text">📱</span><span class="btn-desktop-text">📱 스팸문자 원본</span></button>` : ''}
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small analyze-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16">
+                        <span class="btn-mobile-text">✨</span><span class="btn-desktop-text">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16" style="margin-right: 4px;">
                             <path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 4a.5.5 0 0 0 0 .707l.707.707a.5.5 0 0 0 .707 0L8.707 4a.5.5 0 0 0 0-.707Zm-3.5 1.65A.5.5 0 0 0 3.293 6L2 7.293a.5.5 0 1 0 .707.707L4 6.707a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707 0ZM10 8a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"/>
-                            <path d="M6.25 10.5c.065.14.12.29.18.445l.08.18a.5.5 0 0 0 .868.036l.338-.676a.5.5 0 0 0-.16-.672l-.354-.354a.5.5 0 0 0-.85-.043l-.248.495Zm3.5 0c.065.14.12.29.18.445l.08.18a.5.5 0 0 0 .868.036l.338-.676a.5.5 0 0 0-.16-.672l-.354-.354a.5.5 0 0 0-.85-.043l-.248.495ZM1.625 13.5A.5.5 0 0 0 1 14h14a.5.5 0 0 0-.625-.5h-12.75Z"/>
+                            <path d="M6.25 10.5c.065.14.12.29.18.445l.08.18a.5.5 0 0 0 .868.036l.338-.676a.5.5 0 0 0-.16-.672l-.354-.354a.5.5 0 0 0-.85-.043l-.248.495Zm3.5 0c.065.14.12.29.18.445l.08.18a .5.5 0 0 0 .868.036l.338-.676a.5.5 0 0 0-.16-.672l-.354-.354a.5.5 0 0 0-.85-.043l-.248.495ZM1.625 13.5A.5.5 0 0 0 1 14h14a.5.5 0 0 0-.625-.5h-12.75Z"/>
                         </svg>
-                        분석하기
-                                    </button>
+                        분석하기</span>
+                    </button>
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">
-                        🗑 삭제
-                                    </button>
-                                </div>
+                        <span class="btn-mobile-text">🗑</span><span class="btn-desktop-text">🗑 삭제</span>
+                    </button>
+                </div>
                 ` : ''}
                 ${showReanalyzeButton ? `
-                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
-                    ${showSpamContentButton ? `<button data-spam-content='${JSON.stringify(rec.spam_content || '').replace(/'/g, '&#39;')}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn">📱 스팸문자 원본</button>` : ''}
+                <div class="recording-actions" style="margin-top: 10px;">
+                    ${showSpamContentButton ? `<button data-spam-content='${spamContentEncoded}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn"><span class="btn-mobile-text">📱</span><span class="btn-desktop-text">📱 스팸문자 원본</span></button>` : ''}
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small reanalyze-btn analyze-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                        <span class="btn-mobile-text">🔄</span><span class="btn-desktop-text">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16" style="margin-right: 4px;">
                             <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
                             <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
                         </svg>
-                        ${rec.call_type === 'discovery' ? '패턴 다시 분석하기' : '다시 분석하기'}
+                        ${rec.call_type === 'discovery' ? '패턴 다시 분석하기' : '다시 분석하기'}</span>
                     </button>
-                    ${showRetryCallButton ? `<button data-file="${fileForAnalysis}" data-phone="${rec.title}" data-id="${rec.identification_number || rec.id || ''}" data-notify="${rec.notification_phone || ''}" class="btn btn-small retry-call-btn" ${isConfirmOnly?'disabled title="자동 수신거부가 불가능합니다."':''}>${isConfirmOnly?'☎️ 직접 전화 필요':'📞 다시 시도하기'}</button>` : ''}
-                    <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">🗑 삭제</button>
-                            </div>
+                    ${showRetryCallButton ? `<button data-file="${fileForAnalysis}" data-phone="${rec.title}" data-id="${rec.identification_number || rec.id || ''}" data-notify="${rec.notification_phone || ''}" class="btn btn-small retry-call-btn" ${isConfirmOnly?'disabled title="자동 수신거부가 불가능합니다."':''}><span class="btn-mobile-text">${isConfirmOnly?'☎️':'📞'}</span><span class="btn-desktop-text">${isConfirmOnly?'☎️ 직접 전화 필요':'📞 다시 시도하기'}</span></button>` : ''}
+                    <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">
+                        <span class="btn-mobile-text">🗑</span><span class="btn-desktop-text">🗑 삭제</span>
+                    </button>
+                </div>
                 ` : ''}
             `;
 
-            // Convert inline action rows to class for responsive styling
-            item.querySelectorAll('div[style*="margin-top: 10px"][style*="gap: 10px"]').forEach(row=>{
-                row.classList.add('recording-actions');
-                row.style.marginTop='10px';
-                row.style.gap='10px';
-                row.style.display='flex';
-                row.style.flexWrap='wrap';
-                row.style.justifyContent='space-between';
-            });
+            // The recording-actions class is now applied directly in the HTML template above
             
             
             // 이벤트 리스너 추가 (이벤트 위임 대신 직접 추가)
@@ -735,6 +860,52 @@
             return item;
         }
 
+        // 기존 DOM 요소의 데이터만 업데이트 (Progress UI 보존용)
+        function updateRecordingItemData(item, rec) {
+            // 분석 결과가 변경된 경우에만 업데이트
+            const currentAnalysisSection = item.querySelector('.analysis-section');
+            const hasProgressUI = item.querySelector('.call-progress') || item.querySelector('.analysis-progress');
+            
+            // Progress UI가 활성화된 상태면 건드리지 않음
+            if (hasProgressUI) {
+                console.log('Skipping update for item with active progress UI:', rec.filename);
+                return;
+            }
+            
+            // 분석 결과 업데이트
+            if (currentAnalysisSection && rec.analysis_result !== '미분석') {
+                const newAnalysisSection = createAnalysisSection(rec);
+                if (newAnalysisSection !== currentAnalysisSection.outerHTML) {
+                    currentAnalysisSection.outerHTML = newAnalysisSection;
+                }
+            }
+            
+            // 버튼 상태 업데이트
+            const analyzeBtn = item.querySelector('.analyze-btn');
+            if (analyzeBtn && rec.analysis_result === '미분석' && rec.ready_for_analysis) {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = `
+                    <span class="btn-mobile-text">✨</span><span class="btn-desktop-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16" style="margin-right: 4px;">
+                        <path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 4a.5.5 0 0 0 0 .707l.707.707a.5.5 0 0 0 .707 0L8.707 4a.5.5 0 0 0 0-.707Zm-3.5 1.65A.5.5 0 0 0 3.293 6L2 7.293a.5.5 0 1 0 .707.707L4 6.707a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707 0ZM10 8a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"/>
+                        <path d="M6.25 10.5c.065.14.12.29.18.445l.08.18a.5.5 0 0 0 .868.036l.338-.676a.5.5 0 0 0-.16-.672l-.354-.354a.5.5 0 0 0-.85-.043l-.248.495Zm3.5 0c.065.14.12.29.18.445l.08.18a .5.5 0 0 0 .868.036l.338-.676a.5.5 0 0 0-.16-.672l-.354-.354a.5.5 0 0 0-.85-.043l-.248.495ZM1.625 13.5A.5.5 0 0 0 1 14h14a.5.5 0 0 0-.625-.5h-12.75Z"/>
+                    </svg>
+                    분석하기</span>
+                `;
+            }
+        }
+
+        // 분석 섹션 HTML 생성 헬퍼 함수
+        function createAnalysisSection(rec) {
+            if (rec.analysis_result === '미분석') {
+                return '';
+            }
+            
+            // 실제 분석 결과 HTML 생성 로직을 여기에 추가
+            // 기존 createRecordingItem의 analysisResultSection 로직을 재사용
+            return `<div class="analysis-section">${rec.analysis_result}</div>`;
+        }
+
         // 수동 분석 버튼 클릭 처리 함수
         function handleAnalysisClick(button) {
             const recordingFile = button.dataset.file;
@@ -750,6 +921,16 @@
 
             // 버튼이 있는 recording-item 찾기
             const recordingItem = button.closest('.recording-item');
+            if (!recordingItem) {
+                showToast('녹음 항목을 찾을 수 없습니다.', true);
+                return;
+            }
+            
+            // 이미 분석이 진행 중인지 확인
+            if (recordingItem.querySelector('.analysis-progress')) {
+                showToast('이미 분석이 진행 중입니다.', true);
+                return;
+            }
             
             // 버튼 상태 변경
             button.disabled = true;
@@ -785,11 +966,29 @@
             .then(data => {
                 console.log('Analysis response:', data);
                 if (data.success && data.analysis_id) {
-                    // 진행 상황 표시 UI 생성
-                    const progressContainer = createProgressUI(recordingItem);
+                    // 기존 분석이 진행 중인 경우 처리
+                    if (data.existing) {
+                        console.log('Using existing analysis:', data.analysis_id);
+                        showToast('이미 분석이 진행 중입니다. 기존 분석을 추적합니다.', false);
+                    }
+                    
+                    // 진행 상황 표시 UI 생성 (기존 것이 없을 때만)
+                    let progressContainer = recordingItem.querySelector('.analysis-progress');
+                    if (!progressContainer) {
+                        progressContainer = createProgressUI(recordingItem);
+                        if (!progressContainer) {
+                            console.error('Failed to create progress UI for:', recordingItem);
+                            showToast('프로그레스 UI 생성 실패', true);
+                            button.disabled = false;
+                            button.innerHTML = originalContent;
+                            return;
+                        }
+                    }
+                    
                     // 진행 중인 analysis_id를 추적
                     activeAnalysisMap.set(filename, data.analysis_id);
                     persistActiveAnalyses();
+                    
                     // call_type에 따라 다른 진행 상황 추적
                     if (callType === 'discovery') {
                         trackPatternAnalysisProgress(data.analysis_id, progressContainer, button, originalContent, data.phone_number, filename);
@@ -811,11 +1010,22 @@
                 button.innerHTML = originalContent;
                 autoAnalysisSet.delete(filename);
                 activeAnalysisMap.delete(filename);
+                
+                // 오류 발생 시 progress UI도 제거
+                const progressContainer = recordingItem.querySelector('.analysis-progress');
+                if (progressContainer) {
+                    progressContainer.remove();
+                }
             });
         }
 
         // 진행 상황 UI 생성
         function createProgressUI(recordingItem) {
+            if (!recordingItem) {
+                console.error('createProgressUI: recordingItem is null');
+                return null;
+            }
+            
             // 기존 진행 상황 UI가 있으면 제거
             const existingProgress = recordingItem.querySelector('.analysis-progress');
             if (existingProgress) {
@@ -835,8 +1045,21 @@
                 </div>
             `;
 
-            recordingItem.insertAdjacentHTML('beforeend', progressHTML);
-            return recordingItem.querySelector('.analysis-progress');
+            try {
+                recordingItem.insertAdjacentHTML('beforeend', progressHTML);
+                const progressContainer = recordingItem.querySelector('.analysis-progress');
+                
+                if (!progressContainer) {
+                    console.error('createProgressUI: Failed to create progress container');
+                    return null;
+                }
+                
+                console.log('Progress UI created successfully');
+                return progressContainer;
+            } catch (error) {
+                console.error('createProgressUI: Error inserting HTML:', error);
+                return null;
+            }
         }
 
         // 진행 상황 추적 (수신거부 분석용)
@@ -846,6 +1069,9 @@
             const fillElement = progressContainer.querySelector('.progress-fill');
             const messageElement = progressContainer.querySelector('.progress-message');
             const recordingItem = progressContainer.closest('.recording-item');
+            
+            let pollCount = 0;
+            const maxPollCount = 300; // 최대 5분 (400ms * 300 = 2분) -> 300 * 400ms = 2분
 
             const stageNames = {
                 'queued': '대기중',
@@ -867,6 +1093,25 @@
             const POLL_INTERVAL = 400; // ms – 더 짧은 주기로 폴링하여 빠른 단계 변화를 포착
 
             const checkProgress = () => {
+                pollCount++;
+                
+                // 타임아웃 체크
+                if (pollCount > maxPollCount) {
+                    console.warn('Analysis polling timeout for:', analysisId);
+                    progressContainer.style.background = '#fef3c7';
+                    progressContainer.style.borderColor = '#fbbf24';
+                    stageElement.textContent = '타임아웃';
+                    messageElement.textContent = '분석 시간이 초과되었습니다. 결과를 확인해주세요.';
+                    
+                    setTimeout(() => {
+                        progressContainer.remove();
+                        button.disabled = false;
+                        button.innerHTML = originalButtonContent;
+                        getRecordings();
+                    }, 3000);
+                    return;
+                }
+                
                 fetch(`get_analysis_progress.php?analysis_id=${analysisId}`)
             .then(response => response.json())
             .then(data => {
@@ -887,6 +1132,18 @@
                                 progressContainer.style.borderColor = '#a7f3d0';
                                 stageElement.style.color = '#065f46';
                                 
+                                // localStorage에서 해당 분석 제거
+                                const audioElement = recordingItem.querySelector('audio');
+                                if (audioElement) {
+                                    const src = audioElement.getAttribute('src');
+                                    const match = src.match(/file=([^&]+)/);
+                                    if (match) {
+                                        const filename = decodeURIComponent(match[1]);
+                                        activeAnalysisMap.delete(filename);
+                                        persistActiveAnalyses();
+                                    }
+                                }
+                                
                                 setTimeout(() => {
                                     progressContainer.remove();
                                     button.disabled = false;
@@ -895,6 +1152,11 @@
                                     
                                     // 해당 녹음 항목만 업데이트
                                     updateSingleRecordingItem(recordingItem);
+                                    
+                                    // 전체 목록도 갱신하여 최신 상태 반영
+                                    setTimeout(() => {
+                                        getRecordings();
+                                    }, 1000);
                                 }, 2000);
                             } else if (stage === 'error' || stage === 'timeout') {
                                 // 오류 발생
@@ -911,6 +1173,21 @@
                                 // 계속 진행중 – 지정 주기 후 다시 확인
                                 setTimeout(checkProgress, POLL_INTERVAL);
                             }
+                        } else if (data.success === false) {
+                            // API 에러 발생 시 분석 완료로 간주하고 결과 확인
+                            console.warn('Analysis API error, checking results:', data);
+                            progressContainer.style.background = '#fef3c7';
+                            progressContainer.style.borderColor = '#fbbf24';
+                            stageElement.textContent = '결과 확인 중...';
+                            messageElement.textContent = '분석 상태를 확인하고 있습니다...';
+                            
+                            setTimeout(() => {
+                                progressContainer.remove();
+                                button.disabled = false;
+                                button.innerHTML = originalButtonContent;
+                                updateSingleRecordingItem(recordingItem);
+                                getRecordings();
+                            }, 3000);
                         } else {
                             // API 오류
                             console.error('Progress check failed:', data);
@@ -1166,7 +1443,13 @@
         recordingsList.addEventListener('loadedmetadata', function(e) {
             if (e.target.tagName === 'AUDIO') {
                 e.target.currentTime = 0;
-                // 시간 표시 포맷 수정
+                // 메타데이터 로드 후 duration 재확인
+                if (isNaN(e.target.duration) || e.target.duration === 0) {
+                    // 강제로 메타데이터 재로드
+                    setTimeout(() => {
+                        e.target.load();
+                    }, 100);
+                }
                 updateAudioTimeDisplay(e.target);
             }
         }, true);
@@ -1182,8 +1465,19 @@
         function updateAudioTimeDisplay(audio) {
             // 브라우저의 기본 컨트롤을 사용하므로 별도 처리 불필요
             // 하지만 NaN 문제를 방지하기 위한 체크 추가
-            if (isNaN(audio.duration)) {
-                audio.load(); // 오디오 다시 로드
+            if (isNaN(audio.duration) || audio.duration === 0) {
+                // 오디오 재로드 시도
+                audio.load();
+                
+                // 모바일에서 사용자 상호작용 후 재시도
+                if (window.innerWidth <= 768) {
+                    audio.addEventListener('canplaythrough', function onCanPlay() {
+                        audio.removeEventListener('canplaythrough', onCanPlay);
+                        if (isNaN(audio.duration)) {
+                            console.warn('Audio duration still NaN after reload:', audio.src);
+                        }
+                    }, { once: true });
+                }
             }
         }
 
@@ -1261,6 +1555,13 @@
         }
 
         function createCallProgressUI(recordingItem) {
+            // 기존 Call Progress UI가 있으면 제거
+            const existingCallProgress = recordingItem.querySelector('.call-progress');
+            if (existingCallProgress) {
+                console.log('Removing existing call progress UI');
+                existingCallProgress.remove();
+            }
+            
             const html = `
             <div class="call-progress" style="margin-top:10px;padding:12px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -1280,6 +1581,17 @@
             let progressEl = recordingItem.querySelector('.call-progress');
             if (!progressEl) {
                 progressEl = createCallProgressUI(recordingItem);
+            }
+            
+            // 실제 녹음 파일명 추출 (audio src에서)
+            const audioEl = recordingItem.querySelector('audio');
+            let actualFilename = filename;
+            if (audioEl && audioEl.src) {
+                const srcMatch = audioEl.src.match(/file=([^&]+)/);
+                if (srcMatch) {
+                    actualFilename = decodeURIComponent(srcMatch[1]);
+                    console.log('Using actual filename from audio src:', actualFilename);
+                }
             }
 
             // 로그 메시지를 친절한 한국어로 변환하는 헬퍼
@@ -1312,21 +1624,75 @@
             const logEl  = progressEl.querySelector('.call-log');
 
             const poll = () => {
-                fetch(`get_call_progress.php?file=${encodeURIComponent(filename)}`)
+                console.log('Polling call progress for filename:', actualFilename, '(original:', filename, ')');
+                fetch(`get_call_progress.php?file=${encodeURIComponent(actualFilename)}`)
                     .then(r=>r.json())
                     .then(data=>{
+                        console.log('Call progress response:', data);
                         if(!data.exists){
                             statusEl.textContent='녹음 대기중...';
+                            
+                            // 대안: call detail로 상태 확인 (녹음 파일이 없어도)
+                            // ID는 원본 filename에서 추출 (actualFilename에는 ID가 없을 수 있음)
+                            const m = filename.match(/-ID_([A-Za-z0-9]+)/);
+                            if (m) {
+                                fetch(`get_call_detail.php?id=${m[1]}&lines=5`)
+                                .then(r => r.json())
+                                .then(d => {
+                                    if (d.success && d.lines && d.lines.length > 0) {
+                                        // 로그가 있으면 통화 진행 중
+                                        const lastRaw = d.lines[d.lines.length-1];
+                                        const lastMsg = lastRaw.substring(lastRaw.indexOf(']')+2);
+                                        statusEl.textContent = translateCallLog(lastMsg) || '통화 진행 중...';
+                                        
+                                        // 진행률도 시간 기반으로 추정 (시작 시각이 있는 경우에만)
+                                        if (d.lines.length > 0) {
+                                            const firstLine = d.lines[0];
+                                            const timeMatch = firstLine.match(/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/);
+                                            if (timeMatch) {
+                                                const startTime = new Date(timeMatch[1]);
+                                                const elapsed = Math.max((Date.now() - startTime.getTime()) / 1000, 1);
+                                                const estimatedPercent = Math.min((elapsed / 60) * 100, 90); // 최대 90%
+                                                fillEl.style.width = estimatedPercent + '%';
+                                                durEl.textContent = Math.round(elapsed) + 's';
+                                            }
+                                        }
+                                    } else {
+                                        // 로그가 없으면 통화 시작 전
+                                        statusEl.textContent='통화 준비중...';
+                                        fillEl.style.width = '5%';
+                                        durEl.textContent = '0s';
+                                    }
+                                }).catch(() => {
+                                    // 로그 파일이 없으면 통화 시작 전
+                                    statusEl.textContent='통화 준비중...';
+                                    fillEl.style.width = '2%';
+                                    durEl.textContent = '0s';
+                                });
+                            } else {
+                                // ID가 없으면 기본 상태
+                                statusEl.textContent='녹음 대기중...';
+                                fillEl.style.width = '1%';
+                                durEl.textContent = '0s';
+                            }
+                            
                             setTimeout(poll,2000);
                             return;
                         }
                         durEl.textContent=`${data.duration_est}s`;
                         const percent=Math.min((data.duration_est/40)*100,99);
                         fillEl.style.width=percent+'%';
-                        // 최신 call_progress 로그(여러 줄)로 상태 및 로그 영역 업데이트
-                        (function(){
+                        // 통합된 call detail 체크 (상태 업데이트 + STT_DONE 감지)
+                        (function checkCallDetailAndCompletion(){
                             const m = filename.match(/-ID_([A-Za-z0-9]+)/);
-                            if(!m) return;
+                            if(!m) {
+                                // ID가 없으면 기본 폴링 계속
+                                if (!data.finished) {
+                                    setTimeout(poll, 2000);
+                                }
+                                return;
+                            }
+                            
                             fetch(`get_call_detail.php?id=${m[1]}&lines=20`)
                             .then(r=>r.json())
                             .then(d=>{
@@ -1335,26 +1701,46 @@
                                     const lastRaw = d.lines[d.lines.length-1];
                                     const lastMsg = lastRaw.substring(lastRaw.indexOf(']')+2);
                                     statusEl.textContent = translateCallLog(lastMsg);
+                                    
                                     // 전체 로그 표시
                                     if(logEl){
                                         const text = d.lines.map(l=>l.substring(l.indexOf(']')+2)).join('\n');
                                         logEl.textContent = text;
                                         logEl.scrollTop = logEl.scrollHeight;
                                     }
+                                    
+                                    // STT_DONE 완료 상태 체크
+                                    const hasSTTDone = d.lines.some(line => line.includes('STT_DONE'));
+                                    if (hasSTTDone || data.finished) {
+                                        console.log('Call finished detected - STT_DONE:', hasSTTDone, 'finished flag:', data.finished);
+                                        statusEl.textContent = '통화 종료';
+                                        fillEl.style.width = '100%';
+                                        
+                                        // Progress UI 제거 및 자동 분석 트리거
+                                        setTimeout(() => {
+                                            if (progressEl && progressEl.parentNode) {
+                                                progressEl.remove();
+                                            }
+                                            autoAnalysisSet.delete(filename);
+                                            
+                                            // 녹음 목록 갱신으로 분석 UI 전환
+                                            getRecordings();
+                                        }, 2000);
+                                        return; // 폴링 중단
+                                    }
                                 }
-                            }).catch(()=>{});
+                                
+                                // 완료되지 않았으면 계속 폴링
+                                if (!data.finished) {
+                                    setTimeout(poll, 2000);
+                                }
+                            }).catch(() => {
+                                // 에러 발생시 기본 로직 사용
+                                if (!data.finished) {
+                                    setTimeout(poll, 2000);
+                                }
+                            });
                         })();
-                        if(data.finished){
-                            statusEl.textContent='통화 종료';
-                            fillEl.style.width='100%';
-                            setTimeout(()=>{
-                                progressEl.remove();
-                                autoAnalysisSet.delete(filename); // 자동 분석 트리거를 위해 추가
-                                getRecordings();
-                            },3000);
-                        }else{
-                            setTimeout(poll,2000);
-                        }
                     })
                     .catch(()=>setTimeout(poll,3000));
             };
@@ -1570,6 +1956,11 @@
             const verifyMsg = document.getElementById('verifyMsg');
             const spamForm = document.getElementById('spamForm');
             
+            // Guard: if verification elements not present (already logged in / desktop no section), skip setup
+            if (!verificationSection || !verificationCode || !verifyMsg) {
+                return;
+            }
+
             let verificationCodeSent = false;
             let countdownTimer = null;
             
@@ -1820,21 +2211,31 @@
 
     // 스팸 문자 원본 모달 표시 함수
     function showSpamContentModal(button) {
-        const spamContent = button.dataset.spamContent;
+        const spamContentEncoded = button.dataset.spamContent;
         const spamDate = button.dataset.spamDate;
         
-        let content;
-        try {
-            content = JSON.parse(spamContent);
-        } catch (e) {
-            content = spamContent || '내용을 불러올 수 없습니다.';
+        let content = '';
+        if (spamContentEncoded) {
+            try {
+                content = decodeURIComponent(escape(atob(spamContentEncoded)));
+            } catch (e) {
+                content = '내용을 불러올 수 없습니다.';
+            }
         }
+
+        // Sanitize to prevent HTML injection & tag truncation
+        const escapeHtml = (str) => str.replace(/&/g,'&amp;')
+                                        .replace(/</g,'&lt;')
+                                        .replace(/>/g,'&gt;')
+                                        .replace(/"/g,'&quot;')
+                                        .replace(/'/g,'&#39;');
+        const safeContent = escapeHtml(content).replace(/\n/g,'<br>');
 
         const formattedDate = spamDate ? new Date(spamDate).toLocaleString('ko-KR') : '날짜 정보 없음';
 
         showCustomAlert(
             '📱 스팸문자 원본',
-            `**수신 시간:** ${formattedDate}\n\n**내용:**\n${content}`,
+            `**수신 시간:** ${formattedDate}<br><br>**내용:**<br>${safeContent}`,
             'info'
         );
     }
