@@ -57,39 +57,39 @@
             textarea.style.height = textarea.scrollHeight + 'px';
                 }
 
-                spamContent.addEventListener('input', function() {
+                if (spamContent) {
+                    spamContent.addEventListener('input', function() {
                         autoResize(this);
-                    // 새 입력이 시작되면 이전 결과 박스를 숨긴다
-                    if (resultArea) {
-                        resultArea.style.display = 'none';
-                        resultArea.innerHTML = '';
-                    }
+                        // 새 입력이 시작되면 이전 결과 박스를 숨긴다
+                        if (resultArea) {
+                            resultArea.style.display = 'none';
+                            resultArea.innerHTML = '';
+                        }
                         const text = this.value.trim();
-                        
                         // Mobile progressive disclosure - show/hide sections based on content
                         handleProgressiveDisclosure(text);
-                        
                         if (text.length > 10) {
                             analyzeText(text);
                         } else {
                             hideDynamicInput();
-                    }
-                });
-
-            spamContent.addEventListener('keydown', function(e){
-                // Enter 키 단독 입력으로 폼이 제출되는 것을 방지 (Shift+Enter 는 줄바꿈 허용)
-                if(e.key === 'Enter' && !e.shiftKey){
-                    e.stopPropagation();
-                    e.preventDefault();
-                    // 문단 구분을 위해 줄바꿈만 삽입
-                    const start = this.selectionStart;
-                    const end = this.selectionEnd;
-                    const value = this.value;
-                    this.value = value.substring(0, start) + '\n' + value.substring(end);
-                    this.selectionStart = this.selectionEnd = start + 1;
-                    autoResize(this);
                         }
-                });
+                    });
+
+                    spamContent.addEventListener('keydown', function(e){
+                        // Enter 키 단독 입력으로 폼이 제출되는 것을 방지 (Shift+Enter 는 줄바꿈 허용)
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            // 문단 구분을 위해 줄바꿈만 삽입
+                            const start = this.selectionStart;
+                            const end = this.selectionEnd;
+                            const value = this.value;
+                            this.value = value.substring(0, start) + '\n' + value.substring(end);
+                            this.selectionStart = this.selectionEnd = start + 1;
+                            autoResize(this);
+                        }
+                    });
+                }
 
             function analyzeText(text) {
             // 080 번호: 하이픈이 섞여 있어도 인식 (예: 080-8888-5050)
@@ -187,28 +187,33 @@
             }
             }
 
-        confirmButton.addEventListener('click', () => {
+        // 식별번호 선택/취소 버튼 이벤트 (버튼이 있을 때만)
+        if (confirmButton) {
+            confirmButton.addEventListener('click', () => {
                 const selectedRadio = document.querySelector('input[name="selectedId"]:checked');
-            if (!selectedRadio) return;
-            
-            confirmedId = (selectedRadio.value === 'custom')
-                ? document.getElementById('customIdInput').value.trim()
-                : selectedRadio.value;
+                if (!selectedRadio) return;
 
-            if (confirmedId) {
-                detectedIdText.innerHTML = `✅ 선택된 식별번호: <strong>${confirmedId}</strong>`;
+                confirmedId = (selectedRadio.value === 'custom')
+                    ? document.getElementById('customIdInput').value.trim()
+                    : selectedRadio.value;
+
+                if (confirmedId) {
+                    detectedIdText.innerHTML = `✅ 선택된 식별번호: <strong>${confirmedId}</strong>`;
                     detectedIdSection.style.display = 'block';
                     multipleIdSection.style.display = 'none';
-                confirmationContainer.classList.remove('show');
+                    confirmationContainer.classList.remove('show');
                 }
             });
+        }
 
-        cancelButton.addEventListener('click', () => {
+        if (cancelButton) {
+            cancelButton.addEventListener('click', () => {
                 confirmationContainer.classList.remove('show');
-            const selectedRadio = document.querySelector('input[name="selectedId"]:checked');
-            if(selectedRadio) selectedRadio.checked = false;
+                const selectedRadio = document.querySelector('input[name="selectedId"]:checked');
+                if (selectedRadio) selectedRadio.checked = false;
                 confirmedId = null;
             });
+        }
 
             // Mobile progressive disclosure handler
             function handleProgressiveDisclosure(text) {
@@ -252,11 +257,12 @@
                         }
                     }
                 } else {
-                    // On desktop, ensure sections are always visible
+                    // On desktop, ensure notification section is always visible
                     if (notificationSection) {
                         notificationSection.classList.add('show');
                     }
-                    // Verification section controlled by login_flow.js
+                    // Verification section: only show when triggered by user input
+                    // (removed auto-show for non-logged users)
                     if (submitSection) {
                         submitSection.classList.add('show');
                     }
@@ -301,7 +307,16 @@
                 const submitSection = document.getElementById('submitSection');
                 if (notificationSection) notificationSection.classList.add('show');
                 if (submitSection) submitSection.classList.add('show');
+            } else {
+                // For non-logged users on desktop, show verification section
+                if (window.innerWidth > 768) {
+                    const verificationSection = document.getElementById('verificationSection');
+                    if (verificationSection) verificationSection.classList.add('show');
+                }
             }
+            
+            // Check for pending form data after authentication
+            checkAndProcessPendingForm();
             handleProgressiveDisclosure(spamContent ? spamContent.value.trim() : '');
             
             window.addEventListener('resize', function() {
@@ -311,6 +326,45 @@
 
             function hideDynamicInput() {
                 dynamicContainer.classList.remove('show');
+        }
+
+        // Check for pending form data after authentication and process automatically
+        function checkAndProcessPendingForm() {
+            const pendingData = sessionStorage.getItem('pending_spam_form');
+            if (pendingData) {
+                try {
+                    const formData = JSON.parse(pendingData);
+                    // Check if data is recent (within 10 minutes)
+                    if (Date.now() - formData.timestamp < 600000) {
+                        console.log('Restoring and processing pending form data:', formData);
+                        
+                        // Restore form data
+                        const spamContentField = document.getElementById('spamContent');
+                        const notificationPhoneField = document.getElementById('notificationPhone');
+                        const phoneNumberField = document.getElementById('phoneNumber');
+                        
+                        if (spamContentField) spamContentField.value = formData.spam_content;
+                        if (notificationPhoneField) notificationPhoneField.value = formData.notification_phone;
+                        if (phoneNumberField && formData.phone_number) phoneNumberField.value = formData.phone_number;
+                        
+                        // Clear pending data
+                        sessionStorage.removeItem('pending_spam_form');
+                        
+                        // Auto-submit form after a short delay
+                        setTimeout(() => {
+                            console.log('Auto-submitting restored form...');
+                            const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                            spamForm.dispatchEvent(submitEvent);
+                        }, 1000);
+                    } else {
+                        // Data too old, remove it
+                        sessionStorage.removeItem('pending_spam_form');
+                    }
+                } catch (e) {
+                    console.error('Error processing pending form data:', e);
+                    sessionStorage.removeItem('pending_spam_form');
+                }
+            }
         }
 
         spamForm.addEventListener('submit', function(e) {
@@ -453,7 +507,7 @@
 
                         // 2. 통화 진행바 트리거 (DOM 업데이트 전에 체크) - 중복 방지 강화
                         data.recordings.forEach(rec => {
-                            if (rec.analysis_result === '미분석' && !rec.ready_for_analysis) {
+                            if (rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.' && !rec.ready_for_analysis) {
                                 const escapedFilename = CSS.escape(rec.filename);
                                 const btnEl = document.querySelector(`button.analyze-btn[data-file="${escapedFilename}"]`);
                                 const recordingItem = btnEl ? btnEl.closest('.recording-item') : null;
@@ -476,7 +530,7 @@
                         // 3. 진행 중인 분석 재개 (localStorage에서 복원)
                         activeAnalysisMap.forEach((analysisId, filename) => {
                             const rec = data.recordings.find(r => r.filename === filename);
-                            if (rec && rec.analysis_result === '미분석') {
+                            if (rec && rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.') {
                                 const escapedFilename = CSS.escape(filename);
                                 const btnEl = document.querySelector(`button.analyze-btn[data-file="${escapedFilename}"]`);
                                 const recordingItem = btnEl ? btnEl.closest('.recording-item') : null;
@@ -559,9 +613,32 @@
                                 }
                             });
                             
-                            // DOM 재구성
+                            // DOM 재구성 - 삭제 중인 버튼 상태 보존
+                            const disabledDeleteButtons = new Map();
+                            recordingsList.querySelectorAll('.delete-btn[disabled]').forEach(btn => {
+                                const recordingFile = btn.dataset.file;
+                                if (recordingFile) {
+                                    disabledDeleteButtons.set(recordingFile, {
+                                        originalContent: btn.innerHTML,
+                                        disabled: true
+                                    });
+                                }
+                            });
+                            
                             recordingsList.innerHTML = '';
-                            newItems.forEach(item => recordingsList.appendChild(item));
+                            newItems.forEach(item => {
+                                recordingsList.appendChild(item);
+                                
+                                // 삭제 중인 버튼 상태 복원
+                                const deleteBtn = item.querySelector('.delete-btn');
+                                if (deleteBtn && deleteBtn.dataset.file) {
+                                    const savedState = disabledDeleteButtons.get(deleteBtn.dataset.file);
+                                    if (savedState) {
+                                        deleteBtn.disabled = savedState.disabled;
+                                        deleteBtn.innerHTML = savedState.originalContent;
+                                    }
+                                }
+                            });
                         }
                     } else {
                         recordingsList.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">표시할 녹음 파일이 없습니다.</div>';
@@ -593,7 +670,7 @@
                             // 최신 discovery 녹음 찾기
                             const discoveryRecording = data.recordings.find(rec => 
                                 rec.call_type === 'discovery' && 
-                                rec.analysis_result === '미분석' &&
+                                rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.' &&
                                 (Date.now() - rec.file_mtime * 1000) < 60000 // 1분 이내 생성
                             );
                             
@@ -638,10 +715,7 @@
             // Encode spam content to avoid attribute truncation/HTML issues
             const spamContentEncoded = rec.spam_content ? btoa(unescape(encodeURIComponent(rec.spam_content))) : '';
             
-            const statusColor = rec.analysis_result === '성공' ? 'result-success' : 
-                                rec.analysis_result === '실패' ? 'result-failure' :
-                                rec.analysis_result === '불확실' ? 'result-uncertain' : 
-                                rec.analysis_result === '미분석' ? 'result-unknown' : 'result-unknown';
+            const statusColor = rec.analysis_result === '성공' ? 'result-success' : 'result-failure';
             
             const callTypeLabel = rec.call_type === 'discovery' 
                 ? '<span class="label label-discovery">패턴탐색</span>' 
@@ -680,11 +754,11 @@
             let showReanalyzeButton = false;
             const isConfirmOnly = rec.pattern_data && (rec.pattern_data.auto_supported === false || rec.pattern_data.pattern_type === 'confirm_only');
             let showRetryCallButton = false;
-            if (rec.call_type === 'unsubscribe' && (rec.analysis_result === '실패' || rec.analysis_result === '불확실' || rec.analysis_result === '시도됨')) {
+            if (rec.call_type === 'unsubscribe' && rec.analysis_result === '실패') {
                 showRetryCallButton = true;
             }
                     
-            if (rec.analysis_result && rec.analysis_result !== '미분석') {
+            if (rec.analysis_result && !(rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.')) {
                 const completedAt = rec.completed_at ? new Date(rec.completed_at).toLocaleString('ko-KR') : '';
                 const confidenceText = rec.confidence ? ` (신뢰도: ${rec.confidence}%)` : '';
                 
@@ -762,11 +836,17 @@
                                 </div>
                     <div class="recording-tags">${callTypeLabel} ${autoLabel} ${patternSourceLabel} ${registrationBadge} ${patternTypeBadge}</div>
                                     </div>
-                <audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;" crossorigin="anonymous" onloadeddata="this.currentTime=0;"></audio>
+                ${rec.ready_for_analysis || !(rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.') ? 
+                    `<audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;" crossorigin="anonymous" onloadeddata="this.currentTime=0;"></audio>` : 
+                    `<div class="audio-placeholder" style="width: 100%; margin-top: 10px; padding: 15px; background: #f8f9fa; border: 1px dashed #dee2e6; border-radius: 8px; text-align: center; color: #6c757d;">
+                        <div style="font-size: 14px;">🎙️ 녹음 진행 중...</div>
+                        <div style="font-size: 12px; margin-top: 5px;">통화 완료 후 재생 가능합니다</div>
+                    </div>`
+                }
                 ${analysisResultSection}
                 ${showAnalyzeButton ? `
-                <div class="recording-actions" style="margin-top: 10px;">
-                    ${showSpamContentButton ? `<button data-spam-content='${spamContentEncoded}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn"><span class="btn-mobile-text">📱</span><span class="btn-desktop-text">📱 스팸문자 원본</span></button>` : ''}
+                <div class="recording-actions" style="margin-top: 10px; display: flex; justify-content: flex-end; width: 100%;">
+                    ${showSpamContentButton ? `<button data-spam-content='${spamContentEncoded}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn"><span class="btn-mobile-text">📱</span><span class="btn-desktop-text">스팸문자 원본</span></button>` : ''}
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small analyze-btn">
                         <span class="btn-mobile-text">✨</span><span class="btn-desktop-text">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16" style="margin-right: 4px;">
@@ -776,13 +856,13 @@
                         분석하기</span>
                     </button>
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">
-                        <span class="btn-mobile-text">🗑</span><span class="btn-desktop-text">🗑 삭제</span>
+                        <span class="btn-mobile-text">🗑</span><span class="btn-desktop-text">삭제</span>
                     </button>
                 </div>
                 ` : ''}
                 ${showReanalyzeButton ? `
-                <div class="recording-actions" style="margin-top: 10px;">
-                    ${showSpamContentButton ? `<button data-spam-content='${spamContentEncoded}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn"><span class="btn-mobile-text">📱</span><span class="btn-desktop-text">📱 스팸문자 원본</span></button>` : ''}
+                <div class="recording-actions" style="margin-top: 10px; display: flex; justify-content: flex-end; width: 100%;">
+                    ${showSpamContentButton ? `<button data-spam-content='${spamContentEncoded}' data-spam-date="${rec.spam_received_at || ''}" class="btn btn-small spam-content-btn"><span class="btn-mobile-text">📱</span><span class="btn-desktop-text">스팸문자 원본</span></button>` : ''}
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small reanalyze-btn analyze-btn">
                         <span class="btn-mobile-text">🔄</span><span class="btn-desktop-text">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16" style="margin-right: 4px;">
@@ -791,9 +871,9 @@
                         </svg>
                         ${rec.call_type === 'discovery' ? '패턴 다시 분석하기' : '다시 분석하기'}</span>
                     </button>
-                    ${showRetryCallButton ? `<button data-file="${fileForAnalysis}" data-phone="${rec.title}" data-id="${rec.identification_number || rec.id || ''}" data-notify="${rec.notification_phone || ''}" class="btn btn-small retry-call-btn" ${isConfirmOnly?'disabled title="자동 수신거부가 불가능합니다."':''}><span class="btn-mobile-text">${isConfirmOnly?'☎️':'📞'}</span><span class="btn-desktop-text">${isConfirmOnly?'☎️ 직접 전화 필요':'📞 다시 시도하기'}</span></button>` : ''}
+                    ${showRetryCallButton ? `<button data-file="${fileForAnalysis}" data-phone="${rec.title}" data-id="${rec.identification_number || rec.id || ''}" data-notify="${rec.notification_phone || ''}" class="btn btn-small retry-call-btn" ${isConfirmOnly?'disabled title="자동 수신거부가 불가능합니다."':''}><span class="btn-mobile-text">${isConfirmOnly?'☎️':'📞'}</span><span class="btn-desktop-text">${isConfirmOnly?'직접 전화 필요':'다시 시도하기'}</span></button>` : ''}
                     <button data-file="${fileForAnalysis}" data-type="${rec.call_type}" class="btn btn-small delete-btn">
-                        <span class="btn-mobile-text">🗑</span><span class="btn-desktop-text">🗑 삭제</span>
+                        <span class="btn-mobile-text">🗑</span><span class="btn-desktop-text">삭제</span>
                     </button>
                 </div>
                 ` : ''}
@@ -829,7 +909,7 @@
             }
             
             // 통화 진행 상태 즉시 트리거 (녹음중일 때)
-            if (rec.analysis_result === '미분석' && !rec.ready_for_analysis && !item.querySelector('.call-progress')) {
+            if (rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.' && !rec.ready_for_analysis && !item.querySelector('.call-progress')) {
                 trackCallProgress(item, rec.filename);
             }
             
@@ -873,7 +953,7 @@
             }
             
             // 분석 결과 업데이트
-            if (currentAnalysisSection && rec.analysis_result !== '미분석') {
+            if (currentAnalysisSection && !(rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.')) {
                 const newAnalysisSection = createAnalysisSection(rec);
                 if (newAnalysisSection !== currentAnalysisSection.outerHTML) {
                     currentAnalysisSection.outerHTML = newAnalysisSection;
@@ -882,7 +962,7 @@
             
             // 버튼 상태 업데이트
             const analyzeBtn = item.querySelector('.analyze-btn');
-            if (analyzeBtn && rec.analysis_result === '미분석' && rec.ready_for_analysis) {
+            if (analyzeBtn && rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.' && rec.ready_for_analysis) {
                 analyzeBtn.disabled = false;
                 analyzeBtn.innerHTML = `
                     <span class="btn-mobile-text">✨</span><span class="btn-desktop-text">
@@ -897,7 +977,7 @@
 
         // 분석 섹션 HTML 생성 헬퍼 함수
         function createAnalysisSection(rec) {
-            if (rec.analysis_result === '미분석') {
+            if (rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.') {
                 return '';
             }
             
@@ -1250,6 +1330,9 @@
             const messageElement = progressContainer.querySelector('.progress-message');
             const recordingItem = progressContainer.closest('.recording-item');
 
+            let pollCount = 0;
+            const maxPollCount = 180; // 최대 3분 (800ms * 180 = 2.4분)
+
             const stageNames = {
                 'queued': '대기중',
                 'starting': '시작중',
@@ -1270,6 +1353,30 @@
 
             // 진행 상황 확인 함수
             const checkProgress = () => {
+                pollCount++;
+                
+                // 타임아웃 체크
+                if (pollCount > maxPollCount) {
+                    console.warn('Pattern analysis polling timeout for:', analysisId);
+                    progressContainer.style.background = '#fef3c7';
+                    progressContainer.style.borderColor = '#fbbf24';
+                    stageElement.textContent = '타임아웃';
+                    messageElement.textContent = '패턴 분석 시간이 초과되었습니다. 결과를 확인해주세요.';
+                    
+                    setTimeout(() => {
+                        progressContainer.remove();
+                        if (button) {
+                            button.disabled = false;
+                            button.innerHTML = originalButtonContent;
+                        }
+                        if (filename && activeAnalysisMap.has(filename)) {
+                            activeAnalysisMap.delete(filename);
+                            persistActiveAnalyses();
+                        }
+                        getRecordings();
+                    }, 3000);
+                    return;
+                }
                 fetch(`get_pattern_analysis_progress.php?analysis_id=${analysisId}`)
                     .then(response => response.json())
                     .then(data => {
@@ -1398,11 +1505,12 @@
             if (buttonContainer) {
                 buttonContainer.innerHTML = `
                     <button data-file="${fileForAnalysis}" data-type="discovery" class="btn btn-small reanalyze-btn analyze-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                        <span class="btn-mobile-text">🔄</span><span class="btn-desktop-text">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16" style="margin-right: 4px;">
                             <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
                             <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
                         </svg>
-                        패턴 다시 분석하기
+                        패턴 다시 분석하기</span>
                     </button>
                 `;
             }
@@ -1413,53 +1521,56 @@
             }, 1000);
         }
 
-        // 수동 분석 버튼 클릭 처리 - 이벤트 위임 수정
-        recordingsList.addEventListener('click', function(event) {
-            // 삭제 버튼 처리
-            const delBtn = event.target.closest('.delete-btn');
-            if (delBtn && !delBtn.disabled) {
-                event.preventDefault();
-                handleDeleteClick(delBtn);
-                return;
-            }
-
-            // 스팸 문자 원본 보기 버튼 처리
-            const spamBtn = event.target.closest('.spam-content-btn');
-            if (spamBtn) {
-                event.preventDefault();
-                showSpamContentModal(spamBtn);
-                return;
-            }
-
-            // 분석(재분석) 버튼 처리
-            const analyzeBtn = event.target.closest('.analyze-btn');
-            if (analyzeBtn && !analyzeBtn.disabled) {
-                event.preventDefault();
-                handleAnalysisClick(analyzeBtn);
-            }
-        });
-
-        // 오디오 플레이어 로드 시 시간 초기화 (버그 수정)
-        recordingsList.addEventListener('loadedmetadata', function(e) {
-            if (e.target.tagName === 'AUDIO') {
-                e.target.currentTime = 0;
-                // 메타데이터 로드 후 duration 재확인
-                if (isNaN(e.target.duration) || e.target.duration === 0) {
-                    // 강제로 메타데이터 재로드
-                    setTimeout(() => {
-                        e.target.load();
-                    }, 100);
+        // 녹음 목록이 있을 때만 이벤트 위임 및 오디오 이벤트 설정
+        if (recordingsList) {
+            // 수동 분석 버튼 클릭 처리 - 이벤트 위임 수정
+            recordingsList.addEventListener('click', function(event) {
+                // 삭제 버튼 처리
+                const delBtn = event.target.closest('.delete-btn');
+                if (delBtn && !delBtn.disabled) {
+                    event.preventDefault();
+                    handleDeleteClick(delBtn);
+                    return;
                 }
-                updateAudioTimeDisplay(e.target);
-            }
-        }, true);
 
-        // 오디오 시간 업데이트 이벤트
-        recordingsList.addEventListener('timeupdate', function(e) {
-            if (e.target.tagName === 'AUDIO') {
-                updateAudioTimeDisplay(e.target);
-            }
-        }, true);
+                // 스팸 문자 원본 보기 버튼 처리
+                const spamBtn = event.target.closest('.spam-content-btn');
+                if (spamBtn) {
+                    event.preventDefault();
+                    showSpamContentModal(spamBtn);
+                    return;
+                }
+
+                // 분석(재분석) 버튼 처리
+                const analyzeBtn = event.target.closest('.analyze-btn');
+                if (analyzeBtn && !analyzeBtn.disabled) {
+                    event.preventDefault();
+                    handleAnalysisClick(analyzeBtn);
+                }
+            });
+
+            // 오디오 플레이어 로드 시 시간 초기화 (버그 수정)
+            recordingsList.addEventListener('loadedmetadata', function(e) {
+                if (e.target.tagName === 'AUDIO') {
+                    e.target.currentTime = 0;
+                    // 메타데이터 로드 후 duration 재확인
+                    if (isNaN(e.target.duration) || e.target.duration === 0) {
+                        // 강제로 메타데이터 재로드
+                        setTimeout(() => {
+                            e.target.load();
+                        }, 100);
+                    }
+                    updateAudioTimeDisplay(e.target);
+                }
+            }, true);
+
+            // 오디오 시간 업데이트 이벤트
+            recordingsList.addEventListener('timeupdate', function(e) {
+                if (e.target.tagName === 'AUDIO') {
+                    updateAudioTimeDisplay(e.target);
+                }
+            }, true);
+        }
 
         // 오디오 시간 표시 업데이트 함수
         function updateAudioTimeDisplay(audio) {
@@ -1501,17 +1612,25 @@
                             }, 3000);
         }
 
-        // 새로고침 버튼 이벤트 리스너
-        refreshBtn.addEventListener('click', function() {
-            this.blur(); // 버튼에서 포커스 제거하여 pressed 상태 해제
-            getRecordings();
-        });
+        // 새로고침 버튼 이벤트 리스너 (버튼이 존재할 때만)
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', function() {
+                this.blur(); // 버튼에서 포커스 제거하여 pressed 상태 해제
+                getRecordings();
+            });
+        }
 
         // 삭제 버튼 클릭 처리 함수
         async function handleDeleteClick(button) {
             const recordingFile = button.dataset.file;
             const callType = button.dataset.type || 'unsubscribe';
             if (!recordingFile) return;
+
+            // 이미 삭제 중인 경우 중복 실행 방지
+            if (button.disabled) {
+                console.log('Delete already in progress for:', recordingFile);
+                return;
+            }
 
             const confirmed = await modernConfirm({
                 message: '정말 이 녹음과 분석 결과를 삭제하시겠습니까?',
@@ -1539,7 +1658,14 @@
                 if (data.success) {
                     showToast('삭제되었습니다.');
                     const item = button.closest('.recording-item');
-                    if (item) item.remove();
+                    if (item) {
+                        // DOM에서 즉시 제거하여 추가 요청 방지
+                        item.remove();
+                    }
+                    // 삭제 성공 후 목록 새로고침
+                    setTimeout(() => {
+                        getRecordings();
+                    }, 500);
                 } else {
                     showToast('삭제 실패: ' + (data.errors ? data.errors.join(', ') : '알 수 없는 오류'), true);
                     button.disabled = false;
@@ -2087,43 +2213,6 @@
                 }
             });
             
-            // 폼 제출 시 자동 인증 플로우
-            spamForm.addEventListener('submit', function(e) {
-                if (!window.IS_LOGGED) {
-                    e.preventDefault();
-                    
-                    // 알림받을 연락처가 입력되어 있는지 확인
-                    const notificationPhone = document.getElementById('notificationPhone').value.trim();
-                    if (!notificationPhone) {
-                        verifyMsg.className = 'verification-message verify-msg error';
-                        verifyMsg.textContent = '알림받을 연락처를 먼저 입력해주세요.';
-                        return false;
-                    }
-                    
-                    // 이미 인증번호가 전송되었고 입력된 경우 바로 인증 시도
-                    if (verificationCodeSent && verificationCode.value.trim()) {
-                        verifyCode();
-                        return false;
-                    }
-                    
-                    // 인증번호가 아직 전송되지 않았으면 자동으로 전송
-                    if (!verificationCodeSent) {
-                        verifyMsg.className = 'verification-message verify-msg info';
-                        verifyMsg.textContent = '인증번호를 전송하고 있습니다...';
-                        
-                        // 자동으로 인증번호 전송
-                        sendVerificationCode(notificationPhone);
-                        return false;
-                    }
-                    
-                    // 인증번호가 전송되었지만 입력되지 않은 경우
-                    verifyMsg.className = 'verification-message verify-msg error';
-                    verifyMsg.textContent = '전송된 인증번호를 입력해주세요.';
-                    verificationSection.style.display = 'block';
-                    verificationCode.focus();
-                    return false;
-                }
-            });
         }
 
     // 페이지 언로드 시 진행 중인 분석 저장
@@ -2142,7 +2231,7 @@
                     console.log('Current recordings:', data);
                     if (data.recordings) {
                         console.log('Ready for analysis:', data.recordings.filter(r => r.ready_for_analysis));
-                        console.log('In progress:', data.recordings.filter(r => r.analysis_result === '미분석'));
+                        console.log('In progress:', data.recordings.filter(r => r.analysis_result === '실패' && r.analysis_text === '아직 분석되지 않았습니다.'));
                     }
                 });
         };
