@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded',()=>{
   if(typeof IS_LOGGED!=='undefined' && !IS_LOGGED){
     const verSec=document.getElementById('verificationSection');
+    
+    // Force hide verification section initially only for non-logged users
+    if(verSec && !window.IS_LOGGED){
+      verSec.classList.remove('show');
+      verSec.style.display = 'none';
+    }
     const spamForm=document.getElementById('spamForm');
     let codeSent=false;
     let currentAuthPhone='';
@@ -15,14 +21,20 @@ document.addEventListener('DOMContentLoaded',()=>{
       const spamContent=document.getElementById('spamContent')?.value?.trim();
       const notifPhone=notifInput?.value?.replace(/[^0-9]/g,'');
       
-      // Mobile에서는 progressive disclosure가 인증 섹션을 보여줄 때까지 대기
-      if(window.innerWidth <= 768 && verSec && !verSec.classList.contains('show')){
-        return; // Progressive disclosure가 아직 인증 섹션을 노출하지 않았으면 대기
-      }
+      console.log('showVerificationIfNeeded called:', {
+        spamContent: spamContent ? 'present' : 'empty',
+        notifPhone,
+        phoneLength: notifPhone?.length,
+        windowWidth: window.innerWidth,
+        codeSent,
+        currentAuthPhone
+      });
       
-      if(spamContent && notifPhone && notifPhone.length>=10){
+      // SMS 발송 조건 개선: 연락처만 있어도 발송 (모바일 progressive disclosure에서 스팸 내용이 먼저 입력되었을 가능성)
+      if(notifPhone && notifPhone.length>=10){
         if(!codeSent || currentAuthPhone!==notifPhone){
           // 연락처가 변경되었거나 처음 입력시 자동으로 인증번호 발송
+          console.log('Triggering SMS send for:', notifPhone);
           sendVerificationCode(notifPhone);
         }
       }
@@ -47,19 +59,27 @@ document.addEventListener('DOMContentLoaded',()=>{
     function sendVerificationCode(phone){
       if(codeSent && currentAuthPhone===phone) return;
       
+      console.log('Sending verification code to:', phone);
       vMsg.textContent='인증번호를 발송중...';
       vMsg.className='verify-msg sending show';
       
-      fetch('api/send_code.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})})
+      fetch('api/send_code.php', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone })
+      })
         .then(r=>r.json()).then(d=>{
+          console.log('SMS API response:', d);
           if(d.success){
             codeSent=true;
             currentAuthPhone=phone;
-            // Progressive disclosure compatibility - only show if not in mobile progressive mode
-            if(window.innerWidth > 768 || verSec.classList.contains('show')){
+            // Progressive disclosure compatibility - ensure verification section is shown
+            if(!verSec.classList.contains('show')){
               verSec.classList.add('show');
-              verSec.scrollIntoView({behavior:'smooth'});
+              verSec.style.display = 'block'; // Override any inline display:none
             }
+            verSec.scrollIntoView({behavior:'smooth'});
             vMsg.textContent=`${phone}로 인증번호를 전송했습니다.`;
             vMsg.className='verify-msg success show';
             vInput.focus();
@@ -69,6 +89,7 @@ document.addEventListener('DOMContentLoaded',()=>{
               startCountdown(d.expires_at);
             }
           }else{
+            console.error('SMS sending failed:', d);
             vMsg.textContent=d.message||'전송 실패';
             vMsg.className='verify-msg error show';
           }
@@ -109,7 +130,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           ev.preventDefault();
           const phone=notifInput.value.replace(/[^0-9]/g,'');
           if(!phone){
-            modernAlert('알림받을 연락처를 입력하세요');
+            alert('알림받을 연락처를 입력하세요');
             notifInput.focus();
             return;
           }
@@ -118,7 +139,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           // 인증번호가 발송되었지만 아직 로그인되지 않은 경우
           ev.preventDefault();
           if(!vInput.value.trim()){
-            modernAlert('인증번호를 입력하세요');
+            alert('인증번호를 입력하세요');
             vInput.focus();
             return;
           }
@@ -139,18 +160,66 @@ document.addEventListener('DOMContentLoaded',()=>{
         return;
       }
 
+      // 인증 전에 폼 데이터를 세션 스토리지에 저장
+      const formData = {
+        spam_content: document.getElementById('spamContent')?.value || '',
+        notification_phone: phone,
+        phone_number: document.getElementById('phoneNumber')?.value || '',
+        timestamp: Date.now()
+      };
+      sessionStorage.setItem('pending_spam_form', JSON.stringify(formData));
+      console.log('Pending form data saved:', formData);
+
       vBtn.disabled=true;
       vBtn.textContent='인증중...';
       vMsg.textContent='인증번호를 확인중입니다...';
       vMsg.className='verify-msg checking show';
 
-      fetch('api/verify_code.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,code})})
+      fetch('api/verify_code.php', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, code })
+      })
         .then(r=>r.json()).then(d=>{
           if(d.success){
             vMsg.textContent='✅ 인증이 완료되었습니다. 잠시만 기다려주세요...';
             vMsg.className='verify-msg success show';
-            // 인증 성공시 페이지 새로고침하여 로그인 상태 반영
-            setTimeout(()=>window.location.reload(),1500);
+            
+            // Check if redirect is requested by server
+            if(d.redirect){
+              // Server requested redirect, reload to logged-in state
+              setTimeout(()=>{
+                console.log('Authentication successful, reloading page...', {
+                  logged_in: d.logged_in,
+                  user_phone: d.user_phone
+                });
+                
+                // Keep pending form data for processing after login
+                // (will be processed by pending_form_processor.js after reload)
+                
+                // Force complete page reload with cache busting
+                try {
+                  const currentUrl = new URL(window.location);
+                  currentUrl.searchParams.set('auth_complete', Date.now());
+                  currentUrl.searchParams.set('_', Date.now()); // Additional cache buster
+                  
+                  console.log('Redirecting to:', currentUrl.toString());
+                  
+                  // Use replace to avoid adding to history
+                  window.location.replace(currentUrl.toString());
+                } catch(e) {
+                  console.error('Redirect failed, trying simple reload:', e);
+                  // Fallback: simple reload
+                  window.location.reload(true);
+                }
+              }, 1500);
+            } else {
+              // Fallback: standard reload with cache busting
+              setTimeout(()=>{
+                window.location.reload(true);
+              },1500);
+            }
           } else {
             vMsg.textContent=d.message||'인증에 실패했습니다. 다시 시도해주세요.';
             vMsg.className='verify-msg error show';

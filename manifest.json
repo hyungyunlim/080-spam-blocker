@@ -1,0 +1,40 @@
+{
+    "name": "080 수신거부 자동화 시스템",
+    "short_name": "080 차단",
+    "description": "스팸 문자의 080 번호를 자동으로 추출하여 수신거부 전화를 대신 걸어주는 서비스",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f5f7fa",
+    "theme_color": "#667eea",
+    "orientation": "portrait",
+    "categories": ["utilities", "productivity"],
+    "lang": "ko",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3e%3ctext y='0.9em' font-size='100'%3e🚫%3c/text%3e%3c/svg%3e",
+            "sizes": "120x120",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3e%3ctext y='0.9em' font-size='150'%3e🚫%3c/text%3e%3c/svg%3e",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3e%3ctext y='0.9em' font-size='400'%3e🚫%3c/text%3e%3c/svg%3e",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 568'%3e%3crect width='320' height='568' fill='%23f5f7fa'/%3e%3ctext x='160' y='284' text-anchor='middle' font-size='20'%3e080 수신거부 자동화%3c/text%3e%3c/svg%3e",
+            "sizes": "320x568",
+            "type": "image/svg+xml",
+            "form_factor": "narrow"
+        }
+    ]
+}

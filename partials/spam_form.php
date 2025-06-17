@@ -70,7 +70,7 @@
 
             <!-- 인증 단계 (비로그인시 노출) -->
             <?php if (!$IS_LOGGED): ?>
-            <div id="verificationSection" class="verification-container progressive-section">
+            <div id="verificationSection" class="verification-container progressive-section" style="display: none;">
                 <div class="verification-header">
                     <div class="verification-icon">📱</div>
                     <div class="verification-title">

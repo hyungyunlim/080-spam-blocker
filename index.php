@@ -4,6 +4,13 @@ $IS_LOGGED=is_logged_in();
 $CUR_PHONE=current_user_phone(); 
 $IS_ADMIN=is_admin();
 
+// Debug session info for troubleshooting
+if (isset($_GET['auth_complete'])) {
+    error_log("Auth complete check - Logged in: " . ($IS_LOGGED ? 'YES' : 'NO') . 
+              ", Phone: " . $CUR_PHONE . 
+              ", Session ID: " . session_id());
+}
+
 // 로그인한 사용자의 마지막 접속 시간 업데이트
 if ($IS_LOGGED) {
     update_last_access();
@@ -139,8 +146,6 @@ if ($IS_LOGGED) {
         .btn:not(:active):not(:hover){transform:translateY(0) scale(1)}
     </style>
     
-    <!-- Preload critical fonts -->
-    <link rel="preload" href="data:font/woff2;base64," as="font" type="font/woff2" crossorigin>
     
     <!-- Load CSS asynchronously -->
     <link rel="preload" href="assets/style.css?v=<?php echo time(); ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -150,7 +155,7 @@ if ($IS_LOGGED) {
         <link rel="stylesheet" href="assets/modal.css?v=2">
     </noscript>
 </head>
-<body>
+<body class="<?php echo $IS_LOGGED ? 'logged-in' : 'not-logged-in'; ?>">
     <div class="container">
         <div class="header">
             <h1>🚫 080 수신거부 자동화 시스템</h1>
@@ -196,12 +201,54 @@ if ($IS_LOGGED) {
         <?php include __DIR__.'/partials/spam_form.php'; ?>
 
         <?php if ($IS_LOGGED): ?>
+        
+        <!-- 관리자 세션 디버깅 카드 (비로그인 상태에서도 표시) -->
+        <?php $sessionDebug = debug_session_info(); if ($sessionDebug): ?>
+        <div class="card">
+            <div class="card-header">
+                🔍 세션 디버깅 (관리자 전용)
+            </div>
+            <div class="card-body">
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 11px; margin-bottom: 10px;">
+                    <strong>기본 세션 정보:</strong><br>
+                    • 세션 ID: <?php echo $sessionDebug['session_id']; ?><br>
+                    • 세션 이름: <?php echo $sessionDebug['session_name']; ?><br>
+                    • 현재 호스트: <?php echo $sessionDebug['http_host']; ?><br>
+                    • HTTPS: <?php echo $sessionDebug['is_https'] ? 'Yes' : 'No'; ?><br>
+                    • 요청 URI: <?php echo $sessionDebug['request_uri']; ?><br>
+                    • 로그인 상태: <?php echo $sessionDebug['is_logged_in'] ? 'Yes' : 'No'; ?><br>
+                    • 사용자 ID: <?php echo $sessionDebug['user_id'] ?: '(없음)'; ?><br>
+                    • 전화번호: <?php echo $sessionDebug['phone'] ?: '(없음)'; ?>
+                </div>
+                
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 11px; margin-bottom: 10px;">
+                    <strong>쿠키 설정:</strong><br>
+                    • 도메인: <?php echo $sessionDebug['cookie_params']['domain'] ?: '(기본값)'; ?><br>
+                    • 경로: <?php echo $sessionDebug['cookie_params']['path']; ?><br>
+                    • Secure: <?php echo $sessionDebug['cookie_params']['secure'] ? 'Yes' : 'No'; ?><br>
+                    • HttpOnly: <?php echo $sessionDebug['cookie_params']['httponly'] ? 'Yes' : 'No'; ?><br>
+                    • SameSite: <?php echo $sessionDebug['cookie_params']['samesite'] ?: '(없음)'; ?><br>
+                    • Lifetime: <?php echo $sessionDebug['cookie_params']['lifetime']; ?>초
+                </div>
+                
+                <details style="margin-top: 10px;">
+                    <summary style="cursor: pointer; font-weight: bold;">전체 세션 데이터 보기</summary>
+                    <pre style="background: #f5f5f5; padding: 10px; margin-top: 5px; font-size: 10px; overflow-x: auto;"><?php echo htmlspecialchars(print_r($sessionDebug['session_data'], true)); ?></pre>
+                </details>
+            </div>
+        </div>
+        <?php endif; ?>
+        
+        <?php if ($IS_ADMIN): ?>
+        
         <!-- 녹음 파일 목록 카드 -->
         <?php include __DIR__.'/partials/recordings_list.php'; ?>
 
         <!-- 패턴 요약 카드 -->
         <?php include __DIR__.'/partials/pattern_summary.php'; ?>
-        <?php endif; ?>
+        <?php endif; /* end IS_ADMIN */ ?>
+
+        <?php endif; /* end second IS_LOGGED */ ?>
     </div>
 
     <div id="toast" class="toast-notification"></div>
@@ -223,6 +270,7 @@ if ($IS_LOGGED) {
     <script src="login_flow.js?v=<?php echo time(); ?>" defer></script>
     <script src="assets/modal.js?v=2" defer></script>
     <script src="assets/app.js?v=<?php echo time(); ?>" defer></script>
+    <script src="assets/pending_form_processor.js?v=<?php echo time(); ?>" defer></script>
     
     <?php
     // Add performance monitoring in development

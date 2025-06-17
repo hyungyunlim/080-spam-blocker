@@ -121,6 +121,10 @@ if (php_sapi_name() !== 'cli' && !empty($spamMessage) && $spamMessage !== 'AUTO_
         $dbPath = __DIR__ . '/spam.db';
         $db = new SQLite3($dbPath);
         
+        // 동시 접근 경합 완화를 위한 설정
+        $db->exec('PRAGMA journal_mode=WAL;');
+        $db->busyTimeout(3000);
+        
         // 사용자 ID 확인/생성
         $cleanNotifyDigits = preg_replace('/[^0-9]/', '', $notificationPhone);
         $stmt = $db->prepare("SELECT id FROM users WHERE phone = :phone");
@@ -287,6 +291,8 @@ $uniqueId = uniqid();
 try{
     $dbPath= __DIR__.'/spam.db';
     $dbUC = new SQLite3($dbPath);
+    $dbUC->exec('PRAGMA journal_mode=WAL;');
+    $dbUC->busyTimeout(3000);
     $uidRow = $dbUC->querySingle("SELECT id FROM users WHERE phone='{$cleanNotifyDigits}'",true);
     $uidVal = $uidRow ? (int)$uidRow['id'] : null;
     $stmtUC = $dbUC->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status,pattern_source,notification_phone) VALUES (:cid,:uid,:p080,:ident,datetime("now"),"pending",:pattern_source,:notify)');

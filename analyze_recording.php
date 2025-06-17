@@ -82,7 +82,7 @@ file_put_contents($progressFile, json_encode([
     'updated_at' => time()
 ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
-$modelSize = 'small'; // small 모델 사용
+$modelSize = 'base'; // base 모델 사용
 
 // 결과 JSON 파일 경로 (wrapper expects positional arg)
 $baseName = pathinfo($recordingFile, PATHINFO_FILENAME);

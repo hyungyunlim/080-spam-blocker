@@ -96,7 +96,7 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
     }
 
     // 패턴 매니저에서 자동 등록 여부 확인
-    $patternManager = new PatternManager();
+    $patternManager = new PatternManager(__DIR__ . '/patterns.json');
     $patternsData = $patternManager->getPatterns();
     $pattern_registered_auto = false;
     if ($phone_in_filename && isset($patternsData['patterns'][$phone_in_filename])) {
@@ -145,8 +145,17 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
                         }
                     }
 
+                    // 패턴 발견에서도 성공 키워드 재분류 적용
+                    $pattern_status = '성공';
+                    if (isset($data['transcription'])) {
+                        $transcription = strtolower(str_replace([' ', '.'], '', $data['transcription']));
+                        if (preg_match('/(정상.*처리|정상적.*처리|정상.*완료|정상적.*완료|처리.*완료|처리.*되었|정상|정상적)/', $transcription)) {
+                            $pattern_status = '성공';
+                        }
+                    }
+                    
                     return [
-                        'analysis_result' => '성공',
+                        'analysis_result' => $pattern_status,
                         'analysis_text' => '패턴 분석 완료 - ' . ($data['pattern']['name'] ?? '패턴 생성됨'),
                         'confidence' => $data['confidence'] ?? null,
                         'transcription' => $data['transcription'] ?? null,
@@ -208,8 +217,17 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
                         }
                     }
 
+                    // fallback 패턴 발견에서도 성공 키워드 재분류 적용
+                    $fallback_status = '성공';
+                    if (isset($latestData['transcription'])) {
+                        $transcription = strtolower(str_replace([' ', '.'], '', $latestData['transcription']));
+                        if (preg_match('/(정상.*처리|정상적.*처리|정상.*완료|정상적.*완료|처리.*완료|처리.*되었|정상|정상적)/', $transcription)) {
+                            $fallback_status = '성공';
+                        }
+                    }
+                    
                     return [
-                        'analysis_result' => '성공',
+                        'analysis_result' => $fallback_status,
                         'analysis_text' => '패턴 분석 완료 - ' . ($latestData['pattern']['name'] ?? '패턴 생성됨'),
                         'confidence' => $latestData['confidence'] ?? null,
                         'transcription' => $latestData['transcription'] ?? null,
@@ -249,23 +267,25 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
             if ($recordTimestamp && $analysisTs && $analysisTs <= ($recordTimestamp + 5)) {
                 // treat as un-analyzed
             } else {
-                $status = $data['analysis']['status'] ?? '결과 없음';
-                // "success", "failed", "unknown" 등을 한글로 변환
+                $status = $data['analysis']['status'] ?? 'failed';
+                
+                // 기존 "attempted" 또는 "unknown" 결과를 성공 키워드 기반으로 재분류
+                if (in_array($status, ['attempted', 'unknown']) && isset($data['transcription'])) {
+                    $transcription = strtolower(str_replace([' ', '.'], '', $data['transcription']));
+                    if (preg_match('/(정상.*처리|정상적.*처리|정상.*완료|정상적.*완료|처리.*완료|처리.*되었|정상|정상적)/', $transcription)) {
+                        $status = 'success';
+                    } else {
+                        $status = 'failed'; // attempted나 unknown은 모두 실패로 처리
+                    }
+                }
+                
+                // "success", "failed"만 사용하는 간단한 분류
                 switch ($status) {
                     case 'success':
                         $status_ko = '성공';
                         break;
-                    case 'failed':
-                        $status_ko = '실패';
-                        break;
-                    case 'unknown':
-                        $status_ko = '불확실';
-                        break;
-                    case 'attempted':
-                        $status_ko = '시도됨';
-                        break;
                     default:
-                        $status_ko = $status; // 그 외 다른 상태값은 그대로 사용
+                        $status_ko = '실패'; // attempted, failed, unknown 모두 실패로 통합
                 }
 
                 // 확인 절차 실패 기반 confirm_only 패턴 자동 등록
@@ -305,7 +325,7 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
     }
     
     return [
-        'analysis_result' => '미분석',
+        'analysis_result' => '실패',
         'analysis_text' => '아직 분석되지 않았습니다.',
         'confidence' => null,
         'transcription' => null,
@@ -322,7 +342,7 @@ $recExtractor = new RecordingInfoExtractor();
 
 // Load all patterns once for later lookups
 require_once __DIR__ . '/pattern_manager.php';
-$patternManagerGlobal = new PatternManager();
+$patternManagerGlobal = new PatternManager(__DIR__ . '/patterns.json');
 $allPatternsGlobal = $patternManagerGlobal->getPatterns();
 
 // 디렉토리가 존재하는지 확인
@@ -406,11 +426,11 @@ if (is_dir($recording_dir)) {
                     }
                 }
 
-                // 자동 분석 필요 여부 (현재 미분석이며 파일 수정 후 10초 경과 및 파일 크기 150KB 이상)
+                // 자동 분석 필요 여부 (현재 미분석이며 파일 수정 후 4초 경과 및 파일 크기 80KB 이상)
                 $inactive = (time() - $recording_info['file_mtime']) > 4; // 최근 4초간 변동 없음
                 $longEnough = $recording_info['file_size'] >= 80 * 1024;   // 약 5초 이상 분량
                 $recording_info['ready_for_analysis'] = (
-                    ($recording_info['analysis_result'] === '미분석') &&
+                    ($recording_info['analysis_result'] === '실패' && $recording_info['analysis_text'] === '아직 분석되지 않았습니다.') &&
                     $inactive &&
                     $longEnough
                 );
@@ -426,7 +446,7 @@ if (is_dir($recording_dir)) {
                     if (preg_match('/discovery-(\d+)/', $recording_info['filename'], $m)) {
                         $pn = $m[1];
                         require_once __DIR__ . '/pattern_manager.php';
-                        $pm = new PatternManager();
+                        $pm = new PatternManager(__DIR__ . '/patterns.json');
                         $patterns = $pm->getPatterns();
                         if (isset($patterns['patterns'][$pn])) {
                             $recording_info['pattern_data'] = $patterns['patterns'][$pn];

@@ -1,10 +1,24 @@
 <?php
 require_once __DIR__ . '/auth.php';
 
-// 인증 확인
+// 인증 확인 - 로그인 페이지로 리다이렉트
 if (!is_logged_in()) {
-    header("HTTP/1.1 401 Unauthorized");
-    echo "Authentication required.";
+    // Ajax 요청인지 확인
+    $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+              strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+    
+    if ($isAjax) {
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'authentication_required', 'redirect' => '/login.php']);
+        exit;
+    }
+    
+    // 현재 URL을 저장하여 로그인 후 리다이렉트
+    $currentUrl = $_SERVER['REQUEST_URI'];
+    $_SESSION['login_redirect'] = $currentUrl;
+    
+    // 로그인 페이지로 리다이렉트
+    header("Location: /login.php");
     exit;
 }
 
@@ -40,6 +54,11 @@ $full_path = $recording_dir . $filename;
 
 // 파일이 실제로 존재하고, .wav 파일인지 확인
 if (file_exists($full_path) && pathinfo($full_path, PATHINFO_EXTENSION) == 'wav') {
+    // CORS 헤더 추가 (모바일 호환성)
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET');
+    header('Access-Control-Allow-Headers: *');
+    
     // 브라우저에 오디오 파일임을 알리는 헤더 전송
     header('Content-Type: audio/wav');
     header('Content-Length: ' . filesize($full_path));

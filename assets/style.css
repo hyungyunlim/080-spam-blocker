@@ -13,9 +13,10 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 100%; /* 전체 폭 사용 */
+            width: 100%; /* 컨테이너 폭 100% */
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px; /* 패딩을 줄여 더 넓은 공간 확보 */
         }
 
         .header {
@@ -202,6 +203,8 @@
             opacity: 0;
             transform: translateY(20px);
             animation: cardFadeIn 0.6s ease-out forwards;
+            width: 100%; /* 카드 폭 100% */
+            max-width: none; /* 최대 폭 제한 제거 */
         }
 
         .card:nth-child(1) { animation-delay: 0.1s; }
@@ -756,12 +759,28 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 4px; /* 모바일에서 최대한 넓은 화면 사용 */
+                max-width: 100vw; /* 뷰포트 전체 폭 사용 */
+            }
+            
+            .card {
+                width: 99.5%; /* 모바일에서 카드 폭 99.5% */
+                margin-left: auto;
+                margin-right: auto;
             }
             
             .header {
-                padding: 30px 20px;
-                margin-bottom: 20px;
+                padding: 20px 15px; /* 모바일 헤더 패딩 축소 */
+                margin-bottom: 15px;
+            }
+            
+            .card-header {
+                padding: 15px; /* 모바일 카드 헤더 패딩 축소 */
+                font-size: 1.2rem;
+            }
+            
+            .card-body {
+                padding: 20px 15px; /* 모바일 카드 바디: 상하 20px, 좌우 15px (헤더와 동일) */
             }
             
             .header h1 {
@@ -1085,16 +1104,10 @@
             overflow: hidden;
         }
 
-        /* Desktop verification container behavior */
+        /* Desktop verification container behavior - only for non-logged users */
         @media (min-width: 769px) {
-            .verification-container:not(.show) {
-                opacity: 0;
-                transform: translateY(-10px);
-                max-height: 0;
-                padding-top: 0;
-                padding-bottom: 0;
-                margin-top: 0;
-                margin-bottom: 0;
+            body:not(.logged-in) .verification-container:not(.show) {
+                display: none !important;
             }
         }
 
@@ -1378,12 +1391,13 @@
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
+                padding: 4px; /* 모바일에서 최대한 넓은 화면 사용 */
+                max-width: 100vw; /* 뷰포트 전체 폭 사용 */
             }
             
             .header {
-                padding: 30px 20px;
-                margin-bottom: 20px;
+                padding: 20px 15px; /* 모바일 헤더 패딩 축소 */
+                margin-bottom: 15px;
             }
             
             .header h1 {
@@ -1523,32 +1537,64 @@
         /* Buttons container for recordings */
         .recording-actions{
             display:flex;
-            flex-wrap:wrap;
-            gap:10px;
-            justify-content:space-between;
+            flex-wrap:nowrap; /* 한 줄로 강제 */
+            gap:8px;
+            justify-content:flex-end !important; /* force right align on desktop */
+            overflow-x:auto; /* 모바일에서 가로 스크롤 허용 */
+            width: 100%; /* 전체 폭 사용 */
+        }
+        
+        .recording-item .recording-actions {
+            justify-content: flex-end !important; /* 데스크톱에서 우측 정렬 강화 */
+            text-align: right;
         }
 
         @media (max-width:768px){
-            .recording-actions .btn{
-                flex:1 1 calc(50% - 8px);
-                text-align:center;
+            .recording-actions,
+            .recording-item .recording-actions {
+                justify-content:flex-end !important; /* 모바일에서도 우측 정렬 */
+                gap:8px; /* 모바일에서 아이콘 간격 늘림 */
+                text-align: right;
             }
-        }
-
-        @supports (-webkit-touch-callout: none) {
-            /* iOS / Safari specific flexbox gap workaround */
-            .recording-actions {
-                justify-content: flex-start; /* left align rows */
-                row-gap: 10px; /* explicit row gap since older Safari ignores gap in wrap rows */
-            }
+            
             .recording-actions .btn {
-                flex: 0 0 calc(50% - 8px); /* exact 2-column width */
-                margin-bottom: 10px; /* fallback for older WebKit with no row-gap */
+                padding: 10px 12px; /* 모바일에서 버튼 크기 약간 키움 */
+                font-size: 0.9rem; /* 모바일에서 폰트 크기 조정 */
+                min-width: auto; /* 최소 폭 제거 */
             }
         }
 
-        /* Mobile Progressive Disclosure for Spam Form - Force hide initially */
-        .progressive-section:not(.show) {
+        .recording-actions .btn {
+            flex-shrink: 0; /* 버튼 크기 축소 방지 */
+            white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        }
+
+        /* 강력한 우측 정렬 강제 - 모든 상위 컨테이너 영향 무시 */
+        div[style*="margin-top: 10px"] .recording-actions,
+        .recording-item > .recording-actions,
+        .recording-actions {
+            margin-left: auto !important;
+            margin-right: 0 !important;
+            align-self: flex-end !important;
+            justify-self: flex-end !important;
+        }
+
+        /* 상위 컨테이너가 있어도 우측 정렬 보장 */
+        .recording-actions {
+            display: flex !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+            width: 100% !important;
+            max-width: none !important;
+        }
+
+        /* Mobile Progressive Disclosure for Spam Form - Force hide initially only for non-logged users */
+        body:not(.logged-in) .progressive-section:not(.show) {
+            display: none !important;
+        }
+        
+        /* Extra verification section hiding for non-logged users only */
+        body:not(.logged-in) #verificationSection:not(.show) {
             display: none !important;
         }
         
@@ -1596,5 +1642,67 @@
                 max-height: none;
                 margin-top: 20px;
                 margin-bottom: 20px;
+            }
+        }
+
+        /* Responsive Button Text - Mobile shows icons only, Desktop shows text */
+        @media (max-width: 768px) {
+            .btn-desktop-text {
+                display: none !important;
+            }
+            .btn-mobile-text {
+                display: inline !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .btn-mobile-text {
+                display: none !important;
+            }
+            .btn-desktop-text {
+                display: inline !important;
+            }
+        }
+
+        @media (max-width: 768px){
+            /* Compact buttons on recording list for mobile */
+            .recording-item .recording-actions .btn{
+                padding:8px 10px !important;
+                font-size:14px !important;
+                gap:6px !important;
+                flex:0 0 auto;
+            }
+            /* 모바일에서는 SVG 아이콘 숨기고 이모지만 표시 */
+            .recording-item .recording-actions .btn svg{
+                display:none !important;
+            }
+            .recording-item .recording-actions .btn .btn-desktop-text{
+                display:none !important;
+            }
+            .recording-item .recording-actions .btn .btn-mobile-text{
+                display:inline !important;
+                font-size:18px; /* 이모지 크기 키움 */
+            }
+        }
+
+        /* Hide specific SVG icon (bi-arrow-clockwise) completely */
+        .bi-arrow-clockwise {
+            display: none !important;
+        }
+
+        @media (min-width: 769px) {
+            /* 데스크톱에서는 SVG 아이콘과 텍스트 모두 표시 */
+            .recording-item .recording-actions .btn svg{
+                display:inline !important;
+            }
+            .recording-item .recording-actions .btn .btn-desktop-text{
+                display:inline !important;
+            }
+            .recording-item .recording-actions .btn .btn-mobile-text{
+                display:none !important;
+            }
+            /* 하지만 bi-arrow-clockwise는 데스크톱에서도 숨김 */
+            .bi-arrow-clockwise {
+                display: none !important;
             }
         }

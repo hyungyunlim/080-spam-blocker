@@ -31,7 +31,7 @@ if (file_exists($resultFile)) {
         // pattern_manager.php에 패턴 저장
         require_once __DIR__ . '/pattern_manager.php';
         
-        $patternManager = new PatternManager();
+        $patternManager = new PatternManager(__DIR__ . '/patterns.json');
         
         // 디버그 로깅
         error_log("Pattern analysis completed for phone: " . $resultData['phone_number']);

@@ -26,10 +26,12 @@ def detect_unsubscribe_patterns(text):
     text_normalized = text.lower().replace(" ", "").replace(".", "")
     
     success_patterns = {
-        '처리완료': (r'(정상적|성공적)으로(처리|완료|등록|차단|해지|거부)되었|이미처리', 95),
+        '정상처리': (r'정상.*처리|정상적.*처리|정상.*완료|정상적.*완료', 95),
+        '처리완료': (r'(정상적|성공적)으로(처리|완료|등록|차단|해지|거부)되었|이미처리|처리.*완료|처리.*되었', 95),
         '완료': (r'(처리|등록|차단|해지|거부|접수)완료|(처리|등록|차단|해지|거부)되었습니다', 90),
-        '접수': (r'접수되었습니다|접수됐', 85),
-        '거부관련': (r'거부(가|를|에|의)?\s*(완료|처리|등록|신청)|수신거부.*완료|거부되었습니다|거부\s*되었습니다', 88)
+        '접수': (r'접수되었습니다|접수됐|접수.*완료', 85),
+        '거부관련': (r'거부(가|를|에|의)?\s*(완료|처리|등록|신청)|수신거부.*완료|거부되었습니다|거부\s*되었습니다', 88),
+        '정상키워드': (r'정상|정상적', 80)
     }
     
     failure_patterns = {
@@ -63,15 +65,16 @@ def detect_unsubscribe_patterns(text):
         if re.search(pattern, text_normalized):
             return {'status': 'failed', 'confidence': confidence, 'reason': f'확인 절차만 요구하여 자동 처리 실패 감지: {reason}'}
 
-    # 일반적인 시도/안내 패턴 – 결과가 불분명할 때 attempted 유지
-    attempt_patterns = {
-        '시도': (r'수신거부|수신차단|해지|거부', 60)
+    # 수신거부 관련 키워드가 있지만 명확한 성공/실패 판단이 안 되는 경우 실패로 처리
+    # (실제 수신거부가 되었다면 보통 "완료", "처리" 등의 명확한 표현이 나오기 때문)
+    general_patterns = {
+        '수신거부언급': (r'수신거부|수신차단|해지|거부', 40)
     }
-    for reason, (pattern, confidence) in attempt_patterns.items():
+    for reason, (pattern, confidence) in general_patterns.items():
          if re.search(pattern, text_normalized):
-            return {'status': 'attempted', 'confidence': confidence, 'reason': '결과가 불분명한 수신거부 시도 키워드 감지'}
+            return {'status': 'failed', 'confidence': confidence, 'reason': '수신거부 키워드는 감지되었으나 명확한 완료 표현 없음 - 실패로 판정'}
 
-    return {'status': 'unknown', 'confidence': 20, 'reason': '관련 키워드를 찾을 수 없음'}
+    return {'status': 'failed', 'confidence': 30, 'reason': '관련 키워드를 찾을 수 없음 - 실패로 판정'}
 
 
 def analyze_audio(audio_file, output_file, progress_file=None, model_size='small'):
@@ -181,7 +184,7 @@ def main():
     parser = argparse.ArgumentParser(description="Whisper-based audio analysis for unsubscribe confirmation.")
     parser.add_argument("--file", required=True, help="Path to the audio file to analyze.")
     parser.add_argument("--output_dir", required=True, help="Directory to save the analysis JSON result.")
-    parser.add_argument("--model", default="small", help="Whisper model size (e.g., tiny, base, small, medium).")
+    parser.add_argument("--model", default="base", help="Whisper model size (e.g., tiny, base, small, medium).")
     parser.add_argument("--progress_file", help="Path to save progress updates.")
     
     args = parser.parse_args()

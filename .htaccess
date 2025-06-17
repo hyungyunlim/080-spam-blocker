@@ -3,6 +3,13 @@ Options -Indexes
 # Enable mod_rewrite
 RewriteEngine On
 
+# Force no cache for CSS and JS files during development
+<FilesMatch "\.(css|js)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</FilesMatch>
+
 # Redirect /spam-admin to admin.php
 RewriteRule ^spam-admin/?$ admin.php [L,QSA]
 

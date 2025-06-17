@@ -20,6 +20,9 @@ class SMSSender {
         // 데이터베이스 연결 초기화
         try {
             $this->db = new SQLite3(__DIR__ . '/spam.db');
+            // WAL 모드 전환 + busy timeout 3초 (동시 접근 경합 완화)
+            $this->db->exec('PRAGMA journal_mode=WAL;');
+            $this->db->busyTimeout(3000);
             // 스키마 적용
             $schemaFile = __DIR__ . '/schema.sql';
             if (file_exists($schemaFile)) {
@@ -441,6 +444,9 @@ class SMSSender {
             $message .= "❓확인필요\n";
         }
         
+        // 웹 URL과 음성파일 링크 추가
+        $webUrl = $this->getWebUrl();
+        $message .= "🌐{$webUrl}\n";
         $message .= "🎙️{$serverUrl}/player.php?file=" . urlencode($recordingFile);
         
         return $this->sendSMS($phoneNumber, $message);
@@ -715,6 +721,32 @@ class SMSSender {
         // 모든 재시도 실패
         $lastResult['message'] = "SMS 전송 실패 ({$maxRetries}회 재시도): " . $lastResult['message'];
         return $lastResult;
+    }
+    
+    /**
+     * 웹 URL 생성 (사용자 접근용)
+     * @return string 웹사이트 URL
+     */
+    private function getWebUrl() {
+        // 설정에서 URL 가져오기
+        if (isset($this->config['web_url']) && !empty($this->config['web_url'])) {
+            return rtrim($this->config['web_url'], '/');
+        }
+        
+        // 서버 URL에서 추출
+        $serverUrl = $this->config['server_url'] ?? '';
+        if (!empty($serverUrl)) {
+            return rtrim($serverUrl, '/');
+        }
+        
+        // 기본값: 도메인 감지
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+            return "{$protocol}://{$_SERVER['HTTP_HOST']}";
+        }
+        
+        // 최종 fallback
+        return 'https://spam.juns.mywire.org';
     }
 }
 // End of SMS sender class (no closing PHP tag to avoid accidental whitespace output)

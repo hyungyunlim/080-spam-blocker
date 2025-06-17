@@ -38,6 +38,9 @@ class StartupManager {
         
         file_put_contents($this->stateFile, json_encode($state, JSON_PRETTY_PRINT));
         
+        // 퍼미션: Apache(www-data)와 Asterisk 모두 쓰기 가능하도록 0666
+        @chmod($this->stateFile, 0666);
+        
         // 로그 기록
         $logMsg = date('Y-m-d H:i:s') . " [StartupManager] Startup marked: {$type}, safe threshold: " . date('Y-m-d H:i:s', $state['safe_message_threshold']) . "\n";
         file_put_contents(__DIR__ . '/logs/startup.log', $logMsg, FILE_APPEND);
@@ -94,6 +97,13 @@ class StartupManager {
         $tmpDir = '/tmp/';
         
         $cleaned = 0;
+        
+        // 0. 스풀 디렉토리의 잔여 call 파일들 정리 (재시작 시 즉시 발신 방지)
+        if (is_dir($spoolDir)) {
+            foreach (glob($spoolDir . '/*.call') as $file) {
+                if (unlink($file)) $cleaned++;
+            }
+        }
         
         // 1. 큐 디렉토리의 오래된 call 파일들 정리
         if (is_dir($queueDir)) {

@@ -28,7 +28,7 @@ $stateFile  = '/tmp/call_queue_last_move';
 // queue 폴더 파일  → 1시간 이상이면 폐기
 // spool 폴더 파일 → 30분 이상이면 폐기(통화 실패·미완료 가능성)
 $queueTtlSec = 3600;   // 1 h
-$spoolTtlSec = 1800;   // 30 min
+$spoolTtlSec = 300;    // 5 min
 
 // 시작 모드 처리
 if ($startupMode) {

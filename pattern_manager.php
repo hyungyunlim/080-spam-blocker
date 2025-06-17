@@ -17,4 +17,6 @@ if ($isDirect) {
     ob_start();
     require_once __DIR__ . '/PatternManager.php';
     ob_end_clean();
-} 
+}
+
+// End of wrapper (no closing PHP tag)

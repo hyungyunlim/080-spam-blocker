@@ -10,6 +10,7 @@ return [
     // 경고 표시 임계값 (바이트)
     'warning_threshold' => 250,
     
+    
     // SMS 메시지 모드 ('short' = 간결, 'detailed' = 상세)
     'message_mode' => 'short',
     

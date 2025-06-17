@@ -1,36 +1,11 @@
 <?php
 // sudo nano pattern_discovery.php
 
+
 require_once __DIR__ . '/pattern_manager.php';
 require_once __DIR__ . '/call_processor.php';
 
-if (!class_exists('PatternManager')) {
-    if (file_exists(__DIR__ . '/pattern_manager.php')) {
-        require_once __DIR__ . '/pattern_manager.php';
-    } else if (file_exists(__DIR__ . '/pattern_manager_class.php')) { // legacy name
-        require_once __DIR__ . '/pattern_manager_class.php';
-    } else {
-        class PatternManager {
-            private $patternsFile;
-            public function __construct($path) { $this->patternsFile = $path; }
-            public function getPatterns() { 
-                if (!file_exists($this->patternsFile)) return ['patterns' => ['default' => []]];
-                $data = json_decode(file_get_contents($this->patternsFile), true);
-                return $data ?: ['patterns' => ['default' => []]];
-            }
-            public function savePatterns($data) { 
-                return file_put_contents($this->patternsFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-            }
-        }
-    }
-}
-
-if (!class_exists('CallProcessor')) {
-    require_once __DIR__ . '/process_v2.php';
-}
-if (!class_exists('SMSSender')) {
-    require_once __DIR__ . '/sms_sender.php';
-}
+require_once __DIR__ . '/sms_sender.php';
 
 class PatternDiscovery
 {

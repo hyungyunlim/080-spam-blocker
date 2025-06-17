@@ -34,6 +34,9 @@ try {
     // central DB
     $dbPath = __DIR__ . '/spam.db';
     $db = new SQLite3($dbPath);
+    // 동시 접속 경합 감소: WAL 모드 + 3초 busy timeout
+    $db->exec('PRAGMA journal_mode=WAL;');
+    $db->busyTimeout(3000);
     // ensure schema present (users etc.)
     $schemaFile = __DIR__ . '/schema.sql';
     if(file_exists($schemaFile)){

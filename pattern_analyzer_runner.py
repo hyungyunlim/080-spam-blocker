@@ -80,7 +80,7 @@ parser = argparse.ArgumentParser(description="Pattern analyzer wrapper with prog
 parser.add_argument("audio", help="wav file")
 parser.add_argument("output", help="result json file")
 parser.add_argument("phone", help="target phone")
-parser.add_argument("--model", default="medium", help="Whisper model size")
+parser.add_argument("--model", default="base", help="Whisper model size")
 parser.add_argument("--progress_file", required=True, help="progress json path")
 default_script = os.path.join(os.path.dirname(__file__), 'advanced_pattern_analyzer.py')
 parser.add_argument("--script", default=default_script, help="underlying analyzer script")

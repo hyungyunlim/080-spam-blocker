@@ -2,7 +2,7 @@
 <?php
 // 패턴 매니저 로드
 require_once __DIR__ . '/../pattern_manager.php';
-$patternManager = new PatternManager();
+$patternManager = new PatternManager(__DIR__ . '/../patterns.json');
 if ($IS_ADMIN) {
     // 어드민은 모든 패턴 보기
     $userPatterns = $patternManager->getPatterns();
