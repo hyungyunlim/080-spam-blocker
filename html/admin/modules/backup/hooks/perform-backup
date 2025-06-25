@@ -1,0 +1,72 @@
+#!/usr/bin/php -q
+<?php
+set_time_limit(0);
+error_reporting(E_ALL);
+date_default_timezone_set('UTC');
+require '/usr/lib/sysadmin/includes.php';
+if (isset($argv[1])) {
+    // Underp the base64
+    $b = str_replace('_', '/', $argv[1]);
+    $settings = @json_decode(gzuncompress(@base64_decode($b)), true);
+    if (is_array($settings)) {
+        $buid = $settings[0];
+        $txn_id = $settings[1];
+        $jobid = $settings[2];
+        $location = $settings[3];
+        $warm = $settings[4];
+    }
+  }
+$command = '/usr/sbin/fwconsole backup --backup=' . escapeshellarg($buid) . '' . $warm . ' --transaction=' . escapeshellarg($jobid) . ' >> '.$location.'/backup_'.$jobid.'_out.log 2> '.$location.'/backup_'.$jobid.'_err.log & echo $!';
+$message = $status = "";
+exec($command);
+
+$db = \Sysadmin\FreePBX::Database();
+//get backup process id
+$backupProcessSql = "SELECT `key`,val FROM kvstore_FreePBX_modules_Backup WHERE `key`= :buid AND id = :id";
+$smtbproc = $db->prepare($backupProcessSql);
+$smtbproc->execute([":buid" => $buid, ":id" => 'runningBackupJobs']);
+$processResult = $smtbproc->fetch();
+if($processResult) {
+    $pResult = json_decode($processResult[1],true);
+    $proccId = $pResult['pid'];
+} else {
+    $proccId = '';
+}
+$finished = false;
+$backupSql = "SELECT `key`,val FROM kvstore_FreePBX_modules_Backup WHERE `key`= :jobid AND id = :id";
+$smt = $db->prepare($backupSql);
+while(!$finished) {
+    $smt->execute([":jobid" => $jobid, ":id" => 'runningBackupstatus']);
+    $result = $smt->fetch();
+    $resDetails = (!empty($result[1]) ? json_decode($result[1],true) : []);
+    if(!empty($resDetails['status']) && $resDetails['status'] == 'FINISHED') {
+        $finished = true;
+        break;
+    }
+    if (!file_exists( "/proc/$proccId"))
+    {
+        $finished = false;
+        break;
+    }
+    sleep(5);
+}
+if($finished) {
+    $status = 'Executed';
+    $message = 'Backup Done';
+    $output = $result[1];
+} else {
+    $message = 'Backup Errored';
+    $status = 'Failed';
+    $output = '';
+}
+$sql = ("UPDATE IGNORE api_asynchronous_transaction_history SET event_status = :event_status , failure_reason =:failure_reason, process_end_time =:end_time, event_output =:event_ouput WHERE `txn_id` = :txn_id");
+$sth = $db->prepare($sql);
+$sth->execute([
+    ":event_status" => $status,
+    ":failure_reason" => $message,
+    ":end_time" => time(),
+    ":txn_id" => $txn_id,
+    ":event_ouput" => $output
+]);
+exit();
+?>

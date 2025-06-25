@@ -1,0 +1,226 @@
+<module>
+	<rawname>userman</rawname>
+	<name>User Management</name>
+	<version>17.0.6.40</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>AGPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/agpl-3.0.txt</licenselink>
+	<repo>standard</repo>
+	<description>
+		This Module manages all PBX users. It allows an Administrator to create a User Account that can be used by other applications for login or API purposes.
+	</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/20024012/User+Management+Module</more-info>
+	<changelog>
+		*17.0.6.40* FREEI-2071,FREEI-2075 advr scd setting and userman settings issue after restore is resolved 
+		*17.0.6.39* FREEI-2058 issue with UCP Template Not Applying Widgets to New User 
+		*17.0.6.38* #754 Userman sync failed for MS LDAP 
+		*17.0.6.37* #720 freepbx 16 usermanager settings password management undefined index 
+		*17.0.6.36* #473 fix:decode sanitized password input before DB operations 
+		*17.0.6.35* Github Issue#537 and Issue#671 
+		*17.0.6.34* bump 
+		*17.0.6.33* FREEI-1767  added hook to callactivityupdate method 
+		*17.0.6.32* #612 Auto certation of account code on userman sync 
+		*17.0.6.31* FREEI-1522 fix: Added hooks on call activity group delete 
+		*17.0.6.30 Fixing FREEI-1452 Userman error on password change 
+		*17.0.6.29 FREEI-1108 AD integration adding support for the email format
+	</changelog>
+	<info/>
+	<category>Admin</category>
+	<menuitems>
+		<userman needsenginedb="yes">User Management</userman>
+	</menuitems>
+	<depends>
+		<phpversion>8.2.0</phpversion>
+		<version>17.0.1</version>
+		<module>core ge 17.0.1</module>
+	</depends>
+	<hooks>
+		<core class="Core" namespace="FreePBX\modules">
+			<method callingMethod="getQuickCreateDisplay" class="Userman" namespace="FreePBX\modules">getQuickCreateDisplay</method>
+			<method callingMethod="processQuickCreate" class="Userman" namespace="FreePBX\modules">processQuickCreate</method>
+		</core>
+		<bulkhandler class="Bulkhandler" namespace="FreePBX\modules" priority="150">
+			<method callingMethod="getHeaders" class="Userman" namespace="FreePBX\modules">bulkhandlerGetHeaders</method>
+			<method callingMethod="getTypes" class="Userman" namespace="FreePBX\modules">bulkhandlerGetTypes</method>
+			<method callingMethod="import" class="Userman" namespace="FreePBX\modules">bulkhandlerImport</method>
+			<method callingMethod="export" class="Userman" namespace="FreePBX\modules">bulkhandlerExport</method>
+		</bulkhandler>
+		<userman class="Userman" namespace="FreePBX\modules">
+			<method callingMethod="addGroup" class="Userman" namespace="FreePBX\modules">pwdAddGroup</method>
+			<method callingMethod="updateGroup" class="Userman" namespace="FreePBX\modules">pwdUpdateGroup</method>
+			<method callingMethod="addUser" class="Userman" namespace="FreePBX\modules">pwdAddUser</method>
+			<method callingMethod="updateUser" class="Userman" namespace="FreePBX\modules">pwdUpdateUser</method>
+			<method callingMethod="myShowPage" class="Userman" namespace="FreePBX\modules">pwdShowPage</method>
+			<method callingMethod="delUser" class="Userman" namespace="FreePBX\modules">pwdDeleteUser</method>
+			<method callingMethod="resetPasswordWithToken" class="Userman" namespace="FreePBX\modules">resetPasswordExpiry</method>
+		</userman>
+	</hooks>
+	<database>
+		<table name="userman_users">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="auth" type="string" length="150" default="freepbx" notnull="false"/>
+			<field name="authid" type="string" length="750" notnull="false"/>
+			<field name="username" type="string" length="150" notnull="false"/>
+			<field name="description" type="string" length="255" notnull="false"/>
+			<field name="password" type="string" length="255" notnull="false"/>
+			<field name="default_extension" type="string" length="45" default="none"/>
+			<field name="primary_group" type="integer" notnull="false"/>
+			<field name="permissions" type="blob" notnull="false"/>
+			<field name="fname" type="string" length="100" notnull="false"/>
+			<field name="lname" type="string" length="100" notnull="false"/>
+			<field name="displayname" type="string" length="200" notnull="false"/>
+			<field name="title" type="string" length="100" notnull="false"/>
+			<field name="company" type="string" length="100" notnull="false"/>
+			<field name="department" type="string" length="100" notnull="false"/>
+			<field name="language" type="string" length="100" notnull="false"/>
+			<field name="timezone" type="string" length="100" notnull="false"/>
+			<field name="dateformat" type="string" length="100" notnull="false"/>
+			<field name="timeformat" type="string" length="100" notnull="false"/>
+			<field name="datetimeformat" type="string" length="100" notnull="false"/>
+			<field name="email" type="text" notnull="false"/>
+			<field name="cell" type="string" length="100" notnull="false"/>
+			<field name="work" type="string" length="100" notnull="false"/>
+			<field name="home" type="string" length="100" notnull="false"/>
+			<field name="fax" type="string" length="100" notnull="false"/>
+			<key name="username_UNIQUE" type="unique">
+				<column name="username"/>
+				<column name="auth"/>
+			</key>
+		</table>
+		<table name="userman_users_settings">
+			<field name="uid" type="integer"/>
+			<field name="module" type="string" length="65"/>
+			<field name="key" type="string" length="190"/>
+			<field name="val" type="blob"/>
+			<field name="type" type="string" length="16" notnull="false"/>
+			<key name="index4" type="unique">
+				<column name="uid"/>
+				<column name="module"/>
+				<column name="key"/>
+			</key>
+			<key name="index2" type="index">
+				<column name="uid"/>
+				<column name="key"/>
+			</key>
+			<key name="index6" type="index">
+				<column name="module"/>
+				<column name="uid"/>
+			</key>
+		</table>
+		<table name="userman_groups">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="auth" type="string" length="150" default="freepbx" notnull="false"/>
+			<field name="authid" type="string" length="750" notnull="false"/>
+			<field name="groupname" type="string" length="150" notnull="false"/>
+			<field name="description" type="string" length="255" notnull="false"/>
+			<field name="language" type="string" length="100" notnull="false"/>
+			<field name="timezone" type="string" length="100" notnull="false"/>
+			<field name="dateformat" type="string" length="100" notnull="false"/>
+			<field name="timeformat" type="string" length="100" notnull="false"/>
+			<field name="datetimeformat" type="string" length="100" notnull="false"/>
+			<field name="priority" type="integer" default="5"/>
+			<field name="users" type="blob" notnull="false"/>
+			<field name="permissions" type="blob" notnull="false"/>
+			<field name="local" type="integer" notnull="true" default="0"/>
+			<key name="groupname_UNIQUE" type="unique">
+				<column name="groupname"/>
+				<column name="auth"/>
+			</key>
+		</table>
+		<table name="userman_groups_settings">
+			<field name="gid" type="integer"/>
+			<field name="module" type="string" length="65"/>
+			<field name="key" type="string" length="190"/>
+			<field name="val" type="blob"/>
+			<field name="type" type="string" length="16" notnull="false"/>
+			<key name="index4" type="unique">
+				<column name="gid"/>
+				<column name="module"/>
+				<column name="key"/>
+			</key>
+			<key name="index2" type="index">
+				<column name="gid"/>
+				<column name="key"/>
+			</key>
+			<key name="index6" type="index">
+				<column name="module"/>
+				<column name="gid"/>
+			</key>
+		</table>
+		<table name="userman_directories">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="name" type="string" length="250" notnull="false"/>
+			<field name="driver" type="string" length="150" default=""/>
+			<field name="active" type="boolean" default="0"/>
+			<field name="order" type="integer" default="5"/>
+			<field name="default" type="boolean" default="0"/>
+			<field name="locked" type="boolean" default="0"/>
+		</table>
+		<table name="userman_ucp_templates">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="templatename" type="string" length="150"/>
+			<field name="description" type="string" length="255" notnull="false"/>
+			<field name="importedfromuname" type="string" length="255" notnull="false"/>
+			<field name="importedfromuid" type="string" length="255" notnull="false"/>
+			<field name="defaultexten" type="string" length="255" notnull="false"/>
+			<field name="hasupdated" type="boolean" default="0"/>
+		</table>
+		<table name="userman_template_settings">
+			<field name="tid" type="integer"/>
+			<field name="module" type="string" length="65"/>
+			<field name="key" type="string" length="190"/>
+			<field name="val" type="blob"/>
+			<field name="type" type="string" length="16" notnull="false"/>
+			<key name="index4" type="unique">
+				<column name="tid"/>
+				<column name="module"/>
+				<column name="key"/>
+			</key>
+			<key name="index2" type="index">
+				<column name="tid"/>
+				<column name="key"/>
+			</key>
+			<key name="index6" type="index">
+				<column name="module"/>
+				<column name="tid"/>
+			</key>
+		</table>
+		<table name="userman_password_reminder">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="uid" type="string" length="40" default=""/>
+			<field name="username" type="string" length="40" default=""/>
+			<field name="usermail" type="string" length="40" default=""/>
+			<field name="usertype" type="string" length="20" default=""/>
+			<field name="passwordChangedAt" type="datetime"/>
+			<field name="passwordExpiryDate" type="datetime"/>
+		</table>
+		<table name="userman_call_activity_groups">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="groupname" type="string" length="150" notnull="false"/>
+			<field name="description" type="string" length="255" notnull="false"/>
+		</table>
+		<table name="userman_call_activity_users">
+			<field name="id" type="integer" primarykey="true" autoincrement="true"/>
+			<field name="uid" type="string" length="40" default=""/>
+			<field name="act_grp_id" type="string" length="40" default=""/>
+			<key name="call_act_gid_idx" type="index">
+				<column name="act_grp_id"/>
+			</key>
+			<key name="call_act_uid_idx" type="index">
+				<column name="uid"/>
+			</key>
+			<key name="call_act_gid_uid_unique" type="unique">
+				<column name="uid"/>
+				<column name="act_grp_id"/>
+			</key>
+		</table>
+	</database>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<console>
+		<command>
+			<name>userman</name>
+		</command>
+	</console>
+</module>

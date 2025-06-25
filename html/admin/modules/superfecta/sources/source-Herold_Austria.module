@@ -1,0 +1,70 @@
+<?php
+
+/*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+ * Developer Notes:
+ *
+ * herold.at Terms of Service:
+ * As summarized in the post here on 2014-06-27
+ * https://github.com/POSSA/Caller-ID-Superfecta/issues/131#issuecomment-47354154
+ * herold.at TOS do not explicitly prohibit automated lookups
+ *
+ * Version History:
+ * 2014-06-28	Initial migration from 2.2.x
+ * 2014-07-02	Add business lookups and change urls to mobile site
+ * 2016-05-03	Rewrite Numbers correct for Herold and change Query for new Mobile Web Template
+ * 2017-03-20	Again Herold has a new Theme. We need to change the regexp again
+ * 2017-11-09	If the Caller ID is 'unknown', 'anonymous' or empty then skip the check
+ * 2020-09-12	update regex per https://community.freepbx.org/t/superfecta-herold-austria/42997/15
+ * 2022-06-10   general update per https://community.freepbx.org/t/superfecta-herold-austria-not-working-anymore-they-changed-the-code/83830
+ *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***/
+
+class Herold_Austria extends superfecta_base {
+
+	public $description;
+	public $version_requirement = "2.11";
+
+	public function __construct() {
+		$this->description = "https://www.herold.at/ - "._("These listings include data for Austria.");
+	}
+
+	function get_caller_id($thenumber, $run_param=array()) {
+		$this->DebugPrint(_("Searching"). "https://www.herold.at/ ... ");
+		
+		if($thenumber !== 'anonymous' && $thenumber !== 'unknown' && $thenumber !== ''){
+
+		if (substr($thenumber, 0, 1) ==! '0') {
+			$thenumber=trim($thenumber,' ');
+			$thenumber="00" . $thenumber;
+		}
+		if (substr($thenumber, 0, 2) === '00') {
+			$thenumber=trim($thenumber,' ');
+		}
+
+		// Set the urls we're searching for
+		$res_rul = "https://www.herold.at/telefonbuch/suche/?userTerm=".$thenumber."/";// url for searching residential listings
+		$bus_url = "https://www.herold.at/gelbe-seiten/suche/?userTerm=".$thenumber."/";// url for searching business listings		
+
+		// regex patterns to search for
+		$regexp = array(
+			'~<h2><span itemprop="name">(.+?)</span>~', // reported broken 2022-06-10
+            '~<h2 class="business-content_heading__2ED5C"><a itemProp="name" data-clickpos="showdetails" href=".+?">(.+?)</a></h2>~',  // working 2022-06-10
+			'~<a rel="nofollow" href=".+?"><h2 class="white-pages-search-result-item_heading__1BDNn">(.+?)</h2></a>~',   // working 2022-06-10
+		);
+
+		// first search for Residential match
+		if ($this->SearchURL($res_rul, $regexp, $match)) {
+			$caller_id = $this->ExtractMatch($match);
+		}
+
+		// if no residential match found, search business
+		if ($this->SearchURL($bus_url, $regexp, $match)) {
+			$caller_id = $this->ExtractMatch($match);
+		}
+		$caller_id = isset($caller_id)?$caller_id:'';
+		
+
+
+		return($caller_id);
+	}
+	}
+}

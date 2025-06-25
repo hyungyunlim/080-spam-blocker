@@ -1,0 +1,35 @@
+<module>
+    <rawname>outroutemsg</rawname>
+    <repo>standard</repo>
+    <name>Route Congestion Messages</name>
+    <version>17.0.1</version>
+    <publisher>Sangoma Technologies Corporation</publisher>
+    <license>GPLv3+</license>
+    <licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+    <category>Settings</category>
+    <description>Configures message or congestion tones played when all trunks are busy in a route. Allows different messages for Emergency
+        Routes and Intra-Company Routes
+    </description>
+    <menuitems>
+        <outroutemsg>Route Congestion Messages</outroutemsg>
+    </menuitems>
+    <database>
+        <table name="outroutemsg">
+            <field name="keyword" type="string" length="40" default="" primarykey="true"/>
+            <field name="data" type="string" length="10"/>
+        </table>
+    </database>
+    <changelog>
+        *17.0.1* 17.0 release 
+	</changelog>
+    <depends>
+        <module>recordings</module>
+		<module>core ge 17.0.1</module>
+    </depends>
+	<methods>
+		<get_config pri="580">outroutemsg_get_config</get_config>
+	</methods>
+    <supported>
+        <version>17.0</version>
+    </supported>
+</module>

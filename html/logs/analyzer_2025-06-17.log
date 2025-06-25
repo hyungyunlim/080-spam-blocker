@@ -1,0 +1,14 @@
+Executing: python3 -u /var/www/html/simple_analyzer.py --file /var/spool/asterisk/monitor/20250617-234505-FROM_AUTO-ID_68517f6f08857-TO_0808778942.wav --output_dir /var/www/html/analysis_results --model base
+파일 확인 완료
+Whisper Base 모델 로딩
+모델 로드 완료
+음성 인식 시작
+[00:00.000 --> 00:03.440]  안녕하세요 수신 거부 서비스입니다.
+[00:03.440 --> 00:08.880]  수신 거부하실 번호를 입력하시고 몸을 점쇄를 눌러주세요.
+[00:31.000 --> 00:34.680]  수신 거부 서비스입니다.
+[00:34.680 --> 00:39.000]  수신 거부하실 번호를 입력하시고 몸을 점쇄를 눌러주세요.
+[00:45.000 --> 00:50.000]  죄송합니다. 입력 횟수를 초과하여 통화가 종류됩니다.
+STT 변환 완료
+🔑 키워드 / 패턴 분석 중...
+🔍 분석 결과: status=failed confidence=85 reason=명확한 실패 키워드 감지: 초과
+결과 저장

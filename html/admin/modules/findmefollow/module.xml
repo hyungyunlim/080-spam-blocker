@@ -1,0 +1,76 @@
+<module>
+	<rawname>findmefollow</rawname>
+	<repo>standard</repo>
+	<name>Follow Me</name>
+	<version>17.0.4.11</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<changelog>
+		*17.0.4.11* FREEI-1586 exception when accessing the FM/FM page after upgrade FreePBX 
+		*17.0.4.10 bump 
+		*17.0.1alpha* 17.0.1 alpha release
+	</changelog>
+	<depends>
+		<module>core ge 17.0.1</module>
+		<module>framework ge 17.0.1</module>
+		<module>recordings ge 17.0.1</module>
+		<module>userman ge 17.0.1</module>
+	</depends>
+	<category>Applications</category>
+	<description>
+		Much like a ring group, but works on individual extensions. When someone calls the extension, it can be setup to ring for a number of seconds before trying to ring other extensions and/or external numbers, or to ring all at once, or in other various 'hunt' configurations. Most commonly used to ring someone's cell phone if they don't answer their extension.
+	</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/23396734/Follow+Me+Module</more-info>
+	<menuitems>
+		<findmefollow needsenginedb="yes">Follow Me</findmefollow>
+	</menuitems>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<hooks>
+		<bulkhandler class="Bulkhandler" namespace="FreePBX\modules">
+			<method callingMethod="getHeaders" class="Findmefollow" namespace="FreePBX\modules">bulkhandlerGetHeaders</method>
+			<method callingMethod="import" class="Findmefollow" namespace="FreePBX\modules">bulkhandlerImport</method>
+			<method callingMethod="export" class="Findmefollow" namespace="FreePBX\modules">bulkhandlerExport</method>
+		</bulkhandler>
+		<core class="Core" namespace="FreePBX\modules">
+			<method callingMethod="getQuickCreateDisplay" class="Findmefollow" namespace="FreePBX\modules">getQuickCreateDisplay</method>
+			<method callingMethod="processQuickCreate" class="Findmefollow" namespace="FreePBX\modules">processQuickCreate</method>
+			<method callingMethod="delUser" class="Findmefollow" namespace="FreePBX\modules">delUser</method>
+		</core>
+		<ucp class="Ucp">
+                        <method namespace="FreePBX\modules" callingMethod="constructModuleConfigPages" class="Findmefollow">ucpConfigPage</method>
+                        <method namespace="FreePBX\modules" callingMethod="addUser" class="Findmefollow">ucpAddUser</method>
+                        <method namespace="FreePBX\modules" callingMethod="updateUser" class="Findmefollow">ucpUpdateUser</method>
+                        <method namespace="FreePBX\modules" callingMethod="delUser" class="Findmefollow">ucpDelUser</method>
+                        <method namespace="FreePBX\modules" callingMethod="addGroup" class="Findmefollow">ucpAddGroup</method>
+                        <method namespace="FreePBX\modules" callingMethod="updateGroup" class="Findmefollow">ucpUpdateGroup</method>
+                        <method namespace="FreePBX\modules" callingMethod="delGroup" class="Findmefollow">ucpDelGroup</method>
+                </ucp>
+	</hooks>
+	<database>
+	  <table name="findmefollow">
+	    <field name="grpnum" type="string" length="20" primaryKey="true"/>
+	    <field name="strategy" type="string" length="50" notnull="false"/>
+	    <field name="grptime" type="smallint" notnull="false"/>
+	    <field name="grppre" type="string" length="100" notnull="false"/>
+	    <field name="grplist" type="string" length="255" notnull="false"/>
+	    <field name="annmsg_id" type="integer" notnull="false"/>
+	    <field name="postdest" type="string" length="255" notnull="false"/>
+	    <field name="dring" type="string" length="255" notnull="false"/>
+	    <field name="rvolume" type="string" length="2" notnull="false"/>
+	    <field name="remotealert_id" type="integer" notnull="false"/>
+	    <field name="needsconf" type="string" length="10" notnull="false"/>
+	    <field name="toolate_id" type="integer" notnull="false"/>
+	    <field name="pre_ring" type="smallint" default="0" notnull="false"/>
+	    <field name="ringing" type="string" length="80" notnull="false"/>
+			<field name="calendar_enable" type="boolean" default="0" notnull="false"/>
+	    <field name="calendar_id" type="string" length="80" default="" notnull="false"/>
+			<field name="calendar_group_id" type="string" length="80" default="" notnull="false"/>
+	    <field name="calendar_match" type="string" length="4" default="yes" notnull="false"/>
+	  </table>
+	</database>
+	<location>release/2.11/findmefollow-2.11.0.3.tgz</location>
+	<md5sum>eb10d338f7206c288e52b240ccf4b850</md5sum>
+</module>

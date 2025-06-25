@@ -1,0 +1,36 @@
+<?php
+/**
+ * Uses Asterisk AstDB Allowlist module to lookup names
+ *
+ * Module Dev notes:
+ * 
+ * Revision History: 
+ *    2024-07-06: Basic fork and edit of source-Asterisk_Phonebook.module by lgaetz
+ */
+class Allowlist extends superfecta_base {
+
+	public $description;
+	public $version_requirement = "2.11";
+
+	public function __construct() {
+		$this->description = _("Searches the Asterisk AstDB entries from FreePBX Allowlist module for caller ID information.");
+	}
+
+	function get_caller_id($thenumber, $run_param=array()) {
+		$caller_id = null;
+
+		$this->DebugPrint("Searching Allowlist Database ... ");
+
+		$name = strip_tags($this->astman->database_get('allowlist', $thenumber));
+
+		// If we found a match, return it
+		if (strlen($name) > 1) {
+			$caller_id = $name;
+		} else {
+			$this->DebugPrint("not found");
+		}
+
+		return $caller_id;
+	}
+
+}

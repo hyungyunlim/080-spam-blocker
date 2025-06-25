@@ -1,0 +1,60 @@
+<module>
+	<rawname>callrecording</rawname>
+	<repo>standard</repo>
+	<name>Call Recording</name>
+	<version>17.0.3.8</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>AGPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/agpl-3.0.txt</licenselink>
+	<candisable>no</candisable>
+	<canuninstall>no</canuninstall>
+	<category>Applications</category>
+	<description>
+		Provides much of the call recording functionality.
+	</description>
+	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/22675564/Call+Recording+Module</more-info>
+	<menuitems needsenginedb="yes">
+		<callrecording>Call Recording</callrecording>
+	</menuitems>
+ 	<popovers>
+		<callrecording>
+			<display>callrecording</display>
+			<view>form</view>
+		</callrecording>
+ 	</popovers>
+	<database>
+  		<table name="callrecording">
+    		<field name="callrecording_id" type="integer" primarykey="true" autoincrement="true"/>
+    		<field name="callrecording_mode" type="string" length="50" notnull="false"/>
+    		<field name="description" type="string" length="50" notnull="false"/>
+    		<field name="dest" type="string" length="255" notnull="false"/>
+  		</table>
+		<table name="callrecording_module">
+    		<field name="extension" type="string" length="50" notnull="false"/>
+    		<field name="cidnum" type="string" length="50" default="" notnull="false"/>
+    		<field name="callrecording" type="string" length="10" notnull="false"/>
+    		<field name="display" type="string" length="20" notnull="false"/>
+  		</table>
+	</database>
+	<changelog>
+		*17.0.3.5* Packaging of ver 17.0.3.5
+		*17.0.3* Packaging of ver 17.0.3
+		*17.0.2* Packaging of ver 17.0.2
+		*17.0.1alpha* 17.0.1 alpha release
+	</changelog>
+	<hooks>
+		<bulkhandler class="Bulkhandler" namespace="FreePBX\modules">
+			<method class="Callrecording" callingMethod="import" namespace="FreePBX\modules">bulkhandlerImport</method>
+			<method class="Callrecording" callingMethod="export" namespace="FreePBX\modules">bulkhandlerExport</method>
+		</bulkhandler>
+	</hooks>
+	<supported>
+		<version>17.0</version>
+	</supported>
+	<depends>
+		<module>core ge 17.0.1</module>
+		<version>17.0.1</version>
+	</depends>
+	<location/>
+	<md5sum/>
+</module>

@@ -1,0 +1,52 @@
+2025-06-17 02:16:11 [StartupManager] Startup marked: initial, safe threshold: 2025-06-17 02:06:11
+2025-06-17 02:34:57 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-17 02:24:57
+2025-06-17 02:34:57 [StartupManager] Cleanup completed: 5 files removed
+2025-06-17 02:37:13 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-17 02:27:13
+2025-06-17 02:37:13 [StartupManager] Cleanup completed: 0 files removed
+2025-06-17 02:38:10 [StartupManager] Startup marked: initial, safe threshold: 2025-06-17 02:28:10
+2025-06-17 02:38:10 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-17 02:28:10
+2025-06-17 02:38:10 [StartupManager] Cleanup completed: 0 files removed
+2025-06-17 02:39:06 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-17 02:29:06
+2025-06-17 02:39:06 [StartupManager] Cleanup completed: 0 files removed
+2025-06-17 05:59:20 [StartupManager] Startup marked: initial, safe threshold: 2025-06-17 05:49:20
+2025-06-17 05:59:20 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-17 05:49:20
+2025-06-17 05:59:20 [StartupManager] Cleanup completed: 0 files removed
+2025-06-17 23:12:36 [StartupManager] Startup marked: initial, safe threshold: 2025-06-17 23:02:36
+2025-06-17 23:12:36 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-17 23:02:36
+2025-06-17 23:12:36 [StartupManager] Cleanup completed: 0 files removed
+2025-06-18 04:49:55 [StartupManager] Startup marked: initial, safe threshold: 2025-06-18 04:39:55
+2025-06-18 04:49:55 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-18 04:39:55
+2025-06-18 04:49:55 [StartupManager] Cleanup completed: 0 files removed
+2025-06-18 13:33:35 [StartupManager] Startup marked: initial, safe threshold: 2025-06-18 13:23:35
+2025-06-18 13:33:35 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-18 13:23:35
+2025-06-18 13:33:35 [StartupManager] Cleanup completed: 0 files removed
+2025-06-25 11:57:03 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 11:47:03
+2025-06-25 11:57:03 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 11:47:03
+2025-06-25 11:57:03 [StartupManager] Cleanup completed: 0 files removed
+2025-06-25 12:52:36 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 12:42:36
+2025-06-25 12:52:36 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 12:42:36
+2025-06-25 12:52:36 [StartupManager] Cleanup completed: 0 files removed
+2025-06-25 13:39:20 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 13:29:20
+2025-06-25 13:39:20 [StartupManager] Cleanup completed: 1 files removed
+2025-06-25 13:41:50 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 13:31:50
+2025-06-25 13:41:50 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 13:31:50
+2025-06-25 13:41:50 [StartupManager] Cleanup completed: 0 files removed
+2025-06-25 16:17:09 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 16:07:09
+2025-06-25 16:17:09 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 16:07:09
+2025-06-25 16:17:09 [StartupManager] Cleanup completed: 0 files removed
+2025-06-25 21:40:43 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 21:30:43
+2025-06-25 21:40:43 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 21:30:43
+2025-06-25 21:40:43 [StartupManager] Cleanup completed: 0 files removed
+2025-06-25 21:44:21 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 21:34:21
+2025-06-25 22:05:32 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 21:55:32
+2025-06-25 22:05:32 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 21:55:32
+2025-06-25 22:05:32 [StartupManager] Cleanup completed: 0 files removed
+2025-06-25 22:10:33 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 22:00:33
+2025-06-25 22:10:33 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 22:00:33
+2025-06-25 22:10:33 [StartupManager] Cleanup completed: 0 files removed
+2025-06-25 22:25:28 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 22:15:28
+2025-06-25 22:25:28 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 22:15:28
+2025-06-25 22:25:28 [StartupManager] Cleanup completed: 0 files removed
+2025-06-25 22:28:58 [StartupManager] Startup marked: initial, safe threshold: 2025-06-25 22:18:58
+2025-06-25 22:28:58 [StartupManager] Startup marked: asterisk_restart, safe threshold: 2025-06-25 22:18:58
+2025-06-25 22:28:58 [StartupManager] Cleanup completed: 0 files removed

@@ -1,0 +1,27 @@
+[17-Jun-2025 00:55:03 UTC] Executing command: /usr/bin/python3 '/var/www/html/simple_analyzer_runner.py' '/var/spool/asterisk/monitor/20250617-083936-FROM_AUTO-ID_6850ab35b393e-TO_0808775167.wav' '/var/www/html/analysis_results/20250617-083936-FROM_AUTO-ID_6850ab35b393e-TO_0808775167_analysis.json' 'base' --progress_file '/var/www/html/progress/analysis_6850bce76d057_1750121703.json' > '/var/www/html/logs/analyzer_2025-06-17.log' 2>&1 &
+[17-Jun-2025 00:55:03 UTC] Command return code: 0
+[17-Jun-2025 00:55:03 UTC] Command output: 
+[17-Jun-2025 13:41:59 UTC] Executing command: /usr/bin/python3 '/var/www/html/simple_analyzer_runner.py' '/var/spool/asterisk/monitor/20250617-224101-FROM_AUTO-ID_68517054aa227-TO_08077778888.wav' '/var/www/html/analysis_results/20250617-224101-FROM_AUTO-ID_68517054aa227-TO_08077778888_analysis.json' 'base' --progress_file '/var/www/html/progress/analysis_685170a70f220_1750167719.json' > '/var/www/html/logs/analyzer_2025-06-17.log' 2>&1 &
+[17-Jun-2025 13:41:59 UTC] Command return code: 0
+[17-Jun-2025 13:41:59 UTC] Command output: 
+[17-Jun-2025 14:46:03 UTC] Executing command: /usr/bin/python3 '/var/www/html/simple_analyzer_runner.py' '/var/spool/asterisk/monitor/20250617-234505-FROM_AUTO-ID_68517f6f08857-TO_0808778942.wav' '/var/www/html/analysis_results/20250617-234505-FROM_AUTO-ID_68517f6f08857-TO_0808778942_analysis.json' 'base' --progress_file '/var/www/html/progress/analysis_68517fac008d8_1750171564.json' > '/var/www/html/logs/analyzer_2025-06-17.log' 2>&1 &
+[17-Jun-2025 14:46:03 UTC] Command return code: 0
+[17-Jun-2025 14:46:03 UTC] Command output: 
+[25-Jun-2025 14:18:57 Asia/Seoul] Executing command: /usr/bin/python3 '/var/www/html/simple_analyzer_runner.py' '/var/spool/asterisk/monitor/20250625-141609-FROM_AUTO-ID_685b8616f3c07-TO_0808811261.wav' '/var/www/html/analysis_results/20250625-141609-FROM_AUTO-ID_685b8616f3c07-TO_0808811261_analysis.json' 'base' --progress_file '/var/www/html/progress/analysis_685b86c1b17a0_1750828737.json' > '/var/www/html/logs/analyzer_2025-06-25.log' 2>&1 &
+[25-Jun-2025 14:18:57 Asia/Seoul] Command return code: 0
+[25-Jun-2025 14:18:57 Asia/Seoul] Command output: 
+[25-Jun-2025 14:21:44 Asia/Seoul] Executing command: /usr/bin/python3 '/var/www/html/simple_analyzer_runner.py' '/var/spool/asterisk/monitor/20250625-142121-FROM_AUTO-ID_685b874eb12e4-TO_0808811261.wav' '/var/www/html/analysis_results/20250625-142121-FROM_AUTO-ID_685b874eb12e4-TO_0808811261_analysis.json' 'base' --progress_file '/var/www/html/progress/analysis_685b87687cd19_1750828904.json' > '/var/www/html/logs/analyzer_2025-06-25.log' 2>&1 &
+[25-Jun-2025 14:21:44 Asia/Seoul] Command return code: 0
+[25-Jun-2025 14:21:44 Asia/Seoul] Command output: 
+[25-Jun-2025 14:33:42 Asia/Seoul] Executing command: /usr/bin/python3 '/var/www/html/simple_analyzer_runner.py' '/var/spool/asterisk/monitor/20250625-143319-FROM_AUTO-ID_685b8a1cebcb9-TO_0808811261.wav' '/var/www/html/analysis_results/20250625-143319-FROM_AUTO-ID_685b8a1cebcb9-TO_0808811261_analysis.json' 'base' --progress_file '/var/www/html/progress/analysis_685b8a3649c5e_1750829622.json' > '/var/www/html/logs/analyzer_2025-06-25.log' 2>&1 &
+[25-Jun-2025 14:33:42 Asia/Seoul] Command return code: 0
+[25-Jun-2025 14:33:42 Asia/Seoul] Command output: 
+[25-Jun-2025 15:26:09 Asia/Seoul] Executing command: /usr/bin/python3 '/var/www/html/simple_analyzer_runner.py' '/var/spool/asterisk/monitor/20250625-152545-FROM_AUTO-ID_685b96670027d-TO_0808811261.wav' '/var/www/html/analysis_results/20250625-152545-FROM_AUTO-ID_685b96670027d-TO_0808811261_analysis.json' 'base' --progress_file '/var/www/html/progress/analysis_685b96816514c_1750832769.json' > '/var/www/html/logs/analyzer_2025-06-25.log' 2>&1 &
+[25-Jun-2025 15:26:09 Asia/Seoul] Command return code: 0
+[25-Jun-2025 15:26:09 Asia/Seoul] Command output: 
+[25-Jun-2025 15:39:37 Asia/Seoul] Executing command: /usr/bin/python3 '/var/www/html/simple_analyzer_runner.py' '/var/spool/asterisk/monitor/20250625-153913-FROM_AUTO-ID_685b998f3fef8-TO_0808811261.wav' '/var/www/html/analysis_results/20250625-153913-FROM_AUTO-ID_685b998f3fef8-TO_0808811261_analysis.json' 'base' --progress_file '/var/www/html/progress/analysis_685b99a9e69ef_1750833577.json' > '/var/www/html/logs/analyzer_2025-06-25.log' 2>&1 &
+[25-Jun-2025 15:39:37 Asia/Seoul] Command return code: 0
+[25-Jun-2025 15:39:37 Asia/Seoul] Command output: 
+[25-Jun-2025 21:23:26 Asia/Seoul] Executing command: /usr/bin/python3 '/var/www/html/simple_analyzer_runner.py' '/var/spool/asterisk/monitor/20250625-212306-FROM_AUTO-ID_685bea23f294f-TO_0808558699.wav' '/var/www/html/analysis_results/20250625-212306-FROM_AUTO-ID_685bea23f294f-TO_0808558699_analysis.json' 'base' --progress_file '/var/www/html/progress/analysis_685bea3eaf498_1750854206.json' > '/var/www/html/logs/analyzer_2025-06-25.log' 2>&1 &
+[25-Jun-2025 21:23:26 Asia/Seoul] Command return code: 0
+[25-Jun-2025 21:23:26 Asia/Seoul] Command output: 

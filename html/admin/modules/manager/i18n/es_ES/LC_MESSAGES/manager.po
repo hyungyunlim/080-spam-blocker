@@ -1,0 +1,463 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FreePBX - módulo manager module spanish translation\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-30 02:39-0400\n"
+"PO-Revision-Date: 2023-04-18 18:11+0200\n"
+"Last-Translator: Javier Pastor <jpastor@cerebelum.net>\n"
+"Language-Team: Spanish <http://*/projects/freepbx/manager/es/>\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 3.2.2\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: assets/js/manager.js:232
+msgid ""
+");\n"
+"    var errDeny         = _("
+msgstr ""
+
+#: views/page.main.php:10
+#, php-format
+msgid "AMI current settings for Bind Address : %s and bind port : %s."
+msgstr "Configuración actual de AMI para Bind Address : %s y bind port : %s."
+
+#: views/view.grid.php:31
+msgid "Actions"
+msgstr "Acciones"
+
+#: views/view.grid.php:4
+msgid "Add Manager"
+msgstr "Añadir gestor"
+
+#: Manager.class.php:48
+msgid "Agent"
+msgstr "Agente"
+
+#: assets/js/manager.js:23
+#, perl-format
+msgid "Are you sure you want to delete (%s)?"
+msgstr "¿Estás seguro de que quieres borrar (%s)?"
+
+#: manager.i18n.php:4
+msgid "Asterisk API"
+msgstr "API Asterisk"
+
+#: views/page.main.php:5
+msgid "Asterisk Manager"
+msgstr "Gestor Asterisk"
+
+#: manager.i18n.php:10
+msgid "Asterisk Manager Users"
+msgstr "Usuarios gestor Asterisk"
+
+#: Manager.class.php:54
+msgid "CDR"
+msgstr "CDR"
+
+#: Manager.class.php:44
+msgid "Call"
+msgstr "Llamar"
+
+#: Manager.class.php:373
+msgid "Can't create, we are conflicting with FreePBX Asterisk Admin User!"
+msgstr ""
+"¡No se puede crear, entramos en conflicto con el usuario administrador de "
+"Asterisk para FreePBX!"
+
+#: Manager.class.php:434
+msgid "Can't delete, we are conflicting with FreePBX Asterisk Admin User!"
+msgstr ""
+"¡No se puede eliminar, entramos en conflicto con el usuario administrador de "
+"Asterisk para FreePBX!"
+
+#: Manager.class.php:430
+msgid "Cannot be deleted as it does not exist!"
+msgstr "No se puede eliminar porque no existe!"
+
+#: functions.inc.php:24
+msgid "Choose Manager:"
+msgstr "Seleccione gestor:"
+
+#: functions.inc.php:24
+msgid "Choose the user that PHPAGI will use to connect the Asterisk API."
+msgstr ""
+"Seleccione el usuario que PHPAGI usará para conectarse a la API de Asterisk."
+
+#: views/view.grid.form.php:225
+msgid "Close"
+msgstr "Cerrar"
+
+#: Manager.class.php:47
+msgid "Command"
+msgstr "Comando"
+
+#: Manager.class.php:294
+msgid "Command not found!"
+msgstr "¡Comando no encontrado!"
+
+#: Manager.class.php:51
+msgid "Config"
+msgstr "Configuracion"
+
+#: Manager.class.php:240
+msgid "Create Successfully"
+msgstr "Creado Correctamente"
+
+#: Manager.class.php:52
+msgid "DTMF"
+msgstr "DTMF"
+
+#: views/view.grid.form.php:78 views/view.grid.php:25
+msgid "Deny"
+msgstr "Denegar"
+
+#: Manager.class.php:55
+msgid "Dialplan"
+msgstr "Dialplan"
+
+#: views/view.grid.form.php:143
+msgid ""
+"For information on individual permissions please see the Asterisk Manager "
+"Documentation"
+msgstr ""
+"Para obtener información sobre permisos individuales, consulte la "
+"documentación del Gestor Asterisk"
+
+#: views/view.grid.form.php:21
+msgid "General"
+msgstr "General"
+
+#: assets/js/manager.js:18
+msgid "ID not detected!"
+msgstr "¡ID no detectado!"
+
+#: views/view.grid.form.php:88
+msgid ""
+"If you want to deny many hosts or networks, use & char as separator.<br/><br/"
+">Example: 192.168.1.0/255.255.255.0&10.0.0.0/255.0.0.0"
+msgstr ""
+"Si desea denegar varios equipos o redes, use el símbol '&' como separador."
+"<br/><br/>Por ejemplo: 192.168.1.0/255.255.255.0&10.0.0.0/255.0.0.0"
+
+#: views/view.grid.form.php:108
+msgid ""
+"If you want to permit many hosts or networks, use & char as separator. Look "
+"at deny example."
+msgstr ""
+"Si desea permitir varios equipos o redes, use el símbolo '&' como separador. "
+"Revise el ejemplo del campo 'Denegar'."
+
+#: views/view.grid.form.php:13
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: Manager.class.php:45
+msgid "Log"
+msgstr "Log"
+
+#: views/view.grid.form.php:35 views/view.grid.php:22
+msgid "Name"
+msgstr "Nombre"
+
+#: views/view.grid.form.php:45
+msgid ""
+"Name of the manager without spaces and special characters except _ and -. "
+"Limit upto 15 characters only."
+msgstr ""
+"Nombre del gestor sin espacios ni caracteres especiales excepto _ y -. "
+"Límite de 15 caracteres."
+
+#: views/view.grid.form.php:177 views/view.grid.form.php:185
+#: views/view.grid.form.php:202 views/view.grid.form.php:210
+#: assets/js/manager.js:24
+msgid "No"
+msgstr "No"
+
+#: Manager.class.php:222
+msgid "No data received!"
+msgstr "No se han recibido datos!"
+
+#: Manager.class.php:426
+msgid "No manager has been selected to be removed!"
+msgstr ""
+
+#: Manager.class.php:389
+msgid "No manager has been selected!"
+msgstr ""
+
+#: Manager.class.php:365
+msgid "No name specified!"
+msgstr "No se ha especificado ningún nombre!"
+
+#: Manager.class.php:56
+msgid "Originate"
+msgstr "Originar"
+
+#: Manager.class.php:328
+#, php-format
+msgid "Page Not Found (%s)!!!!"
+msgstr "¡¡¡¡Página no encontrada (%s)!!!!"
+
+#: views/view.grid.form.php:68
+msgid "Password for the manager."
+msgstr "Contraseña para el gestor."
+
+#: views/view.grid.form.php:24
+msgid "Permissions"
+msgstr "Permisos"
+
+#: views/view.grid.form.php:98 views/view.grid.php:28
+msgid "Permit"
+msgstr "Permiso"
+
+#: views/page.main.php:9
+#, php-format
+msgid ""
+"Please refer to  <a href=\"%s\" target=\"_blank\"> <b>wiki</b> </a> for more "
+"information."
+msgstr ""
+
+#: Manager.class.php:284
+msgid "Removed Failed!"
+msgstr "¡Eliminación fallida!"
+
+#: Manager.class.php:280
+msgid "Removed Successfully"
+msgstr "Eliminado Correctamente"
+
+#: Manager.class.php:53
+msgid "Reporting"
+msgstr "Informes"
+
+#: views/view.grid.form.php:226
+msgid "Save Changes"
+msgstr "Guardar Cambios"
+
+#: views/view.grid.form.php:55
+msgid "Secret"
+msgstr "Secreto"
+
+#: views/view.grid.form.php:131
+msgid ""
+"Sets the timeout used by Asterisk when writing data to the AMI connection "
+"for this user"
+msgstr ""
+"Establece el tiempo de espera utilizado por Asterisk al escribir datos en la "
+"conexión AMI para este usuario"
+
+#: manager.i18n.php:6
+msgid "Settings"
+msgstr "Configuracion"
+
+#: Manager.class.php:43
+msgid "System"
+msgstr "Sistema"
+
+#: views/page.main.php:8
+msgid ""
+"The default Asterisk Manager Interface (AMI) configuration has changed "
+"starting in version 16. "
+msgstr ""
+"La configuración por defecto del Asterisk Manager Interface (AMI) ha "
+"cambiado a partir de la versión 16. "
+
+#: Manager.class.php:398
+msgid "The manager does not exist!"
+msgstr "El gestor no existe!"
+
+#: Manager.class.php:369
+msgid "This manager already exists!"
+msgstr "Este gestor ya existe!"
+
+#: manager.i18n.php:8
+msgid "This module is used to add AMI Users"
+msgstr ""
+
+#: views/view.grid.form.php:195
+msgid "Toggle All"
+msgstr "Alternar Todo"
+
+#: Manager.class.php:268
+msgid "Type not found!"
+msgstr "Tipo no encontrado!"
+
+#: Manager.class.php:255
+msgid "Update Successfully"
+msgstr "Actualizado Correctamente"
+
+#: Manager.class.php:259
+msgid "Update is Failed!"
+msgstr "¡Actualización fallida!"
+
+#: Manager.class.php:49
+msgid "User"
+msgstr "Usuario"
+
+#: Manager.class.php:46
+msgid "Verbose"
+msgstr "Verbose"
+
+#: views/view.grid.form.php:118
+msgid "Write Timeout"
+msgstr "Tiempo de espera de escritura"
+
+#: views/view.grid.form.php:175 views/view.grid.form.php:183
+#: views/view.grid.form.php:200 views/view.grid.form.php:208
+#: assets/js/manager.js:24
+msgid "Yes"
+msgstr "Si"
+
+#: views/view.grid.form.php:124
+msgid "milliseconds"
+msgstr "milisegundos"
+
+#~ msgid ""
+#~ "Please refer to  <a href=\"%s\"> <b>wiki</b> </a> for more information."
+#~ msgstr ""
+#~ "Consulte la  <a href=\"%s\"> <b>wiki</b> </a> para obtener más "
+#~ "información."
+
+#~ msgid "Create New"
+#~ msgstr "Crear Nuevo"
+
+#~ msgid "Error: %s"
+#~ msgstr "Error: %s"
+
+#~ msgid "The manager name cannot be empty or may not have any space in it."
+#~ msgstr "El nombre del gestor no puede estar vacío ni contener espacios."
+
+#~ msgid ""
+#~ "The manager name will not accept any special characters except _ and -."
+#~ msgstr ""
+#~ "El nombre del gestor no aceptará ningún carácter especial excepto _ y -."
+
+#~ msgid "The manager secret cannot be empty."
+#~ msgstr "La contraseña del gestor no puede estar vacía."
+
+#~ msgid ""
+#~ "Manager password must match regex rules like this: [a-zA-Z0-9*?+-.,!_]"
+#~ msgstr ""
+#~ "La contraseña del gestor debe coincidir con reglas regex como estas [a-zA-"
+#~ "Z0-9*?+-.,!_]"
+
+#~ msgid "The manager deny is not well formatted."
+#~ msgstr "El campo 'Denegar' no tiene el formato correcto."
+
+#~ msgid "The manager permit is not well formatted."
+#~ msgstr "El campo 'Permitir' no tiene el formato correcto."
+
+#~ msgid "Updating..."
+#~ msgstr "Actualizando..."
+
+#~ msgid "Adding..."
+#~ msgstr "Añadiendo..."
+
+#~ msgid "The manager read field is not well formatted."
+#~ msgstr "El campo 'Lectura' no tiene el formato correcto."
+
+#~ msgid "The manager write field is not well formatted."
+#~ msgstr "El campo 'Escritura' no tiene el formato correcto."
+
+#~ msgid "call"
+#~ msgstr "llama"
+
+#~ msgid "user"
+#~ msgstr "usuario"
+
+#~ msgid "dtmf"
+#~ msgstr "dtmf"
+
+#~ msgid "cdr"
+#~ msgstr "cdr"
+
+#~ msgid "Delete"
+#~ msgstr "Borrar"
+
+#~ msgid "Reset"
+#~ msgstr "Reiniciar"
+
+#~ msgid "Submit"
+#~ msgstr "Enviar"
+
+#~ msgid "Name is missing!"
+#~ msgstr "Falta el nombre!"
+
+#~ msgid "List Managers"
+#~ msgstr "Administradores de Listas"
+
+#~ msgid "Manager - %s"
+#~ msgstr "Gestor - %s"
+
+#~ msgid "Manager name"
+#~ msgstr "Nombre Admistrador"
+
+#~ msgid "Manager secret"
+#~ msgstr "Secreto Administrador"
+
+#~ msgid "Name of the manager without spaces."
+#~ msgstr "Nombre de administrador sin espacios."
+
+#~ msgid "Adding write timeout.."
+#~ msgstr "Agregando tiempo de espera de escritura.."
+
+#~ msgid "Column present"
+#~ msgstr "Columna Presentada"
+
+#~ msgid "Increasing read field size if needed.."
+#~ msgstr "Incrementando tamaño de lectura de campo si es necesario.."
+
+#~ msgid "Increasing write field size if needed.."
+#~ msgstr "Incrementando tamaño del campo si es requerido.."
+
+#~ msgid "error encountered, not altered"
+#~ msgstr "error encontrado, no alterado"
+
+#~ msgid "ok"
+#~ msgstr "ok"
+
+#~ msgid "Check All/None."
+#~ msgstr "Marcar todos/ninguno."
+
+#~ msgid "Check Asterisk documentation."
+#~ msgstr "Revise la documentación de Asterisk."
+
+#~ msgid "Conflicting FreePBX Manager of %s has not been added"
+#~ msgstr "Conflicto Gestor FreePBX de %s no ha sido agregado"
+
+#~ msgid "Deny:"
+#~ msgstr "Denegar:"
+
+#~ msgid "Manager name:"
+#~ msgstr "Nombre del gestor:"
+
+#~ msgid "Manager secret:"
+#~ msgstr "Contraseña del gestor:"
+
+#~ msgid "Name of the manager without space."
+#~ msgstr "Nombre del gestor, sin espacios."
+
+#~ msgid "Permit:"
+#~ msgstr "Permitir:"
+
+#~ msgid "Read"
+#~ msgstr "Lectura"
+
+#~ msgid "Rights"
+#~ msgstr "Permisos"
+
+#~ msgid "Write"
+#~ msgstr "Escritura"
+
+#~ msgid "deleted"
+#~ msgstr "eliminado"
+
+#~ msgid "Error writing the manager additional file."
+#~ msgstr "Error al escribir el archivo adicional del gestor."
+
+#~ msgid "The manager read and write properties cannot be empty."
+#~ msgstr ""
+#~ "Los permisos del gestor de lectura y escritura no pueden estar vacíos."

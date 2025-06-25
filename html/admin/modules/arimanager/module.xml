@@ -1,0 +1,39 @@
+<module>
+	<rawname>arimanager</rawname>
+	<repo>extended</repo>
+	<name>Asterisk REST Interface Users</name>
+	<version>17.0.1.1</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<category>Settings</category>
+	<menuitems>
+		<arimanager>Asterisk REST Interface Users</arimanager>
+	</menuitems>
+	<changelog>
+		*17.0.1.1* 17.0.1.1  release
+	</changelog>
+	<database>
+	  <table name="arimanager">
+	    <field name="id" type="integer" primarykey="true" autoincrement="true"/>
+	    <field name="name" type="string" length="190"/>
+	    <field name="password" type="string" length="255" notnull="false"/>
+	    <field name="password_format" type="string" length="255" notnull="false"/>
+	    <field name="read_only" type="integer" default="1" notnull="false"/>
+	    <key name="name_UNIQUE" type="unique">
+	      <column name="name"/>
+	    </key>
+	  </table>
+	</database>
+	<description>
+		Asterisk 12 introduces the Asterisk REST Interface (ARI), a set of RESTful API's for building Asterisk based applications. This module provides the ability to add and remove ARI users.
+	</description>
+	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26738829/Asterisk+REST+Interface+Users+Module</more-info>
+	<depends>
+		<module>manager</module>
+		<engine>asterisk 12</engine>
+	</depends>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

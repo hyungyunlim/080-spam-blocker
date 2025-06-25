@@ -1,0 +1,12 @@
+{
+  "file_path": "/var/spool/asterisk/monitor/20250625-141609-FROM_AUTO-ID_685b8616f3c07-TO_0808811261.wav",
+  "timestamp": "2025-06-25T14:21:00.625940",
+  "transcription": "수신갑을 시스템입니다. 2015년 2월 25일 사로 영 1, 영 2, 철 영 1, 8, 5.",
+  "analysis": {
+    "status": "failed",
+    "confidence": 30,
+    "reason": "관련 키워드를 찾을 수 없음 - 실패로 판정"
+  },
+  "pattern_hint": null,
+  "file_size": 239724
+}

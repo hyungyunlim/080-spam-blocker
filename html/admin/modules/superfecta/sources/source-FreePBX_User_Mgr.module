@@ -1,0 +1,81 @@
+<?php
+
+/*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+ * Developer Notes:
+ * This module developed and tested using PIAF "black" FreePBX 12/Asterisk 12. Needs additional testing\
+ * on other distros.
+ *
+ * Version History:-
+ * 2014-08-04	Initial commit by lgaetz
+ * 2016-02-29	Initial Initialize variables
+ *
+ *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***/
+
+class FreePBX_User_Mgr extends superfecta_base {
+    public $description,$source_param;
+    public $version_requirement = "2.11";
+
+  public function __construct() {
+    $this->description = _("Look up name from the FreePBX User Management module");
+    $this->source_param = array(
+		'CNAM_Format' => array(
+			'description' => _('Select how returned CNAM is displayed'),
+			'type' => 'select',
+			'option' => array(
+				'1' => _('First_name Last_name'),
+				'2' => _('Last_name, First_name'),
+			),
+			'default' => '1',
+		),
+		'Filter_Length' => array(
+				'description' => _('The number of rightmost digits to check for a match. Enter zero to disable this setting'),
+				'type' => 'number',
+				'default' => 10
+		)
+	);
+  }
+
+	function get_caller_id($thenumber, $run_param=array()) {
+
+		$this->DebugPrint(_("Searching FreePBX User Manager..."));
+
+		// Initialize variables
+		$caller_id = null;
+		$wquery = null;
+		$wquery_string = null;
+		$wquery_result = null;
+    $umtable = "userman_users";
+		// Set defaults in case user hasn't
+    $run_param['CNAM_Format'] = isset($run_param['CNAM_Format'])?$run_param['CNAM_Format']:'1';
+    $run_param['Filter_Length'] = isset($run_param['Filter_Length'])?!$run_param['Filter_Length']:'0';
+		//  trim incoming number to specified filter length
+		if ($run_param['Filter_Length'] != 0 && strlen($thenumber) > $run_param['Filter_Length']) {
+			$thenumber = substr($thenumber, (-1*$run_param['Filter_Length']));
+		}
+		//  Build regular expression from modified $thenumber to avoid non-digit characters
+		$wquery = "'[^0-9]*";
+		for( $x=0; $x < ((strlen($thenumber))-1); $x++ ) {
+			$wquery .=  substr($thenumber,$x,1)."[^0-9]*" ;
+		}
+		$wquery = $wquery.(substr($thenumber,-1))."([^0-9]+|$)'";
+    $sql = 'SELECT fname,lname FROM '.$umtable.' WHERE (cell REGEXP '.$wquery.') OR (work REGEXP '.$wquery.') OR (home REGEXP '.$wquery.') ORDER BY id DESC';
+    $dbh = \FreePBX::Database();
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+    $last_name = isset($result['lname'])?$result['lname']:'';
+    $first_name = isset($result['fname'])?$result['fname']:'';
+
+		if ($run_param['CNAM_Format'] == 1) {
+			$caller_id = $first_name." ".$last_name;
+		}
+		elseif ($run_param['CNAM_Format'] == 2) {
+			$caller_id = $last_name.",".$first_name;
+		}
+
+		if ($caller_id == "") {
+			$this->DebugPrint(_("Not Found"));
+		}
+		return(trim($caller_id));
+    }
+}

@@ -1,0 +1,271 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+;################################################
+;#        FreePBX Module Signature File         #
+;################################################
+;# Do not alter the contents of this file!  If  #
+;# this file is tampered with, the module will  #
+;# fail validation and be marked as invalid!    #
+;################################################
+
+[config]
+version=1
+hash=sha256
+signedwith=B53D215A755231A3
+signedby='FreePBX Mirror Servers <security@freepbx.org>'
+repo=standard
+timestamp=1728800798.388
+[hashes]
+Api/Gql/dashboard.php = c2204891eb1182b45afe8a7bd005b5b0dc5ba1d52ce6d13cf6d4d104a170df8b
+Backup.php = d75c4f60c17584c643bc1f4882b801fb877ed41c22c3845f79ad56b57b75f0ea
+Dashboard.class.php = ab9d072002ebd0eb7365316c7d45b84ec356d79e7cca2918249807cc8559f21e
+Job.php = b1005242786ae5bd45f914a01aff49b7b2ecac01be183a79eb5ed3824960debd
+LICENSE = 57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6
+README.md = ac84c29aa1be004d13890145cad30f847ebc9283acdd19aeff5cdba7c4c1742f
+Restore.php = 965a89442121eb231690c5d992366be29e7038cc4f9b3652ff7474e22015c1d1
+assets/js/canvasjs.js = ad21ccb6b126d68ffd3c2e150a1b4fd030054d49fb92fd2cd73da5f4ac03863f
+assets/js/dashboard.js = ff64729b580cd84181f93f947d7dd18d768950a74db6b0414ea90a7eb2efa0be
+assets/js/draggabilly.pkgd.min.js = 098143c1b998d8612a7111ff2a4891546c6f4c649da9005212cb13c4452aeccd
+assets/js/packery.pkgd.min.js = e68793b990f77d4bc10424522e1bd0a946d3f271ae62a988a9a544cccd88384a
+assets/js/raphael-min.js = 07a9c78489c33c9be48ae5bf6f73e5f0b8098b2fc5e2a87510ee61ecb2f4f785
+assets/js/source/canvasjs.js = 448432d3be1b92185ec3497ec89416c8c4564868fbeb42e57cfadc7221650f0b
+assets/js/source/excanvas.js = 433aa11b6e5b156ed401659980a288bbebf70c8418071e9a08712b84e025e82d
+assets/js/source/jquery.canvasjs.js = 7482ce7c533ff4b603a552ffcda1785ed8551b0e0661b527634256561f8dfc88
+assets/less/dashboard.less = 9a1672b127e18620d08bb038be91cc4887f15a30e341c8bf31fe5563fdbc1545
+classes/AsteriskInfo.class.php = cf713abb6eab800bce9a4b3d167c611b71752af85eb186792bf4aec96032054c
+classes/CPUInfo.class.php = 74150569f86851f428f75f1a283d04bdb893156b315bf10a0ac2119f7f8d5cdd
+classes/DashboardHooks.class.php = 30b8cdde83635797295ecacb49621f3890cbf7a4e786aa27845f2991196f9a9f
+classes/DiskUsage.class.php = f425e43817e56bbd33895861797b0ce9e879b78e3e3d66b0f7ac6ec5220f1819
+classes/MemInfo.class.php = 6c7a1e85f886c2d00634be8efba78872c8008e72ed97d80be44d55f6ee69e9ba
+classes/Netmon.class.php = 4091ab160c1e3fbf5b7a698c8affa669bb905500b91107b91955437e0cb0e914
+classes/PruneHistory.class.php = e6efbee5819f5b9f3a12f4a2868e9ad9700ef54961a4e4c11acf585e1ae87002
+classes/Statistics.class.php = d47474ab23efb7fa982a86f1c0bc8732a2ad5daa7fbcc43eeae362cb8e56a16d
+classes/SysInfo.class.php = 6a2b08fbac65b59ff60783893738b80cf7f2e8fa336b5b804ba37b7fa750e03a
+classes/SysStat.class.php = 720fc2d5f075a867d7321f49e18ec9b54d888a10c0fe34a1456ccc8d71204042
+classes/TimeUtils.class.php = 5d3b75b7df30dc26bb66a726f115cdac7c1c78d7284c0b9ddd470d371f5be42e
+classes/phpsysinfo/.htaccess = 4e68a773fdb2edf938d8f128666beeb0fe9b01f4dee998e455a4ffddf42d7806
+classes/phpsysinfo/CHANGELOG.md = a574fe08e46d39dca21d297ae36636cdaf99ab92aa18f96c16ce31b0873acf8d
+classes/phpsysinfo/COPYING = ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
+classes/phpsysinfo/README.md = 9c525655abfa4e0503b2902e54d1bea1444def5f145121c55862f3c147868503
+classes/phpsysinfo/README_PLUGIN.md = fe2167abeacec36f43bae75ad1d10f8e0b0608017f014b00ed0212708f3a5e73
+classes/phpsysinfo/config.php = 6d1925e561cbaaf1229242c5302f8c35dc68129bc62c400fdfd82041f52914d6
+classes/phpsysinfo/data/distros.ini = 0cddf6b51fdd87d0fb00332dcda4415b308177ff40517b6a4d1b66183429c3b3
+classes/phpsysinfo/data/languages.ini = b81ae6a8ed4e15a4fec8cd511146b2db9123596d8f8a028d8b167fbabf7794b0
+classes/phpsysinfo/includes/autoloader.inc.php = 06a6abaf12794f0be81014c254827324d289d07a39f3f383b19ab35b17a76d42
+classes/phpsysinfo/includes/class.CommonFunctions.inc.php = 81fb13505e596bc675a1337657f3abe67d856879311904a3bf7dc1416dfe0004
+classes/phpsysinfo/includes/class.Parser.inc.php = b484f576816a8397b2be13c0793683cb4a495dfc95324b475675cb5a602587cf
+classes/phpsysinfo/includes/error/class.PSIError.inc.php = 51170b5632fe847c0ed3e5ef5d7243e185cb6df7e43c2f632b120532270d83bd
+classes/phpsysinfo/includes/interface/class.PSI_Interface_OS.inc.php = 74b40904bf58e04bee4323e4c78c0ef134387774a670881154e4ba4ae3b52f0f
+classes/phpsysinfo/includes/interface/class.PSI_Interface_Output.inc.php = a4a9948f86e76048bc9c90aeacb322f54d77801804a6af31e2504319b5bc64ce
+classes/phpsysinfo/includes/interface/class.PSI_Interface_Plugin.inc.php = 678bfc6988262629f09675d6fbd0bc1e2171426558663ac5b56861a86d10fa13
+classes/phpsysinfo/includes/interface/class.PSI_Interface_Sensor.inc.php = 62569110e9c1148bd57eb3cb83366969f1108163182487e0622578e9e986b7d8
+classes/phpsysinfo/includes/interface/class.PSI_Interface_UPS.inc.php = a1a546e883fffd8a0aa534e398d9ce37cb879e97632f28286e1803eb5a02334a
+classes/phpsysinfo/includes/js/README = d0a857a16ec829033213c3df1d5bb4712c977d1428407573fb98cab7891ee060
+classes/phpsysinfo/includes/js/class.JavaScriptPacker.inc.php = 24e30a34b9cf423a3ee24b320836b2a7a9f899965a24362d4e14113555b8958f
+classes/phpsysinfo/includes/mb/class.coretemp.inc.php = f1a2da86ac77ff719d95299aeb431ff6528778b0eccf53643fa7075dbde68f10
+classes/phpsysinfo/includes/mb/class.hddtemp.inc.php = 35cc90686552fdf824d9ed64b16a7fc420c6e91423a59b23cd19eb19d0f87d8d
+classes/phpsysinfo/includes/mb/class.healthd.inc.php = 197d6af4c00c5648b7ad5cdbea25e3b9b6d8b2e6687d6bf6691989bed331d429
+classes/phpsysinfo/includes/mb/class.hwsensors.inc.php = 76ca255805a7c69ccf8a8043aac1e9b5c0ec20d8174eaf4d1ee2548c1fa892aa
+classes/phpsysinfo/includes/mb/class.ipmi.inc.php = ce5ae733b43f52ff129688454fa18ecaf0841ab6ad9ea38aeba118549c286e76
+classes/phpsysinfo/includes/mb/class.k8temp.inc.php = f46171dd771913bcab59b484e8e8ff6da3d3632a339c3055da58f5f5621fe6bf
+classes/phpsysinfo/includes/mb/class.lmsensors.inc.php = 86a131cdb1ab0fe2a57cab0761f6e1bc496028e20cd9ead8eeb90a9266809930
+classes/phpsysinfo/includes/mb/class.mbm5.inc.php = 0aab47653c6e3e24227d5daf0930a0832fab23f2b1db698f9bc9629e5659f00b
+classes/phpsysinfo/includes/mb/class.mbmon.inc.php = 4505fca98c68177be8c00c7d9db394aacd7d9017c75b8d6774bfd9d0de8201da
+classes/phpsysinfo/includes/mb/class.pitemp.inc.php = 57574704ffa2ede9b05a5d41e36c02f4adefd4abfa7f89900bbfcf9cd37ed367
+classes/phpsysinfo/includes/mb/class.sensors.inc.php = 2ba139f694ca2988f4bb7c5cce75a1885bb95a8bfc4a57280494be05f0c50893
+classes/phpsysinfo/includes/os/class.AIX.inc.php = 5f581d48dfdeaa626d0464440b07dd270e2a4aa7a9bf37a31e644e0bb8b28d70
+classes/phpsysinfo/includes/os/class.Android.inc.php = bdff7bfd5a1c2ecec2423be2e09cc57e1a10c2366d0aaf3693d74ae4937f4a0f
+classes/phpsysinfo/includes/os/class.BSDCommon.inc.php = 4885e184dbb3039a62241e8fcbc0d01b87fec9d02584f8659dc4745c6598a258
+classes/phpsysinfo/includes/os/class.Darwin.inc.php = 5330acc1a6866fda01c4adbc65557ddd9497c306b1b8c0a42be636c73394b11d
+classes/phpsysinfo/includes/os/class.DragonFly.inc.php = dba3860d16e7d54131dcc4977dbd65e6609bda12569edceafa63fdb50ffa9fac
+classes/phpsysinfo/includes/os/class.FreeBSD.inc.php = b86b7b5635377fbf76f3161f5ea5a1b0e82fd5bb6616d8cf3905e99e3a8e597d
+classes/phpsysinfo/includes/os/class.HPUX.inc.php = 4b43ef7bff22ca8f881f5afdff42c620fb64e25739af4ed8fdfaf19270e4fd23
+classes/phpsysinfo/includes/os/class.Haiku.inc.php = 5d38be8d97dee46758d7ae1e8f547aa00227ce8a165d52fc097b9f1204055bed
+classes/phpsysinfo/includes/os/class.Linux.inc.php = ef100d1dbc6b90e18362aca56553ecb98a602347e7cd7e1a407786617971b288
+classes/phpsysinfo/includes/os/class.Minix.inc.php = e0af8b5c3e6e5be9abebdfc68fede7ee8be68c5c44ca6a50d7cff5275c56b3b6
+classes/phpsysinfo/includes/os/class.NetBSD.inc.php = 9590255c0fb693e0a600d9045f329101049b36027d3d16f62dafb20cd04f2aaa
+classes/phpsysinfo/includes/os/class.OS.inc.php = f19d7cad6d95b7223c57bef058a73b7e3be4c9a82259b9d2d8fecc9a89e12264
+classes/phpsysinfo/includes/os/class.OpenBSD.inc.php = cc7d42df61781a2476ce4c46b3b18da04e3c800930c190b3ba26a1122dd08577
+classes/phpsysinfo/includes/os/class.QNX.inc.php = dd2c11acc966e98902406cb02e8d4d24fb59005db116df2f76cd09daf671bb9c
+classes/phpsysinfo/includes/os/class.SunOS.inc.php = a0c4dffb8d5adfff1db2d1d276e037c3b4f8333f3c7f142294f05ebe334e0283
+classes/phpsysinfo/includes/os/class.WINNT.inc.php = 639fd76631ac00bcc48b6c7eb3915cef83d3b7571a55722c7381362970f89a33
+classes/phpsysinfo/includes/output/class.Output.inc.php = 8ea43490c821dcf1ca1123ecc9340039d6dae793205ba7a466273e00baea22f0
+classes/phpsysinfo/includes/output/class.Template.inc.php = cdac8fe95001884b660fdcb4f00c58fc6d5fc12a84c98d3396b71435193603b5
+classes/phpsysinfo/includes/output/class.Webpage.inc.php = beeabadc494bfafc72d468a7f725af89da7102cb40c6618d831119545b75dfd9
+classes/phpsysinfo/includes/output/class.WebpageXML.inc.php = ed659347689368fe67def6aac5666d00b66ce86a65297478ba505c83002be7a8
+classes/phpsysinfo/includes/output/class.WebpageXSLT.inc.php = fd901165ff7ce58d7cca331165852f33f2e11528817866a97b3c5031fd67ea63
+classes/phpsysinfo/includes/plugin/class.PSI_Plugin.inc.php = 5233f312a34e593d5f21c4502e58a7cf35ddccc5e6a4e7e4a8f846a851e24221
+classes/phpsysinfo/includes/to/class.MBInfo.inc.php = f582290b9a4dcdc9c7137f5ab145d921cadde244e90cf0505ec8ee5b310b7c35
+classes/phpsysinfo/includes/to/class.System.inc.php = b218efa3e3503223aee4d8a1983287c84db1677ef97d723dc0946d6a8e3c9e32
+classes/phpsysinfo/includes/to/class.UPSInfo.inc.php = b96176bdef96fa1cda5fbca05054e5c77add384f58f5426b313eb662a0575c7d
+classes/phpsysinfo/includes/to/device/class.CpuDevice.inc.php = a8a8c4e1c59d87cee3ea52f9e0511d7d34c80939ccbc7ea5ce956338aaabf925
+classes/phpsysinfo/includes/to/device/class.DiskDevice.inc.php = 9491d2585b124459db06e49c4ffc642187105746a9fc4d559a8833e8844bec9b
+classes/phpsysinfo/includes/to/device/class.HWDevice.inc.php = 5f593b22ce49cb461a15513c24dec59d28b72379c18a59f458f51e1e85cea05d
+classes/phpsysinfo/includes/to/device/class.NetDevice.inc.php = 1848ffcc4ec14a07dba95afd5204d55ed64768663b4a45f9619f24f996fe0ea0
+classes/phpsysinfo/includes/to/device/class.SensorDevice.inc.php = bfe7198a23ff597fdb66489caeabfb6f0ac3b399b65a4f1b31cd17639b7124f9
+classes/phpsysinfo/includes/to/device/class.UPSDevice.inc.php = 711198b18b2f245a111c0e51194f1290497574b9b86c66413f0109d3a82c092f
+classes/phpsysinfo/includes/ups/class.apcupsd.inc.php = ed08757c140804f46d41a2ba2616a8262d0727769572c47cc9275373c01c371f
+classes/phpsysinfo/includes/ups/class.nut.inc.php = 4f5fbec64ff10c8f2826e940ff7f77c91e8f9b5cf5b19c07dbc4ee56a4aaa87c
+classes/phpsysinfo/includes/ups/class.ups.inc.php = 7f049829ea17cf77e5b9b26d3576c113253cdb4eb9ff77bc4d81e4f0e9853136
+classes/phpsysinfo/includes/xml/class.SimpleXMLExtended.inc.php = 0087f09d6f29428f73aa0182d5dc4f52a3f815d9b9be10aedb92adbd04730fff
+classes/phpsysinfo/includes/xml/class.XML.inc.php = fb427e61bec41dc26d57e872f0aa48f2fd782f8bcab4482621f48627cc48b7e2
+classes/phpsysinfo/js.php = c430992e323dd5cf4879991d6dd52a14f768c6a0a765f82790b688915a7f5e03
+classes/phpsysinfo/phpsysinfo.ini = eb8327391045602382ebf22323de9891cac8dc5125225677487209f2fedb22a7
+classes/phpsysinfo/phpsysinfo.ini.new = 860ce97d470669c01288a31db793c96d1dc1c8b5c83d1fc5731f83d80a7ba268
+classes/phpsysinfo/phpsysinfo.xslt = 6989a01baa98a582a178e05137cf103ffde4f61b837d87c7697f7185f6f36618
+classes/phpsysinfo/phpsysinfo3.xsd = b83e9e711028d26a2cfe6395ea8d987d35e26af85106530add72e28fdc91c963
+classes/phpsysinfo/plugins/bat/class.bat.inc.php = 145e876157937b37b780e3b1947a0f6e18a2121241f213c9b6311b72eb9227aa
+classes/phpsysinfo/plugins/bat/js/bat.js = 0401b1792a5bcef941ff15b40fd6565aae728f10ba6297a952ab079d2a9b8085
+classes/phpsysinfo/plugins/bat/lang/cz.xml = 5dc4d001abdf349bde486faeec19cb6318c5cb622f540db7ba9ea910a02eb4ed
+classes/phpsysinfo/plugins/bat/lang/de.xml = 9285837a53e3ab326d909fa0ed5427a874126983c593f2ef1cb95b7740a2fbd9
+classes/phpsysinfo/plugins/bat/lang/en.xml = dc64cd484a911ad839dea24d1f62228b932572c9351777cc51bafe47cb3b1d9c
+classes/phpsysinfo/plugins/bat/lang/fr.xml = fe3119184883e8e8c8d88661e441d4bb03c0807f913591188d2fb9e3a25216f6
+classes/phpsysinfo/plugins/bat/lang/pl.xml = 14f9eb81ac87e693c26deaf2c3bf95f675b5d658867f75b5c07a5f6b59c51394
+classes/phpsysinfo/plugins/bat/lang/ru.xml = f26ab0a95fed2ff6c92c32b8bf432e472508630e8d09ebcd083556925d35e933
+classes/phpsysinfo/plugins/dmraid/class.dmraid.inc.php = 8d899b363313913cd4fbde9a2282651f3b4582de11228da1acf9013f5fcc5665
+classes/phpsysinfo/plugins/dmraid/css/dmraid.css = 58b995528ed36777d62187510dcf366589f4abe8c6cacd58560889ae20302e1b
+classes/phpsysinfo/plugins/dmraid/gfx/error.png = 1bb4b1e8d5dbaa00c18e8a44366a78a11695b53f3b888bfedfcec9b15ea6f564
+classes/phpsysinfo/plugins/dmraid/gfx/harddrivefail.png = 18bbbd44ea36b526b0f4bd11d42a76fdbef829b68efb9d903d1fd046a4479882
+classes/phpsysinfo/plugins/dmraid/gfx/harddriveok.png = d5418654f5f63ae6b35495c846b775d633dc14e8e43d0b6d02087cd2b6d8b883
+classes/phpsysinfo/plugins/dmraid/gfx/harddrivespare.png = f790935a05b7f66f7032ab61f03577f5f217920032046ca4532e09d74675432e
+classes/phpsysinfo/plugins/dmraid/js/dmraid.js = a84df0ee1d225e412fde6ea73a371bc3e80604a84046f0ee0071053394d46b29
+classes/phpsysinfo/plugins/dmraid/lang/en.xml = 8160271d1b4aca23eb13136c8a2f155234c85b5fa97ce6e01e8e3ca172dbb156
+classes/phpsysinfo/plugins/dmraid/lang/fr.xml = 1b12e82b7332cc8abf9ed9139ac0c187963c12874b8ae81f5dfb9713f9ff99cc
+classes/phpsysinfo/plugins/ipmiinfo/class.ipmiinfo.inc.php = 3211684b81b9f9daa151d9020953119c85d40d98c6e8061f4d6df8ac34473f83
+classes/phpsysinfo/plugins/ipmiinfo/js/ipmiinfo.js = 86f1697fe385b436150c6c297e09d8fe8e43068b797eb0b41c0ac4065a284764
+classes/phpsysinfo/plugins/ipmiinfo/lang/cz.xml = 2d58b85e3075334e42b35cc1b159702616361d3baca16c47b875dd6f3a9de022
+classes/phpsysinfo/plugins/ipmiinfo/lang/de.xml = acfce32d8cab032752dd6dc149fdde3b97ac959632f2bf6b113be1099e1b444f
+classes/phpsysinfo/plugins/ipmiinfo/lang/en.xml = bcb21263fe05faa071b00a68651b089d601fa6c7edae958488a60c6cefd1a210
+classes/phpsysinfo/plugins/ipmiinfo/lang/fr.xml = 5ea78a661042ab733e77c7672d1faa0dadf3ea09ebf70adcbc51a2bd0ca5bc97
+classes/phpsysinfo/plugins/ipmiinfo/lang/pl.xml = 3728062ab5f58616c2a54fb1186d2196ff896c25ec4999af4cfabc570337d42f
+classes/phpsysinfo/plugins/ipmiinfo/lang/ru.xml = bf7165b9a9ba1788cbf016747d9debc1419d6aed96a1c5dfe5b326fc2b54b8cc
+classes/phpsysinfo/plugins/mdstatus/class.mdstatus.inc.php = 78a773f0d1257edb7cdd5a190bbc3dfaeb968aa01110590b277f49b8c0ac0ca4
+classes/phpsysinfo/plugins/mdstatus/css/mdstatus.css = f503f9eca72485c6facd8415137771c77aab7695bfafde566a86cb197fbec706
+classes/phpsysinfo/plugins/mdstatus/gfx/error.png = 1bb4b1e8d5dbaa00c18e8a44366a78a11695b53f3b888bfedfcec9b15ea6f564
+classes/phpsysinfo/plugins/mdstatus/gfx/harddrivefail.png = 18bbbd44ea36b526b0f4bd11d42a76fdbef829b68efb9d903d1fd046a4479882
+classes/phpsysinfo/plugins/mdstatus/gfx/harddriveok.png = d5418654f5f63ae6b35495c846b775d633dc14e8e43d0b6d02087cd2b6d8b883
+classes/phpsysinfo/plugins/mdstatus/gfx/harddrivespare.png = f790935a05b7f66f7032ab61f03577f5f217920032046ca4532e09d74675432e
+classes/phpsysinfo/plugins/mdstatus/js/mdstatus.js = aae8db38f6dc1c751a410b87c24105447d919815bbfd1a77cf731e19c0a5f98b
+classes/phpsysinfo/plugins/mdstatus/lang/cz.xml = 86879cf30ca532402aa25f4c2a18251635e92a77e0479f92eed1acf40f5dc7b1
+classes/phpsysinfo/plugins/mdstatus/lang/de.xml = 2885b4ec973ee8edf63d306c7e7bff053a0c211b0b0d52d67d373c61c7a8a411
+classes/phpsysinfo/plugins/mdstatus/lang/en.xml = 44d184932bb8458555a1757cf38ae7718de00fadfadfe649052a6a041824364d
+classes/phpsysinfo/plugins/mdstatus/lang/fr.xml = 53a8435fe7f944bdb53cad2b0c6152b8b2737735d938fe3ba65c0b1f78f25a1b
+classes/phpsysinfo/plugins/mdstatus/lang/gr.xml = 864059f65235f853f1255f77e719ffc014ff0bf0d98982d02b1e216838c16dfe
+classes/phpsysinfo/plugins/mdstatus/lang/ru.xml = fbd1cad85ebd73e19d23916084eeeb10aeb403d4c32403d2f39d1e8714dada0f
+classes/phpsysinfo/plugins/ps/class.ps.inc.php = 90cb8ad0d10ad125ba2420e1b688cb5f4d4e210e78f725a0199a75dfedd037be
+classes/phpsysinfo/plugins/ps/js/ps.js = 266f1a0f0def826e797522b8711c9e1847e2116fcdfcacc2c7271c47f15cb255
+classes/phpsysinfo/plugins/ps/lang/cz.xml = a3e9b103c18f36eceaf9ca71376b9354bff9444623292236a1aa063f07289603
+classes/phpsysinfo/plugins/ps/lang/de.xml = 149950038e394f41ae5a37cf8e2c5dc6d621df2865ffd8bf150f308af94c9ff7
+classes/phpsysinfo/plugins/ps/lang/en.xml = 805121230e3b9b981c7ffd4dc66534f254980c890a3c00f0226f232234b51926
+classes/phpsysinfo/plugins/ps/lang/fr.xml = b31554c6c41c971ff5e53b22479e0e72311aabb351b3003e185b9631dcf8734a
+classes/phpsysinfo/plugins/ps/lang/gr.xml = 76661ac0bea9ffe59a01ef22db9ae334c428cf2deb34239140c86902d72b6ce5
+classes/phpsysinfo/plugins/ps/lang/pl.xml = 7e4f998630e468d5d0bcc519d1bd22572404079ae279af2fbf8f28be658c9359
+classes/phpsysinfo/plugins/ps/lang/ru.xml = 2678e1d7e0d3ea50f2bb0c72ee34dd82e366f35190604f1008c1e78abf2a9d41
+classes/phpsysinfo/plugins/psstatus/class.psstatus.inc.php = 44c7b36565b3fd6c0c50e6af3c107a317e4e4f18ce3ffcdc09ece1795a55aa61
+classes/phpsysinfo/plugins/psstatus/css/psstatus.css = 765742a93bbadd205024926bb0b5a039383df169058222719563dc39d7ceed43
+classes/phpsysinfo/plugins/psstatus/gfx/offline.png = 91a4c6e29e64e9cd53d1680bcc0f33ab53077dada1f6fd351afefc93e6884460
+classes/phpsysinfo/plugins/psstatus/gfx/online.png = e1475dbf382a7e3addd153e34d303ea465fa0b360973d34348b336f2d2dd89f3
+classes/phpsysinfo/plugins/psstatus/js/psstatus.js = 07500d9bd425cb0efe3bc30579a55f3269a90a2d62b9ec8d92321d3524dfb90a
+classes/phpsysinfo/plugins/psstatus/lang/cz.xml = 1f3cbfbbf4f9af354d93fa7ba3871a32191aae7e63aa2d6101a869a11e941938
+classes/phpsysinfo/plugins/psstatus/lang/de.xml = 313ccc134b9817034c75e13f3d2276deabf9f117d0d36263aa645f0c565dec11
+classes/phpsysinfo/plugins/psstatus/lang/en.xml = c5ece099963c1f2c156fe9996e9ea4e8b0e4b573be32cb888d55152db27cfe3c
+classes/phpsysinfo/plugins/psstatus/lang/fr.xml = 6c2c14661c761c91270b3ad7a9fd5d9ca37de04c757951e9ecae8c4ca5564342
+classes/phpsysinfo/plugins/psstatus/lang/gr.xml = bfa0c71b59c719b4be95ed5cd2bfa0f2e340b910a99bc8e209ed5c2922485711
+classes/phpsysinfo/plugins/psstatus/lang/pl.xml = ba255f16c826235bd3735404c447a1b2765ad5a28e1f6eb96709241ca052c92c
+classes/phpsysinfo/plugins/psstatus/lang/ru.xml = d7ba3cf8500f549474a41604bd9994a75e90182f454f2500edbac54e0445f7f8
+classes/phpsysinfo/plugins/quotas/class.quotas.inc.php = 84e54e75c48702813167b42f15faa301ccd019a2a4ed533950801488a80b7477
+classes/phpsysinfo/plugins/quotas/css/quotas.css = 8e06f27ac42edb70c6d9f57f42dcdb663977b75feffa66c68d5bf3723974cc85
+classes/phpsysinfo/plugins/quotas/js/quotas.js = e64fede1b9bb8311920212020bc07ae1f8b25b32dd8a856559bea66cd5ae9e26
+classes/phpsysinfo/plugins/quotas/lang/cz.xml = 49a38a24650f30519b6f1343c5189ac63d80a8d51d1484dfc708b0a6175353a4
+classes/phpsysinfo/plugins/quotas/lang/de.xml = 56c7f960dffbc37acf52941185dc76d529c8f3f1fd85133cf862797ace88a3cd
+classes/phpsysinfo/plugins/quotas/lang/en.xml = 174c6f8af2a3208f9f9523526338e87d4c071e7cb1d8dac52c159502bebf50e9
+classes/phpsysinfo/plugins/quotas/lang/fr.xml = e809389f3678c9515f74d9520edcb54fe0441c9d83c9c019ae035e4863f5499f
+classes/phpsysinfo/plugins/quotas/lang/pl.xml = 4a202cc400368ada9fd0b411da8a70a3da2e8a860314cfe977d91af41e9e092d
+classes/phpsysinfo/plugins/quotas/lang/ru.xml = ce39e87111fd4f7c73bb70de27eace688c95fe4baf71f4b7f039a9fc025b35ea
+classes/phpsysinfo/plugins/smart/class.smart.inc.php = ea350717541140fd3b319ec19d311c6a08a211aa3ce61189da4d4888a452efe1
+classes/phpsysinfo/plugins/smart/css/smart.css = 353b8f95912d917f219c2dfcd8a13e8323ff0f02b46fecd521317d67af0dd2ed
+classes/phpsysinfo/plugins/smart/js/smart.js = 01c0f19705992aa71f6bf40da89a205992e745190be5e400e3ec83c04dbbe0b3
+classes/phpsysinfo/plugins/smart/lang/cz.xml = 9dc69171a7fb225f5c872c0729c285b93ea68741692c404d53c426925959802f
+classes/phpsysinfo/plugins/smart/lang/en.xml = 5b258b730ca19490614a1e8113f80627f809ae21d748f0f75abb576082b31b0f
+classes/phpsysinfo/plugins/smart/lang/fr.xml = 5046f4c9e7835da25282d10772a121179adf77815dfae6c845ebb5dfc0a65959
+classes/phpsysinfo/plugins/smart/lang/gr.xml = b6a37d81852ec8b107f00a3a7b16b2725e3d8d81839ba15d0bde545faf598f04
+classes/phpsysinfo/plugins/smart/lang/pl.xml = d76962d1c2f040f7373b87cda22556e3fd83c1349bd3de10df25e33cbf45cc97
+classes/phpsysinfo/plugins/smart/lang/ru.xml = 843470126cce4773b534384a137b47777be850537270bc86a6ab0081d19e5930
+classes/phpsysinfo/plugins/snmppinfo/class.snmppinfo.inc.php = b1dfa1882bd4e145b9c86eb1fff67c8de309846c9cdc76d7860c3d9a606f92ce
+classes/phpsysinfo/plugins/snmppinfo/js/snmppinfo.js = 30e8c6c57d8e52021755aa7ce9ee8c94ad04b68b461be28950115516e22a087b
+classes/phpsysinfo/plugins/snmppinfo/lang/cz.xml = 1ea8f9c288c08f99f4c5e77c0b9ef2861ea6f0a1df19e231d437d0c792b614f9
+classes/phpsysinfo/plugins/snmppinfo/lang/de.xml = 0f398dcd584e4239e6a340fd75ecb0699ad80544f6900b208bca6a42efcaa320
+classes/phpsysinfo/plugins/snmppinfo/lang/en.xml = ead448b7c740ca84547417d32ed7dca15ac0f583ac55e9ba4d131322c1cf6427
+classes/phpsysinfo/plugins/snmppinfo/lang/fr.xml = 13b8c606d299a8a8b113f612c7544bf3e93c1f3fb1416e95343fdd82283b668f
+classes/phpsysinfo/plugins/snmppinfo/lang/pl.xml = a2df97a254b687dad523cd3c341a1a2939b0bc390188ca2eb49e47618b8eae73
+classes/phpsysinfo/plugins/snmppinfo/lang/ru.xml = 78429f80373fff737d989a89876e3493fc964073c729a494d6a76975c6b865ac
+classes/phpsysinfo/plugins/updatenotifier/class.updatenotifier.inc.php = 6b983803eb08f69a2610ed739c47d12638f9d237e09927b531e05101543fd7f9
+classes/phpsysinfo/plugins/updatenotifier/js/updatenotifier.js = a7f48c696ba2baf494868b2471a0974c8f33a081ad23aad0f8b6201dc1524c47
+classes/phpsysinfo/plugins/updatenotifier/lang/cz.xml = c79800c90e1b25bbd5e27fc212066f2fef2674dec046787a23ca695e16650463
+classes/phpsysinfo/plugins/updatenotifier/lang/de.xml = b74c439a161a09c2153fcfcfda00cc7fa9a6bc97934e11f71114be5d606a9cba
+classes/phpsysinfo/plugins/updatenotifier/lang/en.xml = 86c27f093c950e35179061c952a6d23edf92db25c19e6a6ffc2e9fd445b32616
+classes/phpsysinfo/plugins/updatenotifier/lang/fr.xml = 0d587bceb92916c81ea57ebcdce24922e862e61e48bcbcd828f2460087ed7275
+classes/phpsysinfo/plugins/updatenotifier/lang/pl.xml = 74250e3b4fae20ae98a44bb7d2cf4eb245add64baf65b5555b6abd4fdf53da95
+classes/phpsysinfo/plugins/updatenotifier/lang/ru.xml = cf474293f6435922eacbe3130e5855bc7c10bf93112b4577d12b47094ad95b53
+classes/phpsysinfo/plugins/uprecords/class.uprecords.inc.php = bd2360450e2cdc138184227521c05f0a42cf663ceba910809ce88737c1f2eec2
+classes/phpsysinfo/plugins/uprecords/js/uprecords.js = 5ee443205d04b8bbef8d52c8ec000f038410a88a986b8b9af065ce985abd40a9
+classes/phpsysinfo/plugins/uprecords/lang/en.xml = a48a1e7663f7ab9e38d010aba3f45fd520bde2f89b2a7743316d33fd1e0e935a
+classes/phpsysinfo/plugins/uprecords/lang/fr.xml = 95f923d35bd5cb8e898daa01b33b263692b440fec45ed156d3102391d873257e
+classes/phpsysinfo/plugins/uprecords/lang/hu.xml = 2413afe74ed5b914d81f2f09ad837ba574a24b23448a6b00466462a37920dfc4
+classes/phpsysinfo/plugins/uprecords/lang/pl.xml = 456cf91093f736c7799e1104b96f7410bc8bd87f0f58c663aad41a9222d7b409
+classes/phpsysinfo/tools/MakeRelease.sh = 5efc0845ecb6efcf830201bf5150659ceb44a7d3362bf886420cdb3a6fca9c01
+classes/phpsysinfo/tools/README = 4a7daa8fee6c6c9073ad038d38dbf9047ba1cbc4b72425d58235258431b70f17
+classes/phpsysinfo/tools/aptana/js.xml = a20be79331cafa7f34c8f7fb059b528738d092ea94fa921c1b55b2b10a194175
+classes/phpsysinfo/tools/aptana/php.xml = 320d7d72b286311a0583d2eb140cefb342a5482c3de25f82f6b4b251445b5ca6
+classes/phpsysinfo/tools/check.sh = d1976b401a280d6ab412b6b020a5da9697e8fc7b32030f7149ec767b328db0ce
+classes/phpsysinfo/tools/checkdistro.php = 193e6a3487c5640692da65edf3d955c0c6c149d9452a4ad4d5e9532ba8d7db48
+classes/phpsysinfo/tools/distrotest.php = 9ec59015bd7238004e77db458e35f7912e8443086dab9cd37b154c0de11695ca
+classes/phpsysinfo/tools/lint.bat = 32eabfe39dda4f30649f9cac94c15175f8234abe228ac0d7fd23ed42a72b7163
+classes/systemdetect.inc.php = f80b21252a58ff901e8439e526debbc8d84614a2249e6cf028e6500188df14a6
+install.php = 00aba3928cd622ad67c0f81ecd5aa8699e07f8f4908c045fe34f6a2dc0067b37
+module.xml = e742de43ba87b0d56a15b4766037a775eb373c2330a9aa849f9d11c6fbb3b7eb
+netmon.php = 1cf79a7567858dbf5976f16c4a3aa56032ff35be7a4b4b0b43b6b587a578a0fa
+page.index.php = c890fb04495d651484b5e1020cdfb75ad8b7e0bb7f85e23d6efa09261a9e6af3
+phpunit.xml = 284df27f8825ef16ff5861bd0100d1ea19e199a24f9ed3a65c9ab7612941cd0a
+scheduler.php = dc6ae6f8686663f6a2caf1c80c9bda7bfe8ccee818f46770159ccc8a8e4f0310
+sections/Blogs.class.php = 297c86249515263068ba24022b296a87f3e384209be4f71d6de6d194166d1dd6
+sections/Notepad.class.php = ec6a4b9a0fecf20bdeb9331f36c081f0879ff3c1c1effe833a1703d8766f47c0
+sections/Overview.class.php = 3d5cda8618c2beed4b52dffdb70acc4e51a96fb96603276745e2e7fe90027f12
+sections/Statistics.class.php = 4e4a79e59da6e9c3f0b90f28cd41e188577ccc5ccd46a008502597f868c76d22
+sections/Uptime.class.php = 438eaf80ee0dd21c7227e965c7fe48d8a63a06fe98ae156537f7c26587342def
+uninstall.php = 1e893d3283320de40d7a8df53da7a27c75543886a707eb9749bc67311aea2799
+utests/API/GQL/DashboardGQlTest.php = f78d5a81a5fbf09c0f7754f08d754e678706888422e14cbb02f5496de7efe000
+utests/asteriskTest.php = c2d750058c9cef42a311d9a94bb916f24813b794a56d49d61826ba48854b2b93
+utests/cpuTest.php = 1ef50008c3b04ac7ec5b6ce00d25f4634b21815af8d78c71d483b0b07d01b529
+utests/diskTest.php = 6ca5063963e2558fb2cf4c0aab52f4dd8a5ea11a8d67c2df29af79b0a148bd49
+utests/hookTest.php = b0a367e6ba30f961d06d219c90a17b9c0c33462e37c1aeb5733e555be451bb96
+utests/mainTest.php = 0891047774827153026ce791a8d317ede2617c462770fbc01e80b6791b4ea25a
+utests/memTest.php = 2b1fdf3f22b78e27f81b56eb35bfd88003962f3a6ad8373f80aacde0d19b67d8
+views/main.php = f56277bbe01b052d5c792b6b31d2a5063e6c768ff7e0209aceec06cd787f161f
+views/sections/blog.php = 455048d35336e2ab4546883c8adf6359f381787aaa9e5ea61e4d215e61adb3be
+views/sections/netmon.php = f30fe04b8f8598792e3da79fd0b7f69139fb09e71887aadd3ac64a4414f93c62
+views/sections/notepad.php = a739d561e9e164e46345cce81aac1c2e3bf3977848966d6fa4ef6ac65ae0f66d
+views/sections/overview.php = 10c765de1ef255077cae1a0a2d2c028a50bce9f201d2f60078ee2ef0cbe7f033
+views/sections/statistics.php = 421782b2a2ba4ab4fda055d4beba10a84d6696835dc467a8e1351a2a0da03276
+views/sections/stats-no-mbstring.php = 5993154099b2bcbe1b397917f007742a732092e878094d25c63aa447f0707c41
+views/sections/stats-no-phpxml.php = 44b852b7392a645266a37134664775f0b8e010be0c33d3cff65534e785313862
+views/sections/uptime.php = ea13bb70d8169d02701df80654b2cea6de30d6ebd23aaca71d1d7ee80164b203
+;# End
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.22 (GNU/Linux)
+
+iQIcBAEBAgAGBQJnC2geAAoJELU9IVp1UjGjszUP/1jWkO1fBMUYIFiSXhhWSP5D
+SryMsRiq4hF4wMhuy6x4W5oQiGJVDb09wUijzeFn09j28pqHWtkm2XkIR2Nysro/
+9ut1wMnAijFyDUNeZjFmji6vOi/nHjwEJa1v8vlNEvIgyTI3/PXmjsRPqdyxXOU/
+qp2fZZDj31TvwE14sZeyHepb5EWhqmrKYfZWqXT2R8znybT9FmSQFiDYkNjxuxKM
+q77+XCZ8StmqUXMbSOMyUZWAJ4TfmDiQ3ysgTor6ZWuQNmOJ0M89I+5P3Go92psD
+uM+hi0syKUgU3zLbsoJha2kDOzGFKg75bmIaJQv7j/R/VdKexDinmbfuQmVTJnWq
+de4yZxSq6lPt4wuYXly6fn88B0khRCUEP4lixDc07JpONyAD5YPyNF2iLMLuyRpx
+mXdSl6IKvdzqDn827oMI2Hsnu7Hk6GiEvNMZQH/k6KxXlO2zQx9j4rgFqerV6Eje
+dlz8RqGxKRsyE0KzPj/9hylnDiyPi5lLM4Qyc0CU11aJga+hbHJkL6yKW1oooaPd
+qcWkQro0DuCYnSbVkD6dEFfDNisqMGm3XX+wVHspAcnL8GZ2ruWyJ9i4Bc2K/jWl
+yrgm39zXFF602N8v3nO7Jnb28xEAxvGFrlIeC5yw6ucgozko/tEymA0O/gX3cpAb
+5jATPHlxrwZkw28I2NeG
+=H70c
+-----END PGP SIGNATURE-----

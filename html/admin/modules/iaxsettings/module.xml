@@ -1,0 +1,29 @@
+<module>
+	<rawname>iaxsettings</rawname>
+	<repo>standard</repo>
+	<name>Asterisk IAX Settings</name>
+	<version>17.0.1</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<licenselink>https://www.gnu.org/licenses/agpl-3.0.txt</licenselink>
+	<license>AGPLv3</license>
+	<category>Settings</category>
+	<menuitems>
+		<iaxsettings>Asterisk IAX Settings</iaxsettings>
+	</menuitems>
+    <database>
+        <table name="iaxsettings">
+            <field name="keyword" type="string" length="50" default="" primarykey="true"/>
+            <field name="data" type="string" length="255" default=""/>
+            <field name="seq" type="boolean" default="0" primarykey="true"/>
+            <field name="type" type="boolean" default="0" primarykey="true"/>
+        </table>
+    </database>
+	<description>Use to configure Various Asterisk IAX Settings in the General section of iax.conf.</description>
+  	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/25824096/Asterisk+IAX+Settings</more-info>
+	<changelog>
+		*17.0.1*  17.0
+	</changelog>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

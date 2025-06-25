@@ -1,0 +1,36 @@
+<module>
+    <rawname>miscapps</rawname>
+    <repo>extended</repo>
+    <name>Misc Applications</name>
+    <version>17.0.3</version>
+    <publisher>Sangoma Technologies Corporation</publisher>
+    <license>GPLv3+</license>
+    <licenselink>https://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+    <category>Applications</category>
+    <description>
+        Adds the ability to create feature codes that can go to any FreePBX destination (such as an IVR or queue)
+    </description>
+    <more-info>https://wiki.freepbx.org/display/FPG/Misc+Applications+Module</more-info>
+    <menuitems>
+        <miscapps needsenginedb="yes">Misc Applications</miscapps>
+    </menuitems>
+    <database>
+        <table name="miscapps">
+            <field name="miscapps_id" type="integer" primarykey="true" autoincrement="true"/>
+            <field name="ext" type="string" length="50" notnull="false"/>
+            <field name="description" type="string" length="50" notnull="false"/>
+            <field name="dest" type="string" length="255" notnull="false"/>
+        </table>
+    </database>
+    <changelog>
+		*17.0.3*  bump
+		*17.0.2* FREEPBX-24005 
+        *17.0.1* 17.0 release
+	</changelog>
+    <depends>
+        <version>17.0</version>
+    </depends>
+    <supported>
+        <version>17.0</version>
+    </supported>
+</module>

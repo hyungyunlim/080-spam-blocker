@@ -1,0 +1,28 @@
+<module>
+	<rawname>pm2</rawname>
+	<repo>standard</repo>
+	<name>Process Management</name>
+	<version>17.0.3.4</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>AGPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/agpl-3.0.txt</licenselink>
+	<category>Admin</category>
+	<description>This module manages background processes for your PBX</description>
+	<changelog>
+		*17.0.3.4* Packaging of ver 17.0.3.4
+		*17.0.1* 17.0
+	</changelog>
+	<hooks>
+		<framework class="Chown" namespace="FreePBX\Console\Command">
+			<method callingMethod="fwcChownFiles" class="Pm2" namespace="FreePBX\modules">chownFreepbx</method>
+		</framework>
+	</hooks>
+	<console>
+		<command>
+			<name>pm2</name>
+		</command>
+	</console>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

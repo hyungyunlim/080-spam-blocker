@@ -1,0 +1,155 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for miscdests
+# Copyright (C) 2008-2017 Sangoma Technologies, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-18 10:50+0530\n"
+"PO-Revision-Date: 2017-07-10 20:42+0200\n"
+"Last-Translator: PETER <ftek@ymail.com>\n"
+"Language-Team: Vietnamese <http://weblate.freepbx.org/projects/freepbx/"
+"miscdests/vi/>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.4\n"
+
+#: views/grid.php:13
+msgid "Actions"
+msgstr "Các thao tác"
+
+#: page.miscdests.php:19 views/bootnav.php:3 views/grid.php:8
+msgid "Add Misc Destination"
+msgstr "Thêm điểm đích Misc"
+
+#: miscdests.i18n.php:8
+msgid ""
+"Allows creating destinations that dial any local number (extensions, feature "
+"codes, outside phone numbers) that can be used by other modules (eg, IVR, "
+"time conditions) as a call destination."
+msgstr ""
+"Cho phép tạo các điểm đích mà khi quay số bất kỳ số điện thoại tại chỗ nào "
+"( máy nhánh, các mã tính năng, các số điện thoại bên ngoài) có thể sử dụng "
+"bởi các mô đun khác ( cụ thể IVR, các điều kiện thời gian) giống như một "
+"điểm đích cuộc gọi."
+
+#: miscdests.i18n.php:6
+msgid "Applications"
+msgstr "Các ứng dụng"
+
+#: Miscdests.class.php:74
+msgid "Delete"
+msgstr "Xóa"
+
+#: views/form.php:23
+msgid "Description:"
+msgstr "Mô tả:"
+
+#: views/grid.php:12
+msgid "Destination"
+msgstr "Điểm đích"
+
+#: views/form.php:45
+msgid "Dial:"
+msgstr "Quay số:"
+
+#: page.miscdests.php:16
+msgid "Edit Misc Destination"
+msgstr "Chỉnh sửa điểm đích Misc"
+
+#: views/form.php:57
+msgid ""
+"Enter the number this destination will simulate dialing, exactly as you "
+"would dial it from an internal phone. When you route a call to this "
+"destination, it will be as if the caller dialed this number from an internal "
+"phone."
+msgstr ""
+"Nhập số, điểm đích này sẽ mô phỏng việc quay số,nhất là khi bạn muốn quay số "
+"từ một máy điện thoại nội bộ. Khi bạn định tuyến một cuộc gọi đến điểm đích "
+"này, nó sẽ như thể người gọi đã quay số điện thoại này từ một điện thoại nội "
+"bộ."
+
+#: views/bootnav.php:8
+msgid "Extension"
+msgstr "Máy nhánh"
+
+#: views/form.php:35
+msgid "Give this Misc Destination a brief name to help you identify it."
+msgstr "Đặt điểm đích Misc một tên ngắn gọn để giúp bạn xác định nó."
+
+#: page.miscdests.php:9
+msgid ""
+"If you need access to a Feature Code, such as *98 to dial voicemail or a "
+"Time Condition toggle, these destinations are now provided as Feature Code "
+"Admin destinations. For upgrade compatibility, if you previously had "
+"configured such a destination, it will still work but the Feature Code short "
+"cuts select list is not longer provided.<br/><br/>"
+msgstr ""
+"Nếu bạn muốn truy nhập vào một mã tính năng, ví dụ *98 để thực hiện cuộc gọi "
+"thoại hoặc một chuyển đổi điều kiện thời gian, những điểm đích này sẽ được "
+"cung cấp các điểm đích quản trị mã tính năng (Feature Code Admin). Đối với "
+"việc nâng cấp khả năng tương thích, nếu bạn đã cấu hình một điểm đích trước "
+"đó, nó sẽ vẫn hoạt động nhưng danh sách short cut của mã tính năng sẽ không "
+"bao giờ được cung cấp nữa.<br/><br/>"
+
+#: views/bootnav.php:2
+msgid "List Misc Destinations"
+msgstr "Danh sách các điểm đích Misc"
+
+#: assets/js/miscdests.js:13
+msgid "Misc Destination already exists"
+msgstr ""
+
+#: Miscdests.class.php:127 functions.inc.php:38
+#, php-format
+msgid "Misc Destination: %s"
+msgstr "Điểm đích Misc: %s"
+
+#: miscdests.i18n.php:4 miscdests.i18n.php:10 page.miscdests.php:8
+msgid "Misc Destinations"
+msgstr "Các điểm đích Misc"
+
+#: page.miscdests.php:9
+msgid ""
+"Misc Destinations are for adding destinations that can be used by other "
+"FreePBX modules, generally used to route incoming calls. If you want to "
+"create feature codes that can be dialed by internal users and go to various "
+"destinations, please see the <strong>Misc Applications</strong> module."
+msgstr ""
+"Điểm đích Misc cho việc thêm các điểm đích có thể được sử dụng bởi các mô "
+"đun FreePBX khác, thông thường được sử dụng để định tuyến các cuộc gọi đến. "
+"Nếu bạn muốn tạo các mã tính năng để quay số bởi người dùng nội bộ và đi đến "
+"nhiều điểm đích, vui lòng xem mô đun <strong>Misc Applications</strong>."
+
+#: assets/js/miscdests.js:11
+msgid "Please enter a valid Description"
+msgstr "Vui lòng nhập một mô tả hợp lý"
+
+#: assets/js/miscdests.js:12
+msgid "Please enter a valid Dial string"
+msgstr "Vu lòng nhập một chuỗi quay số hợp lệ"
+
+#: Miscdests.class.php:79
+msgid "Reset"
+msgstr "Cài đặt lại"
+
+#: Miscdests.class.php:84
+msgid "Submit"
+msgstr "Gửi đi"
+
+#: assets/js/miscdests.js:59
+msgid ""
+"This destination is in use. Deleting it may cause things to not work properly"
+msgstr ""
+"Điểm đích này đang được sử dụng. Đang xóa nó có thể gây nên một số trục trặc "
+"khi hoạt động"
+
+#~ msgid "Removing Settings table"
+#~ msgstr "Đang xóa bảng cài đặt"

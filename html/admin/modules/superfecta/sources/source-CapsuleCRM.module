@@ -1,0 +1,123 @@
+<?php
+/*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+ * CapsuleCRM Caller ID Module for Superfecta
+ * Performs lookups towards CapsuleCRM's RESTful API.
+ *
+ * Enter your API key and password from the web interface.
+ * Capsule CRM Documentation: https://developer.capsulecrm.com/v2/operations/Party
+ *
+ * Written by James Read
+ * 14-Nov-2018
+ *
+ *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***/
+
+class CapsuleCRM extends superfecta_base
+{
+
+    const CAPSULE_URL = 'https://api.capsulecrm.com/api/v2/parties/search';
+
+    public $description = "CapsuleCRM CallerID lookup";
+    public $version_requirement = "2.11";
+    public $source_param = array(
+        'Organization' => array(
+            'description' => 'CapsuleCRM organization name',
+            'type' => 'text',
+        ),
+        'API_Key' => array(
+            'description' => 'CapsuleCRM API Key',
+            'type' => 'password',
+        ),
+    );
+
+    /**
+     * @param $thenumber
+     * @param array $run_param
+     * @return null|string
+     */
+    function get_caller_id($thenumber, $run_param = array())
+    {
+        $apiToken = isset($run_param['API_Key']) ? $run_param['API_Key'] : '';
+
+        $this->DebugPrint("Searching CapsuleCRM  {$thenumber} ... ");
+        $value = $this->queryCapsuleCrm($thenumber, $apiToken);
+        if ($value == null) {
+            return null;
+        }
+
+        return $this->parseResult($value);
+    }
+
+    /**
+     * Queries CapsuleCRM to lookup the information
+     *
+     * @param string $number
+     * @param string $token
+     * @return string|null
+     */
+    private function queryCapsuleCrm($number, $token = '')
+    {
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => self::CAPSULE_URL . "?q=$number",
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_CONNECTTIMEOUT => $this->get_CurlTimeout(),
+            CURLOPT_HTTPHEADER => array(
+                'Accept: application/json',
+                "Authorization: Bearer $token"
+            ),
+        ]);
+
+        $res = htmlspecialchars_decode(curl_exec($ch));
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        // failed to execute cURL request
+        if ($res === false) {
+            $this->DebugPrint('cURL Error: ' . curl_error($ch));
+            $response = null;
+        }
+
+        // Capsule API Error
+        if ($status !== 200) {
+            $this->DebugPrint("Capsule Error ($status): $res");
+            $response = null;
+        }
+
+        curl_close($ch);
+        return $res;
+    }
+
+    /**
+     * parses JSON result form CapsuleCRM
+     *
+     * @param string $raw
+     * @return string|null
+     */
+    private function parseResult($raw)
+    {
+        $data = json_decode($raw);
+
+        // Parse error
+        if ($data == null) {
+            $this->DebugPrint('Parse Error');
+            return null;
+        }
+
+        // Not Found
+        if (empty($data->parties)) {
+            $this->DebugPrint('Not Found');
+            return null;
+        }
+
+        $item = $data->parties[0];
+
+        // checks the party first party is a person if so it will
+        // return the person name and there organisation if it is set.
+        if ($item->type == 'person') {
+            $organisation = $item->organisation == null ? '' : "- {$item->organisation->name}";
+            return trim("{$item->firstName} {$item->lastName} ${organisation}");
+        }
+
+        // party is an organisation so just return the name
+        return trim($item->name);
+    }
+}

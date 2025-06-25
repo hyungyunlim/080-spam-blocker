@@ -1,0 +1,14 @@
+Executing: python3 -u /var/www/html/simple_analyzer.py --file /var/spool/asterisk/monitor/20250625-212306-FROM_AUTO-ID_685bea23f294f-TO_0808558699.wav --output_dir /var/www/html/analysis_results --model base
+파일 확인 완료
+Whisper Base 모델 로딩
+모델 로드 완료
+음성 인식 시작
+[00:00.000 --> 00:06.580]  소년 게임 packages
+[00:11.740 --> 00:16.040]  spr ticket
+[00:24.280 --> 00:26.680]  spr inne
+[00:26.680 --> 00:27.860]  f
+STT 변환 완료
+🔑 키워드 / 패턴 분석 중...
+🔍 분석 결과: status=failed confidence=30 reason=관련 키워드를 찾을 수 없음 - 실패로 판정
+결과 저장
+스크립트 실행 중 치명적 오류: [Errno 13] Permission denied: '/var/www/html/analysis_results/analysis_20250625-212306-FROM_AUTO-ID_685bea23f294f-TO_0808558699.json'

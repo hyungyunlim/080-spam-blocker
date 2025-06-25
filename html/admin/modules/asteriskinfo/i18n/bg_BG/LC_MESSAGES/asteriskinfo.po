@@ -1,0 +1,450 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FreePBX v2.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-07 11:35-0400\n"
+"PO-Revision-Date: 2018-07-03 12:02+0000\n"
+"Last-Translator: Chavdar Shtiliyanov <chavdar_75@yahoo.com>\n"
+"Language-Team: Bulgarian <http://*/projects/freepbx/asteriskinfo/bg/>\n"
+"Language: bg_BG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.19.1\n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-Country: BULGARIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Modules/Fax.php:59
+msgid "AJAX shows up as disabled!"
+msgstr ""
+
+#: Asteriskinfo.class.php:98
+msgid "All"
+msgstr ""
+
+#: asteriskinfo.i18n.php:4 asteriskinfo.i18n.php:10
+#: views/page.asteriskinfo.php:5
+msgid "Asterisk Info"
+msgstr "Астериск Информация"
+
+#: views/page.asteriskinfo.php:8
+msgid "Asterisk doesn't appear to be running!"
+msgstr ""
+
+#: Modules/Conferences.php:21
+msgid ""
+"Can't connect to Asterisk. Is Asterisk running and started by the correct "
+"user?"
+msgstr ""
+
+#: Modules/Channels.php:36
+msgid "Channel Count"
+msgstr ""
+
+#: Modules/Channels.php:11
+msgid "Channels"
+msgstr "Канали"
+
+#: Modules/Modules.php:36
+msgid "Clean All Filters"
+msgstr ""
+
+#: Modules/Channels.php:36 Modules/Fax.php:44
+msgid "Clean Filter"
+msgstr ""
+
+#: Asteriskinfo.class.php:257
+msgid "Command not found!"
+msgstr ""
+
+#: Modules/Conferences.php:26
+msgid "Conference Bridge Info"
+msgstr "Информация за Конференция"
+
+#: Modules/Conferences.php:12
+msgid "Conferences"
+msgstr "Конференции"
+
+#: Modules/Modules.php:36
+msgid "Core"
+msgstr ""
+
+#: views/page.asteriskinfo.php:13
+msgid "Current Asterisk Version:"
+msgstr "Текуща Версия на Астериск :"
+
+#: Modules/Dahdi.php:12
+msgid "Dahdi"
+msgstr "DAHDI"
+
+#: Modules/Dahdi.php:22
+msgid "Dahdi Channels"
+msgstr ""
+
+#: Modules/Dahdi.php:22
+msgid "Dahdi PRI Spans"
+msgstr "Dahdi PRI Портове"
+
+#: Modules/Dahdi.php:31
+msgid ""
+"Dahdi is not loaded into asterisk, hence no channels / spans information to "
+"display."
+msgstr ""
+
+#: Modules/Fax.php:44
+msgid "Data"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Deprecated"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Description"
+msgstr ""
+
+#: Modules/Peers.php:39
+msgid ""
+"Drivers (ChanSIP or PJSIP or IAX or SCCP) are not loaded into asterisk, "
+"hence no Peers information to display."
+msgstr ""
+
+#: Modules/Registries.php:39
+msgid ""
+"Drivers (ChanSIP or PJSIP or IAX) are not loaded into asterisk, hence no "
+"registration information to display."
+msgstr ""
+
+#: Asteriskinfo.class.php:156 Asteriskinfo.class.php:250
+#, php-format
+msgid "Error: Module '%s' not found!"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Extended"
+msgstr ""
+
+#: Modules/Fax.php:13
+msgid "Fax"
+msgstr ""
+
+#: Modules/Fax.php:14
+msgid "Fax Statistics"
+msgstr ""
+
+#: Modules/Fax.php:44
+msgid "Global"
+msgstr ""
+
+#: Modules/Conferences.php:26
+msgid "MeetMe Conference Info"
+msgstr "Информация за MeetMe"
+
+#: Modules/Fax.php:44
+msgid "Module"
+msgstr ""
+
+#: Asteriskinfo.class.php:194
+msgid "Module Not Valid!"
+msgstr ""
+
+#: Modules/Fax.php:44 Modules/Modules.php:11
+msgid "Modules"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Name"
+msgstr ""
+
+#: Modules/Fax.php:101
+msgid "No command detected!"
+msgstr ""
+
+#: Modules/Modules.php:36 assets/js/asteriskinfo.js:138
+msgid "Not Running"
+msgstr ""
+
+#: Modules/Channels.php:36 assets/js/asteriskinfo.js:89
+msgid "Offline"
+msgstr ""
+
+#: Modules/Channels.php:36 assets/js/asteriskinfo.js:84
+msgid "Online"
+msgstr ""
+
+#: Asteriskinfo.class.php:67
+#, php-format
+msgid "Page Not Found (%s)!!!!"
+msgstr ""
+
+#: Modules/Peers.php:12
+msgid "Peers"
+msgstr "Пиъри"
+
+#: asteriskinfo.i18n.php:8
+msgid "Provides a snapshot of the current Asterisk configuration"
+msgstr "Предоставя снимка на текущата Астериск конфигурация"
+
+#: Modules/Queues.php:11
+msgid "Queues"
+msgstr "Опашки"
+
+#: Modules/Queues.php:15
+msgid "Queues Info"
+msgstr "Информация за Опашки"
+
+#: Modules/Registries.php:12
+msgid "Registries"
+msgstr "Регистрации"
+
+#: Modules/Modules.php:36
+msgid "Remove Filter"
+msgstr ""
+
+#: asteriskinfo.i18n.php:6
+msgid "Reports"
+msgstr "Отчети"
+
+#: Modules/Channels.php:36
+msgid "Resource"
+msgstr ""
+
+#: Modules/Modules.php:36 assets/js/asteriskinfo.js:133
+msgid "Running"
+msgstr ""
+
+#: Modules/Fax.php:18
+msgid "Statistics"
+msgstr ""
+
+#: Modules/Channels.php:36 Modules/Modules.php:36
+msgid "Status"
+msgstr ""
+
+#: assets/js/asteriskinfo.js:102 assets/js/asteriskinfo.js:147
+#, perl-format
+msgid "Status: %s"
+msgstr ""
+
+#: Modules/Subscriptions.php:15
+msgid "Subscribe/Notify"
+msgstr "Вписвания/Известявания"
+
+#: Modules/Subscriptions.php:11
+msgid "Subscriptions"
+msgstr "Вписвания"
+
+#: Modules/Modules.php:36
+msgid "Support Level"
+msgstr ""
+
+#: Modules/Channels.php:36
+msgid "Tech"
+msgstr ""
+
+#: Modules/ModuleBase.php:124
+msgid "The Asterisk REST Interface Module is not loaded in asterisk"
+msgstr ""
+
+#: Modules/ModuleBase.php:132
+msgid "The Asterisk REST Interface is Currently Disabled."
+msgstr ""
+
+#: Modules/ModuleBase.php:144
+msgid ""
+"The Asterisk REST Interface is not able to connect please check "
+"configuration in advanced settings."
+msgstr ""
+
+#: views/page.asteriskinfo.php:12
+msgid "This page supplies various information about Asterisk"
+msgstr "Тази страница предоставя разнообразна информация за Астериск"
+
+#: assets/js/asteriskinfo.js:99
+msgid "Undefined"
+msgstr ""
+
+#: Modules/Channels.php:36 Modules/Modules.php:36 assets/js/asteriskinfo.js:94
+#: assets/js/asteriskinfo.js:143
+msgid "Unknown"
+msgstr ""
+
+#: Modules/Modules.php:36
+msgid "Use Count"
+msgstr ""
+
+#: Modules/Fax.php:44
+msgid "Value"
+msgstr ""
+
+#: Modules/Voicemail.php:11
+msgid "Voicemail"
+msgstr ""
+
+#: Modules/Voicemail.php:15
+msgid "Voicemail Users"
+msgstr "Потребители на Гласова Поща"
+
+#~ msgid "Active Channel(s)"
+#~ msgstr "Активни Канали"
+
+#~ msgid "Active IAX2 Channel(s): "
+#~ msgstr "Активни IAX2 Канали: "
+
+#~ msgid "Active PJSIP Channel(s): "
+#~ msgstr "Активни PJSIP Канали: "
+
+#~ msgid "Active SIP Channel(s): "
+#~ msgstr "Активни SIP Канали: "
+
+#~ msgid "Asterisk doesn't appear to be running"
+#~ msgstr "Астериск не работи"
+
+#~ msgid "Available: "
+#~ msgstr "Налични: "
+
+#~ msgid "Chan_PJSip Channel(s)"
+#~ msgstr "Chan_PJSip Канали"
+
+#~ msgid "Chan_PJSip Endpoints"
+#~ msgstr "Chan_PJSip Телефони"
+
+#~ msgid "Chan_PJSip Info"
+#~ msgstr "Chan_PJSip Информация"
+
+#~ msgid "Chan_PJSip Registrations"
+#~ msgstr "Chan_PJSip Регистрирани"
+
+#~ msgid "Chan_PJSip Transports"
+#~ msgstr "Chan_PJSip Преноси"
+
+#~ msgid "Chan_Sip Channel(s)"
+#~ msgstr "Chan_Sip Канали"
+
+#~ msgid "Chan_Sip Info"
+#~ msgstr "Chan_Sip Информация"
+
+#~ msgid "Chan_Sip Peers"
+#~ msgstr "Chan_Sip Пиъри"
+
+#~ msgid "Chan_Sip Registry"
+#~ msgstr "Chan_Sip Регистрирани"
+
+#~ msgid "DAHDi Channels"
+#~ msgstr "DAHDi Канали"
+
+#~ msgid "Full Report"
+#~ msgstr "Пълен Отчет"
+
+#~ msgid "Google Talk Channels"
+#~ msgstr "Google Talk Канали"
+
+#~ msgid "IAX Info"
+#~ msgstr "IAX Информация"
+
+#~ msgid "IAX2 Channel(s)"
+#~ msgstr "IAX2 Канали"
+
+#~ msgid "IAX2 Peers"
+#~ msgstr "IAX2 Пиъри"
+
+#~ msgid "IAX2 Peers: "
+#~ msgstr "IAX2 Пиъри: "
+
+#~ msgid "IAX2 Registry"
+#~ msgstr "IAX2 Регистрирани"
+
+#~ msgid "IAX2 Registry: "
+#~ msgstr "IAX2 Регистрирани: "
+
+#~ msgid "Jabber Connections"
+#~ msgstr "Jabber Връзки"
+
+#~ msgid "Motif Connections"
+#~ msgstr "Motif Връзки"
+
+#~ msgid "Offline-Unmonitored: "
+#~ msgstr "Офлайн-Ненаблюдавани: "
+
+#~ msgid "Offline: "
+#~ msgstr "Офлайн: "
+
+#~ msgid "Online-Unmonitored: "
+#~ msgstr "Онлайн-Ненаблюдавани: "
+
+#~ msgid "Online: "
+#~ msgstr "Онлайн: "
+
+#~ msgid "PJSip Endpoints: "
+#~ msgstr "PJSip Телефони: "
+
+#~ msgid "PJSip Registrations: "
+#~ msgstr "PJSip Регистрирани: "
+
+#~ msgid "Sip Peers: "
+#~ msgstr "Sip Пиъри: "
+
+#~ msgid "Sip Registry: "
+#~ msgstr "Sip Регистрирани: "
+
+#~ msgid "Summary"
+#~ msgstr "Резюме"
+
+#~ msgid ""
+#~ "The module was unable to connect to the Asterisk manager.<br>Make sure "
+#~ "Asterisk is running and your manager.conf settings are proper.<br><br>"
+#~ msgstr ""
+#~ "Модула не успя да се свърже с Астериск manager.<br>Убедете се че Астериск "
+#~ "работи и настройките на вашия manager.conf са правилни.<br><br>"
+
+#~ msgid "Unavailable: "
+#~ msgstr "Недостъпни: "
+
+#~ msgid "Unknown: "
+#~ msgstr "Непознати: "
+
+#~ msgid "Unmonitored: "
+#~ msgstr "Ненаблюдавани: "
+
+#~ msgid "Uptime"
+#~ msgstr "Експлоатация"
+
+#~ msgid "Uptime: "
+#~ msgstr "Експлоатация: "
+
+#~ msgid "DAHDi driver info"
+#~ msgstr "DAHDi драйвер информация"
+
+#~ msgid "Zaptel driver info"
+#~ msgstr "Zaptel драйвер информация"
+
+#~ msgid "ASTERISK MANAGER ERROR"
+#~ msgstr "АСТЕРИСК МЕНИДЖЪР ГРЕШКА"
+
+#~ msgid "Asterisk (Ver. "
+#~ msgstr "Астериск (Версия "
+
+#~ msgid "Refresh"
+#~ msgstr "Обнови"
+
+#~ msgid "Sip Info"
+#~ msgstr "Sip Информация"
+
+#~ msgid "Sip Channel(s)"
+#~ msgstr "Sip Канали"
+
+#~ msgid "Sip Registry"
+#~ msgstr "Sip Регистрирани"
+
+#~ msgid "Sip Peers"
+#~ msgstr "Sip Peer-и"
+
+#~ msgid "Conference Info"
+#~ msgstr "Информация за Конференции"

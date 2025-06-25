@@ -1,0 +1,187 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FreePBX v2.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-18 10:50+0530\n"
+"PO-Revision-Date: 2018-07-03 12:08+0000\n"
+"Last-Translator: Chavdar Shtiliyanov <chavdar_75@yahoo.com>\n"
+"Language-Team: Bulgarian <http://*/projects/freepbx/miscdests/bg/>\n"
+"Language: bg_BG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.19.1\n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-Country: BULGARIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: views/grid.php:13
+msgid "Actions"
+msgstr "Действия"
+
+#: page.miscdests.php:19 views/bootnav.php:3 views/grid.php:8
+msgid "Add Misc Destination"
+msgstr "Добави Друго Направление"
+
+#: miscdests.i18n.php:8
+msgid ""
+"Allows creating destinations that dial any local number (extensions, feature "
+"codes, outside phone numbers) that can be used by other modules (eg, IVR, "
+"time conditions) as a call destination."
+msgstr ""
+"Позволява създаване на направления които да набират всеки локален номер "
+"(вътрешни линии, специални кодове, външни телефонни номера), които да се "
+"използват от други модули (например IVR, Времеви Условия) като направление "
+"за обаждането."
+
+#: miscdests.i18n.php:6
+msgid "Applications"
+msgstr "Приложения"
+
+#: Miscdests.class.php:74
+msgid "Delete"
+msgstr "Изтрий"
+
+#: views/form.php:23
+msgid "Description:"
+msgstr "Описание:"
+
+#: views/grid.php:12
+msgid "Destination"
+msgstr "Направление"
+
+#: views/form.php:45
+msgid "Dial:"
+msgstr "Избери:"
+
+#: page.miscdests.php:16
+msgid "Edit Misc Destination"
+msgstr "Редактирай Друго Направление"
+
+#: views/form.php:57
+msgid ""
+"Enter the number this destination will simulate dialing, exactly as you "
+"would dial it from an internal phone. When you route a call to this "
+"destination, it will be as if the caller dialed this number from an internal "
+"phone."
+msgstr ""
+"Въведете номер който това направление ще имитира при избиране, така както "
+"бихте го избрали от вътрешен телефон. Когато рутирате обаждане към това "
+"направление, ще бъде все едно че обаждащия се избира този номер от вътрешен "
+"телефон."
+
+#: views/bootnav.php:8
+msgid "Extension"
+msgstr "Вътрешна Линия"
+
+#: views/form.php:35
+msgid "Give this Misc Destination a brief name to help you identify it."
+msgstr "Дайте на Друго Направление име с което да го идентифицирате."
+
+#: page.miscdests.php:9
+msgid ""
+"If you need access to a Feature Code, such as *98 to dial voicemail or a "
+"Time Condition toggle, these destinations are now provided as Feature Code "
+"Admin destinations. For upgrade compatibility, if you previously had "
+"configured such a destination, it will still work but the Feature Code short "
+"cuts select list is not longer provided.<br/><br/>"
+msgstr ""
+"Ако ви трябва достъп до Специален Код, като *98 за избиране на Гласова Поща "
+"или промяна на Времево Условие,тези направления сега се представят като "
+"направление със Админ Специален Код. За съвместимост при обновяване, ако "
+"преди сте имали подобно направление то все още ще работи, но няма да се "
+"представи в списъка със Специални Кодове.<br/><br/>"
+
+#: views/bootnav.php:2
+msgid "List Misc Destinations"
+msgstr "Списък Други Направления"
+
+#: assets/js/miscdests.js:13
+msgid "Misc Destination already exists"
+msgstr ""
+
+#: Miscdests.class.php:127 functions.inc.php:38
+#, php-format
+msgid "Misc Destination: %s"
+msgstr "Друго Направление: %s"
+
+#: miscdests.i18n.php:4 miscdests.i18n.php:10 page.miscdests.php:8
+msgid "Misc Destinations"
+msgstr "Други Направления"
+
+#: page.miscdests.php:9
+msgid ""
+"Misc Destinations are for adding destinations that can be used by other "
+"FreePBX modules, generally used to route incoming calls. If you want to "
+"create feature codes that can be dialed by internal users and go to various "
+"destinations, please see the <strong>Misc Applications</strong> module."
+msgstr ""
+"Други Направления се използват за добавяне на направления, които да се "
+"използват от други FreePBX модули, главно използвани за рутиране на "
+"входящите обаждания. Ако искате да създадете специални кодове, които да се  "
+"избират от вътрешните потребители и да отиват към различни направления, моля "
+"вижте модул <strong>Други Приложения</strong>."
+
+#: assets/js/miscdests.js:11
+msgid "Please enter a valid Description"
+msgstr "Моля въведете правилно Описание"
+
+#: assets/js/miscdests.js:12
+msgid "Please enter a valid Dial string"
+msgstr "Моля въведете правилен стринг за Избери"
+
+#: Miscdests.class.php:79
+msgid "Reset"
+msgstr "Изчисти"
+
+#: Miscdests.class.php:84
+msgid "Submit"
+msgstr "Приеми"
+
+#: assets/js/miscdests.js:59
+msgid ""
+"This destination is in use. Deleting it may cause things to not work properly"
+msgstr "Това направление се използва. Изтриването може да доведе до проблеми"
+
+#~ msgid "Removing Settings table"
+#~ msgstr "Премахване на таблица Настройки"
+
+#~ msgid "Language"
+#~ msgstr "Език"
+
+#~ msgid "Delete Misc Destination %s"
+#~ msgstr "Изтрий Друго Направление %s"
+
+#~ msgid ""
+#~ "If you need access to a Feature Code, such as *98 to dial voicemail or a "
+#~ "Time Condition toggle, these destinations are now provided as Feature "
+#~ "Code Admin destinations. For upgrade compatibility, if you previously had "
+#~ "configured such a destination, it will still work but the Feature Code "
+#~ "short cuts select list is not longer provided."
+#~ msgstr ""
+#~ "Ако ви трябва достъп до Специален Код, като *98 за избиране на Гласова "
+#~ "Поща или промяна на Времево Условие,тези направления сега се представят "
+#~ "като направление със Админ Специален Код. За съвместимост при обновяване, "
+#~ "ако преди сте имали подобно направление то все още ще работи, но няма да "
+#~ "се представи в списъка със Специални Кодове."
+
+#~ msgid "Misc Destination"
+#~ msgstr "Друго Направление"
+
+#~ msgid "Misc Destination:"
+#~ msgstr "Друго Направление:"
+
+#~ msgid "Submit Changes"
+#~ msgstr "Приеми Промените"
+
+#~ msgid "deleted"
+#~ msgstr "изтрито"
+
+#~ msgid "featurecode shortcuts"
+#~ msgstr " избери от съществуващи специални кодове "

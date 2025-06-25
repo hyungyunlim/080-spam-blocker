@@ -1,0 +1,80 @@
+.rnav-heading {
+	text-align: center;
+	font-weight: bold;
+	font-variant: small-caps;
+	font-size: 120%;
+	text-decoration: underline;
+	color: black;
+}
+
+.extensions-list {
+	border: 1px black dotted;
+	padding: 2px;
+	overflow: auto;
+	height: 150px;
+	font-size: 85%;
+	min-width: 200px;
+}
+
+.group-override-message {
+	font-size: 89%;
+	font-style: italic;
+	color: grey;
+	margin-top: 3px;
+}
+
+
+#user-side tr, #group-side tr {
+		cursor: pointer;
+}
+legend {
+    text-align: center !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+    margin-bottom: 1.5rem !important;
+}
+.dragitem {
+    white-space: normal !important;
+    background: #d7ebf9;
+    color: #0070a3;
+    cursor: move;
+    padding: 4px;
+    border: 1px solid;
+    border-radius: 4px;
+    word-wrap: break-word;
+    display: block;
+    width: 300px;
+    height: auto;
+    word-wrap: break-word;
+    overflow-x: auto;
+}
+fieldset>span{
+    margin: 5px;
+    display: inline-block;
+    text-align: left;
+}
+.selected{
+  background-color: #f9c7c8 !important;
+  border: solid red 1px !important;
+  z-index: 1 !important;
+}
+
+.left{
+	float: left;
+	margin-bottom: -99999px;
+	padding-bottom: 99999px;
+}
+
+.right {
+    float: left;
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+
+#directory .conection-status {
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+.addgrpdisable {
+    pointer-events: none;
+}

@@ -1,0 +1,14 @@
+{
+    "file_path": "\/var\/spool\/asterisk\/monitor\/20250625-144621-FROM_AUTO-ID_685b8d2ae3bbc-TO_0808811261.wav",
+    "timestamp": "2025-06-25T14:46:37+09:00",
+    "transcription": "",
+    "analysis": {
+        "status": "processing",
+        "confidence": 30,
+        "reason": "Remote analysis result"
+    },
+    "pattern_hint": null,
+    "file_size": 240684,
+    "processing_time": 0,
+    "remote_analysis": true
+}

@@ -1,0 +1,26 @@
+<module>
+	<rawname>asteriskinfo</rawname>
+	<repo>standard</repo>
+	<name>Asterisk Info</name>
+	<version>17.0.2</version>
+	<publisher>Sangoma Technologies Corporation</publisher>
+	<license>GPLv3+</license>
+	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
+	<category>Reports</category>
+	<description>
+		Provides a snapshot of the current Asterisk configuration
+	</description>
+	<more-info>https://wiki.freepbx.org/display/FPG/Asterisk+Info+Module</more-info>
+	<menuitems>
+		<asteriskinfo needsenginedb="yes">Asterisk Info</asteriskinfo>
+	</menuitems>
+	<changelog>
+		*17.0.2* 17.0.2  release
+	</changelog>
+	<depends>
+		<module>arimanager</module>
+	</depends>
+	<supported>
+		<version>17.0</version>
+	</supported>
+</module>

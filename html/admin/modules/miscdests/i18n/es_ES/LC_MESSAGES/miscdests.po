@@ -1,0 +1,124 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-08 23:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"X-Generator: Translate Toolkit 1.11.0\n"
+
+#: views/grid.php:27
+msgid "Actions"
+msgstr "Acciones"
+
+#: page.miscdests.php:17 views/bootnav.php:2 views/grid.php:22
+msgid "Add Misc Destination"
+msgstr "Añadir destino"
+
+#: Miscdests.class.php:79
+msgid "Delete"
+msgstr "Eliminar"
+
+#: views/form.php:38
+msgid "Description:"
+msgstr "Descripción:"
+
+#: views/form.php:60
+msgid "Dial:"
+msgstr "Marcar:"
+
+#: page.miscdests.php:15
+msgid "Edit Misc Destination"
+msgstr "Editar destino"
+
+#: views/form.php:72
+msgid ""
+"Enter the number this destination will simulate dialing, exactly as you "
+"would dial it from an internal phone. When you route a call to this "
+"destination, it will be as if the caller dialed this number from an internal "
+"phone."
+msgstr ""
+"Introduzca el número que simulará este destino, de la misma forma en la que "
+"se marcaría desde un teléfono interno. Cuando se enrute una llamada a este "
+"destino, será tratada como si se hubiera llamado desde el teléfono interno."
+
+#: views/form.php:50
+msgid "Give this Misc Destination a brief name to help you identify it."
+msgstr "Asigne al destino un breve nombre que le ayude a identificarlo."
+
+#: page.miscdests.php:9
+msgid ""
+"If you need access to a Feature Code, such as *98 to dial voicemail or a "
+"Time Condition toggle, these destinations are now provided as Feature Code "
+"Admin destinations. For upgrade compatibility, if you previously had "
+"configured such a destination, it will still work but the Feature Code short "
+"cuts select list is not longer provided.<br/><br/>"
+msgstr ""
+"Si necesita acceder a un código de función, como por ejemplo *98 para marcar "
+"el correo de voz o un toggle de  Condición Tiemporal, estos destinos son "
+"prestados actualmente como destinos Código de función admin. Para la "
+"compatibilidad de actualización, si previamente ha configurado un destino "
+"tal, seguirá funcionando, pero os atajos del código de función ya no será  "
+"provisto. <br/><br/>"
+
+#: views/grid.php:26
+msgid "Language"
+msgstr "Idioma"
+
+#: views/bootnav.php:1
+msgid "List Misc Destinations"
+msgstr "Lista de Destinos Miscelaneos"
+
+#: Miscdests.class.php:132 functions.inc.php:37
+#, php-format
+msgid "Misc Destination: %s"
+msgstr "Destino: %s"
+
+#: page.miscdests.php:8
+msgid "Misc Destinations"
+msgstr "Destinos varios"
+
+#: page.miscdests.php:9
+msgid ""
+"Misc Destinations are for adding destinations that can be used by other "
+"FreePBX modules, generally used to route incoming calls. If you want to "
+"create feature codes that can be dialed by internal users and go to various "
+"destinations, please see the <strong>Misc Applications</strong> module."
+msgstr ""
+"Los destinos varios se utilizan para añadir destinos que puedan ser usados "
+"por otros módulos de FreePBX, que se usan generalmente para enrutar llamadas "
+"internas. Si desea crear códigos de características que puedan ser marcados "
+"por usuarios internos y que vayan a varios destinos, utilice el módulo de "
+"<strong>Aplicaciones varias</strong>."
+
+#: assets/js/miscdests.js:11
+msgid "Please enter a valid Description"
+msgstr "Por favor, introduzca una descripción válida"
+
+#: assets/js/miscdests.js:12
+msgid "Please enter a valid Dial string"
+msgstr "Por favor, introduzca una cadena de marcación válida"
+
+#: Miscdests.class.php:22
+msgid "Removing Settings table"
+msgstr "removiendo tabla de Configuraciones"
+
+#: Miscdests.class.php:84
+msgid "Reset"
+msgstr "Restaura"
+
+#: Miscdests.class.php:89
+msgid "Submit"
+msgstr "Envio"
+
+#: assets/js/miscdests.js:55
+msgid ""
+"This destination is in use. Deleting it may cause things to not work properly"
+msgstr ""
+"Este destino esta en uso. Borrarlo puede causar algunas cosas no funcionen "
+"adecuadamente"

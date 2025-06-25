@@ -1,0 +1,49 @@
+<?php
+/**** * **** * **** * **** * **** * **** * **** * **** * **** * **** * **** * **** * **** *
+ * Developer notes:
+ *
+ * 411.ca TOS details here: https://411.ca/pages/terms
+ * Reviewed 2013-05-16 and found no language preventing superfecta usage
+ *
+ * Releases:
+ *
+ * 2010-03-16       created for ver 2.2 by zorka
+ * 2013-08-16       migrated to 3.x platform
+ * 2015-05-21       url fix by themurman
+ * 2022-04-27       Update REGEX by lgaetz
+ *
+ **** * **** * **** * **** * **** * **** * **** * **** * **** * **** * **** * **** * **** */
+
+class Can411 extends superfecta_base {
+
+    public $description = "https://www.411.ca - These listings include business and residential data for Canada.";
+    public $version_requirement = "2.11";
+
+	function get_caller_id($thenumber, $run_param=array()) {
+		$caller_id = null;
+		$npa = "";
+		$nxx = "";
+		$station = "";
+
+		if (!$this->IsValidNumber('CA', $thenumber, $npa, $nxx, $station)) {
+			$this->DebugPrint(_("Skipping Source - Non Canadian number: ") . $thenumber);
+		} else {
+			$this->DebugPrint(sprintf(_("Searching www.411.ca - (%s) %s-%s..."),$npa,$nxx,$station));
+
+			// By default, there is no match
+			$name = "";
+
+			$url = "https://411.ca/search/?q=$thenumber&st=reverse";    //working May 20, 2015
+
+			// Patterns to search for
+			$regexp = array(
+				'/itemprop=\"name\">(.+?)<\/h4/i',   // working 2022-12-04
+			);
+
+			if ($this->SearchURL($url, $regexp, $match, NULL, TRUE)) {
+				$caller_id = $this->ExtractMatch($match);
+			}
+		}
+		return($caller_id);
+	}
+}

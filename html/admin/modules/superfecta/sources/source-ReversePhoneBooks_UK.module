@@ -1,0 +1,62 @@
+<?php
+/***** ***** ***** ***** ***** ***** ***** *****
+* Module Dev notes:
+*  Terms of service here:
+*  http://www.reversephonebooks.co.uk/terms-and-conditions
+*  No restrictions against Superfecta usage
+*
+*
+* Version history:
+*   2011-10-18 Created by user ukstevef
+*
+***** ***** ***** ***** ***** ***** ***** *****/
+class ReversePhoneBooks_UK extends superfecta_base {
+
+	public $description,$source_param;
+	public $version_requirement = "2.11";
+
+	public function __construct() {
+		$this->description = "http://www.reversephonebooks.co.uk - "._("A datasource devoted to identifying telemarketers. These listings are provided by other users of this service.");
+		$this->source_param = array(
+			'SPAM_Threshold' => array(
+				'description' => _('Specify the number of listings required to mark a call as spam.'),
+				'type' => 'number',
+				'default' => 10
+			)
+		);
+	}
+
+	function get_caller_id($thenumber, $run_param=array()) {
+		$caller_id = NULL;
+
+		if (!$this->IsValidNumber('UK', $thenumber)) {
+			$this->DebugPrint("Skipping Source - Non UK number: $thenumber");
+		} else {
+			$this->DebugPrint("Searching ReversePhoneBooks.co.uk...");
+
+			$url = "http://www.reversephonebooks.co.uk/$thenumber-phone-number";
+			$value = $this->get_url_contents($url);
+
+			$pattern = "/<p>There are (\d+) reported complaint([s]*) for phone number/";
+
+			if ($this->SearchURL($url, $pattern, $match)) {
+				$value = $this->ExtractMatch($match);
+				if (is_numeric($value)) {
+					$this->DebugPrint(sprintf(_("value of %s returned..."),$value));
+
+					$score = $value;
+					$threshold = array_key_exists('SPAM_Threshold', $run_param) ? $run_param['SPAM_Threshold'] : 0;
+					if ($score > $threshold) {
+						$this->spam = true;
+						$this->DebugPrint(" "._("determined to be SPAM"));
+					} else {
+						$this->DebugPrint(_("Not a SPAM caller"));
+					}
+				}
+			} else {
+				$this->DebugPrint(_("not found"));
+			}
+		}
+		return null;
+	}
+}

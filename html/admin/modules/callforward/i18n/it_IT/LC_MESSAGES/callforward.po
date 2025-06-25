@@ -1,0 +1,181 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 2.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-28 10:02-0400\n"
+"PO-Revision-Date: 2018-05-28 15:29+0000\n"
+"Last-Translator: Stell0 <stefano.fancello@nethesis.it>\n"
+"Language-Team: Italian <http://*/projects/freepbx/callforward/it/>\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.19.1\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+
+#: ucp/views/settings.php:5
+msgid "Always"
+msgstr ""
+
+#: callforward.i18n.php:6
+msgid "Applications"
+msgstr "Applicazioni"
+
+#: ucp/views/widget.php:13 ucp/views/widget.php:15
+msgid "Busy"
+msgstr "Occupato"
+
+#: callforward.i18n.php:4 install.php:6 ucp/Callforward.class.php:148
+msgid "Call Forward"
+msgstr "Trasferimento di Chiamata"
+
+#: callforward.i18n.php:24 install.php:7
+msgid "Call Forward All Activate"
+msgstr "Attiva Trasferimento di Chiamata Incondizionato"
+
+#: callforward.i18n.php:20 install.php:8
+msgid "Call Forward All Deactivate"
+msgstr "Disattiva Trasferimento di Chiamata Incondizionato"
+
+#: callforward.i18n.php:26 install.php:9
+msgid "Call Forward All Prompting Activate"
+msgstr "richiama tutti i prompt attivati"
+
+#: callforward.i18n.php:22 install.php:10
+msgid "Call Forward All Prompting Deactivate"
+msgstr "Disattiva Trasferimento di Chiamata Incondizionato (chiede dettagli)"
+
+#: callforward.i18n.php:16 install.php:11
+msgid "Call Forward Busy Activate"
+msgstr "Attiva Trasferimento di Chiamata su Occupato"
+
+#: callforward.i18n.php:12 install.php:12
+msgid "Call Forward Busy Deactivate"
+msgstr "Disattiva Trasferimento di Chiamata su Occupato"
+
+#: callforward.i18n.php:18 install.php:13
+msgid "Call Forward Busy Prompting Activate"
+msgstr "Attiva inoltro chiamata inoltrata"
+
+#: callforward.i18n.php:14 install.php:14
+msgid "Call Forward Busy Prompting Deactivate"
+msgstr "Disattiva Trasferimento di Chiamata su Occupato (chiede dettagli) "
+
+#: callforward.i18n.php:30 install.php:15
+msgid "Call Forward No Answer/Unavailable Activate"
+msgstr "Attiva Trasferimento su Nessuna Risposta/Non disponibile"
+
+#: callforward.i18n.php:28 install.php:16
+msgid "Call Forward No Answer/Unavailable Deactivate"
+msgstr "Disattiva Trasferimento su Nessuna Risposta/Non disponibile"
+
+#: callforward.i18n.php:32 install.php:17
+msgid "Call Forward No Answer/Unavailable Prompting Activate"
+msgstr "Inoltro chiamata Nessuna risposta / Non disponibile Attivazione"
+
+#: callforward.i18n.php:10 install.php:18
+msgid "Call Forward Toggle"
+msgstr "deviazione di chiamata"
+
+#: ucp/Callforward.class.php:90 ucp/Callforward.class.php:129
+msgid "Call Forwarding"
+msgstr "Inoltro chiamata"
+
+#: ucp/Callforward.class.php:195
+msgid "Call Forwarding Has Been Updated!"
+msgstr "L'inoltro delle chiamate è stato aggiornato!"
+
+#: ucp/Callforward.class.php:113
+#, php-format
+msgid "Call Forwarding for %s"
+msgstr ""
+
+#: ucp/views/settings.php:2
+msgid "CallForward Ringtimer"
+msgstr "Timer chiamata inoltro chiamata"
+
+#: ucp/views/settings.php:4
+msgid "Default"
+msgstr ""
+
+#: ucp/views/widget.php:5 ucp/views/widget.php:10 ucp/views/widget.php:15
+msgid "Disabled"
+msgstr ""
+
+#: ucp/views/widget.php:5 ucp/views/widget.php:10 ucp/views/widget.php:15
+msgid "Enabled"
+msgstr ""
+
+#: ucp/views/settings.php:10
+msgid ""
+"Number of seconds to ring prior to going to voicemail or other fail over "
+"destinations that may be setup by an administrator on this account. The "
+"Always setting will ring the call forward destinaiton until answered or the "
+"caller hangs up. The Default setting will use the value set in Ring Time. "
+"Your setting here will be forced to Always if there is no Voicemail or "
+"alternartive fail over destination for a call to go to."
+msgstr ""
+"Numero di secondi da squillare prima di andare alla segreteria telefonica o "
+"altro failover su destinazioni che possono essere impostate da un "
+"amministratore su questo account. L'impostazione Sempre suonerà la "
+"destinazione in avanti fino alla risposta o il chiamante riaggancia. "
+"L'impostazione Predefinita utilizzerà il valore impostato in Durata squilli. "
+"L'impostazione qui sarà forzata su Sempre se non ci sono Voicemail o "
+"failover alternartive sulla destinazione per una chiamata a cui rivolgersi."
+
+#: ucp/views/settings.php:7
+msgid "Seconds"
+msgstr "Secondi"
+
+#: callforward.i18n.php:8
+msgid ""
+"The Call Forwarding module provides feature codes for call forwarding. Call "
+"Forwarding is used to forward calls from one user to another based on "
+"conditions such as busy, unavailable, and no answer."
+msgstr ""
+
+#: ucp/Callforward.class.php:61
+msgid "The given extension is empty."
+msgstr ""
+
+#: ucp/Callforward.class.php:56
+msgid "There are no assigned extensions."
+msgstr ""
+
+#: ucp/Callforward.class.php:65
+msgid "This extension is not assigned to this user."
+msgstr ""
+
+#: ucp/views/widget.php:8 ucp/views/widget.php:10
+msgid "Unavailable"
+msgstr "Non disponibile"
+
+#: ucp/views/widget.php:3 ucp/views/widget.php:5
+msgid "Unconditional"
+msgstr "Incondizionato"
+
+#~ msgid "Provides callforward featurecodes"
+#~ msgstr "Fornisce featurecodes callforward"
+
+#~ msgid "Forward immediately regardless of current state of line/PBX"
+#~ msgstr ""
+#~ "Inoltra immediatamente indipendentemente dallo stato attuale della "
+#~ "linea / PBX"
+
+#~ msgid ""
+#~ "Preconfigured number to which calls are forwarded if the customer "
+#~ "endpoint becomes unresponsive due to an Internet outage or software/"
+#~ "configuration failure of endpoint"
+#~ msgstr ""
+#~ "Numero preconfigurato a cui vengono inoltrate le chiamate se l'endpoint "
+#~ "del cliente non risponde a causa di un'interruzione di Internet o di un "
+#~ "errore software / di configurazione dell'endpoint"
+
+#~ msgid ""
+#~ "Preconfigured number to which calls are forwarded if the customer "
+#~ "endpoint is busy, usually due to being on an active call"
+#~ msgstr ""
+#~ "Numero preconfigurato a cui vengono inoltrate le chiamate se l'endpoint "
+#~ "del cliente è occupato, solitamente a causa di una chiamata attiva"

@@ -1,0 +1,12 @@
+{
+  "file_path": "/var/spool/asterisk/monitor/20250625-143319-FROM_AUTO-ID_685b8a1cebcb9-TO_0808811261.wav",
+  "timestamp": "2025-06-25T14:37:45.140291",
+  "transcription": "크 진가우 Dust desktop. từaris 패는 Arthur 2020 이�改 yellек 융킹 before becoming his politician Beugh 을 term 지금까지 빛었다 and did not have the power to do so. The new system has been created.",
+  "analysis": {
+    "status": "failed",
+    "confidence": 30,
+    "reason": "관련 키워드를 찾을 수 없음 - 실패로 판정"
+  },
+  "pattern_hint": null,
+  "file_size": 241324
+}

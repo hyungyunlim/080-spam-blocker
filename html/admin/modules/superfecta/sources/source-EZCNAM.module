@@ -1,0 +1,77 @@
+<?php
+/*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+ * Developer Notes:
+ *
+ * Version History:
+ * 2022-06-13	Initial commit #FREEPBX-23555
+ * 2022-07-14   Update to version 16, add multi language support, refactor code, tested = only message error (Javier Pastor Aka VSC55)
+ * 2024-05-25   Adapt for version 16 of freepbx  (Javier Pastor Aka VSC55)
+ *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***/
+
+class EZCNAM extends superfecta_base {
+
+    public $description = "https://www.ezcn am.com/ - Commercial source for Caller ID Name data.";
+    public $version_requirement = "2.11";
+    public $source_param = array(
+        'Key' => array(
+            'description' => 'Your unique API key will be assigned to you when you create an EZCNAM account.',
+            'type' => 'text'
+        ),
+        'Ignore_Keywords' => array(
+            'description' => 'If this source provides CNAM including any of the keywords listed here, the CNAM will be ignored and other sources will be used to find the value.<br>Separate keywords with commas.',
+            'type' => 'textarea',
+            'default' => 'unavailable, unknown'
+        ),
+    );
+
+    function get_caller_id($thenumber, $run_param=array())
+    {
+        $caller_id = parent::get_caller_id($thenumber, $run_param);
+
+        // Get Config
+        $Key             = isset($run_param['Key']) ? $run_param['Key'] : null;
+        $Ignore_Keywords = isset($run_param['Ignore_Keywords']) ? $run_param['Ignore_Keywords'] : '';
+        $thenumber       = urlencode($thenumber);
+        $debug = $this->debug;
+        if ( empty($Key))
+        {
+            $this->DebugPrint(_("Lookups require account key... Skipping!"));
+        }
+        else
+        {
+            $url = sprintf("https://api.ezcnam.com/v1?key=%s&phone=%s&out=json", $Key, $thenumber);
+            $ret = $this->get_url_contents($url);
+            $result = json_decode($ret, true);
+            if ( strtoupper($result['status']) == "OK")
+            {
+                $sname = trim($result['name']);
+                if (strlen($sname) > 1)
+                {
+                    // convert list of ignore keywords into array
+                    $key_words = array();
+                    $temp_array = explode(',', $Ignore_Keywords);
+                    foreach($temp_array as $val) {
+                        $key_words[] = trim($val);
+                    }
+    
+                    // Remove all ignore keywords from the retuned CNAM string and compare the before and after.
+                    $test_string = trim(str_ireplace($key_words,'',$sname));
+                    if($test_string == $sname)
+                    {
+                        $caller_id = $sname;
+                    }
+                    else
+                    {
+                        $this->DebugPrint( sprintf(_("'%s' contains flagged key word(s), discarding... Skipping!"), $sname));
+                    }
+                }
+            }
+            else
+            {
+                $this->DebugPrint( sprintf(_("%s: %s"), $result['status'], $result['reason']));
+            }
+            $this->DebugPrint( is_null($caller_id) ? _("Not Found") : _("Found"));
+        }
+        return($caller_id);
+    }
+}
