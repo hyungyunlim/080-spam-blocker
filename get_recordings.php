@@ -35,6 +35,24 @@ function parse_recording_filename($filename) {
             $info['id'] = $id_match[1];
         }
     }
+    // 패턴 1-2: TO_ 뒤에 번호가 없는 경우 (DB에서 찾기)
+    elseif (preg_match('/(\d{8}-\d{6}).*?-ID_([a-f0-9]+)-TO_\.wav/i', $filename, $matches)) {
+        $info['call_type']      = 'unsubscribe';
+        $timestamp_str          = $matches[1];
+        $call_id                = $matches[2];
+        $info['id']             = $call_id;
+        
+        // DB에서 080 번호 찾기
+        try {
+            $db = new SQLite3(__DIR__ . '/spam.db');
+            $row = $db->querySingle("SELECT phone080 FROM unsubscribe_calls WHERE call_id = '{$call_id}' LIMIT 1", true);
+            if ($row && !empty($row['phone080'])) {
+                $phone_number = $row['phone080'];
+            }
+        } catch (Exception $e) {
+            // DB 오류 시 무시
+        }
+    }
     // 패턴 2: 패턴 학습 (예: 20250611-000841-discovery-0808895050.wav)
     elseif (preg_match('/(\d{8}-\d{6}).*?discovery-([0-9]+)/i', $filename, $matches)) {
         $info['call_type']      = 'discovery';
@@ -426,8 +444,8 @@ if (is_dir($recording_dir)) {
                     }
                 }
 
-                // 자동 분석 필요 여부 (현재 미분석이며 파일 수정 후 4초 경과 및 파일 크기 80KB 이상)
-                $inactive = (time() - $recording_info['file_mtime']) > 4; // 최근 4초간 변동 없음
+                // 자동 분석 필요 여부 (현재 미분석이며 파일 수정 후 충분한 시간 경과 및 파일 크기 조건)
+                $inactive = (time() - $recording_info['file_mtime']) > 8; // 최근 8초간 변동 없음 (통화 프로그레스 표시 시간 확보)
                 $longEnough = $recording_info['file_size'] >= 80 * 1024;   // 약 5초 이상 분량
                 $recording_info['ready_for_analysis'] = (
                     ($recording_info['analysis_result'] === '실패' && $recording_info['analysis_text'] === '아직 분석되지 않았습니다.') &&

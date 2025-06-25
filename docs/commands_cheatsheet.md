@@ -43,7 +43,56 @@
 * `sudo chown -R asterisk:asterisk tmp_calls/ call_queue/ pattern_discovery/`  – fix perms.
 
 ---
-## 8. Quectel EC25 – useful AT commands
+## 8. Migration to Raspberry Pi 5 (RaspPBX)
+
+### Prerequisites
+1. **Download RaspPBX** from http://www.raspbx.org/download/
+2. **Flash to SD card** (64GB+ recommended)
+3. **Boot Raspberry Pi 5** and complete initial setup
+4. **Enable SSH** and get IP address: `sudo raspi-config` → Interface Options → SSH → Enable
+5. **Setup SSH key** for passwordless access: `ssh-copy-id root@RASPBX_IP`
+
+### Migration Steps
+```bash
+# 1. Run migration script on current server
+./migrate_to_raspbx.sh
+# Enter RaspPBX IP when prompted
+
+# 2. After migration completes, run on RaspPBX
+ssh root@RASPBX_IP
+./raspbx_post_install.sh
+
+# 3. Connect Quectel EC25 with independent power supply
+# 4. Verify modem detection: lsusb | grep -i quectel
+# 5. Check ttyUSB ports: ls -la /dev/ttyUSB*
+# 6. Update /etc/asterisk/quectel.conf with correct ports
+```
+
+### Hardware Requirements
+- **Raspberry Pi 5** with high-quality power adapter
+- **MicroSD card** 64GB+ (Class 10+)
+- **Quectel EC25** USB adapter with **independent power supply** (2.1A+)
+- **Ethernet cable** for initial setup
+
+### Post-Migration Verification
+```bash
+# Check services
+systemctl status asterisk call_queue_runner sms_fetcher
+
+# Test modem
+asterisk -rx 'quectel show devices'
+
+# Test SMS processing
+ENC=$(echo -n "수신거부 080-1234-5678 식별번호 1234" | base64)
+php /var/www/html/sms_auto_processor.php --caller=01011112222 --msg_base64="$ENC"
+```
+
+### Web Interfaces
+- **FreePBX**: http://RASPBX_IP/admin/
+- **080 SMS Dashboard**: http://RASPBX_IP/dashboard.php
+
+---
+## 9. Quectel EC25 – useful AT commands
 Open a terminal session:  
 `minicom -D /dev/ttyUSB2 -b 115200`  (or use `screen /dev/ttyUSB2 115200`)
 
@@ -88,5 +137,8 @@ analysis_logs/           – STT / pattern analysis progress
 ## 10. Misc snippets
 * Duplicate-SMS lock file lives in `/tmp/smslock_<080>_<ID>` (auto-expires in 5 min).
 * Force reload front-end resources after CSS tweak: **Shift+Cmd+R** (Mac) or **Ctrl+F5**.
-
+* USB tty2 being root right sudo bash scripts/setup_tty2_autologin.sh
+  sudo rm /dev/ttyUSB2
+  sudo udevadm trigger --action=add --attr-match=idVendor=2c7c
+  sudo systemctl restart asterisk
 > Keep this cheat-sheet under version control (`docs/commands_cheatsheet.md`) and extend as new recurring commands emerge. 

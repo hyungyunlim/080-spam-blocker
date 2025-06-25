@@ -1,0 +1,15 @@
+[Unit]
+Description=Modem Recovery Service
+After=asterisk.service
+Requires=asterisk.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/modem_recovery.sh
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+User=root
+
+[Install]
+WantedBy=multi-user.target

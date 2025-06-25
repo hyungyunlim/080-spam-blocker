@@ -20,14 +20,14 @@ header('Content-Type: text/plain; charset=utf-8');
 $logFile = __DIR__ . '/logs/process_v2_debug.log';
 
 // 로그 파일 초기화 또는 구분선 추가 (스크립트 실행 시작 지점)
-file_put_contents($logFile, "--- Script Start: " . date('Y-m-d H:i:s') . " ---\n", FILE_APPEND);
+@file_put_contents($logFile, "--- Script Start: " . date('Y-m-d H:i:s') . " ---\n", FILE_APPEND);
 
 // 필수 클래스 포함
 require_once __DIR__ . '/sms_sender.php';
 // CLI 모드에서는 PatternManager 관련 기능 비활성화
 
 // POST 데이터 로깅
-file_put_contents($logFile, "POST Data: " . json_encode($_POST) . "\n", FILE_APPEND);
+@file_put_contents($logFile, "POST Data: " . json_encode($_POST) . "\n", FILE_APPEND);
 
 // ============ CLI MODE SUPPORT ============
 if (php_sapi_name() === 'cli') {
@@ -65,34 +65,34 @@ $notificationPhone = $_POST['notification_phone'] ?? '';
 // 1. 필수 파라미터 검증
 if (empty($spamMessage)) {
     $errorMsg = "Error: Spam message is empty. Exiting.";
-    file_put_contents($logFile, $errorMsg . "\n", FILE_APPEND);
+    @file_put_contents($logFile, $errorMsg . "\n", FILE_APPEND);
     die("오류: 광고 문자 내용이 비어있습니다.");
 }
 
 if (empty($notificationPhone)) {
     $errorMsg = "Error: Notification phone is empty. Exiting.";
-    file_put_contents($logFile, $errorMsg . "\n", FILE_APPEND);
+    @file_put_contents($logFile, $errorMsg . "\n", FILE_APPEND);
     die("오류: 알림 받을 연락처가 비어있습니다.");
 }
-file_put_contents($logFile, "Parameters validated successfully.\n", FILE_APPEND);
+@file_put_contents($logFile, "Parameters validated successfully.\n", FILE_APPEND);
 
 // 2. 080 번호 추출
 preg_match('/080-?\d{3,4}-?\d{4}/', $spamMessage, $matches);
 if (empty($matches)) {
     $errorMsg = "Error: 080 number not found in spam message. Exiting.";
-    file_put_contents($logFile, $errorMsg . "\n", FILE_APPEND);
+    @file_put_contents($logFile, $errorMsg . "\n", FILE_APPEND);
     die("오류: 문자 내용에서 080으로 시작하는 번호를 찾을 수 없습니다.");
 }
 $phoneNumber = str_replace('-', '', $matches[0]);
-file_put_contents($logFile, "Extracted 080 number: " . $phoneNumber . "\n", FILE_APPEND);
+@file_put_contents($logFile, "Extracted 080 number: " . $phoneNumber . "\n", FILE_APPEND);
 
 // 3. 식별번호 결정 우선순위: (1) "식별번호" 키워드 뒤 4~8자리 -> (2) 문자 중 11자리 010번호 -> (3) 수동 입력 -> (4) 알림 연락처
 $identificationNumber = '';
 
 // ① "식별번호123456" 또는 "식별번호: 123456" 형태
-if (preg_match('/식별번호\s*[:]?\s*([0-9]{4,8})/u', $spamMessage, $m)) {
+if (preg_match('/식별번호\s*[:]?\s*([0-9]{4,11})/u', $spamMessage, $m)) {
     $identificationNumber = $m[1];
-    file_put_contents($logFile, "ID from SMS keyword: {$identificationNumber}\n", FILE_APPEND);
+    @file_put_contents($logFile, "ID from SMS keyword: {$identificationNumber}\n", FILE_APPEND);
 }
 
 // ② 수동 입력 번호
@@ -100,7 +100,7 @@ if (empty($identificationNumber)) {
     $cleanManual = preg_replace('/[^0-9]/', '', $manualPhone);
     if (strlen($cleanManual) >= 4) {
         $identificationNumber = $cleanManual;
-        file_put_contents($logFile, "ID from manual phone: {$identificationNumber}\n", FILE_APPEND);
+        @file_put_contents($logFile, "ID from manual phone: {$identificationNumber}\n", FILE_APPEND);
     }
 }
 
@@ -109,9 +109,9 @@ if (empty($identificationNumber)) {
     $cleanNotify = preg_replace('/[^0-9]/', '', $notificationPhone);
     if (strlen($cleanNotify) >= 4 && $cleanNotify !== '01000000000') {
         $identificationNumber = $cleanNotify;
-        file_put_contents($logFile, "ID from notification phone: {$identificationNumber}\n", FILE_APPEND);
+        @file_put_contents($logFile, "ID from notification phone: {$identificationNumber}\n", FILE_APPEND);
     } else {
-        file_put_contents($logFile, "WARNING: Identification number could not be determined.\n", FILE_APPEND);
+        @file_put_contents($logFile, "WARNING: Identification number could not be determined.\n", FILE_APPEND);
     }
 }
 
@@ -149,10 +149,10 @@ if (php_sapi_name() !== 'cli' && !empty($spamMessage) && $spamMessage !== 'AUTO_
         $stmt->bindValue(':ident', $identificationNumber, SQLITE3_TEXT);
         $stmt->execute();
         
-        file_put_contents($logFile, "Spam content saved to database for user {$userId}\n", FILE_APPEND);
+        @file_put_contents($logFile, "Spam content saved to database for user {$userId}\n", FILE_APPEND);
         $db->close();
     } catch (Exception $e) {
-        file_put_contents($logFile, "Error saving spam content: " . $e->getMessage() . "\n", FILE_APPEND);
+        @file_put_contents($logFile, "Error saving spam content: " . $e->getMessage() . "\n", FILE_APPEND);
     }
 }
 
@@ -163,12 +163,12 @@ if (file_exists($patternsFile)) {
     $patternsData = json_decode(file_get_contents($patternsFile), true);
     if ($patternsData && isset($patternsData['patterns'])) {
         $patterns = $patternsData['patterns'];
-        file_put_contents($logFile, "Loaded " . count($patterns) . " patterns from patterns.json\n", FILE_APPEND);
+        @file_put_contents($logFile, "Loaded " . count($patterns) . " patterns from patterns.json\n", FILE_APPEND);
     } else {
-        file_put_contents($logFile, "patterns.json is invalid or empty.\n", FILE_APPEND);
+        @file_put_contents($logFile, "patterns.json is invalid or empty.\n", FILE_APPEND);
     }
 } else {
-    file_put_contents($logFile, "patterns.json not found.\n", FILE_APPEND);
+    @file_put_contents($logFile, "patterns.json not found.\n", FILE_APPEND);
 }
 
 // 5. 패턴 조회 - 우선순위: 사용자 소유 → 성공한 커뮤니티 패턴 → 기본 패턴
@@ -184,7 +184,7 @@ if (isset($patterns[$phoneNumber])) {
     if (!isset($candidatePattern['owner_phone']) || $candidatePattern['owner_phone'] === $currentUserPhone) {
         $pattern = $candidatePattern;
         $patternSource = 'user';
-        file_put_contents($logFile, "Found user-owned pattern for {$phoneNumber}\n", FILE_APPEND);
+        @file_put_contents($logFile, "Found user-owned pattern for {$phoneNumber}\n", FILE_APPEND);
     }
 }
 
@@ -200,11 +200,11 @@ if (!$pattern && isset($patterns[$phoneNumber])) {
         
         $pattern = $candidatePattern;
         $patternSource = 'community';
-        file_put_contents($logFile, "Found community pattern for {$phoneNumber} (owner: {$candidatePattern['owner_phone']}, success: {$candidatePattern['success_stats']['success']})\n", FILE_APPEND);
+        @file_put_contents($logFile, "Found community pattern for {$phoneNumber} (owner: {$candidatePattern['owner_phone']}, success: {$candidatePattern['success_stats']['success']})\n", FILE_APPEND);
     }
 }
 
-file_put_contents($logFile, "Pattern search result for {$phoneNumber}: " . ($pattern ? "Found ({$patternSource})" : 'Not Found') . "\n", FILE_APPEND);
+@file_put_contents($logFile, "Pattern search result for {$phoneNumber}: " . ($pattern ? "Found ({$patternSource})" : 'Not Found') . "\n", FILE_APPEND);
 
 // 자동호출 지원 여부 확인
 if ($pattern && isset($pattern['auto_supported']) && !$pattern['auto_supported']) {
@@ -214,7 +214,7 @@ if ($pattern && isset($pattern['auto_supported']) && !$pattern['auto_supported']
     echo "   시스템이 대신 '1번'을 눌러줄 방법은 있지만, 사용자의 전화번호를 대신 입력할 수 없어서\n";
     echo "   자동 처리(수신거부 완료)까지 진행할 수 없습니다.\n";
     echo "   녹음 파일을 참고하여 직접 전화를 걸어 수신거부를 진행해주세요.\n";
-    file_put_contents($logFile, "Pattern for {$phoneNumber} is confirm_only – aborting automatic call.\n", FILE_APPEND);
+    @file_put_contents($logFile, "Pattern for {$phoneNumber} is confirm_only – aborting automatic call.\n", FILE_APPEND);
     exit;
 }
 
@@ -225,9 +225,9 @@ if (!$pattern) {
         $patternSource = 'default';
         $pattern['name'] = $pattern['name'] ?? '기본 패턴';
         echo "ℹ️  등록된 패턴이 없어 기본 패턴으로 먼저 시도합니다.\n";
-        file_put_contents($logFile, "Pattern not found – using default pattern first.\n", FILE_APPEND);
+        @file_put_contents($logFile, "Pattern not found – using default pattern first.\n", FILE_APPEND);
     } else {
-        file_put_contents($logFile, "Pattern not found and no default. Starting discovery.\n", FILE_APPEND);
+        @file_put_contents($logFile, "Pattern not found and no default. Starting discovery.\n", FILE_APPEND);
     echo "🔍 패턴이 없습니다! 패턴 디스커버리를 시작합니다: {$phoneNumber}\n";
     
     $discovery = new PatternDiscovery();
@@ -236,13 +236,13 @@ if (!$pattern) {
     $smsSender = new SmsSender();
     $smsSender->logSMS($result, 'pattern_discovery_started');
     
-    file_put_contents($logFile, "Exiting after starting discovery.\n--- Script End ---\n\n", FILE_APPEND);
+    @file_put_contents($logFile, "Exiting after starting discovery.\n--- Script End ---\n\n", FILE_APPEND);
     exit("패턴 학습 중입니다. 완료 후 다시 시도해주세요.");
     }
 }
 
 // 7. 패턴이 존재할 경우, Call File 생성 준비
-file_put_contents($logFile, "Pattern found. Preparing to create Call File.\n", FILE_APPEND);
+@file_put_contents($logFile, "Pattern found. Preparing to create Call File.\n", FILE_APPEND);
 
 // 패턴 소스에 따른 메시지 표시
 switch($patternSource) {
@@ -280,7 +280,7 @@ foreach ($tokens as $search => $replacement) {
 
 $dtmfToSend = ltrim($dtmfToSend, ','); // 맨 앞 콤마 제거
 
-file_put_contents($logFile, "Final DTMF sequence: " . $dtmfToSend . "\n", FILE_APPEND);
+@file_put_contents($logFile, "Final DTMF sequence: " . $dtmfToSend . "\n", FILE_APPEND);
 echo "추출된 080번호: " . $phoneNumber . "\n";
 echo "최종 식별번호: " . $identificationNumber . "\n";
 echo "적용될 DTMF 패턴: " . $dtmfToSend . "\n";
@@ -305,12 +305,12 @@ try{
     $stmtUC->execute();
 }catch(Throwable $e){ /* ignore db errors */ }
 
-exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} dtmf {$dtmfToSend}\"");
-exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} dtmf_sequence {$dtmfToSend}\"");
-exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} notification_phone {$notificationPhone}\"");
-exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} identification_number {$identificationNumber}\"");
-exec("/usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} recnum {$phoneNumber}\"");
-file_put_contents($logFile, "Variables stored in AstDB for ID: {$uniqueId}\n", FILE_APPEND);
+exec("echo 'hacker03' | sudo -S /usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} dtmf {$dtmfToSend}\" 2>/dev/null");
+exec("echo 'hacker03' | sudo -S /usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} dtmf_sequence {$dtmfToSend}\" 2>/dev/null");
+exec("echo 'hacker03' | sudo -S /usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} notification_phone {$notificationPhone}\" 2>/dev/null");
+exec("echo 'hacker03' | sudo -S /usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} identification_number {$identificationNumber}\" 2>/dev/null");
+exec("echo 'hacker03' | sudo -S /usr/sbin/asterisk -rx \"database put CallFile/{$uniqueId} recnum {$phoneNumber}\" 2>/dev/null");
+@file_put_contents($logFile, "Variables stored in AstDB for ID: {$uniqueId}\n", FILE_APPEND);
 
 // 9. Call File 내용 생성
 $callFileContent = "Channel: quectel/quectel0/{$phoneNumber}\n";
@@ -323,6 +323,7 @@ $callFileContent .= "Extension: s\n";
 $callFileContent .= "Priority: 1\n";
 $callFileContent .= "Set: CALL_ID={$uniqueId}\n";
 $callFileContent .= "Set: CALLFILE_ID={$uniqueId}\n";
+$callFileContent .= "Set: __AUTO_SUCCESS_CHECK=1\n";
 $callFileContent .= "Set: __CONFIRM_WAIT={$pattern['confirmation_wait']}\n";
 $callFileContent .= "Set: __TOTAL_DURATION={$pattern['total_duration']}\n";
 $callFileContent .= "Set: __INITIAL_WAIT={$pattern['initial_wait']}\n";
@@ -353,7 +354,7 @@ $tempFile = $rawTemp . '.call';
 rename($rawTemp, $tempFile);
 
 file_put_contents($tempFile, $callFileContent);
-file_put_contents($logFile, "Temporary Call File created at: {$tempFile}\n", FILE_APPEND);
+@file_put_contents($logFile, "Temporary Call File created at: {$tempFile}\n", FILE_APPEND);
 
 // ---- New: create initial call_progress log ----
 $progressDir = '/var/log/asterisk/call_progress';
@@ -365,8 +366,8 @@ $initLine = date('Y-m-d H:i:s') . " [{$uniqueId}] CALL_CREATED TO_{$phoneNumber}
 file_put_contents($progressLog, $initLine, FILE_APPEND);
 // ----------------------------------------------
 
-chown($tempFile, 'asterisk');
-chgrp($tempFile, 'asterisk');
+chmod($tempFile, 0644);
+exec("echo 'hacker03' | sudo -S chown asterisk:asterisk '{$tempFile}' 2>/dev/null");
 
 // =================================================================================
 //  모뎀 상태 확인 – quectel 채널이 활동 중이면 Busy 로 판단
@@ -378,8 +379,15 @@ if(!is_dir($queueDir)) mkdir($queueDir, 0775, true);
 
 function modem_is_busy(): bool {
     $out = [];
-    exec('/usr/sbin/asterisk -rx "core show channels concise" | grep quectel', $out);
-    return count($out) > 0; // active quectel channel → busy
+    exec('echo "hacker03" | sudo -S /usr/sbin/asterisk -rx "quectel show devices" 2>/dev/null | grep quectel0', $modemStatus);
+    exec('echo "hacker03" | sudo -S /usr/sbin/asterisk -rx "quectel show devices" 2>/dev/null | grep quectel0 | grep Free', $out);
+    
+    $status = isset($modemStatus[0]) ? trim($modemStatus[0]) : 'Unknown';
+    $isFree = count($out) > 0;
+    
+    error_log("[PROCESS_V2] Modem status check: {$status}, isFree: " . ($isFree ? 'true' : 'false'));
+    
+    return !$isFree; // not Free → busy
 }
 
 $destinationDir = modem_is_busy() ? $queueDir : '/var/spool/asterisk/outgoing/';
@@ -388,7 +396,7 @@ $finalFile = $destinationDir . basename($tempFile);
 
 if (rename($tempFile, $finalFile)) {
     $destLabel = ($destinationDir === $queueDir) ? 'Queued' : 'Spool';
-    file_put_contents($logFile, "Call File moved to: {$finalFile} ({$destLabel}).\n", FILE_APPEND);
+    @file_put_contents($logFile, "Call File moved to: {$finalFile} ({$destLabel}).\n", FILE_APPEND);
     if($destinationDir === $queueDir){
         echo "성공: Call File이 큐에 등록되었습니다. 모뎀이 통화 중이므로 여유가 생기면 순차 발신됩니다.\n";
     } else {
@@ -414,22 +422,22 @@ if (rename($tempFile, $finalFile)) {
     // 수신거부 시작 알림 SMS 발송
     $smsSender = new SmsSender();
     $notificationResult = $smsSender->sendUnsubscribeNotification($notificationPhone, $phoneNumber, $identificationNumber, 'started');
-    file_put_contents($logFile, "Start notification sent: " . ($notificationResult['success'] ? 'success' : 'failed') . "\n", FILE_APPEND);
+    @file_put_contents($logFile, "Start notification sent: " . ($notificationResult['success'] ? 'success' : 'failed') . "\n", FILE_APPEND);
     
     echo "\n💡 안내: 전화 연결 후 '실패'로 표시되면 아래 방법을 시도해 보세요.\n • \"녹음 듣기\" 버튼으로 안내 음성을 확인합니다.\n • 화면의 '패턴 추가' 메뉴에서 안내에 맞게 버튼/번호 입력 순서를 저장하면 다음부터 자동으로 처리됩니다.";
 
 } else {
     $errorMsg = "Error: Failed to move Call File to spool directory. Check permissions.";
-    file_put_contents($logFile, $errorMsg . "\n", FILE_APPEND);
+    @file_put_contents($logFile, $errorMsg . "\n", FILE_APPEND);
     error_log($errorMsg . " Temp file: {$tempFile}, Final file: {$finalFile}");
     echo "오류: Call File을 생성하지 못했습니다.\n";
     
     $smsSender = new SmsSender();
     $failureResult = $smsSender->sendUnsubscribeNotification($notificationPhone, $phoneNumber, $identificationNumber, 'error');
-    file_put_contents($logFile, "Error notification sent: " . ($failureResult['success'] ? 'success' : 'failed') . "\n", FILE_APPEND);
+    @file_put_contents($logFile, "Error notification sent: " . ($failureResult['success'] ? 'success' : 'failed') . "\n", FILE_APPEND);
 }
 
-file_put_contents($logFile, "--- Script End ---\n\n", FILE_APPEND);
+@file_put_contents($logFile, "--- Script End ---\n\n", FILE_APPEND);
 
 // 결과 메시지 생성 시, 각 줄 앞뒤 공백을 제거
 function formatResultMessage($lines) {

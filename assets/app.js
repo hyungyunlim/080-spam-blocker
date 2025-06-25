@@ -1115,13 +1115,15 @@
             const progressHTML = `
                 <div class="analysis-progress" style="margin-top: 15px; padding: 15px; background: #f0f4f8; border-radius: 8px; border: 1px solid #d1d9e6;">
                     <div class="progress-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span class="progress-stage" style="font-weight: 600; color: #4a5568;">분석 준비중...</span>
+                        <span class="progress-stage" style="font-weight: 600; color: #4a5568;">🧠 M1 AI 분석 준비중...</span>
                         <span class="progress-percentage" style="font-weight: 600; color: #667eea;">0%</span>
                     </div>
                     <div class="progress-bar" style="background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;">
                         <div class="progress-fill" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
                     </div>
-                    <div class="progress-message" style="margin-top: 8px; font-size: 13px; color: #718096;">대기중...</div>
+                    <div class="progress-message" style="margin-top: 8px; font-size: 13px; color: #718096;">
+                        <span class="analysis-location" style="font-weight: 600; color: #667eea;">🔗 M1 맥미니</span>에서 Whisper Medium 모델로 분석 중...
+                    </div>
                 </div>
             `;
 
@@ -1154,19 +1156,19 @@
             const maxPollCount = 300; // 최대 5분 (400ms * 300 = 2분) -> 300 * 400ms = 2분
 
             const stageNames = {
-                'queued': '대기중',
-                'starting': '시작중',
-                'file_check': '파일 확인',
-                'loading_model': '모델 로딩',
-                'model_loaded': '모델 로드 완료',
-                'transcribing': '음성 변환',
-                'transcription_done': 'STT 완료',
-                'analyzing_keywords': '키워드 분석',
-                'analyzing': '텍스트 분석',
-                'saving': '결과 저장',
-                'completed': '완료',
-                'error': '오류',
-                'timeout': '시간 초과'
+                'queued': '🔄 M1 분석 대기중',
+                'starting': '🚀 M1 분석 시작',
+                'file_check': '📁 M1 파일 확인',
+                'loading_model': '🧠 Whisper Medium 모델 로딩',
+                'model_loaded': '✅ 모델 로드 완료',
+                'transcribing': '🎤 M1 음성 변환 중',
+                'transcription_done': '📝 STT 완료',
+                'analyzing_keywords': '🔍 키워드 분석',
+                'analyzing': '🤖 AI 텍스트 분석',
+                'saving': '💾 결과 저장',
+                'completed': '✅ M1 분석 완료',
+                'error': '❌ 분석 오류',
+                'timeout': '⏰ 시간 초과'
             };
 
             // 진행 상황 확인 함수
@@ -1224,20 +1226,20 @@
                                     }
                                 }
                                 
+                                // M1 분석 완료 즉시 결과 갱신
+                                showToast('🎉 M1 분석 완료! 결과를 확인하세요');
+                                
+                                // 즉시 전체 목록 갱신하여 최신 결과 반영
+                                getRecordings();
+                                
                                 setTimeout(() => {
                                     progressContainer.remove();
                                     button.disabled = false;
                                     button.innerHTML = originalButtonContent;
-                                    showToast('분석이 완료되었습니다!');
                                     
-                                    // 해당 녹음 항목만 업데이트
-                                    updateSingleRecordingItem(recordingItem);
-                                    
-                                    // 전체 목록도 갱신하여 최신 상태 반영
-                                    setTimeout(() => {
-                                        getRecordings();
-                                    }, 1000);
-                                }, 2000);
+                                    // 한번 더 갱신하여 완전한 동기화 보장
+                                    getRecordings();
+                                }, 1500);
                             } else if (stage === 'error' || stage === 'timeout') {
                                 // 오류 발생
                                 progressContainer.style.background = '#fee2e2';

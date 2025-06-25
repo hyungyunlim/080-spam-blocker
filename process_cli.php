@@ -39,13 +39,39 @@ if (empty($notificationPhone)) {
     exit(1);
 }
 
+// Wait for modem to be ready (SMS sending might still be in progress)
+$maxWait = 15; // Maximum 15 seconds
+$waited = 0;
+error_log("[PROCESS_CLI] Starting modem wait check for {$phoneNumber}");
+
+while ($waited < $maxWait) {
+    $out = [];
+    $modemStatus = [];
+    exec('echo "hacker03" | sudo -S /usr/sbin/asterisk -rx "quectel show devices" 2>/dev/null | grep quectel0', $modemStatus);
+    exec('echo "hacker03" | sudo -S /usr/sbin/asterisk -rx "quectel show devices" 2>/dev/null | grep quectel0 | grep Free', $out);
+    
+    $status = isset($modemStatus[0]) ? trim($modemStatus[0]) : 'Unknown';
+    $isFree = count($out) > 0;
+    
+    error_log("[PROCESS_CLI] Wait check #{$waited}: {$status}, isFree: " . ($isFree ? 'true' : 'false'));
+    
+    if ($isFree) {
+        break; // Modem is Free
+    }
+    sleep(1);
+    $waited++;
+}
+
+error_log("[PROCESS_CLI] Modem wait completed after {$waited} seconds");
+
 // Log the start
 $logMessage = sprintf(
-    "[%s] CLI Call Processing: phone=%s, id=%s, notify=%s\n",
+    "[%s] CLI Call Processing: phone=%s, id=%s, notify=%s (waited %ds for modem)\n",
     date('Y-m-d H:i:s'),
     $phoneNumber,
     $identificationNumber,
-    $notificationPhone
+    $notificationPhone,
+    $waited
 );
 file_put_contents('/tmp/call_process.log', $logMessage, FILE_APPEND);
 

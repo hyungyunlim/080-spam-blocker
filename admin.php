@@ -142,7 +142,7 @@ function get_system_statistics() {
         // 사용자 통계
         $userStats = $db->querySingle("
             SELECT COUNT(*) as total,
-                   COUNT(CASE WHEN last_access > datetime('now', '-30 days') THEN 1 END) as active_30d
+                   COUNT(CASE WHEN last_access > datetime('now', '-30 days') OR (verified = 1 AND last_access IS NULL) THEN 1 END) as active_30d
             FROM users
         ", true);
         
@@ -485,6 +485,11 @@ function get_system_statistics() {
         .status-admin {
             background: #fef3c7;
             color: #92400e;
+        }
+
+        .status-sms-verified {
+            background: #dbeafe;
+            color: #1e40af;
         }
 
         .btn {
@@ -1552,6 +1557,7 @@ function get_system_statistics() {
                             $isBlocked = isset($user['blocked']) && $user['blocked'];
                             $lastAccess = $user['last_access'] ?? null;
                             $isActive = $lastAccess && strtotime($lastAccess) > strtotime('-30 days');
+                        $isSMSVerified = $user['verified'] && !$lastAccess;
                         ?>
                         <tr>
                             <td>
@@ -1601,6 +1607,8 @@ function get_system_statistics() {
                                     <span class="status-badge status-blocked">차단됨</span>
                                 <?php elseif ($isActive): ?>
                                     <span class="status-badge status-active">활성</span>
+                                <?php elseif ($isSMSVerified): ?>
+                                    <span class="status-badge status-sms-verified">SMS 인증됨</span>
                                 <?php else: ?>
                                     <span class="status-badge status-inactive">비활성</span>
                                 <?php endif; ?>
@@ -1721,6 +1729,7 @@ function get_system_statistics() {
                         $isBlocked = isset($user['blocked']) && $user['blocked'];
                         $lastAccess = $user['last_access'] ?? null;
                         $isActive = $lastAccess && strtotime($lastAccess) > strtotime('-30 days');
+                        $isSMSVerified = $user['verified'] && !$lastAccess;
                     ?>
                     <div class="mobile-user-card">
                         <div class="mobile-user-header">
@@ -1781,6 +1790,8 @@ function get_system_statistics() {
                                 <span class="status-badge status-blocked">차단됨</span>
                             <?php elseif ($isActive): ?>
                                 <span class="status-badge status-active">활성</span>
+                            <?php elseif ($isSMSVerified): ?>
+                                <span class="status-badge status-sms-verified">SMS 인증됨</span>
                             <?php else: ?>
                                 <span class="status-badge status-inactive">비활성</span>
                             <?php endif; ?>
@@ -1895,7 +1906,16 @@ function get_system_statistics() {
         <div class="card">
             <div class="card-header">
                 📊 최근 활동
-                <span style="font-size: 0.9rem; opacity: 0.9;">최근 10건</span>
+                <span style="font-size: 0.9rem; opacity: 0.9;">
+                    <?php 
+                    $activity_count = count($system_stats['recent_activity']);
+                    if ($activity_count > 0) {
+                        echo "최근 {$activity_count}건";
+                    } else {
+                        echo "활동 없음";
+                    }
+                    ?>
+                </span>
             </div>
             <div class="card-body">
                 <div class="activity-list">
