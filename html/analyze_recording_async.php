@@ -63,11 +63,12 @@ function startAnalysis($filename, $jobId) {
     
     // 백그라운드에서 Python 스크립트 실행
     $command = sprintf(
-        'python3 %s %s %s small --progress_file %s > /dev/null 2>&1 &',
+        'python3 %s %s %s small --progress_file %s --analysis_id %s > /dev/null 2>&1 &',
         escapeshellcmd($scriptPath),
         escapeshellarg($recordingPath),
         escapeshellarg($resultFile),
-        escapeshellarg($progressFile)
+        escapeshellarg($progressFile),
+        escapeshellarg($jobId)
     );
     
     updateProgress($jobId, 'processing', 15, 'STT 분석 시작...');

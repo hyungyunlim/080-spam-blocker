@@ -527,6 +527,35 @@
                             }
                         });
 
+                        // 2.5. 이미 시작된 분석 추적 (Race Condition 해결)
+                        data.recordings.forEach(rec => {
+                            // 조건: 서버에는 analysis_id가 있지만, 프론트엔드(activeAnalysisMap)는 아직 모르는 경우
+                            if (rec.analysis_id && !activeAnalysisMap.has(rec.filename)) {
+                                const escapedFilename = CSS.escape(rec.filename);
+                                const btnEl = document.querySelector(`button.analyze-btn[data-file="${escapedFilename}"]`);
+                                const recordingItem = btnEl ? btnEl.closest('.recording-item') : null;
+
+                                if (recordingItem && !recordingItem.querySelector('.analysis-progress')) {
+                                    console.log(`Race condition detected. Starting progress tracking for already-started analysis: ${rec.analysis_id} on file ${rec.filename}`);
+                                    
+                                    // activeAnalysisMap에 추가하여 중복 추적 방지
+                                    activeAnalysisMap.set(rec.filename, rec.analysis_id);
+                                    persistActiveAnalyses();
+
+                                    const progressContainer = createProgressUI(recordingItem);
+                                    const button = recordingItem.querySelector('.analyze-btn');
+                                    const originalButtonContent = button ? button.innerHTML : '';
+                                    if(button) button.disabled = true;
+
+                                    if (rec.call_type === 'discovery') {
+                                        trackPatternAnalysisProgress(rec.analysis_id, progressContainer, button, originalButtonContent, rec.title, rec.filename);
+                                    } else {
+                                        trackAnalysisProgress(rec.analysis_id, progressContainer, button, originalButtonContent);
+                                    }
+                                }
+                            }
+                        });
+
                         // 3. 진행 중인 분석 재개 (localStorage에서 복원)
                         activeAnalysisMap.forEach((analysisId, filename) => {
                             const rec = data.recordings.find(r => r.filename === filename);

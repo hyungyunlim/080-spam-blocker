@@ -336,7 +336,8 @@ function get_analysis_result($recording_filename, $call_type = 'unsubscribe', $r
                     'confidence' => $data['analysis']['confidence'] ?? null,
                     'transcription' => $data['transcription'] ?? null,
                     'completed_at' => $data['timestamp'] ?? null,
-                    'pattern_registered' => $pattern_registered_auto
+                    'pattern_registered' => $pattern_registered_auto,
+                    'analysis_id' => $data['analysis_id'] ?? null
                 ];
             }
         }

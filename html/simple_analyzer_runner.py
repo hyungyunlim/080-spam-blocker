@@ -28,6 +28,7 @@ parser.add_argument('audio')
 parser.add_argument('output')
 parser.add_argument('model', default='small', nargs='?')
 parser.add_argument('--progress_file', required=True)
+parser.add_argument('--analysis_id', required=True)
 parser.add_argument('--script', default='/var/www/html/simple_analyzer.py')
 args = parser.parse_args()
 
@@ -37,7 +38,8 @@ write_progress(pf, 'starting', 5, 'Python 래퍼 시작중...')
 cmd = ['python3', '-u', args.script,
        '--file', args.audio,
        '--output_dir', '/var/www/html/analysis_results',
-       '--model', args.model]
+       '--model', args.model,
+       '--analysis_id', args.analysis_id]
 print('Executing:', ' '.join(cmd))
 proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
 

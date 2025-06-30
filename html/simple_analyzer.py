@@ -77,7 +77,7 @@ def detect_unsubscribe_patterns(text):
     return {'status': 'failed', 'confidence': 30, 'reason': '관련 키워드를 찾을 수 없음 - 실패로 판정'}
 
 
-def analyze_audio(audio_file, output_file, progress_file=None, model_size='small'):
+def analyze_audio(audio_file, output_file, progress_file=None, model_size='small', analysis_id=None):
     """음성 분석 메인 함수"""
     try:
         if progress_file:
@@ -140,6 +140,7 @@ def analyze_audio(audio_file, output_file, progress_file=None, model_size='small
                 }
         
         output_data = {
+            'analysis_id': analysis_id,
             'file_path': audio_file,
             'timestamp': datetime.now().isoformat(),
             'transcription': transcription,

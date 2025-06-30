@@ -1,4 +1,10 @@
 <?php 
+require_once __DIR__.'/vendor/autoload.php';
+
+\Sentry\init([
+    'dsn' => 'https://99bfc49828a970db5b55592d413e1562@o4509563438366720.ingest.us.sentry.io/4509563477164032',
+]);
+
 require_once __DIR__.'/auth.php'; 
 $IS_LOGGED=is_logged_in(); 
 $CUR_PHONE=current_user_phone(); 
@@ -119,13 +125,23 @@ if ($IS_LOGGED) {
                 }
                 // 기존 액션들
                 elseif ($_POST['action'] === 'make_call' && isset($_POST['id'])) {
-                    require_once 'call_processor.php';
-                    $processor = new CallProcessor();
-                    $actionResult = $processor->makeCall($_POST['id'], $_POST['phone_number']);
+                    try {
+                        require_once 'call_processor.php';
+                        $processor = new CallProcessor();
+                        $actionResult = $processor->makeCall($_POST['id'], $_POST['phone_number']);
+                    } catch (\Throwable $exception) {
+                        \Sentry\captureException($exception);
+                        $actionResult = '오류가 발생했습니다. 관리자에게 문의하세요.';
+                    }
                 } elseif ($_POST['action'] === 'start_discovery') {
-                    require_once 'pattern_discovery.php';
-                    $discovery = new PatternDiscovery();
-                    $actionResult = $discovery->startDiscovery($_POST['discovery_phone_number'], $_POST['notification_phone_number']);
+                    try {
+                        require_once 'pattern_discovery.php';
+                        $discovery = new PatternDiscovery();
+                        $actionResult = $discovery->startDiscovery($_POST['discovery_phone_number'], $_POST['notification_phone_number']);
+                    } catch (\Throwable $exception) {
+                        \Sentry\captureException($exception);
+                        $actionResult = '오류가 발생했습니다. 관리자에게 문의하세요.';
+                    }
                 }
             }
         }
