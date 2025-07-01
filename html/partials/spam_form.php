@@ -64,7 +64,7 @@
             <!-- 알림 연락처 입력 (필수) -->
             <div class="form-group progressive-section" id="notificationSection">
                 <label for="notificationPhone">알림 받을 연락처 (필수) *</label>
-                <input type="tel" id="notificationPhone" name="notification_phone" required placeholder="예: 01012345678">
+                <input type="tel" id="notificationPhone" name="notification_phone" required placeholder="예: 01012345678" value="<?php echo isset($_SESSION['phone']) ? htmlspecialchars($_SESSION['phone']) : ''; ?>">
                 <div class="help-text">📱 처리 완료 후 결과를 알림 문자로 받을 연락처를 입력해주세요</div>
             </div>
 

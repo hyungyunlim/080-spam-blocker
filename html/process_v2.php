@@ -49,6 +49,12 @@ if (php_sapi_name() === 'cli') {
     if (isset($cliArgs['id'])) {
         $_POST['phone_number'] = $cliArgs['id'];
     }
+    
+    // notification_phone이 비어있으면 에러 출력
+    if (empty($_POST['notification_phone'])) {
+        fwrite(STDERR, "Warning: --notification parameter is empty or missing in CLI mode\n");
+        @file_put_contents($logFile, "Warning: notification_phone is empty in CLI mode\n", FILE_APPEND);
+    }
 
     $isAuto = isset($cliArgs['auto']);
     if($isAuto){
@@ -127,6 +133,14 @@ if (php_sapi_name() !== 'cli' && !empty($spamMessage) && $spamMessage !== 'AUTO_
         
         // 사용자 ID 확인/생성
         $cleanNotifyDigits = preg_replace('/[^0-9]/', '', $notificationPhone);
+        
+        // 빈 전화번호로 사용자 생성 방지
+        if (empty($cleanNotifyDigits)) {
+            @file_put_contents($logFile, "Error: notification_phone is empty after cleaning, cannot create user\n", FILE_APPEND);
+            $db->close();
+            return;
+        }
+        
         $stmt = $db->prepare("SELECT id FROM users WHERE phone = :phone");
         $stmt->bindValue(':phone', $cleanNotifyDigits, SQLITE3_TEXT);
         $result = $stmt->execute();
@@ -293,15 +307,28 @@ try{
     $dbUC = new SQLite3($dbPath);
     $dbUC->exec('PRAGMA journal_mode=WAL;');
     $dbUC->busyTimeout(3000);
-    $uidRow = $dbUC->querySingle("SELECT id FROM users WHERE phone='{$cleanNotifyDigits}'",true);
-    $uidVal = $uidRow ? (int)$uidRow['id'] : null;
-    $stmtUC = $dbUC->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status,pattern_source,notification_phone) VALUES (:cid,:uid,:p080,:ident,datetime("now"),"pending",:pattern_source,:notify)');
+    // 빈 전화번호로 사용자 조회 방지
+    if (empty($cleanNotifyDigits)) {
+        @file_put_contents($logFile, "Warning: cleanNotifyDigits is empty, cannot find user_id\n", FILE_APPEND);
+        $uidVal = null;
+    } else {
+        $uidRow = $dbUC->querySingle("SELECT id FROM users WHERE phone='{$cleanNotifyDigits}'",true);
+        $uidVal = $uidRow ? (int)$uidRow['id'] : null;
+    }
+
+    // 예상 녹음 파일 경로 생성
+    $from_id = !empty($GLOBALS['AUTO_CALL_MODE']) ? 'AUTO' : 'SYSTEM';
+    $recording_filename = date('YmdHis') . "-FROM_{$from_id}-ID_{$uniqueId}-TO_{$phoneNumber}.wav";
+    $call_file_path = '/var/spool/asterisk/monitor/' . $recording_filename;
+
+    $stmtUC = $dbUC->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status,pattern_source,notification_phone, call_file_path) VALUES (:cid,:uid,:p080,:ident,datetime("now"),"pending",:pattern_source,:notify, :path)');
     $stmtUC->bindValue(':cid',$uniqueId,SQLITE3_TEXT);
     if($uidVal!==null){$stmtUC->bindValue(':uid',$uidVal,SQLITE3_INTEGER);} else {$stmtUC->bindValue(':uid',null,SQLITE3_NULL);}
     $stmtUC->bindValue(':p080',$phoneNumber,SQLITE3_TEXT);
     $stmtUC->bindValue(':ident',$identificationNumber,SQLITE3_TEXT);
     $stmtUC->bindValue(':pattern_source',$patternSource,SQLITE3_TEXT);
     $stmtUC->bindValue(':notify',$notificationPhone,SQLITE3_TEXT);
+    $stmtUC->bindValue(':path', $call_file_path, SQLITE3_TEXT);
     $stmtUC->execute();
 }catch(Throwable $e){ /* ignore db errors */ }
 

@@ -38,6 +38,7 @@ if ($IS_LOGGED) {
         window.IS_LOGGED=<?php echo $IS_LOGGED?'true':'false';?>;
         window.CUR_PHONE=<?php echo json_encode($CUR_PHONE);?>;
         window.IS_ADMIN=<?php echo $IS_ADMIN?'true':'false';?>;
+        <?php $authFlow = ''; ?>
         window.AUTH_FLOW=<?php echo $authFlow ?: 'null';?>;
     </script>
     <!-- Favicon and PWA Manifest -->
@@ -216,9 +217,9 @@ if ($IS_LOGGED) {
         <!-- 메인 입력 카드 -->
         <?php include __DIR__.'/partials/spam_form.php'; ?>
 
-        <?php if ($IS_LOGGED): ?>
+        <?php if ($IS_LOGGED && $IS_ADMIN): ?>
         
-        <!-- 관리자 세션 디버깅 카드 (비로그인 상태에서도 표시) -->
+        <!-- 관리자 세션 디버깅 카드 -->
         <?php $sessionDebug = debug_session_info(); if ($sessionDebug): ?>
         <div class="card">
             <div class="card-header">

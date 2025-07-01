@@ -75,6 +75,24 @@ try {
     if ($updateResult) {
         echo "✅ 기존 사용자 created_at 업데이트 완료\n";
     }
+
+    // unsubscribe_calls 테이블에 company_name 컬럼 추가
+    $callsTableInfo = $db->query("PRAGMA table_info(unsubscribe_calls)");
+    $existingCallsColumns = [];
+    while ($row = $callsTableInfo->fetchArray(SQLITE3_ASSOC)) {
+        $existingCallsColumns[] = $row['name'];
+    }
+
+    if (!in_array('company_name', $existingCallsColumns)) {
+        $sql = "ALTER TABLE unsubscribe_calls ADD COLUMN company_name TEXT";
+        if ($db->exec($sql)) {
+            echo "✅ unsubscribe_calls 테이블에 company_name 컬럼 추가 완료\n";
+        } else {
+            echo "❌ unsubscribe_calls 테이블에 company_name 컬럼 추가 실패: " . $db->lastErrorMsg() . "\n";
+        }
+    } else {
+        echo "ℹ️ company_name 컬럼은 이미 unsubscribe_calls 테이블에 존재합니다\n";
+    }
     
     echo "데이터베이스 마이그레이션 완료!\n";
     

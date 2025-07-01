@@ -1588,6 +1588,29 @@ if (isset($_GET['created'])) {
                 
                 return $this->savePatterns($importData);
             }
+
+            /**
+             * 특정 번호와 연관된 회사명 목록 가져오기
+             */
+            public function getCompanyNamesByNumber($number) {
+                try {
+                    $db = new SQLite3(__DIR__ . '/spam.db');
+                    $stmt = $db->prepare("SELECT DISTINCT company_name FROM unsubscribe_calls WHERE target_number = :number AND company_name IS NOT NULL AND company_name != ''");
+                    $stmt->bindValue(':number', $number, SQLITE3_TEXT);
+                    $result = $stmt->execute();
+                    
+                    $names = [];
+                    while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                        $names[] = $row['company_name'];
+                    }
+                    
+                    $db->close();
+                    return $names;
+                } catch (Exception $e) {
+                    error_log("Error fetching company names: " . $e->getMessage());
+                    return [];
+                }
+            }
         }
 
         // CLI 실행이 아닌 경우에만 웹 인터페이스 실행
@@ -1932,7 +1955,8 @@ if (isset($_GET['created'])) {
                                 
                                 <div class="form-group">
                                     <label for="form-name">패턴 이름</label>
-                                    <input type="text" name="name" id="form-name" placeholder="회사명 패턴" required>
+                                    <input type="text" name="name" id="form-name" placeholder="회사명 패턴" required list="company-names-list">
+                                    <datalist id="company-names-list"></datalist>
                                     <div class="help-text" style="font-size: 0.875rem; color: #64748b; margin-top: 6px;">식별하기 쉬운 이름</div>
                                 </div>
                             </div>
@@ -2722,27 +2746,30 @@ if (isset($_GET['created'])) {
                     setTimeout(() => {
                         alert.style.transition = 'all 0.5s ease';
                         alert.style.opacity = '0';
-                        alert.style.transform = 'translateY(-10px)';
-                        
-                        // 페이드아웃 완료 후 URL에서 파라미터 제거
-                        setTimeout(() => {
-                            // URL에서 파라미터 제거
-                            const url = new URL(window.location);
-                            url.searchParams.delete('created');
-                            url.searchParams.delete('updated');
-                            url.searchParams.delete('deleted');
-                            window.history.replaceState({}, document.title, url.pathname + url.search);
-                            
-                            // 알림 요소 제거
-                            alert.remove();
-                        }, 500);
-                    }, 3000);
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const numberInput = document.getElementById('form-number');
+                const dataList = document.getElementById('company-names-list');
+
+                numberInput.addEventListener('input', function() {
+                    const number = this.value.trim();
+                    if (number.length >= 10) {
+                        fetch(`api/get_company_names.php?number=${encodeURIComponent(number)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success && data.names) {
+                                    dataList.innerHTML = '';
+                                    data.names.forEach(name => {
+                                        const option = document.createElement('option');
+                                        option.value = name;
+                                        dataList.appendChild(option);
+                                    });
+                                }
+                            })
+                            .catch(error => console.error('Error fetching company names:', error));
+                    }
                 });
             });
         </script>
-    </div>
-</body>
 </html>
-<?php
-        } // CLI 체크 닫는 괄호
-?>
+<?php } ?>

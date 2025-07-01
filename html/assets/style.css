@@ -483,7 +483,14 @@
             font-weight: 600;
             font-size: 18px;
             color: #2d3748;
-            margin-bottom: 5px;
+        }
+
+        .recording-title-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
         }
 
         .recording-datetime {
@@ -742,6 +749,67 @@
 
         .toast-notification.error::before {
             content: '✕';
+        }
+
+        /* Company Name Tag System */
+        .company-tags-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .company-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .company-tag .remove-tag {
+            margin-left: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #adb5bd;
+            transition: color 0.2s;
+        }
+        .company-tag .remove-tag:hover {
+            color: #212529;
+        }
+
+        .add-tag-btn {
+            background: none;
+            border: 1px dashed #adb5bd;
+            color: #868e96;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .add-tag-btn:hover {
+            background-color: #f1f3f5;
+            color: #495057;
+            border-color: #868e96;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            background: #f1f3f5;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            width: 120px;
         }
 
         /* Loading States */

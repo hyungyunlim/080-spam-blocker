@@ -853,18 +853,33 @@
             // auto-analysis 로직은 filename 으로 버튼을 찾으므로 data-file 은 순수 파일명만 사용
             const fileForAnalysis = rec.filename;
 
+            const companyTagsUI = `
+                <div class="company-tags-container" data-call-id="${rec.call_db_id}">
+                    ${(rec.company_names || []).map(name => `
+                        <span class="company-tag">
+                            ${name}
+                            <span class="remove-tag" data-name="${name}">&times;</span>
+                        </span>
+                    `).join('')}
+                    <button class="add-tag-btn">+</button>
+                </div>
+            `;
+
             item.innerHTML = `
                 <div class="recording-header">
-                                <div class="recording-info">
-                                    <div class="recording-title">
-                            📞 ${rec.title}
-                                    </div>
-                                    <div class="recording-datetime">
+                    <div class="recording-info">
+                        <div class="recording-title-container">
+                            <div class="recording-title">
+                                📞 ${rec.title}
+                            </div>
+                            ${rec.call_db_id ? companyTagsUI : ''}
+                        </div>
+                        <div class="recording-datetime">
                             <span class="date-icon">📅</span> ${rec.datetime}
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
                     <div class="recording-tags">${callTypeLabel} ${autoLabel} ${patternSourceLabel} ${registrationBadge} ${patternTypeBadge}</div>
-                                    </div>
+                </div>
                 ${rec.ready_for_analysis || !(rec.analysis_result === '실패' && rec.analysis_text === '아직 분석되지 않았습니다.') ? 
                     `<audio controls preload="metadata" src="player.php?file=${encodeURIComponent(rec.filename)}&v=${rec.file_mtime}" style="width: 100%; margin-top: 10px;" crossorigin="anonymous" onloadeddata="this.currentTime=0;"></audio>` : 
                     `<div class="audio-placeholder" style="width: 100%; margin-top: 10px; padding: 15px; background: #f8f9fa; border: 1px dashed #dee2e6; border-radius: 8px; text-align: center; color: #6c757d;">
@@ -1577,6 +1592,63 @@
                 if (analyzeBtn && !analyzeBtn.disabled) {
                     event.preventDefault();
                     handleAnalysisClick(analyzeBtn);
+                    return;
+                }
+
+                // 회사명 태그 추가 버튼 처리
+                const addTagBtn = event.target.closest('.add-tag-btn');
+                if (addTagBtn) {
+                    event.preventDefault();
+                    const container = addTagBtn.parentElement;
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'tag-input';
+                    input.placeholder = '회사명 입력...';
+                    
+                    addTagBtn.style.display = 'none';
+                    container.appendChild(input);
+                    input.focus();
+
+                    const saveAndCleanup = () => {
+                        const newName = input.value.trim();
+                        if (newName) {
+                            // UI에 태그 추가
+                            const newTag = document.createElement('span');
+                            newTag.className = 'company-tag';
+                            newTag.innerHTML = `${newName} <span class="remove-tag" data-name="${newName}">&times;</span>`;
+                            container.insertBefore(newTag, input);
+                            // 서버에 업데이트
+                            updateCompanyTags(container);
+                        }
+                        // 입력창 제거 및 버튼 복원
+                        if (input.parentElement) {
+                            input.remove();
+                        }
+                        addTagBtn.style.display = 'flex';
+                    };
+
+                    input.addEventListener('blur', saveAndCleanup);
+
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            input.blur(); // blur 이벤트를 트리거하여 로직을 한 번만 실행
+                        } else if (e.key === 'Escape') {
+                            input.value = ''; // 저장하지 않고 blur 처리
+                            input.blur();
+                        }
+                    });
+                    return;
+                }
+
+                // 회사명 태그 삭제 버튼 처리
+                const removeTagBtn = event.target.closest('.remove-tag');
+                if (removeTagBtn) {
+                    event.preventDefault();
+                    const tag = removeTagBtn.parentElement;
+                    const container = tag.parentElement;
+                    tag.remove();
+                    updateCompanyTags(container);
                 }
             });
 
@@ -1641,6 +1713,34 @@
                             setTimeout(() => {
                 toast.style.display = 'none';
                             }, 3000);
+        }
+
+        // 회사명 태그 업데이트 함수
+        function updateCompanyTags(container) {
+            const callId = container.dataset.callId;
+            const tags = Array.from(container.querySelectorAll('.company-tag .remove-tag')).map(span => span.dataset.name);
+            
+            console.log(`Updating company tags for call ${callId}:`, tags);
+
+            fetch('api/update_company_name.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `call_id=${encodeURIComponent(callId)}&company_names=${encodeURIComponent(JSON.stringify(tags))}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('회사명이 저장되었습니다.');
+                } else {
+                    showToast('회사명 저장 실패: ' + (data.error || '알 수 없는 오류'), true);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating company tags:', error);
+                showToast('회사명 저장 중 오류 발생', true);
+            });
         }
 
         // 새로고침 버튼 이벤트 리스너 (버튼이 존재할 때만)

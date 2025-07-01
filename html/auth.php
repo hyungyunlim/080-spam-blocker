@@ -22,6 +22,7 @@ ini_set('session.cookie_path', '/');
 ini_set('session.cookie_httponly', 1);
 ini_set('session.cookie_secure', $isHttps ? 1 : 0); // HTTPS일 때만 secure
 ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.cookie_lifetime', 60 * 60 * 24 * 365); // 1년
 
 // 세션 이름을 호스트별로 고유하게 설정
 $sessionName = 'SPAM_SESSION';

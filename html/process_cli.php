@@ -112,12 +112,13 @@ try {
     $uidRow = $db->querySingle("SELECT id FROM users WHERE phone='{$cleanNotifyDigits}'", true);
     $uidVal = $uidRow ? (int)$uidRow['id'] : null;
     
-    $stmt = $db->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status,pattern_source) VALUES (?,?,?,?,datetime("now"),"pending",?)');
+    $stmt = $db->prepare('INSERT OR IGNORE INTO unsubscribe_calls (call_id,user_id,phone080,identification,created_at,status,pattern_source,notification_phone) VALUES (?,?,?,?,datetime("now"),"pending",?,?)');
     $stmt->bindValue(1, $uniqueId, SQLITE3_TEXT);
     $stmt->bindValue(2, $uidVal, $uidVal !== null ? SQLITE3_INTEGER : SQLITE3_NULL);
     $stmt->bindValue(3, $phoneNumber, SQLITE3_TEXT);
     $stmt->bindValue(4, $identificationNumber, SQLITE3_TEXT);
     $stmt->bindValue(5, $patternSource, SQLITE3_TEXT);
+    $stmt->bindValue(6, $notificationPhone, SQLITE3_TEXT);
     $stmt->execute();
     $db->close();
 } catch (Exception $e) {

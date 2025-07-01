@@ -364,10 +364,34 @@ require_once __DIR__ . '/pattern_manager.php';
 $patternManagerGlobal = new PatternManager(__DIR__ . '/patterns.json');
 $allPatternsGlobal = $patternManagerGlobal->getPatterns();
 
+// 사용자 권한에 따라 허용된 파일 목록을 미리 가져옵니다.
+$allowed_files = null; // null은 모든 파일을 의미 (관리자)
+if (!is_admin()) {
+    $currentUserPhone = current_user_phone();
+    $db = new SQLite3(__DIR__ . '/spam.db');
+    $stmt = $db->prepare("SELECT call_file_path FROM unsubscribe_calls WHERE notification_phone = :phone");
+    $stmt->bindValue(':phone', $currentUserPhone, SQLITE3_TEXT);
+    $results = $stmt->execute();
+    
+    $allowed_files = [];
+    while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+        if (!empty($row['call_file_path'])) {
+            // call_file_path에서 파일명만 추출하여 키로 사용
+            $allowed_files[basename($row['call_file_path'])] = true;
+        }
+    }
+    $db->close();
+}
+
 // 디렉토리가 존재하는지 확인
 if (is_dir($recording_dir)) {
     if ($dh = opendir($recording_dir)) {
         while (($file = readdir($dh)) !== false) {
+            // 사용자 필터링: 허용 목록이 있고, 현재 파일이 목록에 없으면 건너뛰기
+            if ($allowed_files !== null && !isset($allowed_files[$file])) {
+                continue;
+            }
+
             if (pathinfo($file, PATHINFO_EXTENSION) == 'wav') {
                 $recording_info = parse_recording_filename($file);
                 // 기존 분석 결과 확인 및 추가 (파일 생성 시점 고려)
@@ -411,14 +435,20 @@ if (is_dir($recording_dir)) {
                                 $recording_info['spam_received_at'] = $smsData['received_at'];
                             }
                             
-                            // 패턴 소스 정보 조회 (call_id 기반)
+                            // 패턴 소스 정보 및 회사명 조회 (call_id 기반)
                             if (preg_match('/-ID_([A-Za-z0-9]+)/i', $file, $id_match)) {
                                 $call_id = $id_match[1];
-                                $callQuery = "SELECT pattern_source FROM unsubscribe_calls WHERE call_id = '{$call_id}' LIMIT 1";
+                                $callQuery = "SELECT id, pattern_source, company_name FROM unsubscribe_calls WHERE call_id = '{$call_id}' LIMIT 1";
                                 $callData = $db->querySingle($callQuery, true);
                                 
-                                if ($callData && !empty($callData['pattern_source'])) {
-                                    $recording_info['pattern_source'] = $callData['pattern_source'];
+                                if ($callData) {
+                                    $recording_info['call_db_id'] = $callData['id'];
+                                    if (!empty($callData['pattern_source'])) {
+                                        $recording_info['pattern_source'] = $callData['pattern_source'];
+                                    }
+                                    // company_name이 JSON 문자열이므로 배열로 디코딩
+                                    $company_names = json_decode($callData['company_name'], true);
+                                    $recording_info['company_names'] = is_array($company_names) ? $company_names : [];
                                 }
                             }
                         }
